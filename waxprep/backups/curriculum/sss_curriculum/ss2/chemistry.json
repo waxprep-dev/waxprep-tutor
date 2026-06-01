@@ -1,0 +1,300 @@
+{
+  "subject": "chemistry",
+  "class_level": "SS2",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Acids, Bases and Salts",
+    "Oxidation and Reduction",
+    "Electrolysis",
+    "Carbon and Its Compounds",
+    "Hydrocarbons",
+    "Chemical Equilibrium",
+    "Energy Changes"
+  ],
+  "jamb_high_priority_topics": [
+    "Redox Reactions",
+    "Electrolysis",
+    "Acids and Bases",
+    "Organic Chemistry",
+    "Energy Changes"
+  ],
+  "topics": [
+    {
+      "id": "acids_bases",
+      "title": "Acids, Bases and Salts",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "acid_base_theory",
+          "title": "Theories of Acids and Bases",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "Arrhenius theory",
+            "Brønsted-Lowry theory",
+            "acid",
+            "base",
+            "proton donor",
+            "proton acceptor",
+            "conjugate acid-base pair",
+            "amphoteric",
+            "strong acid",
+            "weak acid"
+          ],
+          "common_misconceptions": [
+            "All acids are dangerous",
+            "Strong acids always have lower pH than weak acids"
+          ],
+          "teaching_note": "Use indicators to demonstrate acid-base properties. Show that strength and concentration are different concepts."
+        },
+        {
+          "id": "ph_salts",
+          "title": "pH and Salts",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "acid_base_theory"
+          ],
+          "concepts": [
+            "pH scale",
+            "pH meter",
+            "universal indicator",
+            "salt hydrolysis",
+            "acidic salts",
+            "basic salts",
+            "neutral salts",
+            "buffer solutions"
+          ],
+          "common_misconceptions": [
+            "All salts are neutral",
+            "pH 7 means no ions present"
+          ],
+          "teaching_note": "Demonstrate pH measurement of various solutions. Explain salt hydrolysis using examples of different salt types."
+        }
+      ]
+    },
+    {
+      "id": "redox",
+      "title": "Oxidation and Reduction",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "redox_concepts",
+          "title": "Concepts of Oxidation and Reduction",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "oxidation",
+            "reduction",
+            "oxidizing agent",
+            "reducing agent",
+            "oxidation number",
+            "electron transfer",
+            "half-reactions",
+            "disproportionation"
+          ],
+          "common_misconceptions": [
+            "Oxidation always involves oxygen",
+            "The oxidizing agent is oxidized"
+          ],
+          "teaching_note": "Use OIL RIG mnemonic (Oxidation Is Loss, Reduction Is Gain of electrons). Emphasize that the oxidizing agent gets reduced."
+        },
+        {
+          "id": "balancing_redox",
+          "title": "Balancing Redox Equations",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "redox_concepts"
+          ],
+          "concepts": [
+            "ion-electron method",
+            "half-equation method",
+            "acidic medium",
+            "basic medium",
+            "redox titration"
+          ],
+          "common_misconceptions": [
+            "Hydrogen and oxygen must always be balanced first",
+            "Charge doesn't need to balance"
+          ],
+          "teaching_note": "Teach the systematic method: split into half-reactions, balance atoms, balance charge with electrons, combine."
+        }
+      ]
+    },
+    {
+      "id": "electrolysis",
+      "title": "Electrolysis",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "electrolysis_principles",
+          "title": "Principles of Electrolysis",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "redox"
+          ],
+          "concepts": [
+            "electrolyte",
+            "non-electrolyte",
+            "electrode",
+            "anode",
+            "cathode",
+            "electrolysis",
+            "Faraday's laws",
+            "ionic theory",
+            "selective discharge"
+          ],
+          "common_misconceptions": [
+            "Electrolysis is the same as conduction in metals",
+            "Cathode is always negative"
+          ],
+          "teaching_note": "Distinguish between electrolytic and metallic conduction. Note that cathode is negative in electrolysis but positive in cells."
+        },
+        {
+          "id": "electrolysis_applications",
+          "title": "Applications of Electrolysis",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "electrolysis_principles"
+          ],
+          "concepts": [
+            "extraction of metals",
+            "electroplating",
+            "purification of metals",
+            "Faraday's first law",
+            "Faraday's second law",
+            "calculations"
+          ],
+          "common_misconceptions": [
+            "All metals can be extracted by electrolysis economically",
+            "Electroplating is only for decoration"
+          ],
+          "teaching_note": "Show calculations using Faraday's constant (96500 C/mol). Discuss industrial applications like aluminum extraction."
+        }
+      ]
+    },
+    {
+      "id": "carbon_compounds",
+      "title": "Carbon and Its Compounds",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "organic_intro",
+          "title": "Introduction to Organic Chemistry",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "organic chemistry",
+            "catenation",
+            "tetravalency of carbon",
+            "hydrocarbons",
+            "functional groups",
+            "homologous series",
+            "isomerism",
+            "structural formula",
+            "molecular formula"
+          ],
+          "common_misconceptions": [
+            "Organic means natural/biological",
+            "Organic compounds don't contain metals"
+          ],
+          "teaching_note": "Explain that organic chemistry is the chemistry of carbon compounds. Show the diversity of organic compounds."
+        },
+        {
+          "id": "alkanes_alkenes",
+          "title": "Alkanes and Alkenes",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "organic_intro"
+          ],
+          "concepts": [
+            "alkane",
+            "alkene",
+            "alkyne",
+            "saturated",
+            "unsaturated",
+            "general formula",
+            "nomenclature",
+            "IUPAC naming",
+            "structural isomerism",
+            "geometric isomerism"
+          ],
+          "common_misconceptions": [
+            "Alkanes are more reactive than alkenes",
+            "Isomers have different molecular formulas"
+          ],
+          "teaching_note": "Teach IUPAC naming systematically. Show that alkenes are more reactive due to the double bond."
+        }
+      ]
+    },
+    {
+      "id": "hydrocarbons",
+      "title": "Hydrocarbons and Petroleum",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "petroleum",
+          "title": "Petroleum and Petrochemicals",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "alkanes_alkenes"
+          ],
+          "concepts": [
+            "petroleum",
+            "crude oil",
+            "fractional distillation",
+            "refining",
+            "petrochemicals",
+            "octane number",
+            "knocking",
+            "cracking",
+            "reforming"
+          ],
+          "common_misconceptions": [
+            "Petroleum is only used for fuel",
+            "Cracking just breaks large molecules randomly"
+          ],
+          "teaching_note": "Connect to Nigerian economy. Explain the fractionating column and uses of each fraction."
+        }
+      ]
+    },
+    {
+      "id": "energy_changes",
+      "title": "Energy Changes in Chemical Reactions",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "thermochemistry",
+          "title": "Thermochemistry",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "electrolysis"
+          ],
+          "concepts": [
+            "exothermic reaction",
+            "endothermic reaction",
+            "enthalpy change",
+            "Hess's law",
+            "bond energy",
+            "activation energy",
+            "energy profile diagram"
+          ],
+          "common_misconceptions": [
+            "Exothermic reactions don't need activation energy",
+            "Breaking bonds releases energy"
+          ],
+          "teaching_note": "Use energy profile diagrams. Emphasize that bond breaking requires energy while bond forming releases energy."
+        }
+      ]
+    }
+  ]
+}

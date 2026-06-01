@@ -1,0 +1,229 @@
+{
+  "subject": "economics",
+  "class_level": "SS2",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Demand and Supply",
+    "Elasticity",
+    "Theory of Consumer Behaviour",
+    "Theory of Production",
+    "Cost and Revenue Analysis",
+    "Market Structures",
+    "National Income"
+  ],
+  "jamb_high_priority_topics": [
+    "Demand and Supply",
+    "Elasticity",
+    "Market Structure",
+    "National Income",
+    "Money and Banking"
+  ],
+  "topics": [
+    {
+      "id": "demand_supply",
+      "title": "Demand and Supply",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "law_demand",
+          "title": "Law of Demand",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "demand",
+            "law of demand",
+            "demand schedule",
+            "demand curve",
+            "individual demand",
+            "market demand",
+            "determinants of demand",
+            "change in demand",
+            "change in quantity demanded"
+          ],
+          "common_misconceptions": [
+            "Demand and quantity demanded are the same",
+            "Demand always decreases when price rises"
+          ],
+          "teaching_note": "Distinguish between movement along and shift of the demand curve. Use Giffen goods and Veblen goods as exceptions."
+        },
+        {
+          "id": "law_supply",
+          "title": "Law of Supply",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "law_demand"
+          ],
+          "concepts": [
+            "supply",
+            "law of supply",
+            "supply schedule",
+            "supply curve",
+            "determinants of supply",
+            "change in supply",
+            "change in quantity supplied",
+            "equilibrium"
+          ],
+          "common_misconceptions": [
+            "Supply and quantity supplied are the same",
+            "Supply curve always slopes upward"
+          ],
+          "teaching_note": "Show market equilibrium using supply and demand curves. Discuss price determination in different markets."
+        }
+      ]
+    },
+    {
+      "id": "elasticity",
+      "title": "Elasticity",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "price_elasticity",
+          "title": "Price Elasticity of Demand and Supply",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "demand_supply"
+          ],
+          "concepts": [
+            "elasticity",
+            "price elasticity of demand",
+            "inelastic",
+            "elastic",
+            "unitary elastic",
+            "perfectly elastic",
+            "perfectly inelastic",
+            "PED formula",
+            "factors affecting elasticity"
+          ],
+          "common_misconceptions": [
+            "Slope of demand curve equals elasticity",
+            "Elasticity is the same at all points on a linear curve"
+          ],
+          "teaching_note": "Use the point elasticity formula. Explain factors: substitutes, necessity vs luxury, proportion of income."
+        }
+      ]
+    },
+    {
+      "id": "consumer_behaviour",
+      "title": "Theory of Consumer Behaviour",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "utility_theory",
+          "title": "Utility Theory",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "elasticity"
+          ],
+          "concepts": [
+            "utility",
+            "total utility",
+            "marginal utility",
+            "law of diminishing marginal utility",
+            "consumer surplus",
+            "indifference curves",
+            "budget line",
+            "equilibrium"
+          ],
+          "common_misconceptions": [
+            "Utility can be measured objectively",
+            "Consumer surplus is actual money saved"
+          ],
+          "teaching_note": "Compare cardinal and ordinal approaches. Show how utility maximization determines consumer choice."
+        }
+      ]
+    },
+    {
+      "id": "production_costs",
+      "title": "Production and Costs",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "theory_production_ss2",
+          "title": "Theory of Production",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "consumer_behaviour"
+          ],
+          "concepts": [
+            "production function",
+            "total product",
+            "average product",
+            "marginal product",
+            "law of diminishing returns",
+            "stages of production",
+            "fixed input",
+            "variable input"
+          ],
+          "common_misconceptions": [
+            "Total product always declines when diminishing returns set in",
+            "Short run means a specific time period"
+          ],
+          "teaching_note": "Use numerical tables and graphs. Distinguish between short run and long run based on fixed vs variable inputs."
+        },
+        {
+          "id": "cost_analysis",
+          "title": "Cost and Revenue Analysis",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "theory_production_ss2"
+          ],
+          "concepts": [
+            "fixed cost",
+            "variable cost",
+            "total cost",
+            "average cost",
+            "marginal cost",
+            "total revenue",
+            "average revenue",
+            "marginal revenue",
+            "profit maximization"
+          ],
+          "common_misconceptions": [
+            "Fixed costs never change",
+            "Profit is maximized when total revenue is highest"
+          ],
+          "teaching_note": "Derive cost curves from production data. Show that MC = MR is the profit-maximizing condition."
+        }
+      ]
+    },
+    {
+      "id": "national_income",
+      "title": "National Income",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "measuring_national_income",
+          "title": "Measuring National Income",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "cost_analysis"
+          ],
+          "concepts": [
+            "GDP",
+            "GNP",
+            "NNP",
+            "NI",
+            "income method",
+            "expenditure method",
+            "output method",
+            "real GDP",
+            "nominal GDP",
+            "per capita income"
+          ],
+          "common_misconceptions": [
+            "GDP measures welfare",
+            "GNP and GDP are always different"
+          ],
+          "teaching_note": "Explain the three approaches and why they should give the same result. Discuss limitations of GDP as a welfare measure."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+{
+  "subject": "government",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Political Concepts and Principles",
+    "Systems of Government",
+    "Citizenship",
+    "Political Parties and Party Systems",
+    "The Electoral Process",
+    "Constitutions",
+    "Nigerian Constitutional Development"
+  ],
+  "jamb_high_priority_topics": [
+    "Elements of Government",
+    "Systems of Government",
+    "Citizenship",
+    "Political Parties",
+    "Constitutions",
+    "Nigerian Government"
+  ],
+  "topics": [
+    {
+      "id": "political_concepts",
+      "title": "Political Concepts and Principles",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "basic_concepts_govt",
+          "title": "Basic Concepts in Government",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "politics",
+            "government",
+            "state",
+            "nation",
+            "power",
+            "authority",
+            "legitimacy",
+            "sovereignty",
+            "democracy",
+            "rule of law"
+          ],
+          "common_misconceptions": [
+            "Government and state mean the same thing",
+            "Power and authority are identical"
+          ],
+          "teaching_note": "Define each concept precisely with examples. Distinguish between state (entity) and government (ruling body)."
+        },
+        {
+          "id": "elements_state",
+          "title": "Elements and Characteristics of a State",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "basic_concepts_govt"
+          ],
+          "concepts": [
+            "population",
+            "territory",
+            "government",
+            "sovereignty",
+            "permanence",
+            "universality",
+            "compulsory membership"
+          ],
+          "common_misconceptions": [
+            "A nation is always a state",
+            "Sovereignty can be shared completely"
+          ],
+          "teaching_note": "Use Nigeria as the primary example. Discuss the four essential elements and how they apply to Nigeria."
+        }
+      ]
+    },
+    {
+      "id": "systems_government",
+      "title": "Systems of Government",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "presidential_system",
+          "title": "Presidential System of Government",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "political_concepts"
+          ],
+          "concepts": [
+            "separation of powers",
+            "checks and balances",
+            "executive",
+            "legislature",
+            "judiciary",
+            "president",
+            "direct election",
+            "fixed tenure"
+          ],
+          "common_misconceptions": [
+            "Complete separation of powers exists",
+            "The president is above the law"
+          ],
+          "teaching_note": "Analyze the Nigerian presidential system. Discuss how checks and balances work in practice."
+        },
+        {
+          "id": "parliamentary_system",
+          "title": "Parliamentary and Other Systems",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "presidential_system"
+          ],
+          "concepts": [
+            "parliamentary system",
+            "prime minister",
+            "cabinet",
+            "collective responsibility",
+            "fusion of powers",
+            "monarchy",
+            "unitary system",
+            "federal system",
+            "confederal system"
+          ],
+          "common_misconceptions": [
+            "Parliamentary system has no checks and balances",
+            "Unitary system means dictatorship"
+          ],
+          "teaching_note": "Compare Nigerian (presidential/federal) with British (parliamentary/unitary) systems. Discuss advantages and disadvantages."
+        }
+      ]
+    },
+    {
+      "id": "citizenship",
+      "title": "Citizenship",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "citizenship_concepts",
+          "title": "Citizenship: Types, Rights and Duties",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "citizenship by birth",
+            "citizenship by registration",
+            "citizenship by naturalization",
+            "dual citizenship",
+            "rights of citizens",
+            "duties of citizens",
+            "fundamental human rights"
+          ],
+          "common_misconceptions": [
+            "Being born in Nigeria automatically grants citizenship",
+            "Rights have no corresponding duties"
+          ],
+          "teaching_note": "Explain Nigerian citizenship laws. Discuss the balance between rights and duties. Connect to the Nigerian constitution."
+        }
+      ]
+    },
+    {
+      "id": "political_parties",
+      "title": "Political Parties and Party Systems",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "party_systems",
+          "title": "Party Systems and Political Parties",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "systems_government"
+          ],
+          "concepts": [
+            "one-party system",
+            "two-party system",
+            "multi-party system",
+            "party manifesto",
+            "ideology",
+            "party organization",
+            "party functions"
+          ],
+          "common_misconceptions": [
+            "More parties mean better democracy",
+            "All political parties have clear ideologies"
+          ],
+          "teaching_note": "Analyze Nigeria's party system historically and currently. Discuss the role of political parties in democratic governance."
+        }
+      ]
+    },
+    {
+      "id": "electoral_process",
+      "title": "The Electoral Process",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "elections",
+          "title": "Elections and Electoral Management",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "political_parties"
+          ],
+          "concepts": [
+            "election",
+            "franchise",
+            "voting",
+            "INEC",
+            "electoral commission",
+            "electoral malpractice",
+            "rigging",
+            "referendum",
+            "plebiscite"
+          ],
+          "common_misconceptions": [
+            "Elections alone define democracy",
+            "Voting is the only form of political participation"
+          ],
+          "teaching_note": "Discuss the role of INEC in Nigeria. Analyze electoral reforms and challenges. Compare Nigerian electoral system with others."
+        }
+      ]
+    },
+    {
+      "id": "constitutions",
+      "title": "Constitutions",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "types_constitutions",
+          "title": "Types and Features of Constitutions",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "written constitution",
+            "unwritten constitution",
+            "rigid constitution",
+            "flexible constitution",
+            "unitary constitution",
+            "federal constitution",
+            "features of constitution",
+            "sources of constitution"
+          ],
+          "common_misconceptions": [
+            "Written constitution is always rigid",
+            "Nigeria has always had a federal constitution"
+          ],
+          "teaching_note": "Analyze Nigeria's constitutional evolution from 1922 to 1999. Discuss the merits and demerits of each type."
+        },
+        {
+          "id": "constitutional_development",
+          "title": "Nigerian Constitutional Development",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "types_constitutions"
+          ],
+          "concepts": [
+            "Clifford constitution",
+            "Richards constitution",
+            "Macpherson constitution",
+            "Lyttleton constitution",
+            "independence constitution",
+            "republican constitution",
+            "1979 constitution",
+            "1999 constitution"
+          ],
+          "common_misconceptions": [
+            "The 1999 constitution is Nigeria's first",
+            "All colonial constitutions were imposed without input"
+          ],
+          "teaching_note": "Provide a chronological overview. Highlight the key features and limitations of each constitution."
+        }
+      ]
+    }
+  ]
+}

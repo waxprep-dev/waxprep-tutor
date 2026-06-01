@@ -1,0 +1,174 @@
+{
+  "subject": "social_studies",
+  "class_level": "JSS3",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Social Issues",
+    "Corruption",
+    "Poverty",
+    "Population",
+    "Migration",
+    "Globalization",
+    "Sustainable Development"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "social_issues",
+      "title": "Social Issues",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "corruption",
+          "title": "Corruption and Its Effects",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "corruption",
+            "bribery",
+            "embezzlement",
+            "nepotism",
+            "fraud",
+            "effects on development",
+            "prevention",
+            "EFCC",
+            "ICPC",
+            "transparency",
+            "accountability"
+          ],
+          "common_misconceptions": [
+            "Corruption is only in government",
+            "Small bribes are harmless"
+          ],
+          "teaching_note": "Discuss corruption at all levels. Emphasize individual responsibility in fighting corruption."
+        }
+      ]
+    },
+    {
+      "id": "poverty",
+      "title": "Poverty and Its Effects",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "poverty_concepts",
+          "title": "Understanding Poverty",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "social_issues"
+          ],
+          "concepts": [
+            "poverty",
+            "absolute poverty",
+            "relative poverty",
+            "poverty line",
+            "causes",
+            "effects",
+            "poverty alleviation",
+            "social welfare",
+            "empowerment"
+          ],
+          "common_misconceptions": [
+            "Poverty is always caused by laziness",
+            "Poor people are less intelligent"
+          ],
+          "teaching_note": "Discuss structural causes of poverty. Explore government and NGO interventions."
+        }
+      ]
+    },
+    {
+      "id": "population",
+      "title": "Population Issues",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "population_concepts",
+          "title": "Population and Development",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "poverty"
+          ],
+          "concepts": [
+            "population",
+            "population growth",
+            "birth rate",
+            "death rate",
+            "migration",
+            "overpopulation",
+            "underpopulation",
+            "optimum population",
+            "demographic transition"
+          ],
+          "common_misconceptions": [
+            "Large population always means overpopulation",
+            "Migration is always negative"
+          ],
+          "teaching_note": "Analyze Nigerian population data. Discuss population policy and its challenges."
+        }
+      ]
+    },
+    {
+      "id": "globalization",
+      "title": "Globalization",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "globalization_concepts",
+          "title": "Globalization and Its Effects",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "population"
+          ],
+          "concepts": [
+            "globalization",
+            "interdependence",
+            "international trade",
+            "technology transfer",
+            "cultural exchange",
+            "advantages",
+            "disadvantages",
+            "neo-colonialism"
+          ],
+          "common_misconceptions": [
+            "Globalization is always good",
+            "Globalization means losing Nigerian culture"
+          ],
+          "teaching_note": "Discuss both benefits and challenges. Explore how Nigeria can benefit from globalization."
+        }
+      ]
+    },
+    {
+      "id": "sustainable_development",
+      "title": "Sustainable Development",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "sdg",
+          "title": "Sustainable Development Goals",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "globalization"
+          ],
+          "concepts": [
+            "sustainable development",
+            "SDGs",
+            "MDGs",
+            "environmental sustainability",
+            "economic sustainability",
+            "social sustainability",
+            "Agenda 2030"
+          ],
+          "common_misconceptions": [
+            "Sustainability is only about the environment",
+            "SDGs are only for governments"
+          ],
+          "teaching_note": "Connect SDGs to Nigerian context. Discuss how students can contribute."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,314 @@
+{
+  "subject": "biology",
+  "class_level": "SS2",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Ecology",
+    "Ecosystem",
+    "Conservation of Resources",
+    "Genetics",
+    "Evolution",
+    "Reproductive System",
+    "Growth and Development"
+  ],
+  "jamb_high_priority_topics": [
+    "Ecology",
+    "Ecosystem",
+    "Genetics",
+    "Evolution",
+    "Reproduction"
+  ],
+  "topics": [
+    {
+      "id": "ecology",
+      "title": "Ecology",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "ecological_concepts",
+          "title": "Ecological Concepts",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "ecology",
+            "ecosystem",
+            "habitat",
+            "biosphere",
+            "niche",
+            "population",
+            "community",
+            "environment",
+            "abiotic factors",
+            "biotic factors"
+          ],
+          "common_misconceptions": [
+            "Habitat and ecosystem are the same",
+            "Ecology only studies animals"
+          ],
+          "teaching_note": "Use local Nigerian ecosystems as examples. Conduct field trips to observe ecological relationships."
+        },
+        {
+          "id": "ecological_factors",
+          "title": "Ecological Factors",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "ecological_concepts"
+          ],
+          "concepts": [
+            "temperature",
+            "rainfall",
+            "light",
+            "humidity",
+            "wind",
+            "pH",
+            "topography",
+            "edaphic factors",
+            "salinity",
+            "current"
+          ],
+          "common_misconceptions": [
+            "Abiotic factors don't affect each other",
+            "All organisms respond to factors the same way"
+          ],
+          "teaching_note": "Show how abiotic factors interact. Discuss adaptations of organisms to different ecological conditions in Nigeria."
+        }
+      ]
+    },
+    {
+      "id": "ecosystem",
+      "title": "Ecosystem Dynamics",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "food_relationships",
+          "title": "Food Relationships and Energy Flow",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "ecology"
+          ],
+          "concepts": [
+            "food chain",
+            "food web",
+            "trophic levels",
+            "producer",
+            "consumer",
+            "decomposer",
+            "energy flow",
+            "pyramid of energy",
+            "pyramid of numbers",
+            "pyramid of biomass"
+          ],
+          "common_misconceptions": [
+            "Energy is recycled in ecosystems",
+            "Carnivores are always at the top of food chains"
+          ],
+          "teaching_note": "Emphasize that energy flows while matter cycles. Construct food webs using Nigerian organisms."
+        },
+        {
+          "id": "nutrient_cycling",
+          "title": "Nutrient Cycling in Nature",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "food_relationships"
+          ],
+          "concepts": [
+            "carbon cycle",
+            "water cycle",
+            "nitrogen cycle",
+            "decomposition",
+            "nitrification",
+            "denitrification",
+            "nitrogen fixation",
+            "symbiotic bacteria",
+            "Leguminosae"
+          ],
+          "common_misconceptions": [
+            "Plants get carbon from the soil",
+            "Nitrogen gas is directly usable by plants"
+          ],
+          "teaching_note": "Trace each cycle step by step. Explain the role of decomposers and microorganisms in nutrient cycling."
+        }
+      ]
+    },
+    {
+      "id": "conservation",
+      "title": "Conservation of Resources",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "conservation_methods",
+          "title": "Conservation and Resource Management",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "ecosystem"
+          ],
+          "concepts": [
+            "conservation",
+            "preservation",
+            "game reserves",
+            "national parks",
+            "deforestation",
+            "desertification",
+            "soil erosion",
+            "pollution",
+            "overgrazing",
+            "bush burning"
+          ],
+          "common_misconceptions": [
+            "Conservation means preventing all use",
+            "Pollution only affects the local area"
+          ],
+          "teaching_note": "Discuss Nigerian conservation efforts like Yankari Game Reserve. Connect to sustainable development goals."
+        }
+      ]
+    },
+    {
+      "id": "genetics",
+      "title": "Genetics",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "mendelian_genetics",
+          "title": "Mendelian Genetics",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "ecosystem"
+          ],
+          "concepts": [
+            "gene",
+            "allele",
+            "dominant",
+            "recessive",
+            "homozygous",
+            "heterozygous",
+            "genotype",
+            "phenotype",
+            "Mendel's first law",
+            "Mendel's second law",
+            "Punnett square"
+          ],
+          "common_misconceptions": [
+            "Dominant traits are always more common",
+            "Recessive traits can disappear completely"
+          ],
+          "teaching_note": "Use Punnett squares systematically. Practice monohybrid and dihybrid cross calculations."
+        },
+        {
+          "id": "variation",
+          "title": "Variation and Inheritance",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "mendelian_genetics"
+          ],
+          "concepts": [
+            "continuous variation",
+            "discontinuous variation",
+            "sex-linked inheritance",
+            "blood group inheritance",
+            "sickle cell",
+            "co-dominance",
+            "incomplete dominance"
+          ],
+          "common_misconceptions": [
+            "All traits follow Mendelian inheritance",
+            "Sickle cell trait is the same as sickle cell disease"
+          ],
+          "teaching_note": "Discuss sickle cell in Nigerian context. Show non-Mendelian patterns with clear examples."
+        }
+      ]
+    },
+    {
+      "id": "evolution",
+      "title": "Evolution",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "evolution_theory",
+          "title": "Theory of Evolution",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "genetics"
+          ],
+          "concepts": [
+            "evolution",
+            "natural selection",
+            "survival of the fittest",
+            "adaptation",
+            " Lamarck's theory",
+            "Darwin's theory",
+            "speciation",
+            "evidence of evolution"
+          ],
+          "common_misconceptions": [
+            "Evolution means humans came from monkeys",
+            "Evolution is just a theory in the casual sense"
+          ],
+          "teaching_note": "Distinguish between Darwin's and Lamarck's theories. Present evidence: fossils, comparative anatomy, embryology, molecular biology."
+        }
+      ]
+    },
+    {
+      "id": "reproductive_system",
+      "title": "Reproductive System and Development",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "human_reproduction",
+          "title": "Human Reproductive System",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "genetics"
+          ],
+          "concepts": [
+            "male reproductive system",
+            "female reproductive system",
+            "sperm",
+            "ovum",
+            "ovulation",
+            "menstrual cycle",
+            "fertilization",
+            "implantation",
+            "gestation"
+          ],
+          "common_misconceptions": [
+            "Fertilization occurs in the uterus",
+            "Menstruation is the same as ovulation"
+          ],
+          "teaching_note": "Use diagrams to trace the path of gametes. Explain the hormonal control of the menstrual cycle."
+        },
+        {
+          "id": "growth_development",
+          "title": "Growth and Development in Organisms",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "human_reproduction"
+          ],
+          "concepts": [
+            "growth",
+            "development",
+            "metamorphosis",
+            "complete metamorphosis",
+            "incomplete metamorphosis",
+            "life cycles",
+            "ageing"
+          ],
+          "common_misconceptions": [
+            "Growth and development are the same",
+            "All animals undergo metamorphosis"
+          ],
+          "teaching_note": "Compare growth patterns in plants and animals. Use insect metamorphosis as a clear example."
+        }
+      ]
+    }
+  ]
+}

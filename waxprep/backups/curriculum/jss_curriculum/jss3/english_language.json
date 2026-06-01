@@ -1,0 +1,174 @@
+{
+  "subject": "english_language",
+  "class_level": "JSS3",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Advanced Comprehension",
+    "Summary Writing",
+    "Grammar",
+    "Essay Writing",
+    "Vocabulary",
+    "Oral English"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "comprehension_jss3",
+      "title": "Advanced Comprehension",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "reading_skills_jss3",
+          "title": "Advanced Reading Comprehension",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "critical reading",
+            "inference",
+            "deduction",
+            "author's viewpoint",
+            "fact vs opinion",
+            "figurative language",
+            "context clues",
+            "tone",
+            "mood"
+          ],
+          "common_misconceptions": [
+            "Every statement in the passage is the author's opinion",
+            "Figurative language should be taken literally"
+          ],
+          "teaching_note": "Practice with complex passages. Teach students to distinguish fact from opinion."
+        }
+      ]
+    },
+    {
+      "id": "summary_jss3",
+      "title": "Summary Writing",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "summary_techniques_jss3",
+          "title": "Summary Writing Techniques",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "comprehension_jss3"
+          ],
+          "concepts": [
+            "summarization",
+            "relevant points",
+            "irrelevant details",
+            "paraphrasing",
+            "synthesis",
+            "word limit",
+            "own words",
+            "coherence"
+          ],
+          "common_misconceptions": [
+            "Summary is just a shorter version of the passage",
+            "Copying phrases shows good understanding"
+          ],
+          "teaching_note": "Emphasize synthesis over copying. Practice identifying truly main points."
+        }
+      ]
+    },
+    {
+      "id": "grammar_jss3",
+      "title": "Grammar",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "advanced_grammar_jss3",
+          "title": "Advanced Grammar Topics",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "summary_jss3"
+          ],
+          "concepts": [
+            "tenses",
+            "perfect tenses",
+            "continuous tenses",
+            "reported speech",
+            "active and passive voice",
+            "conditional sentences",
+            "relative clauses",
+            "participles"
+          ],
+          "common_misconceptions": [
+            "Reported speech just means removing quotation marks",
+            "Passive voice is always wrong"
+          ],
+          "teaching_note": "Teach systematic conversion for reported speech. Show when passive voice is appropriate."
+        }
+      ]
+    },
+    {
+      "id": "essay_jss3",
+      "title": "Essay Writing",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "essay_writing_jss3",
+          "title": "Essay Writing Mastery",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "grammar_jss3"
+          ],
+          "concepts": [
+            "essay types",
+            "narrative",
+            "descriptive",
+            "argumentative",
+            "expository",
+            "formal letter",
+            "informal letter",
+            "speech",
+            "article",
+            "introduction",
+            "conclusion"
+          ],
+          "common_misconceptions": [
+            "One essay plan fits all questions",
+            "Personal opinions have no place in formal essays"
+          ],
+          "teaching_note": "Practice all essay types. Focus on planning, development, and effective conclusions."
+        }
+      ]
+    },
+    {
+      "id": "vocabulary_jss3",
+      "title": "Vocabulary Development",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "vocabulary_building",
+          "title": "Building Vocabulary",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "essay_jss3"
+          ],
+          "concepts": [
+            "synonyms",
+            "antonyms",
+            "homonyms",
+            "prefixes",
+            "suffixes",
+            "word formation",
+            "context clues",
+            "register",
+            "collocation"
+          ],
+          "common_misconceptions": [
+            "Using big words always impresses",
+            "Synonyms are always interchangeable"
+          ],
+          "teaching_note": "Build vocabulary through extensive reading. Practice using words in context."
+        }
+      ]
+    }
+  ]
+}

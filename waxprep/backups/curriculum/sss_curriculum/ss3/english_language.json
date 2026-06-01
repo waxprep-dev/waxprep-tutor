@@ -1,0 +1,170 @@
+{
+  "subject": "english_language",
+  "class_level": "SS3",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Advanced Comprehension",
+    "Summary at Advanced Level",
+    "Essay Writing Mastery",
+    "Grammar and Usage",
+    "Lexis and Structure",
+    "Oral English",
+    "Register and Vocabulary"
+  ],
+  "jamb_high_priority_topics": [
+    "Comprehension",
+    "Lexis and Structure",
+    "Oral English",
+    "Essay Writing"
+  ],
+  "topics": [
+    {
+      "id": "advanced_comprehension",
+      "title": "Advanced Comprehension",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "complex_texts",
+          "title": "Analysis of Complex Texts",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "inference",
+            "deduction",
+            "critical reading",
+            "tone identification",
+            "author's purpose",
+            "fact vs opinion",
+            "bias detection",
+            "argument analysis"
+          ],
+          "common_misconceptions": [
+            "Comprehension answers are always in the passage",
+            "There is only one correct interpretation"
+          ],
+          "teaching_note": "Practice with complex, multi-layered passages. Focus on higher-order thinking skills."
+        }
+      ]
+    },
+    {
+      "id": "advanced_summary",
+      "title": "Advanced Summary Writing",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "summary_mastery",
+          "title": "Summary Writing Mastery",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "complex_texts"
+          ],
+          "concepts": [
+            "synthesis",
+            "paraphrasing",
+            "conciseness",
+            "relevance",
+            "main points",
+            "supporting details",
+            "own words",
+            "coherence"
+          ],
+          "common_misconceptions": [
+            "Summary should cover every detail",
+            "Copying with minor changes is acceptable"
+          ],
+          "teaching_note": "Focus on synthesizing information from multiple paragraphs. Practice with timed exercises."
+        }
+      ]
+    },
+    {
+      "id": "essay_mastery",
+      "title": "Essay Writing Mastery",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "advanced_essay",
+          "title": "Advanced Essay Techniques",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "thesis statement",
+            "argument development",
+            "evidence",
+            "counter-argument",
+            "conclusion",
+            "formal register",
+            "academic writing",
+            "essay types"
+          ],
+          "common_misconceptions": [
+            "Longer essays always score higher",
+            "Personal opinions have no place in formal essays"
+          ],
+          "teaching_note": "Practice writing under examination conditions. Focus on clarity, coherence, and convincing argumentation."
+        }
+      ]
+    },
+    {
+      "id": "advanced_grammar",
+      "title": "Advanced Grammar and Usage",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "grammar_mastery",
+          "title": "Grammar Mastery",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "tense consistency",
+            "modal verbs",
+            "conditionals",
+            "reported speech",
+            "active vs passive",
+            "relative clauses",
+            "participial phrases",
+            "gerunds",
+            "infinitives"
+          ],
+          "common_misconceptions": [
+            "Complex grammar equals better writing",
+            "Grammar rules have no exceptions"
+          ],
+          "teaching_note": "Focus on common errors in examination contexts. Use authentic examples from past papers."
+        }
+      ]
+    },
+    {
+      "id": "oral_english_ss3",
+      "title": "Oral English",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "oral_mastery",
+          "title": "Oral English Mastery",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "vowel sounds",
+            "consonant sounds",
+            "stress patterns",
+            "intonation",
+            "rhyme",
+            "syllable",
+            "homophones",
+            "minimal pairs"
+          ],
+          "common_misconceptions": [
+            "Nigerian English pronunciation is wrong",
+            "Intonation doesn't affect meaning"
+          ],
+          "teaching_note": "Practice with standardized English pronunciation. Focus on sounds that differ from Nigerian languages."
+        }
+      ]
+    }
+  ]
+}

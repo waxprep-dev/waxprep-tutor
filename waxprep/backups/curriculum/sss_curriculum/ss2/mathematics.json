@@ -1,0 +1,298 @@
+{
+  "subject": "mathematics",
+  "class_level": "SS2",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Algebraic Functions",
+    "Quadratic Functions",
+    "Simultaneous Equations",
+    "Trigonometry",
+    "Circle Geometry",
+    "Mensuration",
+    "Probability",
+    "Statistics"
+  ],
+  "jamb_high_priority_topics": [
+    "Functions",
+    "Quadratic Equations",
+    "Trigonometric Functions",
+    "Circle Theorems",
+    "Probability",
+    "Permutation and Combination"
+  ],
+  "topics": [
+    {
+      "id": "algebraic_functions",
+      "title": "Algebraic Functions",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "functions_concepts",
+          "title": "Functions and Relations",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "function",
+            "relation",
+            "domain",
+            "range",
+            "codomain",
+            "mapping",
+            "one-to-one",
+            "many-to-one",
+            "inverse function",
+            "composite function"
+          ],
+          "common_misconceptions": [
+            "All relations are functions",
+            "f(x) means f multiplied by x"
+          ],
+          "teaching_note": "Use the vertical line test for functions. Emphasize that f(x) is notation for function output, not multiplication."
+        }
+      ]
+    },
+    {
+      "id": "quadratic_functions",
+      "title": "Quadratic Functions",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "graphing_quadratics",
+          "title": "Graphing Quadratic Functions",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "functions_concepts"
+          ],
+          "concepts": [
+            "parabola",
+            "vertex",
+            "axis of symmetry",
+            "minimum point",
+            "maximum point",
+            "roots",
+            "intercept form",
+            "vertex form"
+          ],
+          "common_misconceptions": [
+            "All parabolas open upward",
+            "The vertex is always the y-intercept"
+          ],
+          "teaching_note": "Use completing the square to find vertex form. Show how the coefficient of x² determines the direction of opening."
+        },
+        {
+          "id": "simultaneous_equations",
+          "title": "Simultaneous Equations",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "graphing_quadratics"
+          ],
+          "concepts": [
+            "simultaneous linear equations",
+            "simultaneous linear and quadratic",
+            "elimination method",
+            "substitution method",
+            "graphical method"
+          ],
+          "common_misconceptions": [
+            "Always choose elimination over substitution",
+            "Graphical method is the most accurate"
+          ],
+          "teaching_note": "Teach students to choose the most efficient method. Emphasize checking solutions by substitution."
+        }
+      ]
+    },
+    {
+      "id": "advanced_trigonometry",
+      "title": "Advanced Trigonometry",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "trig_identities",
+          "title": "Trigonometric Identities and Equations",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "sin²x + cos²x = 1",
+            "1 + tan²x = sec²x",
+            "trigonometric identities",
+            "solving trig equations",
+            " CAST diagram",
+            "reference angles",
+            "general solutions"
+          ],
+          "common_misconceptions": [
+            "sin(x+y) = sin x + sin y",
+            "Only use positive roots when solving"
+          ],
+          "teaching_note": "Derive the Pythagorean identity. Use the CAST diagram for finding all solutions. Practice deriving other identities from the basic one."
+        },
+        {
+          "id": "sine_cosine_rules",
+          "title": "Sine and Cosine Rules",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "trig_identities"
+          ],
+          "concepts": [
+            "sine rule",
+            "cosine rule",
+            "area of triangle",
+            "ambiguous case",
+            "bearings",
+            "three-figure bearings"
+          ],
+          "common_misconceptions": [
+            "Sine rule works for all triangles including right-angled",
+            "Bearings are measured clockwise from south"
+          ],
+          "teaching_note": "Compare when to use sine rule vs cosine rule. Emphasize that bearings are measured clockwise from north."
+        }
+      ]
+    },
+    {
+      "id": "circle_geometry",
+      "title": "Circle Geometry",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "circle_theorems",
+          "title": "Circle Theorems",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "sine_cosine_rules"
+          ],
+          "concepts": [
+            "angle at center",
+            "angle at circumference",
+            "angles in same segment",
+            "angle in semicircle",
+            "cyclic quadrilateral",
+            "alternate segment theorem",
+            "tangent properties"
+          ],
+          "common_misconceptions": [
+            "Angle at center equals angle at circumference",
+            "All quadrilaterals are cyclic"
+          ],
+          "teaching_note": "Prove each theorem using isosceles triangles and angles on a straight line. Practice identifying which theorem applies in complex diagrams."
+        }
+      ]
+    },
+    {
+      "id": "mensuration",
+      "title": "Mensuration",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "plane_mensuration",
+          "title": "Mensuration of Plane Shapes",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "circle_geometry"
+          ],
+          "concepts": [
+            "area of triangle",
+            "area of parallelogram",
+            "area of trapezium",
+            "area of circle",
+            "area of sector",
+            "area of segment",
+            "arc length",
+            "perimeter",
+            "composite shapes"
+          ],
+          "common_misconceptions": [
+            "Area of sector uses 360° instead of 180°",
+            "Perimeter of circle is called circumference"
+          ],
+          "teaching_note": "Derive area formulas from basic principles. Emphasize the difference between arc length and area of sector."
+        },
+        {
+          "id": "solid_mensuration",
+          "title": "Mensuration of Solids",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "plane_mensuration"
+          ],
+          "concepts": [
+            "volume of prism",
+            "volume of cylinder",
+            "volume of cone",
+            "volume of sphere",
+            "surface area",
+            "curved surface area",
+            "total surface area",
+            "frustum"
+          ],
+          "common_misconceptions": [
+            "Volume and capacity are different units",
+            "Surface area and volume have the same units"
+          ],
+          "teaching_note": "Use real objects to demonstrate volume. Show the relationship between units of volume and capacity."
+        }
+      ]
+    },
+    {
+      "id": "probability",
+      "title": "Probability",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "probability_basics",
+          "title": "Basic Probability Concepts",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "experiment",
+            "outcome",
+            "sample space",
+            "event",
+            "probability scale",
+            "mutually exclusive",
+            "independent events",
+            "complementary events"
+          ],
+          "common_misconceptions": [
+            "Probability of 1 means it always happens",
+            "Previous outcomes affect independent events (gambler's fallacy)"
+          ],
+          "teaching_note": "Use coin tosses and dice throws for experiments. Address the gambler's fallacy explicitly."
+        },
+        {
+          "id": "permutation_combination",
+          "title": "Permutation and Combination",
+          "waec_frequency": "high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "probability_basics"
+          ],
+          "concepts": [
+            "permutation",
+            "combination",
+            "factorial",
+            "nPr",
+            "nCr",
+            "arrangement",
+            "selection",
+            "repetition allowed",
+            "circular permutation"
+          ],
+          "common_misconceptions": [
+            "Permutation and combination are the same",
+            "Order matters in combinations"
+          ],
+          "teaching_note": "Use real scenarios: arrangement of books (permutation) vs selection of team (combination)."
+        }
+      ]
+    }
+  ]
+}

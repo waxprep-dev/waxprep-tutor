@@ -1,0 +1,230 @@
+{
+  "subject": "government",
+  "class_level": "SS2",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Public Administration",
+    "Civil Service",
+    "Local Government",
+    "Federal System in Nigeria",
+    "Political Development in Nigeria",
+    "Foreign Policy",
+    "International Organizations"
+  ],
+  "jamb_high_priority_topics": [
+    "Nigerian Government",
+    "Public Administration",
+    "International Relations",
+    "Local Government"
+  ],
+  "topics": [
+    {
+      "id": "public_administration",
+      "title": "Public Administration",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "civil_service",
+          "title": "The Civil Service",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "civil service",
+            "public service",
+            "bureaucracy",
+            "hierarchy",
+            "permanence",
+            "neutrality",
+            "anonymity",
+            "impartiality",
+            "civil service commission"
+          ],
+          "common_misconceptions": [
+            "Civil service and public service are the same",
+            "Civil servants make policy decisions"
+          ],
+          "teaching_note": "Explain the characteristics of the civil service. Discuss reforms and challenges in the Nigerian civil service."
+        },
+        {
+          "id": "public_corporations",
+          "title": "Public Corporations",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "civil_service"
+          ],
+          "concepts": [
+            "public corporation",
+            "parastatal",
+            "statutory corporation",
+            "government-owned enterprise",
+            "NNPC",
+            "PHCN",
+            "NPA",
+            "advantages",
+            "disadvantages",
+            "privatization"
+          ],
+          "common_misconceptions": [
+            "Public corporations are part of the civil service",
+            "Privatization always improves efficiency"
+          ],
+          "teaching_note": "Analyze Nigerian public corporations. Discuss privatization and commercialization policies."
+        }
+      ]
+    },
+    {
+      "id": "local_government",
+      "title": "Local Government",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "local_govt_system",
+          "title": "Local Government in Nigeria",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "public_administration"
+          ],
+          "concepts": [
+            "local government",
+            "third tier",
+            "functions",
+            "sources of revenue",
+            "problems",
+            "1976 reform",
+            "creation of local governments",
+            "chairman",
+            "councillors"
+          ],
+          "common_misconceptions": [
+            "Local government is controlled by the state governor",
+            "Local governments have sufficient funding"
+          ],
+          "teaching_note": "Discuss the relationship between state and local governments. Analyze funding challenges and reforms."
+        }
+      ]
+    },
+    {
+      "id": "federal_system",
+      "title": "Federal System in Nigeria",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "federalism_nigeria",
+          "title": "Federalism and Its Practice in Nigeria",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "local_government"
+          ],
+          "concepts": [
+            "federalism",
+            "federal character",
+            "revenue allocation",
+            "exclusive list",
+            "concurrent list",
+            "residual list",
+            "fiscal federalism",
+            "derivation principle"
+          ],
+          "common_misconceptions": [
+            "Federalism means equal powers for all tiers",
+            "The federal government should control everything"
+          ],
+          "teaching_note": "Trace Nigeria's federal evolution. Discuss revenue allocation formulas and agitations for restructuring."
+        }
+      ]
+    },
+    {
+      "id": "political_development",
+      "title": "Political Development in Nigeria",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "pre_colonial",
+          "title": "Pre-colonial Political Systems",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "federal_system"
+          ],
+          "concepts": [
+            "Hausa-Fulani system",
+            "Emirate system",
+            "Yoruba system",
+            "Igbo system",
+            "Benin system",
+            "direct rule",
+            "indirect rule",
+            "centralized",
+            "decentralized"
+          ],
+          "common_misconceptions": [
+            "All pre-colonial systems were primitive",
+            "Indirect rule was the same everywhere"
+          ],
+          "teaching_note": "Compare the three major pre-colonial systems. Analyze how colonial rule affected traditional structures."
+        },
+        {
+          "id": "nigerian_nationalism",
+          "title": "Nigerian Nationalism and Independence",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "pre_colonial"
+          ],
+          "concepts": [
+            "nationalism",
+            "Herbert Macaulay",
+            "Nnamdi Azikiwe",
+            "Obafemi Awolowo",
+            "Ahmadu Bello",
+            "Amalgamation",
+            "Richard constitution",
+            "independence",
+            "political parties"
+          ],
+          "common_misconceptions": [
+            "Independence was given without struggle",
+            "All nationalists wanted the same thing"
+          ],
+          "teaching_note": "Discuss contributions of key nationalists. Analyze the regional basis of early political parties."
+        }
+      ]
+    },
+    {
+      "id": "foreign_policy",
+      "title": "Foreign Policy and International Relations",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "nigeria_foreign_policy",
+          "title": "Nigeria's Foreign Policy",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "political_development"
+          ],
+          "concepts": [
+            "foreign policy",
+            "diplomacy",
+            "non-alignment",
+            "Africa as centerpiece",
+            "ECOWAS",
+            "OAU/AU",
+            "Commonwealth",
+            "UN",
+            "bilateral relations"
+          ],
+          "common_misconceptions": [
+            "Foreign policy is only about war and peace",
+            "Nigeria's foreign policy never changes"
+          ],
+          "teaching_note": "Analyze Nigeria's foreign policy principles. Discuss contributions to peacekeeping and African integration."
+        }
+      ]
+    }
+  ]
+}

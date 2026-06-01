@@ -1,0 +1,298 @@
+{
+  "subject": "physics",
+  "class_level": "SS2",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Projectile Motion",
+    "Equilibrium of Forces",
+    "Simple Harmonic Motion",
+    "Gravitational Field",
+    "Electrostatics",
+    "Current Electricity",
+    "Atomic and Nuclear Physics"
+  ],
+  "jamb_high_priority_topics": [
+    "Motion",
+    "Equilibrium",
+    "Work, Energy and Power",
+    "Electrostatics",
+    "Electricity",
+    "Modern Physics"
+  ],
+  "topics": [
+    {
+      "id": "projectile_motion",
+      "title": "Projectile Motion",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "projectiles",
+          "title": "Projectiles and Trajectory",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "projectile",
+            "trajectory",
+            "horizontal projection",
+            "angle projection",
+            "time of flight",
+            "maximum height",
+            "range",
+            "components of velocity"
+          ],
+          "common_misconceptions": [
+            "Horizontal motion affects vertical motion",
+            "Acceleration is zero at maximum height"
+          ],
+          "teaching_note": "Emphasize independence of horizontal and vertical motions. Show that vertical acceleration is always g downward."
+        }
+      ]
+    },
+    {
+      "id": "equilibrium",
+      "title": "Equilibrium of Forces",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "moments",
+          "title": "Moments and Equilibrium",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "projectile_motion"
+          ],
+          "concepts": [
+            "moment of force",
+            "principle of moments",
+            "couple",
+            "torque",
+            "equilibrium conditions",
+            "center of gravity",
+            "stability"
+          ],
+          "common_misconceptions": [
+            "Equilibrium means no forces act",
+            "Center of gravity is always at the geometric center"
+          ],
+          "teaching_note": "Use meter rules and known weights to verify the principle of moments. Show how to locate center of gravity experimentally."
+        },
+        {
+          "id": "resolution_forces",
+          "title": "Resolution and Composition of Forces",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "moments"
+          ],
+          "concepts": [
+            "resolution of forces",
+            "components",
+            "resultant",
+            "parallelogram of forces",
+            "triangle of forces",
+            "Lami's theorem"
+          ],
+          "common_misconceptions": [
+            "The resultant is always larger than individual forces",
+            "Lami's theorem applies to any three forces"
+          ],
+          "teaching_note": "Use force boards for experimental verification. Show that resultant can be smaller than components."
+        }
+      ]
+    },
+    {
+      "id": "shm",
+      "title": "Simple Harmonic Motion",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "shm_concepts",
+          "title": "Characteristics of SHM",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "equilibrium"
+          ],
+          "concepts": [
+            "SHM definition",
+            "amplitude",
+            "period",
+            "frequency",
+            "displacement",
+            "velocity",
+            "acceleration",
+            "restoring force",
+            "equation of SHM"
+          ],
+          "common_misconceptions": [
+            "SHM means motion that repeats",
+            "Acceleration is constant in SHM"
+          ],
+          "teaching_note": "Use simple pendulum and mass-spring systems. Show that acceleration is proportional to displacement and directed toward equilibrium."
+        },
+        {
+          "id": "shm_applications",
+          "title": "Applications of SHM",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "shm_concepts"
+          ],
+          "concepts": [
+            "simple pendulum",
+            "spiral spring",
+            "T = 2π√(L/g)",
+            "T = 2π√(m/k)",
+            "seconds pendulum",
+            "energy in SHM"
+          ],
+          "common_misconceptions": [
+            "Period of pendulum depends on mass",
+            "Amplitude affects the period significantly"
+          ],
+          "teaching_note": "Derive period formulas. Show experimentally that period is independent of amplitude (for small angles) and mass for pendulum."
+        }
+      ]
+    },
+    {
+      "id": "gravitational_field",
+      "title": "Gravitational Field",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "gravitation",
+          "title": "Newton's Law of Gravitation",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "shm"
+          ],
+          "concepts": [
+            "Newton's law of gravitation",
+            "gravitational constant",
+            "gravitational field strength",
+            "acceleration due to gravity",
+            "mass and weight",
+            "Kepler's laws"
+          ],
+          "common_misconceptions": [
+            "Gravity is the same everywhere on Earth",
+            "Mass and weight are the same"
+          ],
+          "teaching_note": "Distinguish mass (constant) from weight (varies with location). Use Cavendish experiment as historical context."
+        }
+      ]
+    },
+    {
+      "id": "electrostatics",
+      "title": "Electrostatics",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "electric_fields",
+          "title": "Electric Fields and Charge",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "gravitational_field"
+          ],
+          "concepts": [
+            "electric charge",
+            "Coulomb's law",
+            "electric field",
+            "electric field strength",
+            "electric field lines",
+            "potential",
+            "equipotential surfaces"
+          ],
+          "common_misconceptions": [
+            "Positive charges have more charge than negative",
+            "Electric field and electric force are the same"
+          ],
+          "teaching_note": "Compare Coulomb's law with Newton's law of gravitation. Use field line patterns for different charge configurations."
+        },
+        {
+          "id": "capacitors",
+          "title": "Capacitors",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "electric_fields"
+          ],
+          "concepts": [
+            "capacitor",
+            "capacitance",
+            "parallel plate capacitor",
+            "energy stored",
+            "charging",
+            "discharging",
+            "dielectric",
+            "series combination",
+            "parallel combination"
+          ],
+          "common_misconceptions": [
+            "Capacitors store electric charge like a battery stores energy",
+            "Capacitance is the same as charge"
+          ],
+          "teaching_note": "Explain that capacitors store energy in electric fields. Derive energy formula. Show combination formulas."
+        }
+      ]
+    },
+    {
+      "id": "atomic_nuclear",
+      "title": "Atomic and Nuclear Physics",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "atomic_models",
+          "title": "Atomic Models and Structure",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "electrostatics"
+          ],
+          "concepts": [
+            "Thomson model",
+            "Rutherford model",
+            "Bohr model",
+            "energy levels",
+            "electron orbits",
+            "atomic spectra",
+            "ionization energy"
+          ],
+          "common_misconceptions": [
+            "Electrons orbit like planets in exact paths",
+            "Rutherford's model was the final model"
+          ],
+          "teaching_note": "Show how each model addressed limitations of the previous. Use spectral lines as evidence for energy levels."
+        },
+        {
+          "id": "nuclear_physics",
+          "title": "Nuclear Physics and Radioactivity",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "atomic_models"
+          ],
+          "concepts": [
+            "radioactivity",
+            "alpha decay",
+            "beta decay",
+            "gamma decay",
+            "half-life",
+            "nuclear fission",
+            "nuclear fusion",
+            "binding energy",
+            "mass defect"
+          ],
+          "common_misconceptions": [
+            "All radiation is harmful at any dose",
+            "Nuclear fission and fusion are the same process"
+          ],
+          "teaching_note": "Discuss applications in medicine and energy. Explain safety measures. Use half-life calculations extensively."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,324 @@
+{
+  "subject": "mathematics",
+  "class_level": "JSS1",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Whole Numbers",
+    "Fractions",
+    "Decimals",
+    "Percentages",
+    "Algebraic Expressions",
+    "Geometry",
+    "Statistics"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "whole_numbers",
+      "title": "Whole Numbers",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "number_system",
+          "title": "The Number System",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "counting numbers",
+            "whole numbers",
+            "place value",
+            "expanded form",
+            "number line",
+            "comparing numbers",
+            "ordering numbers",
+            "rounding off"
+          ],
+          "common_misconceptions": [
+            "Zero is not a number",
+            "Bigger numbers always have more digits"
+          ],
+          "teaching_note": "Use number lines and place value charts. Connect to real-life counting scenarios."
+        },
+        {
+          "id": "number_operations",
+          "title": "Basic Operations with Whole Numbers",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "number_system"
+          ],
+          "concepts": [
+            "addition",
+            "subtraction",
+            "multiplication",
+            "division",
+            "BODMAS",
+            "order of operations",
+            "estimation"
+          ],
+          "common_misconceptions": [
+            "Multiplication always makes numbers bigger",
+            "Division always makes numbers smaller"
+          ],
+          "teaching_note": "Emphasize BODMAS rule. Use word problems to connect operations to real life."
+        }
+      ]
+    },
+    {
+      "id": "fractions",
+      "title": "Fractions",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "fraction_concepts",
+          "title": "Understanding Fractions",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "whole_numbers"
+          ],
+          "concepts": [
+            "fraction",
+            "numerator",
+            "denominator",
+            "proper fraction",
+            "improper fraction",
+            "mixed number",
+            "equivalent fractions",
+            "simplifying fractions"
+          ],
+          "common_misconceptions": [
+            "Bigger denominator means bigger fraction",
+            "Fractions are always less than 1"
+          ],
+          "teaching_note": "Use fraction strips and area models. Show that fractions represent division."
+        },
+        {
+          "id": "fraction_operations",
+          "title": "Operations with Fractions",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "fraction_concepts"
+          ],
+          "concepts": [
+            "adding fractions",
+            "subtracting fractions",
+            "multiplying fractions",
+            "dividing fractions",
+            "LCM",
+            "common denominator",
+            "reciprocal"
+          ],
+          "common_misconceptions": [
+            "Add numerators and denominators directly",
+            "Division of fractions means divide numerator and denominator"
+          ],
+          "teaching_note": "Find common denominators before adding/subtracting. Use 'keep, change, flip' for division."
+        }
+      ]
+    },
+    {
+      "id": "decimals",
+      "title": "Decimals and Percentages",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "decimal_concepts",
+          "title": "Decimals",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "fractions"
+          ],
+          "concepts": [
+            "decimal",
+            "decimal point",
+            "tenths",
+            "hundredths",
+            "thousandths",
+            "converting fractions to decimals",
+            "converting decimals to fractions",
+            "rounding decimals"
+          ],
+          "common_misconceptions": [
+            "More decimal places means a bigger number",
+            "0.5 is bigger than 0.50"
+          ],
+          "teaching_note": "Connect decimals to fractions (denominators of 10, 100, 1000). Use money examples for practical understanding."
+        },
+        {
+          "id": "percentages",
+          "title": "Percentages",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "decimal_concepts"
+          ],
+          "concepts": [
+            "percentage",
+            "percent",
+            "converting percentages to fractions",
+            "converting percentages to decimals",
+            "percentage of quantities",
+            "expressing one quantity as percentage of another"
+          ],
+          "common_misconceptions": [
+            "Percentages are always out of 100",
+            "Percentage cannot be more than 100%"
+          ],
+          "teaching_note": "Show that percentage means 'per hundred'. Practice conversions between fractions, decimals, and percentages."
+        }
+      ]
+    },
+    {
+      "id": "algebraic_expressions_jss1",
+      "title": "Algebraic Expressions",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "introduction_algebra",
+          "title": "Introduction to Algebra",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "decimals"
+          ],
+          "concepts": [
+            "variable",
+            "constant",
+            "algebraic expression",
+            "term",
+            "coefficient",
+            "like terms",
+            "unlike terms",
+            "simplifying expressions",
+            "substitution"
+          ],
+          "common_misconceptions": [
+            "Letters in algebra always stand for specific numbers",
+            "2x means 2 + x"
+          ],
+          "teaching_note": "Use concrete materials (cups and counters) to represent variables. Emphasize that 2x means 2 multiplied by x."
+        },
+        {
+          "id": "simple_equations",
+          "title": "Simple Linear Equations",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "introduction_algebra"
+          ],
+          "concepts": [
+            "equation",
+            "linear equation",
+            "solving equations",
+            "balance method",
+            "transposition",
+            "word problems",
+            "checking solutions"
+          ],
+          "common_misconceptions": [
+            "The variable must always be on the left side",
+            "You can only add/subtract the same number, not expression"
+          ],
+          "teaching_note": "Use balance model for equations. Emphasize doing the same operation to both sides."
+        }
+      ]
+    },
+    {
+      "id": "geometry_jss1",
+      "title": "Basic Geometry",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "lines_angles",
+          "title": "Lines and Angles",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "point",
+            "line",
+            "line segment",
+            "ray",
+            "angle",
+            "types of angles",
+            "acute",
+            "obtuse",
+            "right",
+            "reflex",
+            "straight",
+            "complementary",
+            "supplementary",
+            "vertically opposite"
+          ],
+          "common_misconceptions": [
+            "Angle size depends on arm length",
+            "Obtuse angle is bigger than reflex angle"
+          ],
+          "teaching_note": "Use protractors for accurate measurement. Show that angle size depends on rotation, not arm length."
+        },
+        {
+          "id": "plane_shapes",
+          "title": "Plane Shapes",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "lines_angles"
+          ],
+          "concepts": [
+            "triangle",
+            "quadrilateral",
+            "rectangle",
+            "square",
+            "parallelogram",
+            "rhombus",
+            "trapezium",
+            "polygon",
+            "circle",
+            "perimeter",
+            "area"
+          ],
+          "common_misconceptions": [
+            "Square is not a rectangle",
+            "All quadrilaterals with equal sides are squares"
+          ],
+          "teaching_note": "Use Venn diagrams to show relationships between shapes. Derive area formulas from basic principles."
+        }
+      ]
+    },
+    {
+      "id": "statistics_jss1",
+      "title": "Introduction to Statistics",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "data_collection",
+          "title": "Data Collection and Presentation",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "data",
+            "frequency table",
+            "tally marks",
+            "pictogram",
+            "bar chart",
+            "pie chart",
+            "mean",
+            "median",
+            "mode",
+            "range"
+          ],
+          "common_misconceptions": [
+            "Mean is always a whole number",
+            "Mode must be a number in the data set"
+          ],
+          "teaching_note": "Collect data from the classroom. Construct various charts by hand. Discuss when each average is most useful."
+        }
+      ]
+    }
+  ]
+}

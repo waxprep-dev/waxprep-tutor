@@ -1,0 +1,394 @@
+{
+  "subject": "physics",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Measurements and Units",
+    "Kinematics of Linear Motion",
+    "Newton's Laws of Motion",
+    "Work, Energy and Power",
+    "Heat Energy",
+    "Electricity",
+    "Waves"
+  ],
+  "jamb_high_priority_topics": [
+    "Measurements",
+    "Motion",
+    "Forces",
+    "Work, Energy and Power",
+    "Heat",
+    "Current Electricity",
+    "Waves"
+  ],
+  "topics": [
+    {
+      "id": "measurements_units",
+      "title": "Measurements and Units",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "fundamental_quantities",
+          "title": "Fundamental and Derived Quantities",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "SI units",
+            "fundamental quantities",
+            "derived quantities",
+            "dimensions",
+            "meter",
+            "kilogram",
+            "second",
+            "ampere",
+            "kelvin"
+          ],
+          "common_misconceptions": [
+            "Confusing fundamental and derived quantities",
+            "Using non-SI units in calculations"
+          ],
+          "teaching_note": "Emphasize that all physical quantities must have units. Use practical demonstrations with measuring instruments."
+        },
+        {
+          "id": "measurement_techniques",
+          "title": "Measurement Techniques and Instruments",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "fundamental_quantities"
+          ],
+          "concepts": [
+            "vernier caliper",
+            "micrometer screw gauge",
+            "metre rule",
+            "stopwatch",
+            "beam balance",
+            "precision",
+            "accuracy",
+            "significant figures"
+          ],
+          "common_misconceptions": [
+            "Confusing precision with accuracy",
+            "Reading vernier scale incorrectly",
+            "Not understanding zero error"
+          ],
+          "teaching_note": "Allow students to handle actual measuring instruments. Demonstrate zero error correction on vernier calipers and micrometers."
+        }
+      ]
+    },
+    {
+      "id": "kinematics",
+      "title": "Kinematics of Linear Motion",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "concepts_of_motion",
+          "title": "Concepts of Motion",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "distance",
+            "displacement",
+            "speed",
+            "velocity",
+            "acceleration",
+            "uniform motion",
+            "uniform acceleration",
+            "rest"
+          ],
+          "common_misconceptions": [
+            "Confusing distance with displacement",
+            "Thinking constant speed means zero acceleration",
+            "Confusing speed and velocity"
+          ],
+          "teaching_note": "Use ticker-timer experiments to demonstrate motion concepts. Emphasize the vector nature of displacement and velocity."
+        },
+        {
+          "id": "equations_motion",
+          "title": "Equations of Uniformly Accelerated Motion",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "concepts_of_motion"
+          ],
+          "concepts": [
+            "v = u + at",
+            "s = ut + ½at²",
+            "v² = u² + 2as",
+            "average velocity",
+            "motion under gravity",
+            "free fall"
+          ],
+          "common_misconceptions": [
+            "Using wrong signs for acceleration due to gravity",
+            "Assuming all motion problems involve constant acceleration"
+          ],
+          "teaching_note": "Derive the equations of motion graphically. Emphasize sign conventions for upward and downward motion."
+        }
+      ]
+    },
+    {
+      "id": "forces",
+      "title": "Forces and Newton's Laws of Motion",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "newtons_first_law",
+          "title": "Newton's First Law (Law of Inertia)",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "kinematics"
+          ],
+          "concepts": [
+            "inertia",
+            "Newton's first law",
+            "balanced forces",
+            "unbalanced forces",
+            "equilibrium",
+            "net force"
+          ],
+          "common_misconceptions": [
+            "Thinking that force is needed to maintain motion",
+            "Confusing inertia with momentum"
+          ],
+          "teaching_note": "Use demonstrations with coins on paper and objects on moving carts. Clarify that inertia is a property, not a force."
+        },
+        {
+          "id": "newtons_second_third",
+          "title": "Newton's Second and Third Laws",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "newtons_first_law"
+          ],
+          "concepts": [
+            "F = ma",
+            "Newton's second law",
+            "Newton's third law",
+            "action-reaction pairs",
+            "momentum",
+            "impulse"
+          ],
+          "common_misconceptions": [
+            "Thinking action-reaction pairs act on the same body",
+            "Confusing mass and weight"
+          ],
+          "teaching_note": "Use F=ma experiments with dynamics trolleys. Clarify that action and reaction forces act on different bodies."
+        }
+      ]
+    },
+    {
+      "id": "work_energy_power",
+      "title": "Work, Energy and Power",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "work_done",
+          "title": "Work Done by a Force",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "forces"
+          ],
+          "concepts": [
+            "work",
+            "force",
+            "displacement",
+            "W = F × d × cosθ",
+            "joule",
+            "positive work",
+            "negative work",
+            "zero work"
+          ],
+          "common_misconceptions": [
+            "Thinking that holding a heavy object involves doing work",
+            "Ignoring the angle between force and displacement"
+          ],
+          "teaching_note": "Emphasize that work is done only when force causes displacement in the direction of the force."
+        },
+        {
+          "id": "energy_forms",
+          "title": "Forms of Energy and Conservation",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "work_done"
+          ],
+          "concepts": [
+            "kinetic energy",
+            "potential energy",
+            "mechanical energy",
+            "conservation of energy",
+            "energy transformation",
+            "power",
+            "watt"
+          ],
+          "common_misconceptions": [
+            "Thinking energy is lost in transformations",
+            "Confusing power with energy"
+          ],
+          "teaching_note": "Demonstrate energy transformations using pendulums and rolling objects. Emphasize that energy is conserved, not lost."
+        }
+      ]
+    },
+    {
+      "id": "heat_energy",
+      "title": "Heat Energy",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "temperature_heat",
+          "title": "Temperature and Heat",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "temperature",
+            "heat",
+            "thermometric properties",
+            "thermometers",
+            "Celsius scale",
+            "Kelvin scale",
+            "absolute zero"
+          ],
+          "common_misconceptions": [
+            "Confusing heat with temperature",
+            "Thinking that temperature measures the amount of heat"
+          ],
+          "teaching_note": "Distinguish clearly between temperature (a property) and heat (energy in transit). Demonstrate different types of thermometers."
+        },
+        {
+          "id": "thermal_expansion",
+          "title": "Thermal Expansion",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "temperature_heat"
+          ],
+          "concepts": [
+            "linear expansion",
+            "area expansion",
+            "volume expansion",
+            "coefficient of expansion",
+            "anomalous expansion of water",
+            "applications"
+          ],
+          "common_misconceptions": [
+            "Thinking all substances expand equally when heated",
+            "Not understanding the anomalous expansion of water"
+          ],
+          "teaching_note": "Demonstrate expansion with bimetallic strips and ball-and-ring experiments. Explain why water expansion between 0°C and 4°C is important for aquatic life."
+        }
+      ]
+    },
+    {
+      "id": "electricity",
+      "title": "Current Electricity",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "electric_current",
+          "title": "Electric Current and Circuits",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "electric current",
+            "charge",
+            "potential difference",
+            "resistance",
+            "Ohm's law",
+            "series circuit",
+            "parallel circuit",
+            "EMF"
+          ],
+          "common_misconceptions": [
+            "Thinking current is used up in a circuit",
+            "Confusing potential difference with current"
+          ],
+          "teaching_note": "Use circuit diagrams and actual circuit building. Emphasize that current is the flow of charge, not the charge itself."
+        },
+        {
+          "id": "ohms_law",
+          "title": "Ohm's Law and Resistance",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "electric_current"
+          ],
+          "concepts": [
+            "Ohm's law",
+            "V = IR",
+            "resistors",
+            "variable resistors",
+            "resistivity",
+            "conductivity",
+            "I-V characteristics"
+          ],
+          "common_misconceptions": [
+            "Applying Ohm's law to non-ohmic conductors",
+            "Thinking resistance depends on voltage or current"
+          ],
+          "teaching_note": "Experimentally verify Ohm's law using a resistor. Distinguish between ohmic and non-ohmic conductors."
+        }
+      ]
+    },
+    {
+      "id": "waves",
+      "title": "Waves",
+      "week": 7,
+      "subtopics": [
+        {
+          "id": "wave_properties",
+          "title": "Properties of Waves",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "amplitude",
+            "wavelength",
+            "frequency",
+            "period",
+            "velocity",
+            "wave equation",
+            "transverse waves",
+            "longitudinal waves",
+            "crest",
+            "trough"
+          ],
+          "common_misconceptions": [
+            "Confusing frequency with amplitude",
+            "Not understanding the relationship v = fλ"
+          ],
+          "teaching_note": "Demonstrate waves using slinky springs and ripple tanks. Emphasize the wave equation v = fλ and its applications."
+        },
+        {
+          "id": "sound_waves",
+          "title": "Sound Waves",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "wave_properties"
+          ],
+          "concepts": [
+            "sound production",
+            "propagation",
+            "speed of sound",
+            "echo",
+            "reverberation",
+            "pitch",
+            "loudness",
+            "quality"
+          ],
+          "common_misconceptions": [
+            "Thinking sound travels faster in air than in solids",
+            "Confusing pitch with loudness"
+          ],
+          "teaching_note": "Demonstrate that sound requires a medium. Use tuning forks to show pitch and resonance."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,383 @@
+{
+  "subject": "mathematics",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Number Bases",
+    "Algebraic Processes",
+    "Indices and Logarithms",
+    "Quadratic Equations",
+    "Trigonometry"
+  ],
+  "jamb_high_priority_topics": [
+    "Logarithms and Indices",
+    "Quadratic Equations",
+    "Sequences and Series",
+    "Sets",
+    "Trigonometry"
+  ],
+  "topics": [
+    {
+      "id": "number_bases",
+      "title": "Number Bases",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "binary_numbers",
+          "title": "Binary Numbers and Conversion",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "base 2",
+            "binary digits",
+            "conversion to decimal",
+            "conversion from decimal",
+            "place value"
+          ],
+          "common_misconceptions": [
+            "Students often confuse binary place values with decimal place values",
+            "Some forget that binary only uses digits 0 and 1"
+          ],
+          "teaching_note": "Use physical counters to demonstrate the concept of place value in different bases."
+        },
+        {
+          "id": "octal_hexadecimal",
+          "title": "Octal and Hexadecimal Systems",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "binary_numbers"
+          ],
+          "concepts": [
+            "base 8",
+            "base 16",
+            "hexadecimal digits A-F",
+            "octal conversion",
+            "hexadecimal conversion"
+          ],
+          "common_misconceptions": [
+            "Students sometimes confuse hexadecimal letters A-F with variable symbols in algebra"
+          ],
+          "teaching_note": "Connect octal and hexadecimal to their use in computer science."
+        }
+      ]
+    },
+    {
+      "id": "algebraic_expressions",
+      "title": "Algebraic Expressions and Operations",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "expanding_brackets",
+          "title": "Expanding and Simplifying Brackets",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "distributive law",
+            "expansion",
+            "simplification",
+            "like terms",
+            "brackets"
+          ],
+          "common_misconceptions": [
+            "Forgetting to multiply every term inside the bracket by the factor outside",
+            "Sign errors when expanding negative coefficients"
+          ],
+          "teaching_note": "Use the area model to visualize expansion. Emphasize the distributive property systematically."
+        },
+        {
+          "id": "factorization",
+          "title": "Factorization Techniques",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "expanding_brackets"
+          ],
+          "concepts": [
+            "common factors",
+            "grouping",
+            "difference of squares",
+            "trinomials",
+            "factor by grouping"
+          ],
+          "common_misconceptions": [
+            "Difficulty identifying common factors in complex expressions",
+            "Confusing factorization with expansion"
+          ],
+          "teaching_note": "Start with numerical examples to establish the concept of common factors."
+        }
+      ]
+    },
+    {
+      "id": "indices_logarithms",
+      "title": "Indices and Logarithms",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "laws_of_indices",
+          "title": "Laws of Indices",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "multiplication law",
+            "division law",
+            "power law",
+            "zero index",
+            "negative indices",
+            "fractional indices"
+          ],
+          "common_misconceptions": [
+            "Adding indices when multiplying same bases",
+            "Confusing negative indices with negative numbers"
+          ],
+          "teaching_note": "Build the laws of indices from numerical examples using pattern recognition."
+        },
+        {
+          "id": "introduction_logarithms",
+          "title": "Introduction to Logarithms",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "laws_of_indices"
+          ],
+          "concepts": [
+            "logarithm definition",
+            "base 10 logarithms",
+            "antilogarithms",
+            "characteristic",
+            "mantissa",
+            "logarithm tables"
+          ],
+          "common_misconceptions": [
+            "Confusing logarithms with algebraic multiplication",
+            "Difficulty understanding that logarithm is an exponent"
+          ],
+          "teaching_note": "Emphasize that logarithms are exponents. Use the equivalence between exponential and logarithmic forms."
+        }
+      ]
+    },
+    {
+      "id": "quadratic_equations",
+      "title": "Quadratic Equations",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "solving_quadratic_factorization",
+          "title": "Solving Quadratic Equations by Factorization",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "factorization"
+          ],
+          "concepts": [
+            "quadratic equation",
+            "solving by factorization",
+            "roots",
+            "zero product property"
+          ],
+          "common_misconceptions": [
+            "Setting each factor equal to the number on the right side instead of zero"
+          ],
+          "teaching_note": "Emphasize that the equation must equal zero before factorizing."
+        },
+        {
+          "id": "quadratic_formula",
+          "title": "The Quadratic Formula and Completing the Square",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "solving_quadratic_factorization"
+          ],
+          "concepts": [
+            "quadratic formula",
+            "completing the square",
+            "discriminant",
+            "equal roots",
+            "distinct roots",
+            "no real roots"
+          ],
+          "common_misconceptions": [
+            "Sign errors when identifying coefficients a, b, and c",
+            "Forgetting that the discriminant determines the nature of roots"
+          ],
+          "teaching_note": "Derive the quadratic formula from completing the square. Use the discriminant to predict root nature."
+        }
+      ]
+    },
+    {
+      "id": "plane_geometry",
+      "title": "Plane Geometry",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "angles_lines",
+          "title": "Angles and Lines",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "complementary angles",
+            "supplementary angles",
+            "vertically opposite angles",
+            "alternate angles",
+            "corresponding angles"
+          ],
+          "common_misconceptions": [
+            "Confusing alternate and corresponding angles"
+          ],
+          "teaching_note": "Use parallel lines cut by a transversal to demonstrate all angle relationships."
+        },
+        {
+          "id": "polygons",
+          "title": "Polygons and Their Properties",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "angles_lines"
+          ],
+          "concepts": [
+            "regular polygons",
+            "interior angle sum",
+            "exterior angles",
+            "triangle properties",
+            "quadrilateral properties"
+          ],
+          "common_misconceptions": [
+            "Using the wrong formula for sum of interior angles"
+          ],
+          "teaching_note": "Derive the formula (n-2)×180° through dividing polygons into triangles."
+        }
+      ]
+    },
+    {
+      "id": "trigonometry",
+      "title": "Trigonometry",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "trig_ratios",
+          "title": "Trigonometric Ratios",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "sine",
+            "cosine",
+            "tangent",
+            "SOH CAH TOA",
+            "right-angled triangles",
+            "angle of elevation",
+            "angle of depression"
+          ],
+          "common_misconceptions": [
+            "Confusing sine and cosine ratios",
+            "Using trigonometry in non-right-angled triangles"
+          ],
+          "teaching_note": "Use SOH CAH TOA as a mnemonic. Emphasize that trigonometric ratios only apply to right-angled triangles."
+        }
+      ]
+    },
+    {
+      "id": "statistics",
+      "title": "Statistics",
+      "week": 7,
+      "subtopics": [
+        {
+          "id": "measures_central_tendency",
+          "title": "Measures of Central Tendency",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "mean",
+            "median",
+            "mode",
+            "frequency distribution",
+            "cumulative frequency"
+          ],
+          "common_misconceptions": [
+            "Confusing mean with median in skewed distributions",
+            "Forgetting to arrange data in order before finding median"
+          ],
+          "teaching_note": "Use real-life data. Discuss when each measure is most appropriate."
+        },
+        {
+          "id": "measures_dispersion",
+          "title": "Measures of Dispersion",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "measures_central_tendency"
+          ],
+          "concepts": [
+            "range",
+            "mean deviation",
+            "variance",
+            "standard deviation",
+            "grouped data"
+          ],
+          "common_misconceptions": [
+            "Confusing variance with standard deviation"
+          ],
+          "teaching_note": "Emphasize that standard deviation is the square root of variance."
+        }
+      ]
+    },
+    {
+      "id": "sets",
+      "title": "Sets",
+      "week": 8,
+      "subtopics": [
+        {
+          "id": "set_operations",
+          "title": "Set Operations and Venn Diagrams",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "union",
+            "intersection",
+            "complement",
+            "universal set",
+            "empty set",
+            "subset",
+            "Venn diagrams"
+          ],
+          "common_misconceptions": [
+            "Confusing union with intersection",
+            "Forgetting that n(A∪B) = n(A) + n(B) - n(A∩B)"
+          ],
+          "teaching_note": "Use Venn diagrams as a visual tool. Solve word problems using inclusion-exclusion."
+        }
+      ]
+    },
+    {
+      "id": "variation",
+      "title": "Variation",
+      "week": 9,
+      "subtopics": [
+        {
+          "id": "direct_inverse_variation",
+          "title": "Direct and Inverse Variation",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "direct variation",
+            "inverse variation",
+            "joint variation",
+            "partial variation",
+            "constant of variation"
+          ],
+          "common_misconceptions": [
+            "Confusing direct and inverse variation"
+          ],
+          "teaching_note": "Use real-world examples like speed and time (inverse) or cost and quantity (direct)."
+        }
+      ]
+    }
+  ]
+}

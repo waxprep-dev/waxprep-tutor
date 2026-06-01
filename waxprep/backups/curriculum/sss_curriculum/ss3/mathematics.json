@@ -1,0 +1,239 @@
+{
+  "subject": "mathematics",
+  "class_level": "SS3",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Surds",
+    "Matrices and Determinants",
+    "Logarithms",
+    "Arithmetic and Geometric Progressions",
+    "Permutation and Combination",
+    "Probability",
+    "Statistics",
+    "Trigonometry",
+    "Calculus"
+  ],
+  "jamb_high_priority_topics": [
+    "Sequences and Series",
+    "Matrices",
+    "Differentiation",
+    "Integration",
+    "Statistics"
+  ],
+  "topics": [
+    {
+      "id": "surds",
+      "title": "Surds",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "surd_operations",
+          "title": "Operations with Surds",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "surd",
+            "rational number",
+            "irrational number",
+            "simplifying surds",
+            "addition of surds",
+            "subtraction of surds",
+            "multiplication of surds",
+            "rationalization",
+            "conjugate surds"
+          ],
+          "common_misconceptions": [
+            "√a + √b = √(a+b)",
+            "Rationalizing always removes the denominator"
+          ],
+          "teaching_note": "Emphasize that surds follow the same rules as algebraic terms. Practice rationalizing denominators with binomial surds."
+        }
+      ]
+    },
+    {
+      "id": "sequences_series",
+      "title": "Sequences and Series",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "ap_gp",
+          "title": "Arithmetic and Geometric Progressions",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "surd_operations"
+          ],
+          "concepts": [
+            "sequence",
+            "series",
+            "arithmetic progression",
+            "geometric progression",
+            "first term",
+            "common difference",
+            "common ratio",
+            "nth term",
+            "sum of terms",
+            "sum to infinity"
+          ],
+          "common_misconceptions": [
+            "The sum to infinity exists for all GPs",
+            "AP and GP formulas are interchangeable"
+          ],
+          "teaching_note": "Derive formulas for nth term and sum. Show condition for convergence of GP sum to infinity."
+        }
+      ]
+    },
+    {
+      "id": "permutation_combination_ss3",
+      "title": "Permutation and Combination",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "counting_principles",
+          "title": "Counting Principles and Applications",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "ap_gp"
+          ],
+          "concepts": [
+            "fundamental principle of counting",
+            "permutation",
+            "combination",
+            "factorial",
+            "circular permutation",
+            "repetition",
+            "arrangement with restrictions"
+          ],
+          "common_misconceptions": [
+            "Permutation and combination give the same results",
+            "Order never matters in selection"
+          ],
+          "teaching_note": "Use clear scenarios: arrangement (permutation) vs selection (combination). Practice restricted arrangement problems."
+        }
+      ]
+    },
+    {
+      "id": "probability_ss3",
+      "title": "Probability",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "advanced_probability",
+          "title": "Advanced Probability Concepts",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "counting_principles"
+          ],
+          "concepts": [
+            "sample space",
+            "event",
+            "mutually exclusive events",
+            "independent events",
+            "conditional probability",
+            "Bayes' theorem",
+            "tree diagrams",
+            "Venn diagrams in probability"
+          ],
+          "common_misconceptions": [
+            "Independent events are always mutually exclusive",
+            "Past outcomes affect future independent events"
+          ],
+          "teaching_note": "Clarify the difference between mutually exclusive and independent events. Use tree diagrams for conditional probability."
+        }
+      ]
+    },
+    {
+      "id": "statistics_ss3",
+      "title": "Statistics",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "data_representation",
+          "title": "Data Representation and Analysis",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "advanced_probability"
+          ],
+          "concepts": [
+            "frequency distribution",
+            "histogram",
+            "cumulative frequency",
+            "ogive",
+            "measures of central tendency",
+            "measures of dispersion",
+            "mean deviation",
+            "standard deviation",
+            "variance"
+          ],
+          "common_misconceptions": [
+            "Histogram and bar chart are the same",
+            "Standard deviation can be negative"
+          ],
+          "teaching_note": "Distinguish between histogram (continuous data) and bar chart (discrete). Use grouped data calculations."
+        }
+      ]
+    },
+    {
+      "id": "calculus",
+      "title": "Calculus",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "differentiation_ss3",
+          "title": "Differentiation and Applications",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "statistics_ss3"
+          ],
+          "concepts": [
+            "limit",
+            "differentiation from first principles",
+            "power rule",
+            "chain rule",
+            "product rule",
+            "quotient rule",
+            "stationary points",
+            "maximum",
+            "minimum",
+            "points of inflection",
+            "rate of change"
+          ],
+          "common_misconceptions": [
+            "dy/dx is a fraction that can be separated",
+            "Stationary point always means maximum or minimum"
+          ],
+          "teaching_note": "Use first and second derivative tests. Connect to curve sketching and optimization problems."
+        },
+        {
+          "id": "integration_ss3",
+          "title": "Integration and Applications",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "differentiation_ss3"
+          ],
+          "concepts": [
+            "indefinite integral",
+            "definite integral",
+            "constant of integration",
+            "area under curve",
+            "area between curves",
+            "volume of revolution",
+            "trapezium rule",
+            "Simpson's rule"
+          ],
+          "common_misconceptions": [
+            "Integration always gives the area under a curve",
+            "The constant of integration is optional"
+          ],
+          "teaching_note": "Emphasize the constant of integration for indefinite integrals. Show numerical methods for approximation."
+        }
+      ]
+    }
+  ]
+}

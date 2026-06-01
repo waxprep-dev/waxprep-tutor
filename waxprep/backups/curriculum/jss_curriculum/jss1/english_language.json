@@ -1,0 +1,194 @@
+{
+  "subject": "english_language",
+  "class_level": "JSS1",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Reading Comprehension",
+    "Grammar",
+    "Essay Writing",
+    "Vocabulary Development",
+    "Listening and Speaking",
+    "Phonics",
+    "Summary Writing"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "comprehension_jss1",
+      "title": "Reading Comprehension",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "reading_skills",
+          "title": "Basic Reading Comprehension Skills",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "reading",
+            "comprehension",
+            "main idea",
+            "supporting details",
+            "context clues",
+            "inference",
+            "literal meaning",
+            "figurative meaning"
+          ],
+          "common_misconceptions": [
+            "Reading fast means better comprehension",
+            "Every detail is equally important"
+          ],
+          "teaching_note": "Use varied passages appropriate for JSS level. Teach skimming and scanning techniques."
+        }
+      ]
+    },
+    {
+      "id": "grammar_jss1",
+      "title": "Grammar",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "parts_speech_jss1",
+          "title": "Parts of Speech",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "comprehension_jss1"
+          ],
+          "concepts": [
+            "noun",
+            "pronoun",
+            "verb",
+            "adjective",
+            "adverb",
+            "preposition",
+            "conjunction",
+            "interjection",
+            "articles"
+          ],
+          "common_misconceptions": [
+            "All verbs show action",
+            "Adjectives only describe people"
+          ],
+          "teaching_note": "Use sentence analysis to identify parts of speech. Create fun activities for practice."
+        },
+        {
+          "id": "tenses_jss1",
+          "title": "Tenses",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "parts_speech_jss1"
+          ],
+          "concepts": [
+            "present tense",
+            "past tense",
+            "future tense",
+            "simple present",
+            "simple past",
+            "simple future",
+            "continuous tense",
+            "subject-verb agreement"
+          ],
+          "common_misconceptions": [
+            "Adding -ed always makes past tense",
+            "All actions in a story use past tense"
+          ],
+          "teaching_note": "Practice with irregular verbs. Use timelines to show when different tenses are used."
+        }
+      ]
+    },
+    {
+      "id": "essay_writing_jss1",
+      "title": "Essay Writing",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "essay_basics",
+          "title": "Introduction to Essay Writing",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "grammar_jss1"
+          ],
+          "concepts": [
+            "essay",
+            "introduction",
+            "body",
+            "conclusion",
+            "topic sentence",
+            "paragraph",
+            "narrative essay",
+            "descriptive essay"
+          ],
+          "common_misconceptions": [
+            "Essays should be as long as possible",
+            "You don't need to plan before writing"
+          ],
+          "teaching_note": "Teach the hamburger paragraph structure. Start with simple 3-paragraph essays."
+        }
+      ]
+    },
+    {
+      "id": "vocabulary_jss1",
+      "title": "Vocabulary Development",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "word_building",
+          "title": "Word Building and Usage",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "essay_writing_jss1"
+          ],
+          "concepts": [
+            "synonyms",
+            "antonyms",
+            "homonyms",
+            "prefixes",
+            "suffixes",
+            "root words",
+            "compound words",
+            "context clues"
+          ],
+          "common_misconceptions": [
+            "Big words always impress readers",
+            "Synonyms can always be used interchangeably"
+          ],
+          "teaching_note": "Build vocabulary through reading and word games. Teach use of dictionary and thesaurus."
+        }
+      ]
+    },
+    {
+      "id": "phonics_speaking",
+      "title": "Phonics and Speaking",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "phonics",
+          "title": "Phonics and Pronunciation",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "vocabulary_jss1"
+          ],
+          "concepts": [
+            "vowel sounds",
+            "consonant sounds",
+            "diphthongs",
+            "silent letters",
+            "stress",
+            "syllables",
+            "rhyme"
+          ],
+          "common_misconceptions": [
+            "English spelling always shows pronunciation",
+            "Silent letters have no purpose"
+          ],
+          "teaching_note": "Practice sounds that differ from Nigerian languages. Use songs and rhymes for pronunciation practice."
+        }
+      ]
+    }
+  ]
+}

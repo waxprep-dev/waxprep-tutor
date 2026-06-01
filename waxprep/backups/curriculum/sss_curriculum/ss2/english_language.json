@@ -1,0 +1,173 @@
+{
+  "subject": "english_language",
+  "class_level": "SS2",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Comprehension Skills",
+    "Summary Writing",
+    "Essay Writing Techniques",
+    "Parts of Speech and Grammar",
+    "Lexis and Structure",
+    "Oral English and Phonetics",
+    "Register and Vocabulary"
+  ],
+  "jamb_high_priority_topics": [
+    "Comprehension",
+    "Lexis and Structure",
+    "Oral Forms",
+    "Essay Writing"
+  ],
+  "topics": [
+    {
+      "id": "comprehension_skills",
+      "title": "Comprehension Skills",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "reading_strategies",
+          "title": "Reading and Comprehension Strategies",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "skimming",
+            "scanning",
+            "intensive reading",
+            "context clues",
+            "inference",
+            "deduction",
+            "main idea",
+            "supporting details",
+            "tone",
+            "purpose"
+          ],
+          "common_misconceptions": [
+            "Reading slowly guarantees better comprehension",
+            "The answer is always directly stated"
+          ],
+          "teaching_note": "Practice with varied text types. Teach students to identify question types: literal, inferential, and evaluative."
+        }
+      ]
+    },
+    {
+      "id": "summary_writing_ss2",
+      "title": "Summary Writing",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "summary_techniques",
+          "title": "Summary Writing Techniques",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "reading_strategies"
+          ],
+          "concepts": [
+            "summarization",
+            "relevant points",
+            "irrelevant details",
+            "paraphrasing",
+            "synthesis",
+            "conciseness",
+            "word limit",
+            "own words"
+          ],
+          "common_misconceptions": [
+            "Summary is just copying key sentences",
+            "More points always mean better marks"
+          ],
+          "teaching_note": "Teach the process: read, identify, draft, check. Practice with passages of varying complexity."
+        }
+      ]
+    },
+    {
+      "id": "essay_techniques",
+      "title": "Essay Writing Techniques",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "essay_development",
+          "title": "Developing Different Essay Types",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "narrative essay",
+            "descriptive essay",
+            "argumentative essay",
+            "expository essay",
+            "formal letter",
+            "informal letter",
+            "speech",
+            "article"
+          ],
+          "common_misconceptions": [
+            "One essay format fits all questions",
+            "Introduction should be the longest paragraph"
+          ],
+          "teaching_note": "Analyze past WAEC/JAMB questions. Practice planning and writing under timed conditions."
+        }
+      ]
+    },
+    {
+      "id": "grammar_lexis",
+      "title": "Grammar and Lexis",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "advanced_grammar",
+          "title": "Advanced Grammar Topics",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "tenses",
+            "concord",
+            "subject-verb agreement",
+            "reported speech",
+            "active and passive voice",
+            "conditionals",
+            "relative clauses",
+            "phrasal verbs",
+            "idioms"
+          ],
+          "common_misconceptions": [
+            "Complex sentences always score higher",
+            "Grammar rules never have exceptions"
+          ],
+          "teaching_note": "Focus on common errors in examination contexts. Use error-correction exercises extensively."
+        }
+      ]
+    },
+    {
+      "id": "oral_english_ss2",
+      "title": "Oral English",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "phonetics",
+          "title": "Phonetics and Phonology",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "IPA",
+            "vowel sounds",
+            "consonant sounds",
+            "stress",
+            "intonation",
+            "syllable",
+            "rhyme",
+            "minimal pairs",
+            "homophones"
+          ],
+          "common_misconceptions": [
+            "English spelling indicates pronunciation",
+            "Stress doesn't change meaning"
+          ],
+          "teaching_note": "Use audio materials and transcription exercises. Practice identifying sounds in Nigerian English context."
+        }
+      ]
+    }
+  ]
+}
