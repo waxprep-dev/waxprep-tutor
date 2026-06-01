@@ -55,6 +55,34 @@ async def dispatch_message(normalized_message: NormalizedMessage) -> None:
             return
         await dedup_cache.mark_processed(normalized_message.platform_message_id)
 
+        content = normalized_message.content or ""
+        content_stripped = content.strip()
+
+        if len(content_stripped) <= 2 and not normalized_message.is_voice and normalized_message.media_type not in ["image", "photo"]:
+            student = await identity_manager.get_or_create_student(
+                platform=normalized_message.platform,
+                platform_user_id=normalized_message.platform_user_id,
+            )
+            from waxprep.app.gateways.whatsapp.sender import WhatsAppSender
+            from waxprep.app.gateways.telegram.sender import TelegramSender
+            responses = ["What do you want to study today?", "What subject are we working on?", "What can I help you with?"]
+            import random
+            msg = random.choice(responses)
+            if normalized_message.platform == Platform.WHATSAPP:
+                await WhatsAppSender().send_text(normalized_message.platform_user_id, msg)
+                await WhatsAppSender().mark_as_read(normalized_message.platform_message_id)
+            elif normalized_message.platform == Platform.TELEGRAM:
+                await TelegramSender().send_text(normalized_message.platform_user_id, msg)
+            return
+
+        if content_stripped.startswith("http://") or content_stripped.startswith("https://"):
+            normalized_message.content = "I sent a link — can you help me understand what it is about or find related study material?"
+
+        import re
+        cleaned = re.sub(r'[^\w\s\?\!\.\,\'\"\-\+\=\/\(\)\[\]]', '', content_stripped)
+        if len(cleaned.strip()) < 2 and len(content_stripped) > 0:
+            normalized_message.content = "I sent a message — what can you help me with?"
+
         if normalized_message.is_voice and normalized_message.media_url:
             try:
                 from waxprep.app.gateways.whatsapp.voice_transcriber import VoiceTranscriber
