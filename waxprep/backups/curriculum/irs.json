@@ -1,0 +1,320 @@
+{
+  "subject": "irs",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Revelation of the Quran",
+    "Articles of Faith",
+    "Pillars of Islam",
+    "Moral Teachings of Islam",
+    "Early Life of the Prophet",
+    "Prophet's Mission in Makkah",
+    "Prophet's Mission in Madinah"
+  ],
+  "jamb_high_priority_topics": [
+    "Quranic Studies",
+    "Hadith",
+    "Fiqh",
+    "Tawhid",
+    "Sirah"
+  ],
+  "topics": [
+    {
+      "id": "revelation_quran",
+      "title": "Revelation of the Quran",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "quran_revelation",
+          "title": "The Revelation and Compilation of the Quran",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "Quran",
+            "wahy",
+            "revelation",
+            "Cave of Hira",
+            "Jibril",
+            "Makkan surahs",
+            "Madinan surahs",
+            "compilation",
+            "Uthmanic codex",
+            "tahfiz"
+          ],
+          "common_misconceptions": [
+            "The Quran was written by Prophet Muhammad",
+            "The Quran has been changed over time"
+          ],
+          "teaching_note": "Explain the process of revelation. Discuss the miraculous nature and preservation of the Quran."
+        },
+        {
+          "id": "themes_quran",
+          "title": "Major Themes of the Quran",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "quran_revelation"
+          ],
+          "concepts": [
+            "Tawhid",
+            "prophethood",
+            "akhirah",
+            "morality",
+            "justice",
+            "mercy",
+            "stories of prophets",
+            "legal rulings"
+          ],
+          "common_misconceptions": [
+            "The Quran is only about rules",
+            "Quranic stories are fictional"
+          ],
+          "teaching_note": "Explore the major themes with relevant verses. Show the coherence and universality of Quranic teachings."
+        }
+      ]
+    },
+    {
+      "id": "articles_faith",
+      "title": "Articles of Faith",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "six_articles",
+          "title": "The Six Articles of Iman",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "Iman",
+            "belief in Allah",
+            "belief in angels",
+            "belief in scriptures",
+            "belief in prophets",
+            "belief in Last Day",
+            "belief in Qadar",
+            "Tawhid"
+          ],
+          "common_misconceptions": [
+            "Belief in Qadar means no free will",
+            "Angels are the same as human souls"
+          ],
+          "teaching_note": "Explain each article with Quranic evidence. Discuss the relationship between Qadar and human responsibility."
+        }
+      ]
+    },
+    {
+      "id": "pillars_islam",
+      "title": "The Five Pillars of Islam",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "five_pillars",
+          "title": "The Five Pillars",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "articles_faith"
+          ],
+          "concepts": [
+            "Shahadah",
+            "Salah",
+            "Zakat",
+            "Sawm",
+            "Hajj",
+            "declaration of faith",
+            "prayer",
+            "charity",
+            "fasting",
+            "pilgrimage"
+          ],
+          "common_misconceptions": [
+            "The pillars are optional for sincere Muslims",
+            "Zakat is the same as voluntary charity"
+          ],
+          "teaching_note": "Explain each pillar with its conditions and significance. Discuss the spiritual and social benefits of each practice."
+        },
+        {
+          "id": "salat_practical",
+          "title": "Practical Aspects of Salat",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "five_pillars"
+          ],
+          "concepts": [
+            "wudu",
+            "ablution",
+            "taharah",
+            "adhan",
+            "iqamah",
+            "rakah",
+            "sujud",
+            "ruku",
+            "qiyam",
+            "juma",
+            "congregational prayer"
+          ],
+          "common_misconceptions": [
+            "Prayer is only about physical movements",
+            "Missing prayer can be made up any time"
+          ],
+          "teaching_note": "Teach the conditions, pillars, and obligations of prayer. Explain the spiritual significance beyond physical actions."
+        }
+      ]
+    },
+    {
+      "id": "moral_teachings",
+      "title": "Moral Teachings of Islam",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "islamic_morality",
+          "title": "Islamic Moral Values",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "pillars_islam"
+          ],
+          "concepts": [
+            "Ikhlas",
+            "sincerity",
+            "honesty",
+            "truthfulness",
+            "trustworthiness",
+            "patience",
+            "gratitude",
+            "humility",
+            "forgiveness",
+            "justice",
+            "kindness"
+          ],
+          "common_misconceptions": [
+            "Islamic morality is only about avoiding sins",
+            "Moral values differ from cultural practices"
+          ],
+          "teaching_note": "Connect moral teachings to Quranic verses and Hadith. Discuss application in contemporary Nigerian society."
+        },
+        {
+          "id": "social_ethics",
+          "title": "Social Ethics in Islam",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "islamic_morality"
+          ],
+          "concepts": [
+            "rights of parents",
+            "rights of neighbors",
+            "rights of children",
+            "family ties",
+            "silk road",
+            "business ethics",
+            "envy",
+            "backbiting",
+            "slander"
+          ],
+          "common_misconceptions": [
+            "Islam only focuses on individual spirituality",
+            "Islamic ethics are backward"
+          ],
+          "teaching_note": "Show how Islamic ethics govern all aspects of life. Compare with contemporary ethical frameworks."
+        }
+      ]
+    },
+    {
+      "id": "sirah",
+      "title": "Sirah: Life of the Prophet Muhammad",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "early_life",
+          "title": "Early Life and Call to Prophethood",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "birth of Prophet",
+            "Aminah",
+            "Abdullah",
+            "Halimah",
+            "Khadijah",
+            "first revelation",
+            "early converts",
+            "persecution",
+            "Year of Sorrow",
+            "Isra and Miraj"
+          ],
+          "common_misconceptions": [
+            "The Prophet was literate",
+            "He sought to be a prophet"
+          ],
+          "teaching_note": "Emphasize the Prophet's character before prophethood. Discuss the significance of key events in his life."
+        },
+        {
+          "id": "madinah_period",
+          "title": "The Madinah Period",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "early_life"
+          ],
+          "concepts": [
+            "Hijrah",
+            "Madinah",
+            "Constitution of Madinah",
+            "battles",
+            "Badr",
+            "Uhud",
+            "Trench",
+            "Treaty of Hudaybiyyah",
+            "conquest of Makkah",
+            "Farewell Sermon"
+          ],
+          "common_misconceptions": [
+            "Islam spread only by the sword",
+            "The Treaty of Hudaybiyyah was a defeat"
+          ],
+          "teaching_note": "Analyze the political and social achievements in Madinah. Explain the wisdom behind the Treaty of Hudaybiyyah."
+        }
+      ]
+    },
+    {
+      "id": "hadith",
+      "title": "Hadith Studies",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "hadith_sciences",
+          "title": "Introduction to Hadith",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "sirah"
+          ],
+          "concepts": [
+            "Hadith",
+            "Sunnah",
+            "isnad",
+            "matn",
+            "Sahih",
+            "Hasan",
+            "Daif",
+            "compilers",
+            "Bukhari",
+            "Muslim",
+            "Abu Dawud",
+            "Tirmidhi",
+            "Nasa'i",
+            "Ibn Majah"
+          ],
+          "common_misconceptions": [
+            "Hadith and Sunnah are the same",
+            "All hadith are equally authentic"
+          ],
+          "teaching_note": "Explain the science of hadith criticism. Discuss the role of hadith in Islamic legislation."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,329 @@
+{
+  "subject": "accounting",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Introduction to Accounting",
+    "Principles of Accounting",
+    "Books of Original Entry",
+    "Ledger Accounts",
+    "Trial Balance",
+    "Trading Account",
+    "Profit and Loss Account",
+    "Balance Sheet"
+  ],
+  "jamb_high_priority_topics": [
+    "Principles of Accounting",
+    "Double Entry",
+    "Books of Original Entry",
+    "Financial Statements"
+  ],
+  "topics": [
+    {
+      "id": "introduction_accounting",
+      "title": "Introduction to Accounting",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "meaning_accounting",
+          "title": "Meaning and Objectives of Accounting",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "accounting definition",
+            "bookkeeping",
+            "financial accounting",
+            "cost accounting",
+            "management accounting",
+            "auditing",
+            "accounting information",
+            "users of accounting information"
+          ],
+          "common_misconceptions": [
+            "Accounting is just mathematics",
+            "Accounting and bookkeeping are identical"
+          ],
+          "teaching_note": "Distinguish between bookkeeping and accounting. Discuss the various users of accounting information and their needs."
+        },
+        {
+          "id": "accounting_principles",
+          "title": "Principles and Concepts of Accounting",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "meaning_accounting"
+          ],
+          "concepts": [
+            "double entry principle",
+            "going concern",
+            "consistency",
+            "prudence",
+            "accrual concept",
+            "matching concept",
+            "business entity concept",
+            "money measurement concept",
+            "realization concept",
+            "dual aspect concept"
+          ],
+          "common_misconceptions": [
+            "Accounting principles are laws",
+            "Rules never change across organizations"
+          ],
+          "teaching_note": "Explain each concept with practical examples. Emphasize that these are guidelines, not rigid laws."
+        }
+      ]
+    },
+    {
+      "id": "source_documents",
+      "title": "Source Documents and Books of Original Entry",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "source_docs",
+          "title": "Source Documents",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "invoice",
+            "receipt",
+            "voucher",
+            "cheque",
+            "debit note",
+            "credit note",
+            "petty cash voucher",
+            "payroll",
+            "bank statement"
+          ],
+          "common_misconceptions": [
+            "All source documents are the same",
+            "An invoice is proof of payment"
+          ],
+          "teaching_note": "Show real or sample source documents. Explain the purpose and content of each document."
+        },
+        {
+          "id": "books_original_entry",
+          "title": "Books of Original Entry",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "source_docs"
+          ],
+          "concepts": [
+            "journal",
+            "cash book",
+            "sales day book",
+            "purchases day book",
+            "returns inwards book",
+            "returns outwards book",
+            "petty cash book",
+            "general journal",
+            "ledger entries"
+          ],
+          "common_misconceptions": [
+            "Cash book is part of the ledger",
+            "All transactions go through the general journal first"
+          ],
+          "teaching_note": "Demonstrate how transactions flow from source documents to books of original entry. Practice with sample transactions."
+        }
+      ]
+    },
+    {
+      "id": "ledger_accounts",
+      "title": "Ledger Accounts and the Trial Balance",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "ledger_posting",
+          "title": "The Ledger and Posting",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "books_original_entry"
+          ],
+          "concepts": [
+            "ledger",
+            "posting",
+            "debit",
+            "credit",
+            "folio",
+            "T-account",
+            "double entry",
+            "personal account",
+            "real account",
+            "nominal account"
+          ],
+          "common_misconceptions": [
+            "Debit always means decrease",
+            "Credit always means increase"
+          ],
+          "teaching_note": "Teach the golden rules of accounting. Emphasize that debit/credit meaning depends on account type."
+        },
+        {
+          "id": "trial_balance",
+          "title": "Trial Balance",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "ledger_posting"
+          ],
+          "concepts": [
+            "trial balance",
+            "debit column",
+            "credit column",
+            "agreement of trial balance",
+            "errors not disclosed by trial balance",
+            "suspense account"
+          ],
+          "common_misconceptions": [
+            "A balanced trial balance means no errors",
+            "Trial balance is a financial statement"
+          ],
+          "teaching_note": "Explain that a trial balance checks arithmetic accuracy only. Discuss errors that don't affect trial balance agreement."
+        }
+      ]
+    },
+    {
+      "id": "financial_statements",
+      "title": "Financial Statements",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "trading_account",
+          "title": "Trading Account",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "trial_balance"
+          ],
+          "concepts": [
+            "trading account",
+            "sales",
+            "cost of goods sold",
+            "opening stock",
+            "purchases",
+            "carriage inwards",
+            "closing stock",
+            "gross profit",
+            "gross loss"
+          ],
+          "common_misconceptions": [
+            "Sales minus purchases equals gross profit",
+            "Opening stock is not part of cost of goods sold"
+          ],
+          "teaching_note": "Derive the cost of goods sold formula. Show the step-by-step preparation of a trading account."
+        },
+        {
+          "id": "profit_loss",
+          "title": "Profit and Loss Account",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "trading_account"
+          ],
+          "concepts": [
+            "profit and loss account",
+            "indirect expenses",
+            "income",
+            "net profit",
+            "net loss",
+            "expenses",
+            "revenue",
+            "depreciation",
+            "bad debts",
+            "discounts"
+          ],
+          "common_misconceptions": [
+            "Net profit is the same as cash in hand",
+            "All expenses appear in the trading account"
+          ],
+          "teaching_note": "Distinguish between direct expenses (trading account) and indirect expenses (P&L account). Practice with comprehensive examples."
+        },
+        {
+          "id": "balance_sheet",
+          "title": "Balance Sheet",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "profit_loss"
+          ],
+          "concepts": [
+            "balance sheet",
+            "assets",
+            "liabilities",
+            "capital",
+            "fixed assets",
+            "current assets",
+            "current liabilities",
+            "long-term liabilities",
+            "working capital",
+            "net worth",
+            "equation: Assets = Capital + Liabilities"
+          ],
+          "common_misconceptions": [
+            "Balance sheet shows profit or loss",
+            "Assets are always equal to capital"
+          ],
+          "teaching_note": "Emphasize that balance sheet shows financial position at a point in time. Distinguish from income statement which covers a period."
+        }
+      ]
+    },
+    {
+      "id": "cash_book",
+      "title": "Cash Book and Bank Reconciliation",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "cash_book_types",
+          "title": "Types of Cash Book",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "ledger_accounts"
+          ],
+          "concepts": [
+            "single column cash book",
+            "double column cash book",
+            "three column cash book",
+            "discount column",
+            "cash discount",
+            "trade discount",
+            "contra entries",
+            "bank column"
+          ],
+          "common_misconceptions": [
+            "Trade discount is recorded in cash book",
+            "Contra entries don't need double entry"
+          ],
+          "teaching_note": "Show the progression from simple to complex cash books. Emphasize the treatment of contra entries."
+        },
+        {
+          "id": "bank_reconciliation",
+          "title": "Bank Reconciliation Statement",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "cash_book_types"
+          ],
+          "concepts": [
+            "bank reconciliation",
+            "unpresented cheques",
+            "uncredited deposits",
+            "bank charges",
+            "standing orders",
+            "direct debits",
+            "dishonoured cheques",
+            "errors",
+            "adjusted cash book"
+          ],
+          "common_misconceptions": [
+            "Bank reconciliation corrects bank errors only",
+            "The adjusted balance must match the bank statement"
+          ],
+          "teaching_note": "Explain timing differences first. Then deal with errors. Show the step-by-step reconciliation process."
+        }
+      ]
+    }
+  ]
+}

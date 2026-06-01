@@ -1,0 +1,353 @@
+{
+  "subject": "crs",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Creation",
+    "The Patriarchs",
+    "Moses and the Exodus",
+    "Israel in Canaan",
+    "The Prophets",
+    "The Life of Jesus",
+    "The Early Church"
+  ],
+  "jamb_high_priority_topics": [
+    "Old Testament",
+    "New Testament",
+    "Life of Jesus",
+    "Early Church",
+    "Paul's Epistles"
+  ],
+  "topics": [
+    {
+      "id": "creation",
+      "title": "Creation",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "biblical_creation",
+          "title": "Biblical Account of Creation",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "Genesis 1-2",
+            "six days of creation",
+            "creation of man",
+            "image of God",
+            "dominion",
+            "creation story",
+            "purpose of creation"
+          ],
+          "common_misconceptions": [
+            "The two creation accounts contradict each other",
+            "Creation is only about the physical world"
+          ],
+          "teaching_note": "Explore the theological significance of creation. Discuss man's role as steward of creation."
+        },
+        {
+          "id": "fall_man",
+          "title": "The Fall of Man",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "biblical_creation"
+          ],
+          "concepts": [
+            "Garden of Eden",
+            "Adam and Eve",
+            "the Fall",
+            "original sin",
+            "consequences of disobedience",
+            "Cain and Abel",
+            "the serpent"
+          ],
+          "common_misconceptions": [
+            "The Fall only affected Adam and Eve",
+            "God was surprised by the Fall"
+          ],
+          "teaching_note": "Discuss the consequences of the Fall on humanity and creation. Explore themes of temptation, disobedience, and redemption."
+        }
+      ]
+    },
+    {
+      "id": "patriarchs",
+      "title": "The Patriarchs",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "abraham",
+          "title": "Abraham: Father of Faith",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "creation"
+          ],
+          "concepts": [
+            "Abraham",
+            "Abram",
+            "call of Abraham",
+            "covenant",
+            "faith",
+            "sacrifice",
+            "Isaac",
+            "Ishmael",
+            "promised land"
+          ],
+          "common_misconceptions": [
+            "Abraham had perfect faith from the start",
+            "The Abrahamic covenant was conditional on works"
+          ],
+          "teaching_note": "Trace Abraham's journey of faith. Discuss the significance of God's covenant with Abraham."
+        },
+        {
+          "id": "joseph",
+          "title": "Joseph and His Brothers",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "abraham"
+          ],
+          "concepts": [
+            "Joseph",
+            "dreams",
+            "jealousy",
+            "slavery",
+            "Potiphar",
+            "prison",
+            "interpretation of dreams",
+            "forgiveness",
+            "reconciliation"
+          ],
+          "common_misconceptions": [
+            "Joseph boasted to spite his brothers",
+            "Joseph's suffering was punishment"
+          ],
+          "teaching_note": "Emphasize themes of forgiveness and God's providence. Show how Joseph's suffering led to salvation for his family."
+        }
+      ]
+    },
+    {
+      "id": "moses_exodus",
+      "title": "Moses and the Exodus",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "call_moses",
+          "title": "The Call and Commission of Moses",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "patriarchs"
+          ],
+          "concepts": [
+            "Moses",
+            "burning bush",
+            "call of Moses",
+            "excuses",
+            "Aaron",
+            "Pharaoh",
+            "ten plagues",
+            "Passover"
+          ],
+          "common_misconceptions": [
+            "Moses willingly accepted God's call immediately",
+            "The plagues were natural events"
+          ],
+          "teaching_note": "Discuss Moses' reluctance and God's patience. Explain the significance of the Passover."
+        },
+        {
+          "id": "exodus_wilderness",
+          "title": "Exodus and Wilderness Wanderings",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "call_moses"
+          ],
+          "concepts": [
+            "Red Sea",
+            "manna",
+            "water from rock",
+            "Sinai",
+            "Ten Commandments",
+            "golden calf",
+            "wilderness",
+            "covenant at Sinai"
+          ],
+          "common_misconceptions": [
+            "Israelites wandered because of poor navigation",
+            "The Ten Commandments were the only laws given"
+          ],
+          "teaching_note": "Explore the covenant relationship at Sinai. Discuss the implications of breaking covenant through idolatry."
+        }
+      ]
+    },
+    {
+      "id": "prophets",
+      "title": "The Prophets",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "major_prophets",
+          "title": "Major Prophets",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "moses_exodus"
+          ],
+          "concepts": [
+            "prophet",
+            "prophecy",
+            "Isaiah",
+            "Jeremiah",
+            "Ezekiel",
+            "messianic prophecy",
+            "judgment",
+            "hope",
+            "restoration"
+          ],
+          "common_misconceptions": [
+            "Prophets only predicted the future",
+            "Old Testament prophets are irrelevant today"
+          ],
+          "teaching_note": "Explain the roles of prophets as messengers, teachers, and reformers. Connect messianic prophecies to Jesus."
+        },
+        {
+          "id": "minor_prophets",
+          "title": "Minor Prophets",
+          "waec_frequency": "medium",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "major_prophets"
+          ],
+          "concepts": [
+            "Amos",
+            "Hosea",
+            "Micah",
+            "social justice",
+            "idolatry",
+            "repentance",
+            "compassion",
+            "Hosea's marriage"
+          ],
+          "common_misconceptions": [
+            "Minor prophets are less important than major prophets",
+            "The books are called minor due to their message"
+          ],
+          "teaching_note": "Explain that 'minor' refers to length, not importance. Discuss themes of social justice and true worship."
+        }
+      ]
+    },
+    {
+      "id": "life_jesus",
+      "title": "The Life of Jesus",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "birth_ministry",
+          "title": "Birth and Early Ministry of Jesus",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "prophets"
+          ],
+          "concepts": [
+            "birth of Jesus",
+            "genealogy",
+            "baptism",
+            "temptation",
+            "miracles",
+            "parables",
+            "Sermon on the Mount",
+            "Kingdom of God"
+          ],
+          "common_misconceptions": [
+            "Jesus' ministry was only about miracles",
+            "Jesus came to abolish the Old Testament law"
+          ],
+          "teaching_note": "Trace Jesus' ministry through the Gospels. Explain the central message of the Kingdom of God."
+        },
+        {
+          "id": "death_resurrection",
+          "title": "Death and Resurrection of Jesus",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "birth_ministry"
+          ],
+          "concepts": [
+            "Last Supper",
+            "crucifixion",
+            "resurrection",
+            "atonement",
+            "salvation",
+            "ascension",
+            "Holy Week",
+            "Passion"
+          ],
+          "common_misconceptions": [
+            "Jesus was a victim of circumstances",
+            "Resurrection was spiritual, not physical"
+          ],
+          "teaching_note": "Emphasize the voluntary nature of Jesus' sacrifice. Discuss the significance of the resurrection for Christian faith."
+        }
+      ]
+    },
+    {
+      "id": "early_church",
+      "title": "The Early Church",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "pentecost",
+          "title": "Pentecost and the Spread of the Gospel",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "life_jesus"
+          ],
+          "concepts": [
+            "Pentecost",
+            "Holy Spirit",
+            "Acts of the Apostles",
+            "Peter",
+            "Paul",
+            "missionary journeys",
+            "church establishment"
+          ],
+          "common_misconceptions": [
+            "Paul founded Christianity",
+            "The early church had no problems"
+          ],
+          "teaching_note": "Trace the growth of the church from Jerusalem to the Gentile world. Discuss the role of the Holy Spirit."
+        },
+        {
+          "id": "paul_epistles",
+          "title": "Paul's Epistles and Teachings",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "pentecost"
+          ],
+          "concepts": [
+            "Paul",
+            "Romans",
+            "Corinthians",
+            "Galatians",
+            "Ephesians",
+            "justification by faith",
+            "grace",
+            "church",
+            "Christian living",
+            "spiritual gifts"
+          ],
+          "common_misconceptions": [
+            "Paul taught against the law of Moses entirely",
+            "Grace means law is irrelevant"
+          ],
+          "teaching_note": "Explain Paul's theology of grace and faith. Discuss the relevance of his teachings for modern Christians."
+        }
+      ]
+    }
+  ]
+}

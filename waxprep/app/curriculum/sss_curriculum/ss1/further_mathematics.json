@@ -1,0 +1,347 @@
+{
+  "subject": "further_mathematics",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Binomial Theorem",
+    "Matrices and Determinants",
+    "Complex Numbers",
+    "Mathematical Induction",
+    "Conic Sections",
+    "Differentiation",
+    "Integration"
+  ],
+  "jamb_high_priority_topics": [
+    "Matrices",
+    "Complex Numbers",
+    "Differentiation",
+    "Integration",
+    "Binomial Theorem"
+  ],
+  "topics": [
+    {
+      "id": "binomial_theorem",
+      "title": "Binomial Theorem",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "binomial_expansion",
+          "title": "Binomial Expansion",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "binomial theorem",
+            "Pascal's triangle",
+            "binomial coefficients",
+            "nCr",
+            "factorial notation",
+            "general term",
+            "expansion of (a+b)^n"
+          ],
+          "common_misconceptions": [
+            "Binomial theorem only works for positive integers",
+            "Pascal's triangle is the only way to find coefficients"
+          ],
+          "teaching_note": "Connect Pascal's triangle to combinations formula. Show applications in approximation and probability."
+        }
+      ]
+    },
+    {
+      "id": "matrices",
+      "title": "Matrices and Determinants",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "matrix_operations",
+          "title": "Matrix Operations",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "matrix",
+            "order of matrix",
+            "addition",
+            "subtraction",
+            "scalar multiplication",
+            "matrix multiplication",
+            "identity matrix",
+            "zero matrix",
+            "transpose"
+          ],
+          "common_misconceptions": [
+            "Matrix multiplication is commutative",
+            "Any two matrices can be multiplied"
+          ],
+          "teaching_note": "Emphasize that matrix multiplication is not commutative. Practice with real-world examples like transition matrices."
+        },
+        {
+          "id": "determinants_inverse",
+          "title": "Determinants and Inverse Matrices",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "matrix_operations"
+          ],
+          "concepts": [
+            "determinant",
+            "2x2 determinant",
+            "3x3 determinant",
+            "inverse matrix",
+            "singular matrix",
+            "non-singular matrix",
+            "adjoint",
+            "cofactor",
+            "minor"
+          ],
+          "common_misconceptions": [
+            "A matrix always has an inverse",
+            "Determinant is the same as the matrix"
+          ],
+          "teaching_note": "Show that only square matrices with non-zero determinants have inverses. Connect to solving simultaneous equations."
+        }
+      ]
+    },
+    {
+      "id": "complex_numbers",
+      "title": "Complex Numbers",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "complex_operations",
+          "title": "Operations with Complex Numbers",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "matrices"
+          ],
+          "concepts": [
+            "imaginary unit",
+            "real part",
+            "imaginary part",
+            "complex conjugate",
+            "modulus",
+            "argument",
+            "Argand diagram",
+            "polar form"
+          ],
+          "common_misconceptions": [
+            "i is a variable like x",
+            "Complex numbers are not real so they have no use"
+          ],
+          "teaching_note": "Define i = √-1. Use Argand diagrams to visualize complex numbers. Show applications in engineering and physics."
+        },
+        {
+          "id": "complex_applications",
+          "title": "Applications of Complex Numbers",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "complex_operations"
+          ],
+          "concepts": [
+            "De Moivre's theorem",
+            "roots of unity",
+            "complex equations",
+            "loci in Argand diagram",
+            "Euler's formula"
+          ],
+          "common_misconceptions": [
+            "De Moivre's theorem only works for integer powers",
+            "Complex roots always come in pairs"
+          ],
+          "teaching_note": "Demonstrate De Moivre's theorem for finding powers and roots. Connect to trigonometric identities."
+        }
+      ]
+    },
+    {
+      "id": "mathematical_induction",
+      "title": "Mathematical Induction",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "principle_induction",
+          "title": "Principle of Mathematical Induction",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "mathematical induction",
+            "base case",
+            "inductive step",
+            "inductive hypothesis",
+            "proof by induction",
+            "summation formulae"
+          ],
+          "common_misconceptions": [
+            "Checking a few examples is sufficient proof",
+            "The base case is always n=1"
+          ],
+          "teaching_note": "Emphasize both steps are necessary. Use domino analogy. Practice with summation and divisibility proofs."
+        }
+      ]
+    },
+    {
+      "id": "conic_sections",
+      "title": "Conic Sections",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "parabola_ellipse",
+          "title": "Parabola and Ellipse",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "complex_numbers"
+          ],
+          "concepts": [
+            "conic sections",
+            "parabola",
+            "focus",
+            "directrix",
+            "vertex",
+            "ellipse",
+            "major axis",
+            "minor axis",
+            "foci",
+            "eccentricity"
+          ],
+          "common_misconceptions": [
+            "Parabola only opens upward",
+            "Ellipse and circle are completely different"
+          ],
+          "teaching_note": "Show conic sections as slices of a cone. Derive standard equations from geometric definitions."
+        },
+        {
+          "id": "hyperbola",
+          "title": "Hyperbola",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "parabola_ellipse"
+          ],
+          "concepts": [
+            "hyperbola",
+            "transverse axis",
+            "conjugate axis",
+            "asymptotes",
+            "rectangular hyperbola",
+            "parametric equations"
+          ],
+          "common_misconceptions": [
+            "Hyperbola is two separate curves",
+            "Asymptotes are lines the curve never approaches"
+          ],
+          "teaching_note": "Explain asymptotes clearly. Connect to real-world applications like navigation (LORAN) and astronomy."
+        }
+      ]
+    },
+    {
+      "id": "differentiation",
+      "title": "Differentiation",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "limits_functions",
+          "title": "Limits and Continuity",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "limit",
+            "continuity",
+            "discontinuity",
+            "limit laws",
+            "one-sided limits",
+            "infinite limits",
+            "asymptotes"
+          ],
+          "common_misconceptions": [
+            "Limit is the same as function value",
+            "A function cannot have a limit at a discontinuity"
+          ],
+          "teaching_note": "Use graphical and numerical approaches to understand limits. Distinguish between limit and function value."
+        },
+        {
+          "id": "differentiation_rules",
+          "title": "Differentiation Rules and Applications",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "limits_functions"
+          ],
+          "concepts": [
+            "derivative",
+            "power rule",
+            "product rule",
+            "quotient rule",
+            "chain rule",
+            "implicit differentiation",
+            "parametric differentiation",
+            "tangent",
+            "normal",
+            "rate of change",
+            "maximum",
+            "minimum"
+          ],
+          "common_misconceptions": [
+            "Derivative is the same as the gradient of a line",
+            "The product rule is d(uv)/dx = du/dx × dv/dx"
+          ],
+          "teaching_note": "Practice each rule with varied examples. Connect derivatives to real-world rates of change. Use second derivative for curve sketching."
+        }
+      ]
+    },
+    {
+      "id": "integration",
+      "title": "Integration",
+      "week": 7,
+      "subtopics": [
+        {
+          "id": "indefinite_integration",
+          "title": "Indefinite Integration",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "differentiation"
+          ],
+          "concepts": [
+            "integral",
+            "antiderivative",
+            "constant of integration",
+            "power rule for integration",
+            "integration by substitution",
+            "integration by parts"
+          ],
+          "common_misconceptions": [
+            "Integration is just the reverse of differentiation without the constant",
+            "Integration by parts always works"
+          ],
+          "teaching_note": "Emphasize the constant of integration. Teach the LIATE rule for choosing u and dv in integration by parts."
+        },
+        {
+          "id": "definite_integration",
+          "title": "Definite Integration and Applications",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "indefinite_integration"
+          ],
+          "concepts": [
+            "definite integral",
+            "fundamental theorem of calculus",
+            "area under curve",
+            "area between curves",
+            "volume of revolution",
+            "numerical integration"
+          ],
+          "common_misconceptions": [
+            "Definite integral always gives area",
+            "Area below x-axis is positive"
+          ],
+          "teaching_note": "Show that definite integrals can be negative. Emphasize taking absolute value for area calculations."
+        }
+      ]
+    }
+  ]
+}

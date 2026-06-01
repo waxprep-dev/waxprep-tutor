@@ -1,0 +1,277 @@
+{
+  "subject": "agricultural_science",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Introduction to Agriculture",
+    "Agricultural Ecology",
+    "Soil Science",
+    "Crop Production",
+    "Animal Production",
+    "Agricultural Economics",
+    "Agricultural Extension"
+  ],
+  "jamb_high_priority_topics": [
+    "Agriculture in Nigeria",
+    "Soil Science",
+    "Crop Production",
+    "Animal Production",
+    "Agricultural Economics"
+  ],
+  "topics": [
+    {
+      "id": "introduction_agriculture",
+      "title": "Introduction to Agriculture",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "meaning_importance",
+          "title": "Meaning and Importance of Agriculture",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "agriculture definition",
+            "branches of agriculture",
+            "food production",
+            "employment",
+            "foreign exchange",
+            "raw materials",
+            "GDP contribution"
+          ],
+          "common_misconceptions": [
+            "Agriculture is only crop farming",
+            "Agriculture is for uneducated people"
+          ],
+          "teaching_note": "Show agriculture as a business and science. Discuss Nigerian agricultural statistics and potential."
+        },
+        {
+          "id": "agricultural_systems",
+          "title": "Agricultural Systems in Nigeria",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "meaning_importance"
+          ],
+          "concepts": [
+            "shifting cultivation",
+            "bush fallowing",
+            "subsistence farming",
+            "commercial farming",
+            "plantation farming",
+            "mixed farming",
+            "nomadic herding",
+            "intensive farming",
+            "extensive farming"
+          ],
+          "common_misconceptions": [
+            "Commercial farming is always large-scale",
+            "Shifting cultivation is still widely practiced in Nigeria"
+          ],
+          "teaching_note": "Compare traditional and modern systems. Discuss advantages and disadvantages of each system."
+        }
+      ]
+    },
+    {
+      "id": "soil_science",
+      "title": "Soil Science",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "soil_formation",
+          "title": "Soil Formation and Composition",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "soil formation",
+            "parent material",
+            "climate",
+            "organisms",
+            "topography",
+            "time",
+            "soil profile",
+            "horizons",
+            "soil texture",
+            "soil structure"
+          ],
+          "common_misconceptions": [
+            "Soil is just dirt",
+            "All soil is the same"
+          ],
+          "teaching_note": "Take students to observe soil profiles. Demonstrate soil texture by feel method and mechanical analysis."
+        },
+        {
+          "id": "soil_fertility",
+          "title": "Soil Fertility and Management",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "soil_formation"
+          ],
+          "concepts": [
+            "soil fertility",
+            "soil nutrients",
+            "macronutrients",
+            "micronutrients",
+            "organic matter",
+            "soil pH",
+            "liming",
+            "fertilizers",
+            "manures",
+            "crop rotation",
+            "legumes"
+          ],
+          "common_misconceptions": [
+            "More fertilizer always means better yield",
+            "Organic farming means no inputs at all"
+          ],
+          "teaching_note": "Explain balanced fertilizer use. Discuss organic vs inorganic fertilizers. Practice soil pH testing."
+        }
+      ]
+    },
+    {
+      "id": "crop_production",
+      "title": "Crop Production",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "crop_classification",
+          "title": "Classification of Crops",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "food crops",
+            "cash crops",
+            "cereals",
+            "legumes",
+            "tubers",
+            "vegetables",
+            "fruits",
+            "oil crops",
+            "beverage crops",
+            "fibres",
+            "latex crops"
+          ],
+          "common_misconceptions": [
+            "Cassava is a cereal",
+            "Cash crops are only for export"
+          ],
+          "teaching_note": "Use local Nigerian crops as examples. Classify crops by their botanical families and uses."
+        },
+        {
+          "id": "crop_practices",
+          "title": "Agronomic Practices",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "crop_classification"
+          ],
+          "concepts": [
+            "land preparation",
+            "planting",
+            "spacing",
+            "thinning",
+            "supplying",
+            "weeding",
+            "fertilizer application",
+            "harvesting",
+            "storage",
+            "processing"
+          ],
+          "common_misconceptions": [
+            "Any time is good for planting",
+            "Harvesting is the final step"
+          ],
+          "teaching_note": "Demonstrate proper planting techniques. Emphasize timing for each agronomic practice."
+        }
+      ]
+    },
+    {
+      "id": "animal_production",
+      "title": "Animal Production",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "livestock",
+          "title": "Livestock Management",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "cattle",
+            "sheep",
+            "goats",
+            "pigs",
+            "poultry",
+            "rabbits",
+            "breeds",
+            "feeding",
+            "housing",
+            "health management",
+            "reproduction"
+          ],
+          "common_misconceptions": [
+            "Animal husbandry is only for meat production",
+            "Free-range is always better than intensive"
+          ],
+          "teaching_note": "Discuss products from livestock: meat, milk, eggs, wool, hides. Compare management systems."
+        },
+        {
+          "id": "animal_health",
+          "title": "Animal Health and Diseases",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "livestock"
+          ],
+          "concepts": [
+            "animal diseases",
+            "parasites",
+            "vaccination",
+            "disease prevention",
+            "symptoms",
+            "treatment",
+            "veterinary services",
+            "biosecurity"
+          ],
+          "common_misconceptions": [
+            "All animal diseases affect humans",
+            "Traditional medicine is always safe for animals"
+          ],
+          "teaching_note": "Identify common Nigerian livestock diseases. Emphasize prevention over cure. Discuss zoonotic diseases."
+        }
+      ]
+    },
+    {
+      "id": "agricultural_economics",
+      "title": "Agricultural Economics",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "farm_accounts",
+          "title": "Farm Accounts and Records",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "farm records",
+            "production records",
+            "inventory records",
+            "financial records",
+            "profit and loss",
+            "balance sheet",
+            "farm budgeting",
+            "cash flow"
+          ],
+          "common_misconceptions": [
+            "Small farms don't need records",
+            "Profit is the same as cash in hand"
+          ],
+          "teaching_note": "Show simple record-keeping formats. Emphasize that records help decision-making on the farm."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,284 @@
+{
+  "subject": "geography",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "The Earth as a Planet",
+    "Latitude and Longitude",
+    "Map Reading",
+    "Weather and Climate",
+    "Rocks and Weathering",
+    "Earthquakes and Volcanoes",
+    "Rivers and Drainage"
+  ],
+  "jamb_high_priority_topics": [
+    "The Earth",
+    "Latitude and Longitude",
+    "Map Reading",
+    "Climate",
+    "Geomorphology"
+  ],
+  "topics": [
+    {
+      "id": "earth_planet",
+      "title": "The Earth as a Planet",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "earth_structure",
+          "title": "Structure of the Earth",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "crust",
+            "mantle",
+            "core",
+            "lithosphere",
+            "asthenosphere",
+            "mesosphere",
+            "inner core",
+            "outer core",
+            "continental crust",
+            "oceanic crust"
+          ],
+          "common_misconceptions": [
+            "The crust is uniformly thick everywhere",
+            "The core is entirely liquid"
+          ],
+          "teaching_note": "Compare thicknesses of crust, mantle, and core. Discuss evidence from seismic waves."
+        },
+        {
+          "id": "earth_rotation",
+          "title": "Earth's Rotation and Revolution",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "earth_structure"
+          ],
+          "concepts": [
+            "rotation",
+            "revolution",
+            "day and night",
+            "seasons",
+            "equinox",
+            "solstice",
+            "international date line",
+            "time zones",
+            "local time"
+          ],
+          "common_misconceptions": [
+            "Seasons are caused by Earth's distance from the sun",
+            "The equator is always closest to the sun"
+          ],
+          "teaching_note": "Use globe demonstrations. Emphasize that seasons result from tilt, not distance. Practice time zone calculations."
+        }
+      ]
+    },
+    {
+      "id": "latitude_longitude",
+      "title": "Latitude and Longitude",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "coordinates",
+          "title": "Coordinates and Great Circles",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "earth_planet"
+          ],
+          "concepts": [
+            "latitude",
+            "longitude",
+            "parallels",
+            "meridians",
+            "equator",
+            "prime meridian",
+            "tropics",
+            "arctic circle",
+            "antarctic circle",
+            "great circle",
+            "small circle"
+          ],
+          "common_misconceptions": [
+            "Latitude lines run north-south",
+            "All meridians are great circles but not all parallels are"
+          ],
+          "teaching_note": "Use globes and maps. Practice locating places using coordinates. Calculate distances using latitude."
+        }
+      ]
+    },
+    {
+      "id": "map_reading",
+      "title": "Map Reading and Interpretation",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "map_types",
+          "title": "Types of Maps and Map Scales",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "latitude_longitude"
+          ],
+          "concepts": [
+            "topographic map",
+            "thematic map",
+            "scale",
+            "linear scale",
+            "representative fraction",
+            "statement scale",
+            "large scale",
+            "small scale",
+            "map symbols",
+            "conventional signs"
+          ],
+          "common_misconceptions": [
+            "Large scale maps show large areas",
+            "All maps use the same scale"
+          ],
+          "teaching_note": "Practice converting between scale types. Use real topographic maps for exercises."
+        },
+        {
+          "id": "map_interpretation",
+          "title": "Map Interpretation Techniques",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "map_types"
+          ],
+          "concepts": [
+            "contour lines",
+            "gradient",
+            "cross-section",
+            "intervisibility",
+            "relief",
+            "drainage pattern",
+            "settlement pattern",
+            "land use",
+            "bearing"
+          ],
+          "common_misconceptions": [
+            "Close contour lines always mean steep slopes",
+            "Cross-sections are drawn without vertical exaggeration"
+          ],
+          "teaching_note": "Practice drawing cross-sections and calculating gradients. Use maps of Nigerian locations."
+        }
+      ]
+    },
+    {
+      "id": "weather_climate",
+      "title": "Weather and Climate",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "weather_elements",
+          "title": "Elements of Weather",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "temperature",
+            "rainfall",
+            "humidity",
+            "pressure",
+            "wind",
+            "sunshine",
+            "cloud cover",
+            "weather instruments",
+            " Stevenson screen"
+          ],
+          "common_misconceptions": [
+            "Weather and climate are the same",
+            "Temperature and heat are identical"
+          ],
+          "teaching_note": "Set up a school weather station. Distinguish clearly between weather (short-term) and climate (long-term)."
+        },
+        {
+          "id": "climate_types",
+          "title": "Climate Types and Their Characteristics",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "weather_elements"
+          ],
+          "concepts": [
+            "equatorial climate",
+            "tropical climate",
+            "desert climate",
+            "Mediterranean climate",
+            "tundra climate",
+            "monsoon climate",
+            "Koppen classification",
+            "factors affecting climate"
+          ],
+          "common_misconceptions": [
+            "Nigeria has only one climate type",
+            "Temperature depends only on latitude"
+          ],
+          "teaching_note": "Map the climate types of Nigeria. Discuss how altitude, distance from sea, and prevailing winds affect climate."
+        }
+      ]
+    },
+    {
+      "id": "geomorphology",
+      "title": "Geomorphology",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "rocks",
+          "title": "Rocks and Weathering",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "weather_climate"
+          ],
+          "concepts": [
+            "igneous rocks",
+            "sedimentary rocks",
+            "metamorphic rocks",
+            "weathering",
+            "erosion",
+            "physical weathering",
+            "chemical weathering",
+            "biological weathering",
+            "rock cycle"
+          ],
+          "common_misconceptions": [
+            "Rocks are permanent and unchanging",
+            "Weathering and erosion are the same"
+          ],
+          "teaching_note": "Display rock samples in class. Explain the rock cycle. Distinguish weathering (in situ) from erosion (movement)."
+        },
+        {
+          "id": "volcanoes_earthquakes",
+          "title": "Volcanoes and Earthquakes",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "rocks"
+          ],
+          "concepts": [
+            "volcano",
+            "magma",
+            "lava",
+            "types of volcanoes",
+            "earthquake",
+            "focus",
+            "epicenter",
+            "seismic waves",
+            "Richter scale",
+            "Mercalli scale",
+            "plate tectonics"
+          ],
+          "common_misconceptions": [
+            "Volcanoes only occur on land",
+            "Earthquakes are increasing in frequency"
+          ],
+          "teaching_note": "Explain plate tectonics theory. Show distribution maps. Discuss Nigerian geological stability."
+        }
+      ]
+    }
+  ]
+}

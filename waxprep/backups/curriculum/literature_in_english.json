@@ -1,0 +1,344 @@
+{
+  "subject": "literature_in_english",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Literary Terms and Devices",
+    "Genres of Literature",
+    "Drama Text Analysis",
+    "Prose Text Analysis",
+    "Poetry Analysis",
+    "African Literature",
+    "Non-African Literature"
+  ],
+  "jamb_high_priority_topics": [
+    "Literary Appreciation",
+    "Genres",
+    "Literary Terms",
+    "Prescribed Texts"
+  ],
+  "topics": [
+    {
+      "id": "literary_terms",
+      "title": "Literary Terms and Devices",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "figures_speech",
+          "title": "Figures of Speech and Literary Devices",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "simile",
+            "metaphor",
+            "personification",
+            "hyperbole",
+            "euphemism",
+            "irony",
+            "sarcasm",
+            "pun",
+            "oxymoron",
+            "onomatopoeia",
+            "alliteration",
+            "assonance"
+          ],
+          "common_misconceptions": [
+            "Figures of speech are only for poetry",
+            "All comparisons are similes"
+          ],
+          "teaching_note": "Illustrate each device with examples from prescribed texts. Have students identify devices in given passages."
+        },
+        {
+          "id": "literary_elements",
+          "title": "Elements of Literature",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "figures_speech"
+          ],
+          "concepts": [
+            "theme",
+            "plot",
+            "setting",
+            "character",
+            "characterization",
+            "conflict",
+            "climax",
+            "point of view",
+            "narrative technique",
+            "atmosphere",
+            "tone",
+            "mood"
+          ],
+          "common_misconceptions": [
+            "Theme and subject are the same",
+            "Plot and story mean the same thing"
+          ],
+          "teaching_note": "Analyze each element using excerpts from prescribed texts. Show how elements work together to create meaning."
+        }
+      ]
+    },
+    {
+      "id": "genres_literature",
+      "title": "Genres of Literature",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "drama",
+          "title": "Drama: Forms and Elements",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "literary_terms"
+          ],
+          "concepts": [
+            "drama",
+            "play",
+            "tragedy",
+            "comedy",
+            "tragicomedy",
+            "act",
+            "scene",
+            "dialogue",
+            "stage directions",
+            "dramatis personae",
+            "soliloquy",
+            "aside",
+            "flashback"
+          ],
+          "common_misconceptions": [
+            "Drama is the same as a novel",
+            "Shakespeare only wrote tragedies"
+          ],
+          "teaching_note": "Perform short dramatic excerpts in class. Explain the unique features of drama as a performance genre."
+        },
+        {
+          "id": "prose",
+          "title": "Prose: Forms and Techniques",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "literary_terms"
+          ],
+          "concepts": [
+            "novel",
+            "short story",
+            "novella",
+            "fiction",
+            "non-fiction",
+            "narrator",
+            "narrative perspective",
+            "first person",
+            "third person",
+            "omniscient narrator",
+            "stream of consciousness"
+          ],
+          "common_misconceptions": [
+            "First-person narrators are always reliable",
+            "All novels must be long"
+          ],
+          "teaching_note": "Compare narrative techniques in different prose texts. Discuss how narrative perspective shapes reader understanding."
+        },
+        {
+          "id": "poetry",
+          "title": "Poetry: Forms and Features",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "literary_terms"
+          ],
+          "concepts": [
+            "poetry",
+            "poem",
+            "verse",
+            "stanza",
+            "line",
+            "rhyme",
+            "rhyme scheme",
+            "meter",
+            "rhythm",
+            "free verse",
+            "blank verse",
+            "sonnet",
+            "lyric",
+            "ode",
+            "ballad",
+            "epic"
+          ],
+          "common_misconceptions": [
+            "All poems must rhyme",
+            "Poetry must follow strict rules"
+          ],
+          "teaching_note": "Analyze various poetic forms. Show that modern poetry often breaks traditional rules. Practice scansion with selected poems."
+        }
+      ]
+    },
+    {
+      "id": "drama_analysis",
+      "title": "Drama Text Analysis",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "african_drama",
+          "title": "African Drama Analysis",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "genres_literature"
+          ],
+          "concepts": [
+            "African drama",
+            "cultural themes",
+            "conflict",
+            "character analysis",
+            "plot analysis",
+            "setting",
+            "dramatic irony",
+            "tragic hero",
+            "African worldview"
+          ],
+          "common_misconceptions": [
+            "African drama is inferior to Western drama",
+            "Analysis is just summarizing the plot"
+          ],
+          "teaching_note": "Analyze prescribed African drama texts scene by scene. Connect themes to African cultural and social contexts."
+        },
+        {
+          "id": "non_african_drama",
+          "title": "Non-African Drama Analysis",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "african_drama"
+          ],
+          "concepts": [
+            "Shakespearean drama",
+            "Elizabethan drama",
+            "Greek tragedy",
+            "classic drama",
+            "dramatic conventions",
+            "unity of action",
+            "unities",
+            "tragic flaw"
+          ],
+          "common_misconceptions": [
+            "Shakespearean language is too difficult",
+            "Classical drama is irrelevant today"
+          ],
+          "teaching_note": "Use modern translations alongside original texts. Focus on universal themes that transcend cultural boundaries."
+        }
+      ]
+    },
+    {
+      "id": "prose_analysis",
+      "title": "Prose Text Analysis",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "african_prose",
+          "title": "African Prose Analysis",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "genres_literature"
+          ],
+          "concepts": [
+            "African novel",
+            "post-colonial themes",
+            "oral tradition",
+            "griot",
+            "cultural conflict",
+            "identity",
+            "tradition vs modernity",
+            "social criticism"
+          ],
+          "common_misconceptions": [
+            "African novels only deal with poverty and suffering",
+            "Analysis requires memorizing character names"
+          ],
+          "teaching_note": "Guide students to identify themes and how authors develop them through plot, character, and setting."
+        },
+        {
+          "id": "non_african_prose",
+          "title": "Non-African Prose Analysis",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "african_prose"
+          ],
+          "concepts": [
+            "classic literature",
+            "Victorian novel",
+            "romanticism",
+            "realism",
+            "naturalism",
+            "modernism",
+            "universal themes",
+            "social class"
+          ],
+          "common_misconceptions": [
+            "Non-African texts are not relevant to African students",
+            "Every novel must have a moral lesson"
+          ],
+          "teaching_note": "Find connections between universal themes and students' experiences. Compare how different cultures handle similar themes."
+        }
+      ]
+    },
+    {
+      "id": "poetry_analysis",
+      "title": "Poetry Analysis",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "african_poetry",
+          "title": "African Poetry Analysis",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "genres_literature"
+          ],
+          "concepts": [
+            "African poetry",
+            "oral poetry",
+            "praise poetry",
+            "protest poetry",
+            "cultural identity",
+            "negritude",
+            "pan-Africanism",
+            "decolonization"
+          ],
+          "common_misconceptions": [
+            "African poetry is only oral",
+            "Poetry analysis is subjective with no wrong answers"
+          ],
+          "teaching_note": "Analyze poems line by line. Show how structure, sound devices, and imagery contribute to meaning."
+        },
+        {
+          "id": "non_african_poetry",
+          "title": "Non-African Poetry Analysis",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "african_poetry"
+          ],
+          "concepts": [
+            "English poetry",
+            "romantic poetry",
+            "metaphysical poetry",
+            "nature poetry",
+            "love poetry",
+            "war poetry",
+            "modern poetry",
+            "contemporary poetry"
+          ],
+          "common_misconceptions": [
+            "Old poems are harder to understand",
+            "Poems always have hidden meanings"
+          ],
+          "teaching_note": "Read poems aloud to appreciate sound devices. Build interpretation skills through guided questions."
+        }
+      ]
+    }
+  ]
+}

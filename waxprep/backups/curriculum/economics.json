@@ -1,0 +1,313 @@
+{
+  "subject": "economics",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Introduction to Economics",
+    "Economic Systems",
+    "Theory of Production",
+    "Business Organizations",
+    "Market Structures",
+    "Money and Banking",
+    "International Trade"
+  ],
+  "jamb_high_priority_topics": [
+    "Economics as a Science",
+    "Economic Systems",
+    "Production",
+    "Market Structure",
+    "Money and Inflation",
+    "International Trade"
+  ],
+  "topics": [
+    {
+      "id": "introduction_economics",
+      "title": "Introduction to Economics",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "nature_economics",
+          "title": "Nature and Scope of Economics",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "economics definition",
+            "scarcity",
+            "choice",
+            "scale of preference",
+            "opportunity cost",
+            "microeconomics",
+            "macroeconomics",
+            "positive economics",
+            "normative economics"
+          ],
+          "common_misconceptions": [
+            "Economics is only about money",
+            "Economics only studies the economy of a country"
+          ],
+          "teaching_note": "Start with the basic economic problem: unlimited wants vs limited resources. Use real-life examples to illustrate opportunity cost."
+        },
+        {
+          "id": "basic_concepts",
+          "title": "Basic Economic Concepts",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "nature_economics"
+          ],
+          "concepts": [
+            "wants",
+            "needs",
+            "goods",
+            "services",
+            "factors of production",
+            "land",
+            "labour",
+            "capital",
+            "entrepreneur",
+            "production possibility curve",
+            "utility"
+          ],
+          "common_misconceptions": [
+            "Capital only means money",
+            "Labour refers only to manual work"
+          ],
+          "teaching_note": "Explain the four factors of production with Nigerian examples. Use the PPC to illustrate scarcity, choice, and opportunity cost."
+        }
+      ]
+    },
+    {
+      "id": "economic_systems",
+      "title": "Economic Systems",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "types_economic_systems",
+          "title": "Types of Economic Systems",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "introduction_economics"
+          ],
+          "concepts": [
+            "capitalism",
+            "socialism",
+            "mixed economy",
+            "price mechanism",
+            "central planning",
+            "command economy",
+            "free market",
+            "private sector",
+            "public sector"
+          ],
+          "common_misconceptions": [
+            "Pure capitalism or socialism exists today",
+            "Mixed economy means equal private and public ownership"
+          ],
+          "teaching_note": "Compare and contrast each system using real-world examples. Discuss Nigeria as a mixed economy."
+        }
+      ]
+    },
+    {
+      "id": "theory_production",
+      "title": "Theory of Production",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "factors_production",
+          "title": "Factors of Production and Their Rewards",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "land",
+            "rent",
+            "labour",
+            "wages",
+            "capital",
+            "interest",
+            "entrepreneur",
+            "profit",
+            "division of labour",
+            "specialization"
+          ],
+          "common_misconceptions": [
+            "Profit is the reward for capital",
+            "Division of labour only applies to factories"
+          ],
+          "teaching_note": "Link each factor to its reward clearly. Use examples of specialization from Nigerian industries."
+        },
+        {
+          "id": "law_diminishing_returns",
+          "title": "Law of Diminishing Returns",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "factors_production"
+          ],
+          "concepts": [
+            "total product",
+            "average product",
+            "marginal product",
+            "law of diminishing returns",
+            "stages of production",
+            "fixed inputs",
+            "variable inputs"
+          ],
+          "common_misconceptions": [
+            "Total product always decreases when diminishing returns set in",
+            "Diminishing returns means negative returns"
+          ],
+          "teaching_note": "Use numerical examples and graphs. Emphasize that diminishing returns refers to marginal product declining, not necessarily total product."
+        }
+      ]
+    },
+    {
+      "id": "business_organizations",
+      "title": "Business Organizations",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "forms_business",
+          "title": "Forms of Business Organization",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "sole proprietorship",
+            "partnership",
+            "limited liability company",
+            "cooperative society",
+            "public corporation",
+            "private company",
+            "public company",
+            "shares",
+            "dividends"
+          ],
+          "common_misconceptions": [
+            "Partnership always means equal sharing",
+            "Public company means government-owned"
+          ],
+          "teaching_note": "Compare advantages and disadvantages of each form. Use Nigerian examples like Dangote Group, cooperative societies."
+        }
+      ]
+    },
+    {
+      "id": "market_structures",
+      "title": "Market Structures",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "types_market",
+          "title": "Types of Market Structures",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "economic_systems"
+          ],
+          "concepts": [
+            "perfect competition",
+            "monopoly",
+            "monopolistic competition",
+            "oligopoly",
+            "price taker",
+            "price maker",
+            "barriers to entry",
+            "market power"
+          ],
+          "common_misconceptions": [
+            "Perfect competition is common in reality",
+            "Monopoly always charges the highest possible price"
+          ],
+          "teaching_note": "Emphasize that perfect competition is theoretical. Use real-world Nigerian examples for each market type."
+        }
+      ]
+    },
+    {
+      "id": "money_banking",
+      "title": "Money and Banking",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "functions_money",
+          "title": "Money: Types and Functions",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "medium of exchange",
+            "measure of value",
+            "store of value",
+            "standard of deferred payment",
+            "legal tender",
+            "commodity money",
+            "fiat money",
+            "representative money"
+          ],
+          "common_misconceptions": [
+            "Money must have intrinsic value",
+            "Money and currency are exactly the same"
+          ],
+          "teaching_note": "Trace the evolution of money from barter to digital currencies. Discuss the characteristics of good money."
+        },
+        {
+          "id": "central_banking",
+          "title": "Central Banking and Monetary Policy",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "functions_money"
+          ],
+          "concepts": [
+            "Central Bank of Nigeria",
+            "CBN",
+            "monetary policy",
+            "bank rate",
+            "cash reserve ratio",
+            "liquidity ratio",
+            "open market operations",
+            "inflation targeting"
+          ],
+          "common_misconceptions": [
+            "Central banks exist to make profit",
+            "Monetary policy only affects banks"
+          ],
+          "teaching_note": "Explain the role of CBN as banker to government and banks. Discuss how monetary policy tools affect the Nigerian economy."
+        }
+      ]
+    },
+    {
+      "id": "international_trade",
+      "title": "International Trade",
+      "week": 7,
+      "subtopics": [
+        {
+          "id": "trade_basics",
+          "title": "Basis and Types of International Trade",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "market_structures"
+          ],
+          "concepts": [
+            "absolute advantage",
+            "comparative advantage",
+            "exports",
+            "imports",
+            "balance of trade",
+            "balance of payments",
+            "terms of trade",
+            "tariffs",
+            "quotas"
+          ],
+          "common_misconceptions": [
+            "Countries should only produce what they are best at absolutely",
+            "Trade surplus is always good"
+          ],
+          "teaching_note": "Use comparative advantage examples relevant to Nigeria (crude oil exports, food imports). Discuss trade policies."
+        }
+      ]
+    }
+  ]
+}

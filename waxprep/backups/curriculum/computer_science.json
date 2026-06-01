@@ -1,0 +1,335 @@
+{
+  "subject": "computer_science",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Computer Fundamentals",
+    "Computer Hardware",
+    "Computer Software",
+    "Data Processing",
+    "Programming",
+    "Computer Networks",
+    "Internet and Web Technologies"
+  ],
+  "jamb_high_priority_topics": [
+    "Computer Fundamentals",
+    "Hardware",
+    "Software",
+    "Programming",
+    "Networking"
+  ],
+  "topics": [
+    {
+      "id": "computer_fundamentals",
+      "title": "Computer Fundamentals",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "history_computers",
+          "title": "History and Development of Computers",
+          "waec_frequency": "medium",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "generations of computers",
+            "vacuum tubes",
+            "transistors",
+            "integrated circuits",
+            "microprocessors",
+            "ENIAC",
+            "UNIVAC",
+            "Abacus",
+            "Charles Babbage",
+            "Ada Lovelace"
+          ],
+          "common_misconceptions": [
+            "Computers were invented in the 20th century only",
+            "Each generation completely replaces the previous"
+          ],
+          "teaching_note": "Trace computing history from ancient tools to modern computers. Discuss the evolution of storage and processing power."
+        },
+        {
+          "id": "computer_types",
+          "title": "Types and Classification of Computers",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "history_computers"
+          ],
+          "concepts": [
+            "supercomputer",
+            "mainframe",
+            "minicomputer",
+            "microcomputer",
+            "analog computer",
+            "digital computer",
+            "hybrid computer",
+            "classification by size",
+            "classification by purpose",
+            "classification by data handling"
+          ],
+          "common_misconceptions": [
+            "Personal computers are the only type of computers",
+            "Bigger computers are always more powerful"
+          ],
+          "teaching_note": "Show examples of each type. Discuss embedded computers in everyday devices like phones and cars."
+        }
+      ]
+    },
+    {
+      "id": "computer_hardware",
+      "title": "Computer Hardware",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "system_unit",
+          "title": "The System Unit and Components",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "CPU",
+            "ALU",
+            "CU",
+            "registers",
+            "RAM",
+            "ROM",
+            "motherboard",
+            "bus",
+            "clock speed",
+            "word length",
+            "storage devices",
+            "hard disk",
+            "SSD"
+          ],
+          "common_misconceptions": [
+            "CPU is the entire computer case",
+            "RAM and storage are the same thing"
+          ],
+          "teaching_note": "Use diagrams to show internal components. Explain the fetch-decode-execute cycle. Distinguish between volatile and non-volatile memory."
+        },
+        {
+          "id": "input_output",
+          "title": "Input and Output Devices",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "system_unit"
+          ],
+          "concepts": [
+            "input devices",
+            "keyboard",
+            "mouse",
+            "scanner",
+            "microphone",
+            "output devices",
+            "monitor",
+            "printer",
+            "speaker",
+            "plotter",
+            "storage devices",
+            "flash drive",
+            "optical disc"
+          ],
+          "common_misconceptions": [
+            "Touchscreen is only an input device",
+            "All printers produce the same quality output"
+          ],
+          "teaching_note": "Classify devices as input, output, or both. Discuss emerging technologies like VR headsets and biometric scanners."
+        }
+      ]
+    },
+    {
+      "id": "computer_software",
+      "title": "Computer Software",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "system_software",
+          "title": "System Software",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "computer_hardware"
+          ],
+          "concepts": [
+            "operating system",
+            "utility software",
+            "device drivers",
+            "compiler",
+            "interpreter",
+            "assembler",
+            "Windows",
+            "Linux",
+            "macOS",
+            "Android",
+            "functions of OS"
+          ],
+          "common_misconceptions": [
+            "Operating system is hardware",
+            "Application software can run without an operating system"
+          ],
+          "teaching_note": "Explain the role of OS in managing hardware resources. Compare different operating systems. Explain the difference between compilers and interpreters."
+        },
+        {
+          "id": "application_software",
+          "title": "Application Software",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "system_software"
+          ],
+          "concepts": [
+            "word processor",
+            "spreadsheet",
+            "database",
+            "presentation",
+            "web browser",
+            "email client",
+            "graphics software",
+            "proprietary software",
+            "open source",
+            "freeware",
+            "shareware"
+          ],
+          "common_misconceptions": [
+            "All software must be purchased",
+            "Application software manages hardware directly"
+          ],
+          "teaching_note": "Demonstrate common application software. Discuss software licensing types and legal considerations."
+        }
+      ]
+    },
+    {
+      "id": "data_processing",
+      "title": "Data Processing",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "data_information",
+          "title": "Data and Information",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "data",
+            "information",
+            "knowledge",
+            "data processing cycle",
+            "input",
+            "processing",
+            "output",
+            "storage",
+            "feedback",
+            "data types",
+            "file organization"
+          ],
+          "common_misconceptions": [
+            "Data and information are the same",
+            "Processing only means calculations"
+          ],
+          "teaching_note": "Show how raw data becomes meaningful information. Explain the data processing cycle with examples."
+        }
+      ]
+    },
+    {
+      "id": "programming",
+      "title": "Programming Concepts",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "programming_basics",
+          "title": "Introduction to Programming",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "computer_software"
+          ],
+          "concepts": [
+            "algorithm",
+            "flowchart",
+            "pseudocode",
+            "programming languages",
+            "BASIC",
+            "Python",
+            "Java",
+            "C++",
+            "variables",
+            "constants",
+            "data types",
+            "control structures"
+          ],
+          "common_misconceptions": [
+            "Programming is only for geniuses",
+            "One programming language is enough for everything"
+          ],
+          "teaching_note": "Start with flowcharts and pseudocode before actual coding. Use simple programming exercises to build confidence."
+        }
+      ]
+    },
+    {
+      "id": "networking",
+      "title": "Computer Networks",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "network_types",
+          "title": "Types and Topologies of Networks",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "computer_hardware"
+          ],
+          "concepts": [
+            "LAN",
+            "WAN",
+            "MAN",
+            "network topology",
+            "bus topology",
+            "star topology",
+            "ring topology",
+            "mesh topology",
+            "router",
+            "switch",
+            "hub",
+            "protocol",
+            "TCP/IP"
+          ],
+          "common_misconceptions": [
+            "Internet and World Wide Web are the same",
+            "LAN always covers a single room"
+          ],
+          "teaching_note": "Use diagrams to illustrate network topologies. Discuss the advantages and disadvantages of each type."
+        },
+        {
+          "id": "internet_web",
+          "title": "Internet and Web Technologies",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "network_types"
+          ],
+          "concepts": [
+            "internet",
+            "WWW",
+            "URL",
+            "HTTP",
+            "HTML",
+            "web browser",
+            "search engine",
+            "email",
+            "social media",
+            "cybersecurity",
+            "malware",
+            "firewall"
+          ],
+          "common_misconceptions": [
+            "Internet is the same as the web",
+            "All information on the internet is true"
+          ],
+          "teaching_note": "Teach digital literacy and safe internet practices. Discuss the positive and negative impacts of social media."
+        }
+      ]
+    }
+  ]
+}

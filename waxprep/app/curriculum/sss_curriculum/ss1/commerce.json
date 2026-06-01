@@ -1,0 +1,258 @@
+{
+  "subject": "commerce",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Introduction to Commerce",
+    "Occupation and Production",
+    "Trade",
+    "Aids to Trade",
+    "Business Units",
+    "Finance and Financial Institutions",
+    "Advertising and Communication"
+  ],
+  "jamb_high_priority_topics": [
+    "Commerce",
+    "Trade",
+    "Aids to Trade",
+    "Business Units",
+    "Finance"
+  ],
+  "topics": [
+    {
+      "id": "introduction_commerce",
+      "title": "Introduction to Commerce",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "scope_commerce",
+          "title": "Scope and Importance of Commerce",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "commerce definition",
+            "trade",
+            "aids to trade",
+            "production",
+            "distribution",
+            "exchange",
+            "importance of commerce",
+            "commerce and industry"
+          ],
+          "common_misconceptions": [
+            "Commerce is only buying and selling",
+            "Commerce and business mean the same thing"
+          ],
+          "teaching_note": "Show how commerce links producers to consumers. Use flow charts to illustrate the distribution channel."
+        },
+        {
+          "id": "occupations",
+          "title": "Occupations and Career Opportunities in Commerce",
+          "waec_frequency": "medium",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "scope_commerce"
+          ],
+          "concepts": [
+            "commercial occupations",
+            "industrial occupations",
+            "service occupations",
+            "extractive occupations",
+            "manufacturing occupations",
+            "constructive occupations"
+          ],
+          "common_misconceptions": [
+            "Commercial occupations are superior to others",
+            "All commerce careers require university degrees"
+          ],
+          "teaching_note": "Categorize various occupations. Discuss skills needed for different commerce-related careers."
+        }
+      ]
+    },
+    {
+      "id": "production",
+      "title": "Production",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "types_production",
+          "title": "Types and Factors of Production",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "direct production",
+            "indirect production",
+            "primary production",
+            "secondary production",
+            "tertiary production",
+            "factors of production",
+            "division of labour",
+            "specialization"
+          ],
+          "common_misconceptions": [
+            "Production only means manufacturing",
+            "Division of labour is only for factories"
+          ],
+          "teaching_note": "Use examples from Nigerian economy for each type. Discuss advantages and disadvantages of specialization."
+        }
+      ]
+    },
+    {
+      "id": "trade",
+      "title": "Trade",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "home_trade",
+          "title": "Home Trade",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "production"
+          ],
+          "concepts": [
+            "retail trade",
+            "wholesale trade",
+            "retailer",
+            "wholesaler",
+            "functions of retailer",
+            "functions of wholesaler",
+            "small-scale retailing",
+            "large-scale retailing",
+            "chain stores",
+            "departmental stores"
+          ],
+          "common_misconceptions": [
+            "Retailers and wholesalers perform the same functions",
+            "Small-scale retailing is disappearing"
+          ],
+          "teaching_note": "Visit local markets to observe trade in action. Compare traditional and modern retailing."
+        },
+        {
+          "id": "foreign_trade",
+          "title": "Foreign Trade",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "home_trade"
+          ],
+          "concepts": [
+            "import trade",
+            "export trade",
+            "entrepot trade",
+            "visible exports",
+            "visible imports",
+            "invisible exports",
+            "invisible imports",
+            "balance of trade",
+            "balance of payments",
+            "tariffs",
+            "quotas",
+            "embargo"
+          ],
+          "common_misconceptions": [
+            "Export is always better than import",
+            "Balance of trade is the same as balance of payments"
+          ],
+          "teaching_note": "Analyze Nigeria's trade patterns. Discuss government policies affecting foreign trade."
+        }
+      ]
+    },
+    {
+      "id": "aids_trade",
+      "title": "Aids to Trade",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "aids_trade_overview",
+          "title": "Aids to Trade Overview",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "trade"
+          ],
+          "concepts": [
+            "banking",
+            "insurance",
+            "transportation",
+            "warehousing",
+            "communication",
+            "advertising",
+            "tourism",
+            "facilitators of trade"
+          ],
+          "common_misconceptions": [
+            "Aids to trade are less important than trade itself",
+            "Each aid operates independently"
+          ],
+          "teaching_note": "Show how each aid supports trade activities. Use case studies to illustrate interconnectedness."
+        }
+      ]
+    },
+    {
+      "id": "business_units",
+      "title": "Business Units",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "forms_business_commerce",
+          "title": "Forms of Business Organizations",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "sole proprietorship",
+            "partnership",
+            "limited liability company",
+            "cooperative society",
+            "public corporation",
+            "private company",
+            "public company",
+            "shares",
+            "debentures"
+          ],
+          "common_misconceptions": [
+            "Private company cannot sell shares",
+            "Cooperatives are only for farmers"
+          ],
+          "teaching_note": "Compare advantages and disadvantages. Use Nigerian examples. Explain the formation process for each type."
+        }
+      ]
+    },
+    {
+      "id": "finance",
+      "title": "Finance and Financial Institutions",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "sources_finance",
+          "title": "Sources of Business Finance",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "business_units"
+          ],
+          "concepts": [
+            "personal savings",
+            "bank loans",
+            "overdraft",
+            "trade credit",
+            "hire purchase",
+            "leasing",
+            "mortgage",
+            "shares",
+            "debentures",
+            "government grants"
+          ],
+          "common_misconceptions": [
+            "Bank loans are the only source of finance",
+            "Equity financing is always better than debt"
+          ],
+          "teaching_note": "Discuss short-term vs long-term financing. Explain the cost implications of each source."
+        }
+      ]
+    }
+  ]
+}
