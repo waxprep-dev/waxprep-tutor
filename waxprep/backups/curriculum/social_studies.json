@@ -1,0 +1,209 @@
+{
+  "subject": "social_studies",
+  "class_level": "JSS1",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Family",
+    "Culture",
+    "Socialization",
+    "Friendship",
+    "Communication",
+    "Cooperation",
+    "National Values"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "family",
+      "title": "Family",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "family_types",
+          "title": "Types and Functions of Family",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "family",
+            "nuclear family",
+            "extended family",
+            "polygamous family",
+            "monogamous family",
+            "functions of family",
+            "family tree",
+            "roles in family"
+          ],
+          "common_misconceptions": [
+            "Nuclear family is the only proper family type",
+            "Family only includes blood relatives"
+          ],
+          "teaching_note": "Respect diverse family structures. Discuss how family shapes values and behavior."
+        }
+      ]
+    },
+    {
+      "id": "culture",
+      "title": "Culture and Cultural Values",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "culture_concepts",
+          "title": "Understanding Culture",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "family"
+          ],
+          "concepts": [
+            "culture",
+            "customs",
+            "traditions",
+            "beliefs",
+            "values",
+            "language",
+            "food",
+            "dress",
+            "music",
+            "dance",
+            "cultural diversity",
+            "Nigerian cultures"
+          ],
+          "common_misconceptions": [
+            "One culture is superior to others",
+            "Culture never changes"
+          ],
+          "teaching_note": "Celebrate Nigerian cultural diversity. Discuss positive and negative aspects of cultural practices."
+        }
+      ]
+    },
+    {
+      "id": "socialization",
+      "title": "Socialization",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "socialization_process",
+          "title": "The Process of Socialization",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "culture"
+          ],
+          "concepts": [
+            "socialization",
+            "agents of socialization",
+            "family",
+            "school",
+            "peer group",
+            "religion",
+            "media",
+            "community",
+            "social norms",
+            "values"
+          ],
+          "common_misconceptions": [
+            "Socialization only happens in childhood",
+            "School is the most important agent"
+          ],
+          "teaching_note": "Discuss how different agents contribute to socialization. Analyze positive and negative influences."
+        }
+      ]
+    },
+    {
+      "id": "friendship",
+      "title": "Friendship and Relationships",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "healthy_friendships",
+          "title": "Building Healthy Relationships",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "socialization"
+          ],
+          "concepts": [
+            "friendship",
+            "trust",
+            "respect",
+            "loyalty",
+            "honesty",
+            "peer pressure",
+            "bullying",
+            "conflict resolution",
+            "healthy relationships"
+          ],
+          "common_misconceptions": [
+            "Good friends always agree",
+            "Peer pressure is always negative"
+          ],
+          "teaching_note": "Discuss how to choose friends wisely. Teach strategies for resisting negative peer pressure."
+        }
+      ]
+    },
+    {
+      "id": "communication",
+      "title": "Communication",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "communication_skills",
+          "title": "Effective Communication",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "friendship"
+          ],
+          "concepts": [
+            "communication",
+            "verbal communication",
+            "non-verbal communication",
+            "listening",
+            "speaking",
+            "writing",
+            "body language",
+            "barriers to communication"
+          ],
+          "common_misconceptions": [
+            "Communication is only talking",
+            "Good communicators are born, not made"
+          ],
+          "teaching_note": "Practice active listening and clear expression. Discuss barriers and how to overcome them."
+        }
+      ]
+    },
+    {
+      "id": "national_values",
+      "title": "National Values",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "nigerian_values",
+          "title": "Nigerian Core Values",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "communication"
+          ],
+          "concepts": [
+            "values",
+            "discipline",
+            "integrity",
+            "diligence",
+            "selflessness",
+            "patriotism",
+            "national unity",
+            "religious tolerance",
+            "social justice"
+          ],
+          "common_misconceptions": [
+            "National values don't apply to individuals",
+            "Values are only for religious settings"
+          ],
+          "teaching_note": "Connect values to everyday actions. Discuss how values contribute to national development."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+{
+  "subject": "basic_science",
+  "class_level": "JSS1",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Living and Non-Living Things",
+    "The Human Body",
+    "Plants",
+    "Matter",
+    "Energy",
+    "Earth and Space",
+    "Environmental Science"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "living_non_living",
+      "title": "Living and Non-Living Things",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "characteristics_living",
+          "title": "Characteristics of Living Things",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "living things",
+            "non-living things",
+            "movement",
+            "nutrition",
+            "respiration",
+            "growth",
+            "reproduction",
+            "excretion",
+            "sensitivity",
+            "life processes"
+          ],
+          "common_misconceptions": [
+            "All moving things are living",
+            "Plants don't respire",
+            "Growth only means getting bigger"
+          ],
+          "teaching_note": "Use diverse examples including plants and microorganisms. Demonstrate that plants do move (phototropism) and respire."
+        },
+        {
+          "id": "classification",
+          "title": "Classification of Living Things",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "characteristics_living"
+          ],
+          "concepts": [
+            "classification",
+            "kingdoms",
+            "plants",
+            "animals",
+            "Monera",
+            "Protista",
+            "Fungi",
+            "vertebrates",
+            "invertebrates",
+            "binomial nomenclature"
+          ],
+          "common_misconceptions": [
+            "Bacteria are animals",
+            "All fungi are plants",
+            "Viruses are living organisms"
+          ],
+          "teaching_note": "Use local Nigerian organisms as examples. Explain why viruses are not classified as living."
+        }
+      ]
+    },
+    {
+      "id": "human_body",
+      "title": "The Human Body",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "body_systems",
+          "title": "Introduction to Body Systems",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "living_non_living"
+          ],
+          "concepts": [
+            "cells",
+            "tissues",
+            "organs",
+            "systems",
+            "skeletal system",
+            "muscular system",
+            "digestive system",
+            "circulatory system",
+            "nervous system",
+            "respiratory system"
+          ],
+          "common_misconceptions": [
+            "Bones are dry and dead",
+            "The heart pumps blood to the whole body at once"
+          ],
+          "teaching_note": "Use models and diagrams. Emphasize the interconnection between body systems."
+        }
+      ]
+    },
+    {
+      "id": "plants",
+      "title": "Plants",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "plant_structure",
+          "title": "Structure and Functions of Plants",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "human_body"
+          ],
+          "concepts": [
+            "roots",
+            "stem",
+            "leaves",
+            "flowers",
+            "fruits",
+            "photosynthesis",
+            "chlorophyll",
+            "xylem",
+            "phloem",
+            "transpiration",
+            "germination"
+          ],
+          "common_misconceptions": [
+            "Plants get their food from the soil",
+            "Leaves are only for photosynthesis",
+            "All plants have flowers"
+          ],
+          "teaching_note": "Demonstrate starch test on leaves. Show that plants make their own food through photosynthesis."
+        }
+      ]
+    },
+    {
+      "id": "matter",
+      "title": "Matter",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "states_matter",
+          "title": "States of Matter",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "plants"
+          ],
+          "concepts": [
+            "matter",
+            "solid",
+            "liquid",
+            "gas",
+            "state change",
+            "melting",
+            "freezing",
+            "boiling",
+            "evaporation",
+            "condensation",
+            "sublimation",
+            "particle theory"
+          ],
+          "common_misconceptions": [
+            "Steam is visible water vapor",
+            "All solids are hard",
+            "Gases have no weight"
+          ],
+          "teaching_note": "Use demonstrations to show state changes. Explain particle theory using models."
+        },
+        {
+          "id": "mixtures",
+          "title": "Mixtures and Separation",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "states_matter"
+          ],
+          "concepts": [
+            "mixture",
+            "solution",
+            "solute",
+            "solvent",
+            "suspension",
+            "colloid",
+            "filtration",
+            "evaporation",
+            "distillation",
+            "chromatography",
+            "magnetic separation"
+          ],
+          "common_misconceptions": [
+            "Solutions are always liquid",
+            "Filtration can separate dissolved substances"
+          ],
+          "teaching_note": "Demonstrate each separation technique. Emphasize that dissolving is a physical change."
+        }
+      ]
+    },
+    {
+      "id": "energy",
+      "title": "Energy",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "energy_concepts",
+          "title": "Forms and Transformation of Energy",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "matter"
+          ],
+          "concepts": [
+            "energy",
+            "kinetic energy",
+            "potential energy",
+            "heat energy",
+            "light energy",
+            "sound energy",
+            "electrical energy",
+            "chemical energy",
+            "energy transformation",
+            "conservation of energy"
+          ],
+          "common_misconceptions": [
+            "Energy is used up",
+            "Energy and force are the same",
+            "Machines create energy"
+          ],
+          "teaching_note": "Emphasize that energy is transformed, not destroyed. Use everyday examples of energy transformations."
+        }
+      ]
+    },
+    {
+      "id": "earth_space",
+      "title": "Earth and Space",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "solar_system",
+          "title": "The Solar System",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "energy"
+          ],
+          "concepts": [
+            "sun",
+            "planets",
+            "earth",
+            "moon",
+            "stars",
+            "solar system",
+            "orbit",
+            "rotation",
+            "revolution",
+            "day and night",
+            "seasons",
+            "eclipse"
+          ],
+          "common_misconceptions": [
+            "The sun orbits the earth",
+            "The earth is the largest planet",
+            "Eclipses are caused by magic"
+          ],
+          "teaching_note": "Use models and simulations. Demonstrate day/night and seasons using globes and light sources."
+        }
+      ]
+    }
+  ]
+}
