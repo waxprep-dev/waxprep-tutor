@@ -1,0 +1,408 @@
+{
+  "subject": "biology",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Cell Biology",
+    "Organization of Life",
+    "Plant Nutrition",
+    "Animal Nutrition",
+    "Transport Systems",
+    "Respiration",
+    "Excretion",
+    "Reproduction"
+  ],
+  "jamb_high_priority_topics": [
+    "Cell Biology",
+    "Organization of Life",
+    "Photosynthesis",
+    "Respiration",
+    "Transport Systems",
+    "Ecology",
+    "Genetics"
+  ],
+  "topics": [
+    {
+      "id": "cell_biology",
+      "title": "Cell Biology",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "cell_discovery",
+          "title": "Discovery and Cell Theory",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "cell theory",
+            "Robert Hooke",
+            "Schwann",
+            "Schleiden",
+            "Virchow",
+            "unicellular organisms",
+            "multicellular organisms"
+          ],
+          "common_misconceptions": [
+            "Cells are the smallest living things (viruses are smaller but not living)",
+            "All cells are identical in structure"
+          ],
+          "teaching_note": "Use microscopes to observe cells. Emphasize the three tenets of cell theory and their modern modifications."
+        },
+        {
+          "id": "cell_structure",
+          "title": "Cell Structure and Functions",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "cell_discovery"
+          ],
+          "concepts": [
+            "cell membrane",
+            "cytoplasm",
+            "nucleus",
+            "nucleolus",
+            "mitochondria",
+            "ribosomes",
+            "endoplasmic reticulum",
+            "Golgi body",
+            "lysosomes",
+            "cell wall",
+            "chloroplasts",
+            "vacuoles",
+            "chromosomes"
+          ],
+          "common_misconceptions": [
+            "Confusing cell wall with cell membrane",
+            "Thinking all cells have cell walls",
+            "Not understanding the function of mitochondria"
+          ],
+          "teaching_note": "Compare and contrast plant and animal cells. Use diagrams and microscope slides to reinforce structure-function relationships."
+        }
+      ]
+    },
+    {
+      "id": "organization_life",
+      "title": "Organization of Life",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "levels_organization",
+          "title": "Levels of Organization",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "cell_biology"
+          ],
+          "concepts": [
+            "cell",
+            "tissue",
+            "organ",
+            "system",
+            "organism",
+            "population",
+            "community",
+            "ecosystem",
+            "biosphere"
+          ],
+          "common_misconceptions": [
+            "Confusing population with community",
+            "Not understanding the hierarchical relationship between levels"
+          ],
+          "teaching_note": "Use familiar examples from human anatomy and local ecosystems to illustrate each level."
+        },
+        {
+          "id": "cellular_organization",
+          "title": "Cellular Organization of Living Things",
+          "waec_frequency": "medium",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "levels_organization"
+          ],
+          "concepts": [
+            "prokaryotes",
+            "eukaryotes",
+            "kingdoms",
+            "Monera",
+            "Protista",
+            "Fungi",
+            "Plantae",
+            "Animalia",
+            "viruses"
+          ],
+          "common_misconceptions": [
+            "Viruses are living organisms",
+            "Bacteria are eukaryotic",
+            "All fungi are plants"
+          ],
+          "teaching_note": "Emphasize the key differences between prokaryotic and eukaryotic cells. Explain why viruses are not considered living."
+        }
+      ]
+    },
+    {
+      "id": "plant_nutrition",
+      "title": "Plant Nutrition",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "photosynthesis",
+          "title": "Photosynthesis",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "cell_structure"
+          ],
+          "concepts": [
+            "photosynthesis equation",
+            "light reactions",
+            "dark reactions",
+            "chlorophyll",
+            "stomata",
+            "xylem",
+            "phloem",
+            "factors affecting photosynthesis"
+          ],
+          "common_misconceptions": [
+            "Plants only photosynthesize during the day",
+            "Oxygen is the main product needed by plants",
+            "Photosynthesis only occurs in leaves"
+          ],
+          "teaching_note": "Demonstrate with experiments on starch testing and gas exchange. Use the equation as a framework for understanding the process."
+        },
+        {
+          "id": "mineral_nutrition",
+          "title": "Mineral Nutrition in Plants",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "photosynthesis"
+          ],
+          "concepts": [
+            "macronutrients",
+            "micronutrients",
+            "nitrogen",
+            "phosphorus",
+            "potassium",
+            "magnesium",
+            "deficiency symptoms",
+            "hydroponics"
+          ],
+          "common_misconceptions": [
+            "Plants get all nutrients from photosynthesis",
+            "Minerals provide energy to plants"
+          ],
+          "teaching_note": "Compare with human nutrition. Show deficiency symptoms on actual plants if available."
+        }
+      ]
+    },
+    {
+      "id": "animal_nutrition",
+      "title": "Animal Nutrition",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "nutrition_types",
+          "title": "Types of Nutrition and Food Substances",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "carbohydrates",
+            "proteins",
+            "fats",
+            "vitamins",
+            "minerals",
+            "water",
+            "roughage",
+            "balanced diet",
+            "autotrophic nutrition",
+            "heterotrophic nutrition"
+          ],
+          "common_misconceptions": [
+            "Fats are always unhealthy",
+            "Vitamins provide energy",
+            "Proteins are only for building muscles"
+          ],
+          "teaching_note": "Discuss the functions of each food group. Emphasize the importance of a balanced diet."
+        },
+        {
+          "id": "alimentary_system",
+          "title": "The Alimentary System and Digestion",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "nutrition_types"
+          ],
+          "concepts": [
+            "alimentary canal",
+            "mouth",
+            "oesophagus",
+            "stomach",
+            "small intestine",
+            "large intestine",
+            "enzymes",
+            "digestion",
+            "absorption",
+            "assimilation",
+            "egestion"
+          ],
+          "common_misconceptions": [
+            "Absorption happens in the stomach",
+            "Digestion is complete in the stomach",
+            "Confusing absorption with assimilation"
+          ],
+          "teaching_note": "Follow the journey of food through the digestive system. Emphasize enzyme actions and where absorption occurs."
+        }
+      ]
+    },
+    {
+      "id": "transport_systems",
+      "title": "Transport Systems",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "circulatory_system",
+          "title": "The Circulatory System",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "alimentary_system"
+          ],
+          "concepts": [
+            "heart",
+            "blood",
+            "blood vessels",
+            "arteries",
+            "veins",
+            "capillaries",
+            "double circulation",
+            "pulmonary circulation",
+            "systemic circulation",
+            "blood groups"
+          ],
+          "common_misconceptions": [
+            "Arteries always carry oxygenated blood",
+            "The heart pumps blood to the lungs and body separately",
+            "Veins are always thin-walled"
+          ],
+          "teaching_note": "Use diagrams of heart structure. Trace the path of blood through the heart and body. Distinguish between pulmonary and systemic circulation."
+        },
+        {
+          "id": "transport_plants",
+          "title": "Transport in Plants",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "circulatory_system"
+          ],
+          "concepts": [
+            "xylem",
+            "phloem",
+            "transpiration",
+            "translocation",
+            "root pressure",
+            "capillarity",
+            "cohesion-tension theory",
+            "stomatal regulation"
+          ],
+          "common_misconceptions": [
+            "Transpiration is a waste process",
+            "Phloem transports water",
+            "Root pressure drives all water movement"
+          ],
+          "teaching_note": "Demonstrate transpiration using a potted plant in a polythene bag. Explain the cohesion-tension mechanism for water movement."
+        }
+      ]
+    },
+    {
+      "id": "respiration",
+      "title": "Respiration",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "respiration_process",
+          "title": "The Process of Respiration",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "cell_structure"
+          ],
+          "concepts": [
+            "aerobic respiration",
+            "anaerobic respiration",
+            "glycolysis",
+            "Krebs cycle",
+            "electron transport chain",
+            "fermentation",
+            "ATP",
+            "respiratory quotient"
+          ],
+          "common_misconceptions": [
+            "Respiration is the same as breathing",
+            "Only animals respire",
+            "Anaerobic respiration produces more energy"
+          ],
+          "teaching_note": "Distinguish clearly between breathing (mechanical process) and respiration (biochemical process). All living organisms respire."
+        },
+        {
+          "id": "respiratory_system",
+          "title": "The Respiratory System",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "respiration_process"
+          ],
+          "concepts": [
+            "nose",
+            "trachea",
+            "bronchi",
+            "bronchioles",
+            "alveoli",
+            "lungs",
+            "diaphragm",
+            "intercostal muscles",
+            "gas exchange"
+          ],
+          "common_misconceptions": [
+            "The lungs expand on their own",
+            "Gas exchange occurs in the trachea",
+            "We only inhale oxygen and exhale carbon dioxide"
+          ],
+          "teaching_note": "Use models or diagrams to show breathing mechanics. Explain the role of the diaphragm and intercostal muscles."
+        }
+      ]
+    },
+    {
+      "id": "excretion",
+      "title": "Excretion",
+      "week": 7,
+      "subtopics": [
+        {
+          "id": "excretory_system",
+          "title": "The Excretory System",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "transport_systems"
+          ],
+          "concepts": [
+            "kidneys",
+            "ureters",
+            "bladder",
+            "urethra",
+            "nephron",
+            "urine formation",
+            "filtration",
+            "reabsorption",
+            "homeostasis"
+          ],
+          "common_misconceptions": [
+            "Excretion is the same as egestion",
+            "Only the kidneys excrete waste",
+            "Sweat is pure water"
+          ],
+          "teaching_note": "Distinguish between excretion (metabolic waste) and egestion (undigested food). Explain the role of the kidney in homeostasis."
+        }
+      ]
+    }
+  ]
+}

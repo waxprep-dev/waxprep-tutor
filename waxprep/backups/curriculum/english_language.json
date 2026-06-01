@@ -1,0 +1,289 @@
+{
+  "subject": "english_language",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Comprehension and Summary",
+    "Essay Writing",
+    "Lexis and Structure",
+    "Speech Work",
+    "Listening Skills",
+    "Grammar - Parts of Speech",
+    "Tenses and Concord"
+  ],
+  "jamb_high_priority_topics": [
+    "Comprehension",
+    "Lexis and Structure",
+    "Oral English",
+    "Essay Writing"
+  ],
+  "topics": [
+    {
+      "id": "comprehension_summary",
+      "title": "Comprehension and Summary Writing",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "reading_comprehension",
+          "title": "Reading Comprehension Skills",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "literal comprehension",
+            "inferential comprehension",
+            "evaluative comprehension",
+            "context clues",
+            "main idea",
+            "supporting details"
+          ],
+          "common_misconceptions": [
+            "Comprehension is just reading the passage",
+            "Answers can always be found word-for-word in the passage"
+          ],
+          "teaching_note": "Teach students to identify question types (literal, inferential, evaluative). Practice with varied passage types including descriptive, narrative, and argumentative texts."
+        },
+        {
+          "id": "summary_writing",
+          "title": "Summary Writing Techniques",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "reading_comprehension"
+          ],
+          "concepts": [
+            "summarization",
+            "paraphrasing",
+            "main points",
+            "conciseness",
+            "own words",
+            "relevant points",
+            "irrelevant details"
+          ],
+          "common_misconceptions": [
+            "Summary is just copying from the passage",
+            "Including as many points as possible makes a better summary"
+          ],
+          "teaching_note": "Teach the process: read, identify main points, draft in own words, check word count. Emphasize paraphrasing over direct copying."
+        }
+      ]
+    },
+    {
+      "id": "essay_writing",
+      "title": "Essay Writing",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "essay_structure",
+          "title": "Structure and Organization of Essays",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "introduction",
+            "body paragraphs",
+            "conclusion",
+            "thesis statement",
+            "topic sentence",
+            "unity",
+            "coherence",
+            "transition words"
+          ],
+          "common_misconceptions": [
+            "Longer essays always score higher",
+            "Introduction and conclusion are optional",
+            "Essays don't need planning"
+          ],
+          "teaching_note": "Emphasize planning before writing. Teach the hamburger model for paragraph structure. Practice all essay types: narrative, descriptive, argumentative, expository."
+        },
+        {
+          "id": "essay_types",
+          "title": "Types of Essays",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "essay_structure"
+          ],
+          "concepts": [
+            "narrative essay",
+            "descriptive essay",
+            "argumentative essay",
+            "expository essay",
+            "formal letter",
+            "informal letter",
+            "article writing",
+            "speech writing"
+          ],
+          "common_misconceptions": [
+            "All essays follow the same format",
+            "Formal and informal letters have the same tone"
+          ],
+          "teaching_note": "Teach the features of each essay type. Practice letter formats with proper addresses and salutations. Emphasize audience awareness in speech writing."
+        }
+      ]
+    },
+    {
+      "id": "lexis_structure",
+      "title": "Lexis and Structure",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "parts_speech",
+          "title": "Parts of Speech",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "nouns",
+            "pronouns",
+            "verbs",
+            "adjectives",
+            "adverbs",
+            "prepositions",
+            "conjunctions",
+            "interjections",
+            "articles"
+          ],
+          "common_misconceptions": [
+            "Every word ending in -ly is an adverb",
+            "All verbs show action"
+          ],
+          "teaching_note": "Use sentence analysis to identify parts of speech. Emphasize that word function determines its part of speech, not just form."
+        },
+        {
+          "id": "tenses_concord",
+          "title": "Tenses and Subject-Verb Agreement",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "parts_speech"
+          ],
+          "concepts": [
+            "simple present",
+            "simple past",
+            "simple future",
+            "present continuous",
+            "past continuous",
+            "present perfect",
+            "past perfect",
+            "subject-verb agreement",
+            "concord rules"
+          ],
+          "common_misconceptions": [
+            "Subject-verb agreement only applies to simple tenses",
+            "Collective nouns always take plural verbs"
+          ],
+          "teaching_note": "Teach concord rules systematically. Practice error correction exercises. Focus on tricky cases: collective nouns, indefinite pronouns, and inverted sentences."
+        }
+      ]
+    },
+    {
+      "id": "oral_english",
+      "title": "Oral English",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "vowels_consonants",
+          "title": "Vowels and Consonants",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "pure vowels",
+            "diphthongs",
+            "triphthongs",
+            "consonant clusters",
+            "voiced consonants",
+            "voiceless consonants",
+            "place of articulation",
+            "manner of articulation"
+          ],
+          "common_misconceptions": [
+            "Every letter has only one sound",
+            "The number of letters equals the number of sounds"
+          ],
+          "teaching_note": "Use the International Phonetic Alphabet (IPA). Focus on sounds that differ from Nigerian language phonemes. Practice minimal pairs."
+        },
+        {
+          "id": "rhythm_intonation",
+          "title": "Rhythm, Stress and Intonation",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "vowels_consonants"
+          ],
+          "concepts": [
+            "word stress",
+            "sentence stress",
+            "intonation patterns",
+            "rising tone",
+            "falling tone",
+            "rhythm",
+            "schwa sound"
+          ],
+          "common_misconceptions": [
+            "Stressing every word equally in a sentence",
+            "Intonation doesn't affect meaning"
+          ],
+          "teaching_note": "Demonstrate how stress and intonation change meaning. Use recorded materials for listening practice. Practice with question types: WH vs yes/no questions."
+        }
+      ]
+    },
+    {
+      "id": "vocabulary_development",
+      "title": "Vocabulary Development",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "word_formation",
+          "title": "Word Formation Processes",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "prefixes",
+            "suffixes",
+            "roots",
+            "compounding",
+            "blending",
+            "acronyms",
+            "derivation",
+            "antonyms",
+            "synonyms",
+            "homophones"
+          ],
+          "common_misconceptions": [
+            "Adding any prefix creates the opposite meaning",
+            "Synonyms can always be used interchangeably"
+          ],
+          "teaching_note": "Build vocabulary through word analysis. Teach common prefixes and suffixes with their meanings. Practice identifying word parts."
+        },
+        {
+          "id": "idioms_proverbs",
+          "title": "Idioms, Proverbs and Figures of Speech",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "word_formation"
+          ],
+          "concepts": [
+            "simile",
+            "metaphor",
+            "personification",
+            "hyperbole",
+            "euphemism",
+            "irony",
+            "idioms",
+            "proverbs",
+            "collocations"
+          ],
+          "common_misconceptions": [
+            "Idioms should be interpreted literally",
+            "Figurative language is only for literature"
+          ],
+          "teaching_note": "Teach idioms in context. Compare English idioms with Nigerian language equivalents. Practice identifying figures of speech in everyday language."
+        }
+      ]
+    }
+  ]
+}

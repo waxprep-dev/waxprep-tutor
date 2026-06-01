@@ -1,0 +1,339 @@
+{
+  "subject": "chemistry",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Introduction to Chemistry",
+    "Atomic Structure",
+    "The Periodic Table",
+    "Chemical Bonding",
+    "Stoichiometry and Mole Concept",
+    "States of Matter",
+    "Chemical Equations"
+  ],
+  "jamb_high_priority_topics": [
+    "Atomic Structure",
+    "Periodic Table",
+    "Chemical Bonding",
+    "Mole Concept",
+    "Chemical Equations",
+    "Gas Laws"
+  ],
+  "topics": [
+    {
+      "id": "introduction_chemistry",
+      "title": "Introduction to Chemistry",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "nature_chemistry",
+          "title": "Nature and Importance of Chemistry",
+          "waec_frequency": "low",
+          "jamb_frequency": "low",
+          "prerequisites": [],
+          "concepts": [
+            "chemistry as a science",
+            "branches of chemistry",
+            "careers in chemistry",
+            "chemistry in everyday life",
+            "laboratory safety"
+          ],
+          "common_misconceptions": [
+            "Chemistry is only about dangerous chemicals",
+            "Chemistry has no relevance to daily life"
+          ],
+          "teaching_note": "Show how chemistry applies to cooking, medicine, agriculture, and industry. Emphasize laboratory safety rules."
+        },
+        {
+          "id": "laboratory_techniques",
+          "title": "Laboratory Techniques and Apparatus",
+          "waec_frequency": "medium",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "nature_chemistry"
+          ],
+          "concepts": [
+            "laboratory apparatus",
+            "heating",
+            "filtration",
+            "evaporation",
+            "crystallization",
+            "distillation",
+            "chromatography"
+          ],
+          "common_misconceptions": [
+            "Confusing different separation techniques",
+            "Not understanding when to use each technique"
+          ],
+          "teaching_note": "Demonstrate each separation technique with real examples. Explain the principle behind each method."
+        }
+      ]
+    },
+    {
+      "id": "atomic_structure",
+      "title": "Atomic Structure",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "fundamental_particles",
+          "title": "Fundamental Particles of the Atom",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "protons",
+            "neutrons",
+            "electrons",
+            "atomic number",
+            "mass number",
+            "isotopes",
+            "relative atomic mass"
+          ],
+          "common_misconceptions": [
+            "Confusing atomic number with mass number",
+            "Thinking isotopes have different chemical properties"
+          ],
+          "teaching_note": "Use the mass number and atomic number to calculate subatomic particles. Emphasize that isotopes have identical chemical properties."
+        },
+        {
+          "id": "atomic_models",
+          "title": "Atomic Models and Electron Configuration",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "fundamental_particles"
+          ],
+          "concepts": [
+            "Bohr model",
+            "energy levels",
+            "shells",
+            "subshells",
+            "s,p,d,f",
+            "Aufbau principle",
+            "Hund's rule",
+            "Pauli exclusion principle",
+            "electron configuration"
+          ],
+          "common_misconceptions": [
+            "Electrons orbit the nucleus like planets",
+            "Not understanding the maximum electrons per shell"
+          ],
+          "teaching_note": "Explain that the Bohr model is a simplification. Use the 2n² rule for maximum electrons and demonstrate electron configuration for elements 1-20."
+        }
+      ]
+    },
+    {
+      "id": "periodic_table",
+      "title": "The Periodic Table",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "periodic_law",
+          "title": "Periodic Law and Classification",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "atomic_structure"
+          ],
+          "concepts": [
+            "periodic law",
+            "periods",
+            "groups",
+            "families",
+            "s-block",
+            "p-block",
+            "d-block",
+            "alkali metals",
+            "halogens",
+            "noble gases"
+          ],
+          "common_misconceptions": [
+            "Confusing periods with groups",
+            "Thinking periodic table order is based on atomic mass"
+          ],
+          "teaching_note": "Emphasize that the table is organized by atomic number. Show trends across periods and down groups."
+        },
+        {
+          "id": "periodic_trends",
+          "title": "Periodic Trends",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "periodic_law"
+          ],
+          "concepts": [
+            "atomic radius",
+            "ionization energy",
+            "electronegativity",
+            "electron affinity",
+            "metallic character",
+            "trends across periods",
+            "trends down groups"
+          ],
+          "common_misconceptions": [
+            "Confusing ionization energy with electron affinity",
+            "Not understanding the relationship between trends and electron configuration"
+          ],
+          "teaching_note": "Relate periodic trends to atomic structure and electron shielding. Use graphs to illustrate trends."
+        }
+      ]
+    },
+    {
+      "id": "chemical_bonding",
+      "title": "Chemical Bonding",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "ionic_bonding",
+          "title": "Ionic (Electrovalent) Bonding",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "periodic_table"
+          ],
+          "concepts": [
+            "ionic bond",
+            "electron transfer",
+            "cations",
+            "anions",
+            "electrostatic attraction",
+            "ionic lattice",
+            "properties of ionic compounds"
+          ],
+          "common_misconceptions": [
+            "Thinking ionic compounds form molecules",
+            "Not understanding the difference between ions and atoms"
+          ],
+          "teaching_note": "Use dot-and-cross diagrams to show electron transfer. Emphasize the formation of giant ionic lattices, not molecules."
+        },
+        {
+          "id": "covalent_metallic",
+          "title": "Covalent and Metallic Bonding",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "ionic_bonding"
+          ],
+          "concepts": [
+            "covalent bond",
+            "electron sharing",
+            "single bond",
+            "double bond",
+            "triple bond",
+            "metallic bond",
+            "delocalized electrons",
+            "properties of covalent compounds",
+            "properties of metals"
+          ],
+          "common_misconceptions": [
+            "Thinking covalent bonds always share electrons equally",
+            "Not understanding metallic bonding explains conductivity"
+          ],
+          "teaching_note": "Compare and contrast the three bonding types. Use molecular models for covalent compounds. Explain metallic bonding using the 'sea of electrons' model."
+        }
+      ]
+    },
+    {
+      "id": "stoichiometry",
+      "title": "Stoichiometry and the Mole Concept",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "mole_concept",
+          "title": "The Mole Concept and Avogadro's Constant",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "atomic_structure"
+          ],
+          "concepts": [
+            "mole",
+            "Avogadro's constant",
+            "molar mass",
+            "relative molecular mass",
+            "amount of substance",
+            "molar volume"
+          ],
+          "common_misconceptions": [
+            "Confusing molar mass with relative molecular mass",
+            "Not understanding that the mole is a counting unit"
+          ],
+          "teaching_note": "Use the analogy of a dozen to explain the mole. Practice calculations converting between mass, moles, and number of particles."
+        },
+        {
+          "id": "chemical_equations",
+          "title": "Chemical Equations and Calculations",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "mole_concept"
+          ],
+          "concepts": [
+            "balancing equations",
+            "stoichiometric coefficients",
+            "mole ratios",
+            "mass-mass calculations",
+            "gas volume calculations",
+            "limiting reactant"
+          ],
+          "common_misconceptions": [
+            "Not balancing equations before calculations",
+            "Using wrong mole ratios from unbalanced equations"
+          ],
+          "teaching_note": "Emphasize that equations must be balanced before any stoichiometric calculations. Use step-by-step mole method for calculations."
+        }
+      ]
+    },
+    {
+      "id": "states_matter",
+      "title": "States of Matter",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "kinetic_theory",
+          "title": "Kinetic Theory of Matter",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "solid",
+            "liquid",
+            "gas",
+            "kinetic theory",
+            "particle arrangement",
+            "particle motion",
+            "intermolecular forces",
+            "Brownian motion"
+          ],
+          "common_misconceptions": [
+            "Particles in solids don't move",
+            "Gas particles have no volume"
+          ],
+          "teaching_note": "Use demonstrations and simulations to show particle behavior in different states."
+        },
+        {
+          "id": "gas_laws",
+          "title": "Gas Laws",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "kinetic_theory"
+          ],
+          "concepts": [
+            "Boyle's law",
+            "Charles's law",
+            "pressure law",
+            "combined gas law",
+            "ideal gas equation",
+            "Graham's law of diffusion"
+          ],
+          "common_misconceptions": [
+            "Confusing Boyle's and Charles's laws",
+            "Not converting temperature to Kelvin"
+          ],
+          "teaching_note": "Always convert temperature to Kelvin. Use graphical representations and practical demonstrations."
+        }
+      ]
+    }
+  ]
+}
