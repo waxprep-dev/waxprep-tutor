@@ -1,0 +1,15 @@
+.env
+.env.local
+.env.production
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+*.log
+logs/
+.DS_Store
+node_modules/
