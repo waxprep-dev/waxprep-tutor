@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en-NG">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="/static/web/manifest.json">
+    <title>WaxPrep - AI Tutoring</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-surface: #12121a;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #1e293b;
+            --border-light: #334155;
+            --success: #22c55e;
+            --warning: #eab308;
+            --danger: #ef4444;
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Auth Screen */
+        .auth-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 32px 24px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            gap: 24px;
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .auth-logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .auth-logo p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: var(--bg-surface);
+            border-radius: 12px;
+            padding: 4px;
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .auth-tab.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .auth-form {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .auth-form.active {
+            display: flex;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-group input {
+            padding: 14px 16px;
+            background: var(--bg-surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+            background: var(--accent-hover);
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.85rem;
+            text-align: center;
+            display: none;
+            padding: 10px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Main App */
+        .main-app {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+            height: 100dvh;
+        }
+
+        .main-app.active {
+            display: flex;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            z-index: 10;
+        }
+
+        .header-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .content-area {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .view {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        /* Chat View */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 6px;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--accent);
+            border-bottom-right-radius: 6px;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 12px 16px;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .typing-indicator.show {
+            display: flex;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-8px);
+                opacity: 1;
+            }
+        }
+
+        .chat-input-area {
+            padding: 12px 16px;
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            resize: none;
+            max-height: 120px;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: none;
+            background: var(--accent);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .chat-btn:active {
+            transform: scale(0.95);
+        }
+
+        .chat-btn.mic-btn.recording {
+            background: var(--danger);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
+            }
+        }
+
+        .chat-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Dashboard View */
+        .dashboard-view {
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 24px;
+        }
+
+        .dashboard-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .dashboard-header p {
+            color: var(--text-secondary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--bg-surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-card .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .stat-card .icon.sessions {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--accent);
+        }
+
+        .stat-card .icon.concepts {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .stat-card .icon.score {
+            background: rgba(234, 179, 8, 0.2);
+            color: var(--warning);
+        }
+
+        .stat-card .icon.streak {
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+        }
+
+        .stat-card .value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .knowledge-map {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .subject-card {
+            background: var(--bg-surface);
+            border-radius: var(--radius);
+            padding: 18px;
+            border: 1px solid var(--border);
+        }
+
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .subject-name {
+            font-weight: 600;
+        }
+
+        .subject-percentage {
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        .mastery-bar {
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .mastery-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .mastery-fill.high {
+            background: linear-gradient(90deg, var(--success), #4ade80);
+        }
+
+        .mastery-fill.medium {
+            background: linear-gradient(90deg, var(--warning), #facc15);
+        }
+
+        .mastery-fill.low {
+            background: linear-gradient(90deg, var(--danger), #f87171);
+        }
+
+        /* Progress View */
+        .progress-view {
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .progress-legend {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.mastered {
+            background: var(--success);
+        }
+
+        .legend-dot.partial {
+            background: var(--warning);
+        }
+
+        .legend-dot.needs-work {
+            background: var(--danger);
+        }
+
+        .concept-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .concept-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--bg-surface);
+            padding: 16px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .concept-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .concept-dot.mastered {
+            background: var(--success);
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+        }
+
+        .concept-dot.partial {
+            background: var(--warning);
+            box-shadow: 0 0 8px rgba(234, 179, 8, 0.5);
+        }
+
+        .concept-dot.needs-work {
+            background: var(--danger);
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+        }
+
+        .concept-info {
+            flex: 1;
+        }
+
+        .concept-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .concept-subject {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .concept-percent {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        /* Exams View */
+        .exams-view {
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .exam-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .exam-card {
+            background: var(--bg-surface);
+            border-radius: var(--radius);
+            padding: 24px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .exam-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
+        }
+
+        .exam-card:active {
+            transform: scale(0.98);
+        }
+
+        .exam-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .exam-icon.jamb {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        }
+
+        .exam-icon.waec {
+            background: linear-gradient(135deg, var(--accent) 0%, #a855f7 100%);
+        }
+
+        .exam-info h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .exam-info p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .exam-arrow {
+            margin-left: auto;
+            color: var(--text-muted);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-container {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .loading-container.active {
+            display: flex;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-light);
+            border-radius: 3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 380px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-logo h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .chat-messages {
+                max-width: 720px;
+                margin: 0 auto;
+                width: 100%;
+            }
+
+            .dashboard-view,
+            .progress-view,
+            .exams-view {
+                max-width: 640px;
+                margin: 0 auto;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Auth Screen -->
+        <div class="auth-screen" id="authScreen">
+            <div class="auth-logo">
+                <h1>WaxPrep</h1>
+                <p>AI-powered tutoring for Nigerian students</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+
+            <div class="error-message" id="authError"></div>
+
+            <!-- Login Form -->
+            <form class="auth-form active" id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="student@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+
+            <!-- Register Form -->
+            <form class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" placeholder="Chinedu Okonkwo" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" placeholder="student@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone">Phone Number (optional)</label>
+                    <input type="tel" id="registerPhone" placeholder="08012345678">
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" placeholder="Create a password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+            </form>
+        </div>
+
+        <!-- Main App -->
+        <div class="main-app" id="mainApp">
+            <header class="header">
+                <span class="header-title">WaxPrep</span>
+                <div class="header-user">
+                    <div class="user-avatar" id="userAvatar">S</div>
+                    <button class="logout-btn" id="logoutBtn" title="Logout">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Chat View -->
+                <div class="view active" id="chatView">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot">
+                            Hello! 👋 I'm WaxPrep, your AI tutor. I'm here to help you master any subject — from Mathematics to English, Physics to Chemistry. What would you like to learn today?
+                        </div>
+                    </div>
+                    <div class="typing-indicator" id="typingIndicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="chat-input-area">
+                        <textarea class="chat-input" id="chatInput" placeholder="Type your message..." rows="1"></textarea>
+                        <div class="chat-actions">
+                            <button class="chat-btn mic-btn" id="micBtn" title="Voice input">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                    <line x1="12" y1="19" x2="12" y2="23"/>
+                                    <line x1="8" y1="23" x2="16" y2="23"/>
+                                </svg>
+                            </button>
+                            <button class="chat-btn send-btn" id="sendBtn" title="Send message">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard View -->
+                <div class="view" id="dashboardView">
+                    <div class="dashboard-view">
+                        <div class="dashboard-header">
+                            <h2>Your Progress 📊</h2>
+                            <p>Keep up the great work!</p>
+                        </div>
+
+                        <div class="stats-grid" id="statsGrid">
+                            <div class="stat-card">
+                                <div class="icon sessions">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                    </svg>
+                                </div>
+                                <div class="value" id="statSessions">-</div>
+                                <div class="label">Sessions</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="icon concepts">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                    </svg>
+                                </div>
+                                <div class="value" id="statConcepts">-</div>
+                                <div class="label">Concepts Mastered</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="icon score">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                        <polyline points="22 4 12 14.01 9 11.01"/>
+                                    </svg>
+                                </div>
+                                <div class="value" id="statScore">-</div>
+                                <div class="label">Assessment Score</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="icon streak">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                    </svg>
+                                </div>
+                                <div class="value" id="statStreak">-</div>
+                                <div class="label">Day Streak 🔥</div>
+                            </div>
+                        </div>
+
+                        <h3 class="section-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            </svg>
+                            Knowledge Map
+                        </h3>
+                        <div class="knowledge-map" id="knowledgeMap"></div>
+                    </div>
+                </div>
+
+                <!-- Progress View -->
+                <div class="view" id="progressView">
+                    <div class="progress-view">
+                        <h2 class="section-title" style="margin-bottom: 8px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="20" x2="18" y2="10"/>
+                                <line x1="12" y1="20" x2="12" y2="4"/>
+                                <line x1="6" y1="20" x2="6" y2="14"/>
+                            </svg>
+                            Concept Progress
+                        </h2>
+
+                        <div class="progress-legend">
+                            <div class="legend-item">
+                                <div class="legend-dot mastered"></div>
+                                <span>Mastered (80%+)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot partial"></div>
+                                <span>Partial (40-79%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot needs-work"></div>
+                                <span>Needs Work (&lt;40%)</span>
+                            </div>
+                        </div>
+
+                        <div class="concept-list" id="conceptList"></div>
+                    </div>
+                </div>
+
+                <!-- Exams View -->
+                <div class="view" id="examsView">
+                    <div class="exams-view">
+                        <h2 class="section-title" style="margin-bottom: 8px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10 9 9 9 8 9"/>
+                            </svg>
+                            Practice Exams
+                        </h2>
+
+                        <div class="exam-cards">
+                            <div class="exam-card" id="jambExam">
+                                <div class="exam-icon jamb">📗</div>
+                                <div class="exam-info">
+                                    <h3>JAMB Practice</h3>
+                                    <p>Practice UTME questions to prepare for your exam</p>
+                                </div>
+                                <div class="exam-arrow">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="exam-card" id="waecExam">
+                                <div class="exam-icon waec">📘</div>
+                                <div class="exam-info">
+                                    <h3>WAEC Practice</h3>
+                                    <p>Prepare for your WASSCE with practice questions</p>
+                                </div>
+                                <div class="exam-arrow">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Navigation -->
+                <nav class="bottom-nav">
+                    <button class="nav-item active" data-view="chat">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        <span>Chat</span>
+                    </button>
+                    <button class="nav-item" data-view="dashboard">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="9"/>
+                            <rect x="14" y="3" width="7" height="5"/>
+                            <rect x="14" y="12" width="7" height="9"/>
+                            <rect x="3" y="16" width="7" height="5"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="nav-item" data-view="progress">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10"/>
+                            <line x1="12" y1="20" x2="12" y2="4"/>
+                            <line x1="6" y1="20" x2="6" y2="14"/>
+                        </svg>
+                        <span>Progress</span>
+                    </button>
+                    <button class="nav-item" data-view="exams">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        <span>Exams</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div class="loading-container" id="loadingScreen">
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <script>
+        // State        const state = {
+            token: localStorage.getItem('wx_token'),
+            user: null,
+            currentView: 'chat',
+            isRecording: false,
+            recognition: null
+        };
+
+        // DOM Elements
+        const authScreen = document.getElementById('authScreen');
+        const mainApp = document.getElementById('mainApp');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const authError = document.getElementById('authError');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const micBtn = document.getElementById('micBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const userAvatar = document.getElementById('userAvatar');
+
+        // API Helper
+        async function apiCall(endpoint, method = 'GET', body = null) {
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+
+            if (state.token) {
+                headers['Authorization'] = `Bearer ${state.token}`;
+            }
+
+            const options = {
+                method,
+                headers
+            };
+
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+
+            const response = await fetch(`/api/v1/web${endpoint}`, options);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Request failed');
+            }
+
+            return data;
+        }
+
+        // Auth Tabs
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+
+                tab.classList.add('active');
+                const formId = tab.dataset.tab === 'login' ? 'loginForm' : 'registerForm';
+                document.getElementById(formId).classList.add('active');
+                authError.classList.remove('show');
+            });
+        });
+
+        // Login Form
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const data = await apiCall('/login', 'POST', { email, password });
+                state.token = data.token;
+                localStorage.setItem('wx_token', data.token);
+                await loadProfile();
+            } catch (err) {
+                showError(err.message);
+            }
+        });
+
+        // Register Form
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const phone = document.getElementById('registerPhone').value;
+            const password = document.getElementById('registerPassword').value;
+
+            const body = { name, email, password };
+            if (phone) body.phone = phone;
+
+            try {
+                const data = await apiCall('/register', 'POST', body);
+                state.token = data.token;
+                localStorage.setItem('wx_token', data.token);
+                await loadProfile();
+            } catch (err) {
+                showError(err.message);
+            }
+        });
+
+        function showError(message) {
+            authError.textContent = message;
+            authError.classList.add('show');
+        }
+
+        // Load Profile
+        async function loadProfile() {
+            try {
+                const data = await apiCall('/profile');
+                state.user = data;
+                userAvatar.textContent = data.name ? data.name.charAt(0).toUpperCase() : 'S';
+                showMainApp();
+                loadDashboard();
+            } catch (err) {
+                logout();
+            }
+        }
+
+        // Show Main App
+        function showMainApp() {
+            authScreen.style.display = 'none';
+            mainApp.classList.add('active');
+            loadingScreen.classList.remove('active');
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+
+        function logout() {
+            state.token = null;
+            state.user = null;
+            localStorage.removeItem('wx_token');
+            mainApp.classList.remove('active');
+            authScreen.style.display = 'flex';
+            loadingScreen.classList.remove('active');
+
+            document.getElementById('loginForm').reset();
+            document.getElementById('registerForm').reset();
+            authError.classList.remove('show');
+
+            chatMessages.innerHTML = `
+                <div class="message bot">
+                    Hello! 👋 I'm WaxPrep, your AI tutor. I'm here to help you master any subject — from Mathematics to English, Physics to Chemistry. What would you like to learn today?
+                </div>
+            `;
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const view = item.dataset.view;
+                switchView(view);
+            });
+        });
+
+        function switchView(view) {
+            state.currentView = view;
+
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelector(`[data-view="${view}"]`).classList.add('active');
+
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(`${view}View`).classList.add('active');
+
+            if (view === 'dashboard') {
+                loadDashboard();
+            } else if (view === 'progress') {
+                loadProgress();
+            }
+        }
+
+        // Chat Functions
+        function addMessage(content, isBot = true) {
+            const msg = document.createElement('div');
+            msg.className = `message ${isBot ? 'bot' : 'user'}`;
+            msg.textContent = content;
+            chatMessages.appendChild(msg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping() {
+            typingIndicator.classList.add('show');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTyping() {
+            typingIndicator.classList.remove('show');
+        }
+
+        async function sendMessage(message) {
+            if (!message.trim()) return;
+
+            addMessage(message, false);
+            chatInput.value = '';
+            showTyping();
+
+            try {
+                const data = await apiCall('/chat', 'POST', { message });
+                hideTyping();
+                addMessage(data.response);
+            } catch (err) {
+                hideTyping();
+                addMessage('Sorry, I encountered an error. Please try again.', true);
+            }
+        }
+
+        sendBtn.addEventListener('click', () => sendMessage(chatInput.value));
+
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage(chatInput.value);
+            }
+        });
+
+        chatInput.addEventListener('input', () => {
+            chatInput.style.height = 'auto';
+            chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+        });
+
+        // Voice Input
+        function initVoiceInput() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                state.recognition = new SpeechRecognition();
+                state.recognition.continuous = false;
+                state.recognition.interimResults = false;
+                state.recognition.lang = 'en-NG';
+
+                state.recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    chatInput.value = transcript;
+                    stopRecording();
+                    sendMessage(transcript);
+                };
+
+                state.recognition.onerror = () => {
+                    stopRecording();
+                };
+
+                state.recognition.onend = () => {
+                    stopRecording();
+                };
+            }
+        }
+
+        micBtn.addEventListener('click', () => {
+            if (!state.recognition) {
+                addMessage('Voice input is not supported in your browser.', true);
+                return;
+            }
+
+            if (state.isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        });
+
+        function startRecording() {
+            state.isRecording = true;
+            micBtn.classList.add('recording');
+            state.recognition.start();
+        }
+
+        function stopRecording() {
+            state.isRecording = false;
+            micBtn.classList.remove('recording');
+            if (state.recognition) {
+                state.recognition.stop();
+            }
+        }
+
+        // Dashboard
+        async function loadDashboard() {
+            try {
+                const [stats, knowledgeMap] = await Promise.all([
+                    apiCall('/stats'),
+                    apiCall('/knowledge-map')
+                ]);
+
+                document.getElementById('statSessions').textContent = stats.sessions || 0;
+                document.getElementById('statConcepts').textContent = stats.concepts_mastered || 0;
+                document.getElementById('statScore').textContent = (stats.avg_assessment_score || 0) + '%';
+                document.getElementById('statStreak').textContent = stats.streak_current || 0;
+
+                const kmContainer = document.getElementById('knowledgeMap');
+                kmContainer.innerHTML = '';
+
+                (knowledgeMap.subjects || []).forEach(subject => {
+                    const percentage = subject.avg_mastery || 0;
+                    const fillClass = percentage >= 80 ? 'high' : percentage >= 40 ? 'medium' : 'low';
+
+                    kmContainer.innerHTML += `
+                        <div class="subject-card">
+                            <div class="subject-header">
+                                <span class="subject-name">${subject.subject}</span>
+                                <span class="subject-percentage" style="color: var(--${fillClass === 'high' ? 'success' : fillClass === 'medium' ? 'warning' : 'danger'})">${percentage}%</span>
+                            </div>
+                            <div class="mastery-bar">
+                                <div class="mastery-fill ${fillClass}" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                console.error('Failed to load dashboard:', err);
+            }
+        }
+
+        // Progress
+        async function loadProgress() {
+            try {
+                const knowledgeMap = await apiCall('/knowledge-map');
+
+                const concepts = [];
+                (knowledgeMap.subjects || []).forEach(subject => {
+                    if (subject.concepts) {
+                        subject.concepts.forEach(concept => {
+                            concepts.push({
+                                ...concept,
+                                subject: subject.subject
+                            });
+                        });
+                    }
+                });
+
+                concepts.sort((a, b) => (b.mastery || 0) - (a.mastery || 0));
+
+                const container = document.getElementById('conceptList');
+                container.innerHTML = '';
+
+                concepts.forEach(concept => {
+                    const mastery = concept.mastery || 0;
+                    let dotClass = 'needs-work';
+                    if (mastery >= 80) dotClass = 'mastered';
+                    else if (mastery >= 40) dotClass = 'partial';
+
+                    container.innerHTML += `
+                        <div class="concept-item">
+                            <div class="concept-dot ${dotClass}"></div>
+                            <div class="concept-info">
+                                <div class="concept-name">${concept.name}</div>
+                                <div class="concept-subject">${concept.subject}</div>
+                            </div>
+                            <div class="concept-percent" style="color: var(--${dotClass === 'mastered' ? 'success' : dotClass === 'partial' ? 'warning' : 'danger'})">${mastery}%</div>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                console.error('Failed to load progress:', err);
+            }
+        }
+
+        // Exams
+        document.getElementById('jambExam').addEventListener('click', () => {
+            switchView('chat');
+            sendMessage('Let me do some JAMB practice questions');
+        });
+
+        document.getElementById('waecExam').addEventListener('click', () => {
+            switchView('chat');
+            sendMessage('Let me do some WAEC practice questions');
+        });
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/web/sw.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed:', err));
+        }
+
+        // Initialize
+        async function init() {
+            loadingScreen.classList.add('active');
+
+            if (state.token) {
+                await loadProfile();
+            } else {
+                loadingScreen.classList.remove('active');
+            }
+
+            initVoiceInput();
+        }
+
+        init();
+    </script>
+</body>
+</html>
