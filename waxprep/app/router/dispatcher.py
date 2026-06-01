@@ -106,6 +106,30 @@ async def dispatch_message(normalized_message: NormalizedMessage) -> None:
             platform_user_id=normalized_message.platform_user_id,
         )
 
+
+        if not student.get("onboarding_complete") and student.get("onboarding_exchanges", 0) == 0:
+            from waxprep.app.cache.redis_client import cache_get, cache_set
+            first_message_key = f"wax:first_message:{student['id']}"
+            already_opened = await cache_get(first_message_key)
+            if not already_opened:
+                await cache_set(first_message_key, True, 86400)
+                profile_data = await student_cache.get_student_profile(student["id"])
+                if not profile_data or not profile_data.get("student_name"):
+                    try:
+                        if normalized_message.platform == Platform.WHATSAPP:
+                            from waxprep.app.gateways.whatsapp.sender import WhatsAppSender
+                            await WhatsAppSender().send_level_selector(normalized_message.platform_user_id)
+                            conv = await history_manager.get_or_create_active_conversation(student["id"], normalized_message.platform.value)
+                            await history_manager.save_message(
+                                conversation_id=conv["id"],
+                                student_id=student["id"],
+                                direction="outbound",
+                                content="Level selector shown",
+                                message_type="onboarding",
+                            )
+                            return
+                    except Exception:
+                        pass
         conversation = await history_manager.get_or_create_active_conversation(
             student_id=student["id"],
             platform=normalized_message.platform.value,
