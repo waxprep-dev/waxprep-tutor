@@ -1,0 +1,82 @@
+{
+  "subject": "home_economics",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Home Management",
+    "Family Living",
+    "Food and Nutrition",
+    "Clothing and Textiles",
+    "Household Budgeting"
+  ],
+  "jamb_high_priority_topics": [
+    "Home Management",
+    "Family Living"
+  ],
+  "topics": [
+    {
+      "id": "home_management",
+      "title": "Home Management",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "meaning_home",
+          "title": "Meaning and Importance of Home Management",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "home",
+            "management",
+            "home management",
+            "resources",
+            "human resources",
+            "material resources",
+            "time management",
+            "energy management",
+            "money management"
+          ],
+          "common_misconceptions": [
+            "Home management is only for women",
+            "Management means controlling people",
+            "Home management is not a professional skill"
+          ],
+          "teaching_note": "Home management = using available resources effectively to achieve family goals. Resources: human (knowledge, skills, time, energy), non-human (money, materials, equipment, space). Management process: planning, organizing, implementing, evaluating. DECIDE steps: Define problem, Establish criteria, Consider alternatives, Investigate consequences, Decide and act, Evaluate. Nigerian context: managing resources is especially important given economic challenges - budgeting, meal planning, time management between work and family."
+        }
+      ]
+    },
+    {
+      "id": "family_living",
+      "title": "Family Living",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "family_types",
+          "title": "Types and Functions of Family",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "home_management"
+          ],
+          "concepts": [
+            "family",
+            "nuclear family",
+            "extended family",
+            "monogamy",
+            "polygamy",
+            "family functions",
+            "socialization",
+            "economic support",
+            "emotional support"
+          ],
+          "common_misconceptions": [
+            "Nuclear family is better than extended family",
+            "Polygamy always causes conflict",
+            "Family only means parents and children"
+          ],
+          "teaching_note": "Nigerian context: Extended family is prevalent and culturally important - includes grandparents, uncles, aunts, cousins. Compound family setting common in rural areas. Family functions: reproduction, socialization of children, economic support, emotional support, protection. Marriage types: monogamy (one spouse) and polygamy (multiple spouses - polygyny: one man multiple wives; polyandry: one woman multiple husbands, rare). Kinship terms in Nigerian languages reflect extended family structure."
+        }
+      ]
+    }
+  ]
+}

@@ -3,202 +3,42 @@
   "class_level": "JSS2",
   "academic_year": "Junior Secondary",
   "waec_high_priority_topics": [
-    "Drug Abuse",
-    "Human Rights",
-    "Cultism",
-    "Gender Roles",
-    "Inter-Communal Relationships",
-    "Cooperation",
-    "Conflict Resolution"
+    "Social Issues",
+    "Government",
+    "Democracy",
+    "Law and Order",
+    "Cooperation and Conflict"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
     {
-      "id": "drug_abuse",
-      "title": "Drug Abuse",
+      "id": "government_intro",
+      "title": "Introduction to Government",
       "week": 1,
       "subtopics": [
         {
-          "id": "drugs",
-          "title": "Drug Use and Abuse",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [],
-          "concepts": [
-            "drug",
-            "medicine",
-            "drug abuse",
-            "addiction",
-            "dependence",
-            "withdrawal",
-            "stimulants",
-            "depressants",
-            "narcotics",
-            "hallucinogens",
-            "consequences",
-            "prevention"
-          ],
-          "common_misconceptions": [
-            "Only illegal drugs are harmful",
-            "Prescription drugs are always safe"
-          ],
-          "teaching_note": "Discuss common abused substances in Nigeria. Emphasize prevention and seeking help."
-        }
-      ]
-    },
-    {
-      "id": "human_rights",
-      "title": "Human Rights",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "rights",
-          "title": "Human Rights and Responsibilities",
+          "id": "meaning_government",
+          "title": "Meaning and Types of Government",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
-            "drug_abuse"
+            "jss1_culture"
           ],
           "concepts": [
-            "human rights",
-            "fundamental rights",
-            "children's rights",
-            "women's rights",
-            "civil rights",
-            "political rights",
-            "economic rights",
-            "social rights",
-            "responsibilities"
+            "government",
+            "democracy",
+            "monarchy",
+            "military government",
+            "federal system",
+            "unitary system",
+            "constitution"
           ],
           "common_misconceptions": [
-            "Only adults have rights",
-            "Rights are unlimited"
+            "Government only means the president",
+            "Democracy means everyone does what they want",
+            "Military government is better because there's order"
           ],
-          "teaching_note": "Connect to Nigerian Constitution. Discuss agencies that protect human rights in Nigeria."
-        }
-      ]
-    },
-    {
-      "id": "cultism",
-      "title": "Cultism and Related Issues",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "cultism_concepts",
-          "title": "Understanding Cultism",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "human_rights"
-          ],
-          "concepts": [
-            "cultism",
-            "secret cults",
-            "initiation",
-            "oath",
-            "consequences",
-            "violence",
-            "prevention",
-            "peer pressure",
-            "school safety"
-          ],
-          "common_misconceptions": [
-            "Cults are only in universities",
-            "Joining a cult gives protection"
-          ],
-          "teaching_note": "Discuss dangers of cultism. Teach refusal skills and where to seek help."
-        }
-      ]
-    },
-    {
-      "id": "gender_roles",
-      "title": "Gender Roles",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "gender",
-          "title": "Gender Roles and Stereotypes",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "cultism"
-          ],
-          "concepts": [
-            "gender",
-            "sex",
-            "gender roles",
-            "gender stereotypes",
-            "gender equality",
-            "discrimination",
-            "empowerment",
-            "challenging stereotypes"
-          ],
-          "common_misconceptions": [
-            "Gender roles are natural and unchangeable",
-            "Gender equality means men and women are the same"
-          ],
-          "teaching_note": "Discuss Nigerian cultural context. Challenge harmful stereotypes while respecting culture."
-        }
-      ]
-    },
-    {
-      "id": "conflict_resolution",
-      "title": "Conflict Resolution",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "conflicts",
-          "title": "Managing and Resolving Conflicts",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "gender_roles"
-          ],
-          "concepts": [
-            "conflict",
-            "causes of conflict",
-            "communication",
-            "negotiation",
-            "mediation",
-            "arbitration",
-            "compromise",
-            "peaceful resolution"
-          ],
-          "common_misconceptions": [
-            "All conflicts are bad",
-            "Violence is the best way to resolve conflicts"
-          ],
-          "teaching_note": "Use role-play scenarios. Teach assertive communication and compromise."
-        }
-      ]
-    },
-    {
-      "id": "inter_communal",
-      "title": "Inter-Communal Relationships",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "communal_relationships",
-          "title": "Building Peaceful Communities",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "conflict_resolution"
-          ],
-          "concepts": [
-            "community",
-            "tolerance",
-            "peaceful coexistence",
-            "religious tolerance",
-            "ethnic harmony",
-            "national unity",
-            "patriotism"
-          ],
-          "common_misconceptions": [
-            "Diversity causes conflict",
-            "One community is superior to another"
-          ],
-          "teaching_note": "Celebrate Nigeria's diversity. Discuss examples of peaceful coexistence across ethnic groups."
+          "teaching_note": "Government: organization that makes and enforces laws for a country. Democracy: government by the people (through elected representatives). Monarchy: ruled by king/queen. Military: ruled by armed forces. Nigeria: federal presidential democracy. Three branches: Executive (President), Legislature (National Assembly), Judiciary (courts). Constitution: supreme law. Federal system: power shared between federal and state governments."
         }
       ]
     }

@@ -1,0 +1,43 @@
+{
+  "subject": "agricultural_science",
+  "class_level": "JSS1",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Meaning of Agriculture",
+    "Importance of Agriculture",
+    "Branches of Agriculture",
+    "Agricultural Tools"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "meaning_agric",
+      "title": "Meaning and Importance of Agriculture",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "agric_definition",
+          "title": "What is Agriculture?",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "agriculture",
+            "farming",
+            "crop production",
+            "animal production",
+            "fishery",
+            "forestry",
+            "soil science"
+          ],
+          "common_misconceptions": [
+            "Agriculture is only about farming",
+            "Agriculture is for uneducated people",
+            "Nigeria doesn't need agriculture"
+          ],
+          "teaching_note": "Agriculture: science and practice of cultivating soil, growing crops, and raising animals for human use. Branches: Crop science (arable farming), Animal science (livestock), Soil science, Fishery, Forestry, Agricultural economics. Importance: provides food, employment (70% of Nigerians), raw materials (cotton, rubber), foreign exchange (cocoa, palm oil). Nigeria was once known for: groundnut pyramids (Kano), cocoa (Western region), palm oil (Eastern region), cotton (Northern region)."
+        }
+      ]
+    }
+  ]
+}

@@ -3,205 +3,42 @@
   "class_level": "JSS3",
   "academic_year": "Junior Secondary",
   "waec_high_priority_topics": [
-    "Reproduction in Humans",
-    "Genetics",
-    "Environmental Hazards",
-    "Climate Change",
-    "Soil",
-    "Water",
-    "Energy and Society"
+    "Human Body Systems",
+    "Reproduction",
+    "Environment",
+    "Chemistry of Materials",
+    "Energy Resources"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
     {
-      "id": "reproduction_humans",
-      "title": "Reproduction in Humans",
+      "id": "human_body_systems",
+      "title": "Human Body Systems",
       "week": 1,
       "subtopics": [
         {
-          "id": "human_reproduction",
-          "title": "Human Reproductive System",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [],
-          "concepts": [
-            "male reproductive system",
-            "female reproductive system",
-            "sperm",
-            "ovum",
-            "fertilization",
-            "pregnancy",
-            "gestation",
-            "birth",
-            "puberty",
-            "menstruation"
-          ],
-          "common_misconceptions": [
-            "Urine and sperm come from the same place",
-            "Fertilization happens in the uterus"
-          ],
-          "teaching_note": "Use diagrams respectfully. Emphasize reproductive health and hygiene."
-        }
-      ]
-    },
-    {
-      "id": "genetics_jss3",
-      "title": "Genetics",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "inheritance",
-          "title": "Heredity and Variation",
+          "id": "body_systems",
+          "title": "Major Body Systems",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
-            "reproduction_humans"
+            "jss2_force_motion"
           ],
           "concepts": [
-            "heredity",
-            "variation",
-            "gene",
-            "allele",
-            "dominant",
-            "recessive",
-            "genotype",
-            "phenotype",
-            "homozygous",
-            "heterozygous",
-            "Mendel's laws"
+            "digestive system",
+            "respiratory system",
+            "circulatory system",
+            "nervous system",
+            "reproductive system",
+            "excretory system",
+            "skeletal system"
           ],
           "common_misconceptions": [
-            "Dominant traits are always more common",
-            "Children inherit equally from both parents"
+            "The heart is on the left side (it's centered, slightly left)",
+            "Food is digested only in the stomach (starts in mouth)",
+            "Bones are dry and dead (they are living tissues)"
           ],
-          "teaching_note": "Use Punnett squares for simple crosses. Discuss sickle cell trait in Nigerian context."
-        }
-      ]
-    },
-    {
-      "id": "environmental_hazards",
-      "title": "Environmental Hazards",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "pollution",
-          "title": "Pollution and Its Effects",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "genetics_jss3"
-          ],
-          "concepts": [
-            "pollution",
-            "air pollution",
-            "water pollution",
-            "soil pollution",
-            "noise pollution",
-            "causes",
-            "effects",
-            "prevention",
-            "control"
-          ],
-          "common_misconceptions": [
-            "Pollution only affects cities",
-            "Natural substances can't pollute"
-          ],
-          "teaching_note": "Discuss Nigerian environmental issues: oil spills, erosion, waste management."
-        }
-      ]
-    },
-    {
-      "id": "climate_change_jss3",
-      "title": "Climate Change",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "climate_change_concepts",
-          "title": "Climate Change and Its Effects",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "environmental_hazards"
-          ],
-          "concepts": [
-            "climate change",
-            "global warming",
-            "greenhouse gases",
-            "deforestation",
-            "desertification",
-            "effects",
-            "mitigation",
-            "adaptation",
-            "sustainable development"
-          ],
-          "common_misconceptions": [
-            "Climate change is not real",
-            "Nigeria is not affected by climate change"
-          ],
-          "teaching_note": "Use local examples: Lake Chad shrinkage, flooding. Discuss student roles in mitigation."
-        }
-      ]
-    },
-    {
-      "id": "soil_water",
-      "title": "Soil and Water",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "soil_properties",
-          "title": "Soil Properties and Conservation",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "climate_change_jss3"
-          ],
-          "concepts": [
-            "soil composition",
-            "soil types",
-            "soil fertility",
-            "soil erosion",
-            "conservation",
-            "crop rotation",
-            "afforestation",
-            "terracing"
-          ],
-          "common_misconceptions": [
-            "All soil is the same",
-            "Soil erosion only happens on farms"
-          ],
-          "teaching_note": "Discuss Nigerian agricultural challenges. Show conservation techniques."
-        }
-      ]
-    },
-    {
-      "id": "energy_society",
-      "title": "Energy and Society",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "energy_sources_jss3",
-          "title": "Energy Sources and Their Impact",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "soil_water"
-          ],
-          "concepts": [
-            "renewable energy",
-            "non-renewable energy",
-            "solar",
-            "wind",
-            "hydro",
-            "biomass",
-            "fossil fuels",
-            "conservation",
-            "energy crisis"
-          ],
-          "common_misconceptions": [
-            "Renewable energy is always expensive",
-            "Nigeria has no renewable energy potential"
-          ],
-          "teaching_note": "Discuss Nigeria's energy challenges. Explore solar potential in the north."
+          "teaching_note": "Digestive: mouth \u2192 oesophagus \u2192 stomach \u2192 small intestine \u2192 large intestine. Respiratory: nose \u2192 trachea \u2192 lungs (oxygen in, CO\u2082 out). Circulatory: heart pumps blood through arteries, veins, capillaries. Nervous: brain, spinal cord, nerves. Excretory: kidneys filter waste from blood. Skeletal: 206 bones, supports body, protects organs. Health education: balanced diet, exercise, hygiene, avoiding drugs/substance abuse."
         }
       ]
     }

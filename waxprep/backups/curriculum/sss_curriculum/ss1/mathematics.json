@@ -3,159 +3,186 @@
   "class_level": "SS1",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Number Bases",
-    "Algebraic Processes",
-    "Indices and Logarithms",
+    "Number Systems",
+    "Algebraic Expressions",
     "Quadratic Equations",
-    "Trigonometry"
+    "Plane Geometry",
+    "Trigonometry",
+    "Statistics",
+    "Probability",
+    "Sets"
   ],
   "jamb_high_priority_topics": [
-    "Logarithms and Indices",
-    "Quadratic Equations",
+    "Logarithms",
     "Sequences and Series",
-    "Sets",
-    "Trigonometry"
+    "Quadratic Equations",
+    "Binomial Theorem",
+    "Trigonometry",
+    "Calculus",
+    "Statistics"
   ],
   "topics": [
     {
-      "id": "number_bases",
-      "title": "Number Bases",
+      "id": "number_systems",
+      "title": "Number Systems",
       "week": 1,
       "subtopics": [
         {
-          "id": "binary_numbers",
-          "title": "Binary Numbers and Conversion",
-          "waec_frequency": "very_high",
+          "id": "number_types",
+          "title": "Types of Numbers",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [],
           "concepts": [
-            "base 2",
-            "binary digits",
-            "conversion to decimal",
-            "conversion from decimal",
-            "place value"
+            "natural numbers",
+            "whole numbers",
+            "integers",
+            "rational numbers",
+            "irrational numbers",
+            "real numbers",
+            "prime numbers",
+            "composite numbers"
           ],
           "common_misconceptions": [
-            "Students often confuse binary place values with decimal place values",
-            "Some forget that binary only uses digits 0 and 1"
+            "Zero is a natural number",
+            "All fractions are rational numbers but not all rationals are fractions",
+            "Negative numbers are not real numbers"
           ],
-          "teaching_note": "Use physical counters to demonstrate the concept of place value in different bases."
+          "teaching_note": "Use number line to illustrate relationships. Emphasize that every natural number is a whole number but not vice versa. Worked example: Classify -3, 0, 1/2, \u221a2, 7 into appropriate number sets."
         },
         {
-          "id": "octal_hexadecimal",
-          "title": "Octal and Hexadecimal Systems",
+          "id": "number_bases",
+          "title": "Number Bases",
           "waec_frequency": "high",
           "jamb_frequency": "medium",
           "prerequisites": [
-            "binary_numbers"
+            "number_types"
           ],
           "concepts": [
-            "base 8",
-            "base 16",
-            "hexadecimal digits A-F",
-            "octal conversion",
-            "hexadecimal conversion"
+            "base 2 (binary)",
+            "base 8 (octal)",
+            "base 10 (decimal)",
+            "base 16 (hexadecimal)",
+            "conversion between bases",
+            "binary arithmetic"
           ],
           "common_misconceptions": [
-            "Students sometimes confuse hexadecimal letters A-F with variable symbols in algebra"
+            "Confusing place values in different bases",
+            "Thinking base 5 only uses digits 1-5 instead of 0-4"
           ],
-          "teaching_note": "Connect octal and hexadecimal to their use in computer science."
+          "teaching_note": "Start with familiar base 10, then extend to other bases. Worked example: Convert 25\u2081\u2080 to base 2. Solution: 25 \u00f7 2 = 12 r 1, 12 \u00f7 2 = 6 r 0, 6 \u00f7 2 = 3 r 0, 3 \u00f7 2 = 1 r 1, 1 \u00f7 2 = 0 r 1. Read remainders upwards: 11001\u2082."
+        }
+      ]
+    },
+    {
+      "id": "set_theory",
+      "title": "Set Theory",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "set_concepts",
+          "title": "Basic Set Concepts",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "number_types"
+          ],
+          "concepts": [
+            "set notation",
+            "elements",
+            "universal set",
+            "empty set",
+            "finite set",
+            "infinite set",
+            "subset",
+            "superset",
+            "power set"
+          ],
+          "common_misconceptions": [
+            "Confusing \u2208 (element of) with \u2286 (subset of)",
+            "Thinking {0} is the empty set",
+            "Not understanding that A \u2286 B includes A = B"
+          ],
+          "teaching_note": "Use Venn diagrams extensively. Emphasize proper notation: \u2208 for elements, \u2286 for subsets."
+        },
+        {
+          "id": "set_operations",
+          "title": "Set Operations",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "set_concepts"
+          ],
+          "concepts": [
+            "union",
+            "intersection",
+            "complement",
+            "difference",
+            "disjoint sets",
+            "Venn diagrams",
+            "cardinality",
+            "n(A\u222aB) = n(A) + n(B) - n(A\u2229B)"
+          ],
+          "common_misconceptions": [
+            "Confusing union with intersection",
+            "Forgetting to subtract intersection in the cardinality formula",
+            "Incorrectly shading Venn diagram regions"
+          ],
+          "teaching_note": "WAEC/JAMB frequently test Venn diagram problems with two or three sets. Worked example: In a class of 40 students, 20 study Math, 25 study English, and 8 study both. How many study neither? Solution: n(M\u222aE) = 20 + 25 - 8 = 37. Neither = 40 - 37 = 3."
         }
       ]
     },
     {
       "id": "algebraic_expressions",
-      "title": "Algebraic Expressions and Operations",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "expanding_brackets",
-          "title": "Expanding and Simplifying Brackets",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "distributive law",
-            "expansion",
-            "simplification",
-            "like terms",
-            "brackets"
-          ],
-          "common_misconceptions": [
-            "Forgetting to multiply every term inside the bracket by the factor outside",
-            "Sign errors when expanding negative coefficients"
-          ],
-          "teaching_note": "Use the area model to visualize expansion. Emphasize the distributive property systematically."
-        },
-        {
-          "id": "factorization",
-          "title": "Factorization Techniques",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "expanding_brackets"
-          ],
-          "concepts": [
-            "common factors",
-            "grouping",
-            "difference of squares",
-            "trinomials",
-            "factor by grouping"
-          ],
-          "common_misconceptions": [
-            "Difficulty identifying common factors in complex expressions",
-            "Confusing factorization with expansion"
-          ],
-          "teaching_note": "Start with numerical examples to establish the concept of common factors."
-        }
-      ]
-    },
-    {
-      "id": "indices_logarithms",
-      "title": "Indices and Logarithms",
+      "title": "Algebraic Expressions",
       "week": 3,
       "subtopics": [
         {
-          "id": "laws_of_indices",
-          "title": "Laws of Indices",
+          "id": "expansion_factorization",
+          "title": "Expansion and Factorization",
           "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "number_types"
+          ],
           "concepts": [
-            "multiplication law",
-            "division law",
-            "power law",
-            "zero index",
-            "negative indices",
-            "fractional indices"
+            "expanding brackets",
+            "factorization",
+            "common factors",
+            "difference of squares",
+            "trinomials",
+            "grouping",
+            "perfect squares"
           ],
           "common_misconceptions": [
-            "Adding indices when multiplying same bases",
-            "Confusing negative indices with negative numbers"
+            "(a+b)\u00b2 = a\u00b2 + b\u00b2 (forgetting 2ab)",
+            "Confusing expansion with factorization",
+            "Sign errors when expanding negative brackets"
           ],
-          "teaching_note": "Build the laws of indices from numerical examples using pattern recognition."
+          "teaching_note": "Emphasize the FOIL method for binomials. Worked example: Expand (2x+3)(x-4). Solution: 2x\u00b2 - 8x + 3x - 12 = 2x\u00b2 - 5x - 12. Factorize: x\u00b2 - 5x + 6 = (x-2)(x-3)."
         },
         {
-          "id": "introduction_logarithms",
-          "title": "Introduction to Logarithms",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
+          "id": "algebraic_fractions",
+          "title": "Algebraic Fractions",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
           "prerequisites": [
-            "laws_of_indices"
+            "expansion_factorization"
           ],
           "concepts": [
-            "logarithm definition",
-            "base 10 logarithms",
-            "antilogarithms",
-            "characteristic",
-            "mantissa",
-            "logarithm tables"
+            "simplifying algebraic fractions",
+            "addition of algebraic fractions",
+            "subtraction",
+            "multiplication",
+            "division",
+            "LCM of algebraic expressions"
           ],
           "common_misconceptions": [
-            "Confusing logarithms with algebraic multiplication",
-            "Difficulty understanding that logarithm is an exponent"
+            "Canceling terms instead of factors",
+            "Incorrectly finding common denominators",
+            "Forgetting to factor before simplifying"
           ],
-          "teaching_note": "Emphasize that logarithms are exponents. Use the equivalence between exponential and logarithmic forms."
+          "teaching_note": "Always emphasize factoring numerator and denominator first before simplifying. Worked example: Simplify (x\u00b2-9)/(x\u00b2+6x+9) = (x-3)(x+3)/(x+3)\u00b2 = (x-3)/(x+3)."
         }
       ]
     },
@@ -165,144 +192,369 @@
       "week": 4,
       "subtopics": [
         {
-          "id": "solving_quadratic_factorization",
-          "title": "Solving Quadratic Equations by Factorization",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "factorization"
-          ],
-          "concepts": [
-            "quadratic equation",
-            "solving by factorization",
-            "roots",
-            "zero product property"
-          ],
-          "common_misconceptions": [
-            "Setting each factor equal to the number on the right side instead of zero"
-          ],
-          "teaching_note": "Emphasize that the equation must equal zero before factorizing."
-        },
-        {
-          "id": "quadratic_formula",
-          "title": "The Quadratic Formula and Completing the Square",
+          "id": "solving_quadratics",
+          "title": "Solving Quadratic Equations",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "solving_quadratic_factorization"
+            "expansion_factorization"
           ],
           "concepts": [
-            "quadratic formula",
+            "factorization method",
             "completing the square",
+            "quadratic formula",
             "discriminant",
-            "equal roots",
-            "distinct roots",
-            "no real roots"
+            "nature of roots"
           ],
           "common_misconceptions": [
-            "Sign errors when identifying coefficients a, b, and c",
-            "Forgetting that the discriminant determines the nature of roots"
+            "Thinking all quadratics factorize easily",
+            "Sign errors in the quadratic formula",
+            "Forgetting to set equation to zero first"
           ],
-          "teaching_note": "Derive the quadratic formula from completing the square. Use the discriminant to predict root nature."
+          "teaching_note": "The quadratic formula: x = [-b \u00b1 \u221a(b\u00b2-4ac)] / 2a. Worked example: Solve 2x\u00b2 - 7x + 3 = 0. a=2, b=-7, c=3. Discriminant = 49-24 = 25. x = (7\u00b15)/4. x = 3 or x = 1/2."
+        },
+        {
+          "id": "quadratic_functions",
+          "title": "Quadratic Functions and Graphs",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "solving_quadratics"
+          ],
+          "concepts": [
+            "parabola",
+            "vertex",
+            "axis of symmetry",
+            "minimum/maximum point",
+            "roots from graph",
+            "sketching quadratics"
+          ],
+          "common_misconceptions": [
+            "Confusing roots with vertex",
+            "Not understanding that a>0 gives minimum, a<0 gives maximum",
+            "Incorrectly identifying axis of symmetry"
+          ],
+          "teaching_note": "Vertex form: y = a(x-h)\u00b2 + k where (h,k) is the vertex. Axis of symmetry: x = h = -b/2a."
+        }
+      ]
+    },
+    {
+      "id": "logarithms",
+      "title": "Logarithms",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "logarithm_concepts",
+          "title": "Laws of Logarithms",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "quadratic_equations"
+          ],
+          "concepts": [
+            "definition of logarithm",
+            "laws of logarithms",
+            "log(A\u00d7B)",
+            "log(A/B)",
+            "log(A\u207f)",
+            "change of base",
+            "characteristic and mantissa"
+          ],
+          "common_misconceptions": [
+            "log(a+b) = log(a) + log(b) - NO!",
+            "Confusing log with natural log (ln)",
+            "Forgetting log(1) = 0 and log(base) = 1"
+          ],
+          "teaching_note": "Key laws: log(AB) = logA + logB; log(A/B) = logA - logB; log(A\u207f) = nlogA. Worked example: If log\u2082(x) = 5, then x = 2\u2075 = 32."
+        },
+        {
+          "id": "logarithm_equations",
+          "title": "Logarithmic and Exponential Equations",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "logarithm_concepts"
+          ],
+          "concepts": [
+            "solving log equations",
+            "exponential equations",
+            "application to growth and decay",
+            "compound interest"
+          ],
+          "common_misconceptions": [
+            "Taking log of both sides incorrectly",
+            "Not checking for extraneous solutions",
+            "Confusing exponential growth with linear growth"
+          ],
+          "teaching_note": "Worked example: Solve 2\u02e3 = 64. Take log: xlog2 = log64, so x = log64/log2 = 6. Or recognize 64 = 2\u2076, so x = 6."
+        }
+      ]
+    },
+    {
+      "id": "sequences_series",
+      "title": "Sequences and Series",
+      "week": 6,
+      "subtopics": [
+        {
+          "id": "arithmetic_progression",
+          "title": "Arithmetic Progression (AP)",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "algebraic_expressions"
+          ],
+          "concepts": [
+            "nth term of AP",
+            "T\u2099 = a + (n-1)d",
+            "sum of AP",
+            "S\u2099 = n/2[2a + (n-1)d]",
+            "S\u2099 = n/2(a + l)",
+            "arithmetic mean"
+          ],
+          "common_misconceptions": [
+            "Confusing the nth term formula with sum formula",
+            "Using wrong value for d (common difference)",
+            "Off-by-one errors in counting terms"
+          ],
+          "teaching_note": "Worked example: Find the 20th term of 3, 7, 11, ... Here a=3, d=4. T\u2082\u2080 = 3 + 19(4) = 3 + 76 = 79. Sum of first 20 terms: S\u2082\u2080 = 20/2(3 + 79) = 10 \u00d7 82 = 820."
+        },
+        {
+          "id": "geometric_progression",
+          "title": "Geometric Progression (GP)",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "arithmetic_progression"
+          ],
+          "concepts": [
+            "nth term of GP",
+            "T\u2099 = ar\u207f\u207b\u00b9",
+            "sum of GP",
+            "S\u2099 = a(1-r\u207f)/(1-r)",
+            "sum to infinity",
+            "S\u221e = a/(1-r) for |r|<1",
+            "geometric mean"
+          ],
+          "common_misconceptions": [
+            "Using AP formulas for GP problems",
+            "Forgetting that |r| must be < 1 for sum to infinity",
+            "Confusing r>1 with 0<r<1 cases"
+          ],
+          "teaching_note": "Worked example: Find the sum to infinity of 8, 4, 2, ... Here a=8, r=1/2. S\u221e = 8/(1-1/2) = 8/(1/2) = 16."
+        }
+      ]
+    },
+    {
+      "id": "binomial_theorem",
+      "title": "Binomial Theorem",
+      "week": 7,
+      "subtopics": [
+        {
+          "id": "binomial_expansion",
+          "title": "Binomial Expansion",
+          "waec_frequency": "medium",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "sequences_series"
+          ],
+          "concepts": [
+            "Pascal's triangle",
+            "combination notation",
+            "\u207fC\u1d63",
+            "expansion of (a+b)\u207f",
+            "general term",
+            "finding specific terms"
+          ],
+          "common_misconceptions": [
+            "\u207fC\u1d63 = \u207fC\u2099\u208b\u1d63 confusion",
+            "Off-by-one errors in finding the rth term",
+            "Sign errors in (a-b)\u207f expansions"
+          ],
+          "teaching_note": "The (r+1)th term is \u207fC\u1d63 a\u207f\u207b\u02b3 b\u02b3. Worked example: Find the coefficient of x\u00b3 in (2+x)\u2075. This is \u2075C\u2083 \u00d7 2\u00b2 \u00d7 1\u00b3 = 10 \u00d7 4 = 40."
         }
       ]
     },
     {
       "id": "plane_geometry",
       "title": "Plane Geometry",
-      "week": 5,
+      "week": 8,
       "subtopics": [
         {
           "id": "angles_lines",
-          "title": "Angles and Lines",
+          "title": "Angles and Parallel Lines",
           "waec_frequency": "high",
           "jamb_frequency": "medium",
           "prerequisites": [],
           "concepts": [
-            "complementary angles",
-            "supplementary angles",
+            "types of angles",
             "vertically opposite angles",
             "alternate angles",
-            "corresponding angles"
+            "corresponding angles",
+            "interior angles",
+            "angles on parallel lines"
           ],
           "common_misconceptions": [
-            "Confusing alternate and corresponding angles"
+            "Confusing alternate with corresponding angles",
+            "Assuming lines are parallel without proof",
+            "Incorrectly applying angle sum properties"
           ],
-          "teaching_note": "Use parallel lines cut by a transversal to demonstrate all angle relationships."
+          "teaching_note": "Use Z, F, C patterns to identify angle relationships. Worked example: Two parallel lines cut by a transversal. If one angle is 70\u00b0, find all other angles."
         },
         {
           "id": "polygons",
-          "title": "Polygons and Their Properties",
+          "title": "Polygons",
           "waec_frequency": "high",
           "jamb_frequency": "medium",
           "prerequisites": [
             "angles_lines"
           ],
           "concepts": [
-            "regular polygons",
+            "types of polygons",
             "interior angle sum",
-            "exterior angles",
-            "triangle properties",
-            "quadrilateral properties"
+            "exterior angle sum",
+            "regular polygons",
+            "number of sides formula",
+            "(n-2)\u00d7180\u00b0"
           ],
           "common_misconceptions": [
-            "Using the wrong formula for sum of interior angles"
+            "Exterior angle sum depends on number of sides - NO, always 360\u00b0",
+            "Confusing interior and exterior angles",
+            "Forgetting that regular means all sides AND angles equal"
           ],
-          "teaching_note": "Derive the formula (n-2)×180° through dividing polygons into triangles."
+          "teaching_note": "Interior angle sum = (n-2) \u00d7 180\u00b0. Each interior angle of regular n-gon = (n-2)\u00d7180\u00b0/n. Exterior angle of regular n-gon = 360\u00b0/n."
+        },
+        {
+          "id": "circle_theorems",
+          "title": "Circle Theorems",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "polygons"
+          ],
+          "concepts": [
+            "angle at centre",
+            "angle at circumference",
+            "angles in same segment",
+            "angle in semicircle",
+            "cyclic quadrilateral",
+            "alternate segment theorem",
+            "tangent properties"
+          ],
+          "common_misconceptions": [
+            "Angle at centre = angle at circumference - NO, it's twice!",
+            "Forgetting alternate segment theorem",
+            "Confusing cyclic quadrilateral opposite angles with adjacent"
+          ],
+          "teaching_note": "Key theorem: Angle at centre = 2 \u00d7 angle at circumference. Cyclic quad: opposite angles sum to 180\u00b0. Alternate segment: angle between tangent and chord = angle in alternate segment."
         }
       ]
     },
     {
       "id": "trigonometry",
       "title": "Trigonometry",
-      "week": 6,
+      "week": 9,
       "subtopics": [
         {
           "id": "trig_ratios",
           "title": "Trigonometric Ratios",
           "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "plane_geometry"
+          ],
           "concepts": [
             "sine",
             "cosine",
             "tangent",
             "SOH CAH TOA",
-            "right-angled triangles",
-            "angle of elevation",
-            "angle of depression"
+            "special angles",
+            "sin(30\u00b0)",
+            "cos(60\u00b0)",
+            "tan(45\u00b0)",
+            "trigonometric tables"
           ],
           "common_misconceptions": [
-            "Confusing sine and cosine ratios",
-            "Using trigonometry in non-right-angled triangles"
+            "sin(30\u00b0) = 1/2 but thinking sin(60\u00b0) = 1/2 too",
+            "Confusing sine and cosine",
+            "Using calculator instead of exact values for special angles"
           ],
-          "teaching_note": "Use SOH CAH TOA as a mnemonic. Emphasize that trigonometric ratios only apply to right-angled triangles."
+          "teaching_note": "Special angles: sin30\u00b0=1/2, cos30\u00b0=\u221a3/2, tan30\u00b0=1/\u221a3; sin45\u00b0=cos45\u00b0=1/\u221a2; sin60\u00b0=\u221a3/2, cos60\u00b0=1/2. Worked example: Find x if sin(x) = \u221a3/2. x = 60\u00b0."
+        },
+        {
+          "id": "trig_applications",
+          "title": "Applications of Trigonometry",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "trig_ratios"
+          ],
+          "concepts": [
+            "angles of elevation",
+            "angles of depression",
+            "bearings",
+            "sine rule",
+            "cosine rule",
+            "area of triangle using trig"
+          ],
+          "common_misconceptions": [
+            "Confusing angle of elevation with depression",
+            "Incorrectly labeling bearings",
+            "Using sine rule when cosine rule is needed"
+          ],
+          "teaching_note": "Sine rule: a/sinA = b/sinB = c/sinC. Cosine rule: a\u00b2 = b\u00b2 + c\u00b2 - 2bc\u00b7cosA. Worked example: In \u0394ABC, a=5, b=7, C=60\u00b0. Find c. Using cosine rule: c\u00b2 = 25 + 49 - 70(0.5) = 74 - 35 = 39. c = \u221a39."
         }
       ]
     },
     {
       "id": "statistics",
       "title": "Statistics",
-      "week": 7,
+      "week": 10,
       "subtopics": [
+        {
+          "id": "data_representation",
+          "title": "Data Representation",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "frequency tables",
+            "histograms",
+            "bar charts",
+            "pie charts",
+            "frequency polygons",
+            "cumulative frequency",
+            "ogive"
+          ],
+          "common_misconceptions": [
+            "Confusing histogram with bar chart",
+            "Incorrectly calculating angles for pie charts",
+            "Not using class boundaries for histograms"
+          ],
+          "teaching_note": "Pie chart angle = (frequency/total) \u00d7 360\u00b0. For histograms, use class boundaries and frequency density = frequency/class width."
+        },
         {
           "id": "measures_central_tendency",
           "title": "Measures of Central Tendency",
           "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "data_representation"
+          ],
           "concepts": [
             "mean",
             "median",
             "mode",
-            "frequency distribution",
-            "cumulative frequency"
+            "grouped data mean",
+            "assumed mean",
+            "cumulative frequency for median",
+            "quartiles"
           ],
           "common_misconceptions": [
-            "Confusing mean with median in skewed distributions",
-            "Forgetting to arrange data in order before finding median"
+            "Adding frequencies and dividing by number of classes for grouped mean",
+            "Confusing modal class with mode",
+            "Not ordering data before finding median"
           ],
-          "teaching_note": "Use real-life data. Discuss when each measure is most appropriate."
+          "teaching_note": "Grouped mean: \u03a3fx/\u03a3f where x is midpoint. Assumed mean: A + \u03a3fd/\u03a3f where d = x - A. Median from ogive: find (n/2)th value on cumulative frequency curve."
         },
         {
           "id": "measures_dispersion",
@@ -317,65 +569,125 @@
             "mean deviation",
             "variance",
             "standard deviation",
-            "grouped data"
+            "grouped data standard deviation"
           ],
           "common_misconceptions": [
-            "Confusing variance with standard deviation"
+            "Confusing variance with standard deviation",
+            "Forgetting to take square root for standard deviation",
+            "Using wrong formula for grouped data"
           ],
-          "teaching_note": "Emphasize that standard deviation is the square root of variance."
+          "teaching_note": "Standard deviation = \u221avariance. Worked example: Find SD of 2, 4, 6, 8, 10. Mean = 6. Deviations: -4, -2, 0, 2, 4. Squared: 16, 4, 0, 4, 16. Variance = 40/5 = 8. SD = \u221a8 = 2\u221a2."
         }
       ]
     },
     {
-      "id": "sets",
-      "title": "Sets",
-      "week": 8,
+      "id": "probability",
+      "title": "Probability",
+      "week": 11,
       "subtopics": [
         {
-          "id": "set_operations",
-          "title": "Set Operations and Venn Diagrams",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "union",
-            "intersection",
-            "complement",
-            "universal set",
-            "empty set",
-            "subset",
-            "Venn diagrams"
-          ],
-          "common_misconceptions": [
-            "Confusing union with intersection",
-            "Forgetting that n(A∪B) = n(A) + n(B) - n(A∩B)"
-          ],
-          "teaching_note": "Use Venn diagrams as a visual tool. Solve word problems using inclusion-exclusion."
-        }
-      ]
-    },
-    {
-      "id": "variation",
-      "title": "Variation",
-      "week": 9,
-      "subtopics": [
-        {
-          "id": "direct_inverse_variation",
-          "title": "Direct and Inverse Variation",
+          "id": "basic_probability",
+          "title": "Basic Probability Concepts",
           "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [],
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "set_theory",
+            "statistics"
+          ],
           "concepts": [
-            "direct variation",
-            "inverse variation",
-            "joint variation",
-            "partial variation",
-            "constant of variation"
+            "experiment",
+            "outcome",
+            "sample space",
+            "event",
+            "probability formula",
+            "P(E) = n(E)/n(S)",
+            "complementary events",
+            "mutually exclusive events"
           ],
           "common_misconceptions": [
-            "Confusing direct and inverse variation"
+            "Probability can be greater than 1",
+            "Equally likely assumption when not stated",
+            "Confusing mutually exclusive with independent events"
           ],
-          "teaching_note": "Use real-world examples like speed and time (inverse) or cost and quantity (direct)."
+          "teaching_note": "P(E) = number of favorable outcomes / total outcomes. Always 0 \u2264 P(E) \u2264 1. P(E') = 1 - P(E)."
+        },
+        {
+          "id": "advanced_probability",
+          "title": "Addition and Multiplication Rules",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "basic_probability"
+          ],
+          "concepts": [
+            "addition rule",
+            "P(A\u222aB) = P(A) + P(B) - P(A\u2229B)",
+            "multiplication rule",
+            "independent events",
+            "conditional probability",
+            "tree diagrams"
+          ],
+          "common_misconceptions": [
+            "Always adding probabilities instead of multiplying for 'and'",
+            "Not checking if events are independent",
+            "Confusing P(A|B) with P(B|A)"
+          ],
+          "teaching_note": "AND = multiply (for independent), OR = add (subtract intersection if not mutually exclusive). Worked example: P(A) = 0.4, P(B) = 0.5, P(A\u2229B) = 0.2. P(A\u222aB) = 0.4 + 0.5 - 0.2 = 0.7."
+        }
+      ]
+    },
+    {
+      "id": "calculus_intro",
+      "title": "Introduction to Calculus",
+      "week": 12,
+      "subtopics": [
+        {
+          "id": "differentiation",
+          "title": "Differentiation",
+          "waec_frequency": "high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "algebraic_expressions",
+            "quadratic_equations"
+          ],
+          "concepts": [
+            "limit concept",
+            "gradient of curve",
+            "dy/dx notation",
+            "power rule",
+            "differentiating polynomials",
+            "gradient at a point",
+            "equation of tangent"
+          ],
+          "common_misconceptions": [
+            "d/dx(x\u207f) = nx\u207f instead of nx\u207f\u207b\u00b9",
+            "Forgetting to reduce power by 1",
+            "Confusing derivative with function value"
+          ],
+          "teaching_note": "Power rule: d/dx(x\u207f) = nx\u207f\u207b\u00b9. d/dx(constant) = 0. Worked example: If y = 3x\u2074 - 2x\u00b2 + 5x - 7, find dy/dx. dy/dx = 12x\u00b3 - 4x + 5. At x=1, gradient = 12 - 4 + 5 = 13."
+        },
+        {
+          "id": "integration",
+          "title": "Integration",
+          "waec_frequency": "medium",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "differentiation"
+          ],
+          "concepts": [
+            "indefinite integral",
+            "power rule for integration",
+            "\u222bx\u207f dx = x\u207f\u207a\u00b9/(n+1) + C",
+            "definite integral",
+            "area under curve",
+            "constant of integration"
+          ],
+          "common_misconceptions": [
+            "Forgetting +C for indefinite integrals",
+            "Integrating instead of differentiating or vice versa",
+            "Not reversing the power rule correctly"
+          ],
+          "teaching_note": "Integration reverses differentiation. \u222bx\u207f dx = x\u207f\u207a\u00b9/(n+1) + C for n \u2260 -1. Definite integral gives area: \u222b\u2090\u1d47 f(x)dx = F(b) - F(a). Worked example: \u222b(2x + 3)dx = x\u00b2 + 3x + C."
         }
       ]
     }

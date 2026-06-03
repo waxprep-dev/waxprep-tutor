@@ -3,172 +3,116 @@
   "class_level": "SS2",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Drama Analysis",
-    "Prose Analysis",
-    "Poetry Analysis",
-    "Literary Devices",
-    "Shakespearean Drama",
-    "African Literature",
-    "Literary Appreciation"
+    "African Drama",
+    "Non-African Drama",
+    "African Poetry",
+    "Non-African Poetry",
+    "Literary Criticism",
+    "Literary Terms"
   ],
   "jamb_high_priority_topics": [
-    "Literary Appreciation",
-    "Prescribed Texts",
-    "Literary Terms",
-    "Genres"
+    "African Drama",
+    "African Poetry",
+    "Literary Appreciation"
   ],
   "topics": [
     {
-      "id": "drama_analysis_ss2",
-      "title": "Drama Text Analysis",
+      "id": "african_drama",
+      "title": "African Drama",
       "week": 1,
       "subtopics": [
         {
-          "id": "shakespearean_drama",
-          "title": "Shakespearean Drama",
+          "id": "lion_jewel",
+          "title": "The Lion and the Jewel by Wole Soyinka",
           "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "Shakespeare",
-            "tragedy",
-            "comedy",
-            "history play",
-            "tragic hero",
-            "soliloquy",
-            "aside",
-            "dramatic irony",
-            "iambic pentameter",
-            "Elizabethan drama"
-          ],
-          "common_misconceptions": [
-            "Shakespeare's language is too difficult",
-            "All Shakespeare plays are tragedies"
-          ],
-          "teaching_note": "Use modern English translations alongside original text. Focus on universal themes and character motivations."
-        },
-        {
-          "id": "african_drama_ss2",
-          "title": "African Drama Analysis",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
+          "jamb_frequency": "very_high",
           "prerequisites": [
-            "shakespearean_drama"
+            "ss1_literature"
           ],
           "concepts": [
-            "African drama",
-            "post-colonial themes",
-            "cultural conflict",
+            "Wole Soyinka",
+            "The Lion and the Jewel",
+            "Baroka",
+            "Lakunle",
+            "Sidi",
+            "Sadiku",
             "tradition vs modernity",
-            "folklore",
-            "griot tradition",
-            "ritual",
-            "community"
+            "courtship",
+            "folktale",
+            "drama",
+            "Yoruba culture"
           ],
           "common_misconceptions": [
-            "African drama is just European drama with African characters",
-            "Analysis is just retelling the story"
+            "Lakunle represents progress (he's flawed - superficial modernity)",
+            "Baroka is entirely villainous (he's complex, respects tradition)",
+            "The play is purely a love story (it's about cultural conflict)"
           ],
-          "teaching_note": "Connect African drama to oral traditions. Analyze themes relevant to contemporary Nigerian society."
+          "teaching_note": "Wole Soyinka: Nigerian playwright, 1986 Nobel Prize in Literature (first African). The Lion and the Jewel (1963): set in Ilujinle village. Characters: Baroka (Bale/lion - traditional, cunning), Lakunle (schoolteacher - pseudo-modern, bookish), Sidi (jewel - beautiful, vain), Sadiku (Baroka's senior wife, matchmaker). Themes: Tradition vs Modernity (central conflict), The nature of progress, Deception and manipulation, The power of women (Sadiku's role). Dramatic devices: mime/dance (wedding night scene), flashback (Sidi's photos), comedy, irony. Structure: three scenes - Morning, Noon, Night."
         }
       ]
     },
     {
-      "id": "prose_analysis_ss2",
-      "title": "Prose Text Analysis",
+      "id": "african_poetry",
+      "title": "African Poetry",
       "week": 2,
       "subtopics": [
         {
-          "id": "novel_analysis",
-          "title": "Novel and Short Story Analysis",
+          "id": "african_poems",
+          "title": "Selected African Poems",
           "waec_frequency": "very_high",
-          "jamb_frequency": "high",
+          "jamb_frequency": "very_high",
           "prerequisites": [
-            "drama_analysis_ss2"
+            "african_drama"
           ],
           "concepts": [
-            "plot",
-            "subplot",
-            "theme",
-            "character",
-            "setting",
-            "point of view",
-            "narrative technique",
-            "style",
-            "symbolism",
-            "flashback",
-            "foreshadowing"
+            "Gabriel Okara",
+            "Piano and Drums",
+            "culture conflict",
+            "David Rubadiri",
+            "An African Thunderstorm",
+            "nature imagery",
+            "Lenrie Peters",
+            "The Panic of Growing Older",
+            "aging"
           ],
           "common_misconceptions": [
-            "Plot and story are the same",
-            "First person narrators are always reliable"
+            "Piano and Drums is about music (it's about cultural conflict)",
+            "Rubadiri's poem is just about weather (the storm symbolizes political upheaval)",
+            "Peters' poem is pessimistic (it's realistic about aging but not hopeless)"
           ],
-          "teaching_note": "Teach systematic analysis of prose texts. Connect narrative techniques to reader engagement."
+          "teaching_note": "Gabriel Okara - 'Piano and Drums': speaker torn between traditional African culture (drums, primal) and Western culture (piano, complex, measured). Imagery: 'raw jungle' vs 'wailing piano'. David Rubadiri - 'An African Thunderstorm': describes approaching storm with vivid imagery - wind, trees, clouds, birds. Symbolizes political/social turmoil in Africa. Personification: clouds 'scamper', wind 'whirling'. Lenrie Peters - 'The Panic of Growing Older': reflects on unfulfilled dreams with age. Structure: shows progression from youth's optimism to adult's realization of limitations."
         }
       ]
     },
     {
-      "id": "poetry_analysis_ss2",
-      "title": "Poetry Analysis",
+      "id": "non_african_poetry",
+      "title": "Non-African Poetry",
       "week": 3,
       "subtopics": [
         {
-          "id": "poetry_techniques",
-          "title": "Poetry Analysis Techniques",
+          "id": "non_african_poems",
+          "title": "Selected Non-African Poems",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "prose_analysis_ss2"
+            "african_poetry"
           ],
           "concepts": [
-            "stanza",
-            "verse",
-            "line",
-            "rhyme",
-            "rhyme scheme",
-            "meter",
-            "rhythm",
-            "enjambment",
-            "caesura",
-            "imagery",
-            "symbol",
-            "tone",
-            "mood"
+            "D.H. Lawrence",
+            "Snake",
+            "nature",
+            "T.S. Eliot",
+            "Journey of the Magi",
+            "religious journey",
+            "William Blake",
+            "The School Boy"
           ],
           "common_misconceptions": [
-            "All poems must rhyme",
-            "Free verse has no structure"
+            "Lawrence's 'Snake' is about fear of snakes (it's about human cowardice and respect for nature)",
+            "Eliot's poem is just a Nativity story (it's about spiritual journey and death/rebirth)",
+            "Blake's poem is only about school (it's about how formal education crushes natural joy)"
           ],
-          "teaching_note": "Analyze poems line by line. Show how form contributes to meaning. Practice scansion."
-        }
-      ]
-    },
-    {
-      "id": "literary_appreciation",
-      "title": "Literary Appreciation",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "unseen_analysis",
-          "title": "Analysis of Unseen Passages",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "poetry_analysis_ss2"
-          ],
-          "concepts": [
-            " unseen prose",
-            "unseen poetry",
-            "contextual questions",
-            "critical analysis",
-            "literary devices identification",
-            "theme extraction"
-          ],
-          "common_misconceptions": [
-            "There is only one correct interpretation",
-            "You need to know the author to analyze"
-          ],
-          "teaching_note": "Practice with varied unseen texts. Develop confidence in independent analysis."
+          "teaching_note": "D.H. Lawrence - 'Snake': narrator at water trough meets snake. Inner conflict between human education ('The voice of my education said...') and natural respect. Regrets throwing log at snake. T.S. Eliot - 'Journey of the Magi': from perspective of one Magus. Journey to Bethlehem described as difficult. Theme: death of old self, birth of new. Allusion to Christ's death. William Blake - 'The School Boy': from Songs of Experience. Child who loves summer morning but dreads school. Metaphor: 'cage' for school. Message: formal education stifles natural creativity and joy."
         }
       ]
     }

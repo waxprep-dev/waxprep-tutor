@@ -1,0 +1,46 @@
+{
+  "subject": "business_studies",
+  "class_level": "JSS2",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Bookkeeping",
+    "Double Entry",
+    "Cash Book",
+    "Bank Transactions",
+    "Source Documents"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "bookkeeping_intro",
+      "title": "Introduction to Bookkeeping",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "double_entry",
+          "title": "Double Entry System",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "jss1_business"
+          ],
+          "concepts": [
+            "bookkeeping",
+            "double entry",
+            "debit",
+            "credit",
+            "account",
+            "ledger",
+            "trial balance"
+          ],
+          "common_misconceptions": [
+            "Debit means increase and credit means decrease",
+            "You can record only one side of a transaction",
+            "Bookkeeping is the same as accounting"
+          ],
+          "teaching_note": "Double entry: every transaction has two equal and opposite effects. Debit = left side, Credit = right side. Key rule: Debit the receiver, Credit the giver. For assets: Debit = increase, Credit = decrease. For liabilities: Debit = decrease, Credit = increase. Examples: Started business with \u20a610,000 cash \u2192 Debit Cash, Credit Capital. Bought goods \u20a65,000 cash \u2192 Debit Purchases, Credit Cash."
+        }
+      ]
+    }
+  ]
+}

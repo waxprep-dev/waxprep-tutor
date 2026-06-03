@@ -1,0 +1,195 @@
+{
+  "subject": "islamic_religious_studies",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Tawhid (Oneness of Allah)",
+    "Quranic Studies",
+    "Hadith",
+    "Fiqh (Jurisprudence)",
+    "Sirah (Life of the Prophet)",
+    "Islamic Moral Education"
+  ],
+  "jamb_high_priority_topics": [
+    "Al-Qur'an",
+    "Hadith",
+    "Tawhid and Fiqh",
+    "Sirah"
+  ],
+  "topics": [
+    {
+      "id": "tawhid",
+      "title": "Tawhid (Oneness of Allah)",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "oneness_allah",
+          "title": "The Concept of Tawhid",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "tawhid",
+            "rububiyyah",
+            "uluhiyyah",
+            "asma wa sifat",
+            "shirk",
+            "kufr",
+            "aqeedah",
+            "oneness of Allah"
+          ],
+          "common_misconceptions": [
+            "Tawhid only means Allah is one",
+            "Shirk is only worshipping idols",
+            "Understanding Allah's attributes means comparing Him to creation"
+          ],
+          "teaching_note": "Tawhid = foundation of Islam. Three categories: 1) Tawhid ar-Rububiyyah - Allah is the sole Creator, Provider, Sustainer. 2) Tawhid al-Uluhiyyah - Allah alone deserves worship. 3) Tawhid al-Asma wa as-Sifat - Allah has unique names and attributes. Shirk (associating partners with Allah) is the gravest sin. Quranic evidence: Surah Ikhlas (112:1-4), Surah Al-Baqarah 2:163. Nigerian context: Islam practiced across ethnic groups - Hausa-Fulani, Yoruba, Nupe, Kanuri."
+        }
+      ]
+    },
+    {
+      "id": "quranic_studies",
+      "title": "Quranic Studies",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "revelation_quran",
+          "title": "Revelation and Compilation of the Quran",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "tawhid"
+          ],
+          "concepts": [
+            "wahy",
+            "revelation",
+            "Cave of Hira",
+            "first revelation",
+            "compilation",
+            "Abu Bakr",
+            "Uthman",
+            "standard codex",
+            "makki",
+            "madani",
+            "surah",
+            "ayah"
+          ],
+          "common_misconceptions": [
+            "Prophet Muhammad wrote the Quran (he was illiterate)",
+            "The Quran was compiled during the Prophet's lifetime",
+            "Makki and Madani refer only to place of revelation"
+          ],
+          "teaching_note": "First revelation: Surah Al-Alaq (96:1-5) in Cave of Hira. Angel Jibril brought revelation. Prophet was unlettered (ummi). Compilation: written on various materials during Prophet's time. First official compilation under Abu Bakr after Battle of Yamama (many huffaz died). Standard codex under Uthman ibn Affan (burned other variants to prevent disputes). 114 surahs, 6236 verses. Makki surahs: revealed before Hijra (focus on tawhid, akhirah). Madani surahs: revealed after Hijra (focus on legislation, jihad)."
+        }
+      ]
+    },
+    {
+      "id": "hadith",
+      "title": "Hadith",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "hadith_studies",
+          "title": "Science of Hadith",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "quranic_studies"
+          ],
+          "concepts": [
+            "hadith",
+            "sunnah",
+            "isnad",
+            "matn",
+            "rawi",
+            "sahih",
+            "hasan",
+            "daif",
+            "mawdu",
+            "six books",
+            "bukhari",
+            "muslim"
+          ],
+          "common_misconceptions": [
+            "Hadith and Sunnah are exactly the same (Sunnah is broader)",
+            "All hadith are authentic",
+            "Hadith are not necessary if one has the Quran"
+          ],
+          "teaching_note": "Hadith = reported saying/action/approval of Prophet Muhammad. Isnad = chain of narrators. Matn = text. Classification by authenticity: Sahih (authentic, sound chain), Hasan (good), Da'if (weak), Mawdu (fabricated). Six authentic books (Kutub al-Sittah): Sahih Bukhari (most authentic), Sahih Muslim, Sunan Abu Dawud, Sunan at-Tirmidhi, Sunan an-Nasai, Sunan Ibn Majah. Science of hadith: scholars scrutinized each narrator's character, memory, continuity."
+        }
+      ]
+    },
+    {
+      "id": "fiqh",
+      "title": "Fiqh (Islamic Jurisprudence)",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "pillars_islam",
+          "title": "Five Pillars of Islam",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "hadith"
+          ],
+          "concepts": [
+            "shahadah",
+            "salat",
+            "zakat",
+            "sawm",
+            "hajj",
+            "arkan al-islam",
+            "fard",
+            "wajib",
+            "sunnah",
+            "nafl"
+          ],
+          "common_misconceptions": [
+            "Zakat is voluntary charity (it's obligatory)",
+            "Fasting is only about abstaining from food",
+            "Hajj is required every year"
+          ],
+          "teaching_note": "Five Pillars: 1) Shahadah - testimony of faith ('La ilaha illallah, Muhammadur rasulullah'). 2) Salat - five daily prayers (Fajr, Dhuhr, Asr, Maghrib, Isha). 3) Zakat - 2.5% of wealth given annually to poor. 4) Sawm - fasting in Ramadan (dawn to sunset, no food/drink/marital relations). 5) Hajj - pilgrimage to Makkah (once in lifetime if able). Nigerian context: Eid-el-Fitr (end of Ramadan) and Eid-el-Kabir (10th Dhul Hijjah) are national public holidays. Islamic societies in secondary schools organize jumat services and Islamic vacation courses (IVC)."
+        }
+      ]
+    },
+    {
+      "id": "sirah",
+      "title": "Sirah (Life of the Prophet)",
+      "week": 5,
+      "subtopics": [
+        {
+          "id": "prophet_life",
+          "title": "Biography of Prophet Muhammad (SAW)",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "fiqh"
+          ],
+          "concepts": [
+            "birth",
+            "Mecca",
+            "orphan",
+            "Khadijah",
+            "first revelation",
+            "early Muslims",
+            "persecution",
+            "Hijrah",
+            "Medina",
+            "Constitution of Medina",
+            "battles",
+            "conquest of Mecca",
+            "Farewell Pilgrimage",
+            "death"
+          ],
+          "common_misconceptions": [
+            "The Prophet was born on 12th Rabi' al-Awwal (most widely accepted but debated)",
+            "He founded Islam (he restored it)",
+            "He forced people to convert"
+          ],
+          "teaching_note": "Born: 570 CE in Mecca (Year of the Elephant). Orphaned, raised by grandfather then uncle Abu Talib. First wife: Khadijah bint Khuwaylid (proposed to him, 15 years older). First revelation: 610 CE at age 40. Hijrah to Medina: 622 CE (Year 1 of Islamic calendar). Constitution of Medina: first written constitution, established rights of Muslims, Jews, and other tribes. Major battles: Badr (victory), Uhud (setback), Khandaq (trench). Conquest of Mecca: 630 CE (peaceful, general amnesty). Farewell Pilgrimage: 632 CE, delivered Farewell Sermon. Died: 632 CE in Medina at age 63."
+        }
+      ]
+    }
+  ]
+}

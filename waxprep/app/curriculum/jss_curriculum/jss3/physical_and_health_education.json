@@ -1,0 +1,44 @@
+{
+  "subject": "physical_and_health_education",
+  "class_level": "JSS3",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Ball Games",
+    "Health Education",
+    "BECE Prep"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "football",
+      "title": "Football (Soccer)",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "football_skills",
+          "title": "Football Skills and Rules",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "dribbling",
+            "passing",
+            "shooting",
+            "heading",
+            "tackling",
+            "offside",
+            "foul",
+            "penalty",
+            "corner kick"
+          ],
+          "common_misconceptions": [
+            "Football is only about scoring",
+            "You can use hands anywhere",
+            "Offside is when you're behind the defender"
+          ],
+          "teaching_note": "Basic skills: dribbling (controlling ball while moving), passing (short and long), shooting (at goal), heading (using head to control ball), tackling (taking ball from opponent). Rules: 11 players per team, 90 minutes (2 halves), no hands (except goalkeeper), offside (ahead of last defender when ball is played), fouls (tripping, pushing), penalties (foul in penalty area). Nigerian football: Super Eagles (national team), Enyimba, Kano Pillars, Rangers. Famous players: Jay-Jay Okocha, Rashidi Yekini, Mikel Obi, Victor Osimhen."
+        }
+      ]
+    }
+  ]
+}

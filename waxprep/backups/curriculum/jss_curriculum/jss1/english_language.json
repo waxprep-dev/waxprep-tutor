@@ -3,24 +3,22 @@
   "class_level": "JSS1",
   "academic_year": "Junior Secondary",
   "waec_high_priority_topics": [
-    "Reading Comprehension",
+    "Comprehension",
+    "Composition",
     "Grammar",
-    "Essay Writing",
-    "Vocabulary Development",
-    "Listening and Speaking",
-    "Phonics",
-    "Summary Writing"
+    "Vocabulary",
+    "Lexis and Structure"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
     {
       "id": "comprehension_jss1",
-      "title": "Reading Comprehension",
+      "title": "Comprehension Skills",
       "week": 1,
       "subtopics": [
         {
-          "id": "reading_skills",
-          "title": "Basic Reading Comprehension Skills",
+          "id": "reading_comprehension",
+          "title": "Reading and Understanding Passages",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [],
@@ -29,31 +27,63 @@
             "comprehension",
             "main idea",
             "supporting details",
-            "context clues",
             "inference",
-            "literal meaning",
-            "figurative meaning"
+            "context clues",
+            "vocabulary from context"
           ],
           "common_misconceptions": [
             "Reading fast means better comprehension",
-            "Every detail is equally important"
+            "Every detail is equally important",
+            "Skipping difficult words is fine"
           ],
-          "teaching_note": "Use varied passages appropriate for JSS level. Teach skimming and scanning techniques."
+          "teaching_note": "Grammar rule: Comprehension means understanding what you read. Steps: 1) Read the questions first. 2) Read the passage carefully. 3) Find answers in the passage. 4) Answer in complete sentences. 5) Check your answers. Context clues: use surrounding words to guess meaning of unknown words. Main idea: what the passage is mainly about. Topic sentence often at the beginning. Nigerian context: passages about Nigerian culture, festivals (Eid, Christmas, New Yam), geography, notable Nigerians."
+        }
+      ]
+    },
+    {
+      "id": "composition_jss1",
+      "title": "Composition Writing",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "essay_writing_jss",
+          "title": "Writing Simple Essays",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "comprehension_jss1"
+          ],
+          "concepts": [
+            "essay",
+            "introduction",
+            "body",
+            "conclusion",
+            "paragraph",
+            "topic sentence",
+            "narrative",
+            "descriptive"
+          ],
+          "common_misconceptions": [
+            "Essays can be one paragraph",
+            "Introduction should be the longest part",
+            "You can write anything without planning"
+          ],
+          "teaching_note": "Grammar rule: An essay has three parts: Introduction (introduces the topic), Body (main points, 2-3 paragraphs), Conclusion (summarizes). Each paragraph should have a topic sentence. Plan before writing: brainstorm ideas, organize them. Common topics for JSS1: My School, My Best Friend, A Visit to the Market, My Family, How I Spent My Last Holiday. Use simple, clear sentences. Check spelling and punctuation. Aim for 150-200 words."
         }
       ]
     },
     {
       "id": "grammar_jss1",
       "title": "Grammar",
-      "week": 2,
+      "week": 3,
       "subtopics": [
         {
-          "id": "parts_speech_jss1",
+          "id": "parts_speech_jss",
           "title": "Parts of Speech",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
-            "comprehension_jss1"
+            "composition_jss1"
           ],
           "concepts": [
             "noun",
@@ -64,129 +94,14 @@
             "preposition",
             "conjunction",
             "interjection",
-            "articles"
+            "article"
           ],
           "common_misconceptions": [
-            "All verbs show action",
-            "Adjectives only describe people"
+            "All verbs are action words (some are linking verbs: is, am, are)",
+            "Adjectives only describe people (describe any noun)",
+            "Prepositions are only place words (also time: before, after)"
           ],
-          "teaching_note": "Use sentence analysis to identify parts of speech. Create fun activities for practice."
-        },
-        {
-          "id": "tenses_jss1",
-          "title": "Tenses",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "parts_speech_jss1"
-          ],
-          "concepts": [
-            "present tense",
-            "past tense",
-            "future tense",
-            "simple present",
-            "simple past",
-            "simple future",
-            "continuous tense",
-            "subject-verb agreement"
-          ],
-          "common_misconceptions": [
-            "Adding -ed always makes past tense",
-            "All actions in a story use past tense"
-          ],
-          "teaching_note": "Practice with irregular verbs. Use timelines to show when different tenses are used."
-        }
-      ]
-    },
-    {
-      "id": "essay_writing_jss1",
-      "title": "Essay Writing",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "essay_basics",
-          "title": "Introduction to Essay Writing",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "grammar_jss1"
-          ],
-          "concepts": [
-            "essay",
-            "introduction",
-            "body",
-            "conclusion",
-            "topic sentence",
-            "paragraph",
-            "narrative essay",
-            "descriptive essay"
-          ],
-          "common_misconceptions": [
-            "Essays should be as long as possible",
-            "You don't need to plan before writing"
-          ],
-          "teaching_note": "Teach the hamburger paragraph structure. Start with simple 3-paragraph essays."
-        }
-      ]
-    },
-    {
-      "id": "vocabulary_jss1",
-      "title": "Vocabulary Development",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "word_building",
-          "title": "Word Building and Usage",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "essay_writing_jss1"
-          ],
-          "concepts": [
-            "synonyms",
-            "antonyms",
-            "homonyms",
-            "prefixes",
-            "suffixes",
-            "root words",
-            "compound words",
-            "context clues"
-          ],
-          "common_misconceptions": [
-            "Big words always impress readers",
-            "Synonyms can always be used interchangeably"
-          ],
-          "teaching_note": "Build vocabulary through reading and word games. Teach use of dictionary and thesaurus."
-        }
-      ]
-    },
-    {
-      "id": "phonics_speaking",
-      "title": "Phonics and Speaking",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "phonics",
-          "title": "Phonics and Pronunciation",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "vocabulary_jss1"
-          ],
-          "concepts": [
-            "vowel sounds",
-            "consonant sounds",
-            "diphthongs",
-            "silent letters",
-            "stress",
-            "syllables",
-            "rhyme"
-          ],
-          "common_misconceptions": [
-            "English spelling always shows pronunciation",
-            "Silent letters have no purpose"
-          ],
-          "teaching_note": "Practice sounds that differ from Nigerian languages. Use songs and rhymes for pronunciation practice."
+          "teaching_note": "Grammar rules: Noun: names of people, places, things (Nigeria, Lagos, book, happiness). Pronoun: replaces noun (he, she, it, they, we). Verb: action or state (run, is, have). Adjective: describes noun (tall, beautiful, three). Adverb: describes verb (quickly, very, yesterday). Preposition: shows relationship (in, on, at, under). Conjunction: joins words/clauses (and, but, because). Article: a, an (indefinite), the (definite). Use 'a' before consonant sounds, 'an' before vowel sounds."
         }
       ]
     }

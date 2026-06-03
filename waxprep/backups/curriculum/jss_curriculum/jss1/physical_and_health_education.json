@@ -1,0 +1,46 @@
+{
+  "subject": "physical_and_health_education",
+  "class_level": "JSS1",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Physical Fitness",
+    "Track and Field",
+    "Ball Games",
+    "Health Education",
+    "Swimming",
+    "Safety"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "physical_fitness",
+      "title": "Physical Fitness",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "fitness_components",
+          "title": "Components of Physical Fitness",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "fitness",
+            "strength",
+            "endurance",
+            "flexibility",
+            "speed",
+            "agility",
+            "balance",
+            "coordination"
+          ],
+          "common_misconceptions": [
+            "Fitness means being thin",
+            "Only athletes need fitness",
+            "Exercise is only for adults"
+          ],
+          "teaching_note": "Physical fitness: ability to perform daily activities without getting tired. Components: Strength (muscle power), Endurance (ability to continue activity), Flexibility (range of motion at joints), Speed (moving quickly), Agility (changing direction quickly), Balance (maintaining position), Coordination (using body parts together). Benefits: healthy heart, strong muscles, better concentration, weight control, stress relief. Activities: running, jumping, stretching, sports. Nigerian sports: football (very popular), athletics, basketball, volleyball."
+        }
+      ]
+    }
+  ]
+}

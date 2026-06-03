@@ -1,0 +1,44 @@
+{
+  "subject": "french",
+  "class_level": "JSS1",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Alphabet and Pronunciation",
+    "Greetings",
+    "Numbers",
+    "Days and Months",
+    "Family Members"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "french_basics",
+      "title": "Introduction to French",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "greetings",
+          "title": "Greetings and Introductions",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "bonjour",
+            "salut",
+            "bonsoir",
+            "au revoir",
+            "comment t'appelles-tu",
+            "je m'appelle",
+            "comment ca va"
+          ],
+          "common_misconceptions": [
+            "French is too hard for beginners",
+            "You need to be in France to learn French",
+            "French pronunciation doesn't matter"
+          ],
+          "teaching_note": "Pronunciation guide: Bonjour [b\u0254\u0303\u0292u\u0281] = hello/good day. Salut [saly] = hi/bye (informal). Bonsoir [b\u0254\u0303swa\u0281] = good evening. Comment t'appelles-tu? [k\u0254m\u0251\u0303 t\u203fap\u025bl ty] = What is your name? Je m'appelle... [\u0292\u0259 map\u025bl] = My name is... Comment \u00e7a va? [k\u0254m\u0251\u0303 sa va] = How are you? \u00c7a va bien [sa va bj\u025b\u0303] = I'm fine. Nigerian context: French is Nigeria's second official language. Neighboring Francophone countries: Benin, Niger, Cameroon, Chad. ECOWAS uses French and English."
+        }
+      ]
+    }
+  ]
+}

@@ -3,74 +3,72 @@
   "class_level": "SS1",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
+    "Political Concepts",
+    "Systems of Government",
+    "Forms of Government",
+    "Constitution",
+    "Citizenship",
+    "Political Ideologies"
+  ],
+  "jamb_high_priority_topics": [
     "Political Concepts and Principles",
     "Systems of Government",
     "Citizenship",
-    "Political Parties and Party Systems",
-    "The Electoral Process",
-    "Constitutions",
-    "Nigerian Constitutional Development"
-  ],
-  "jamb_high_priority_topics": [
-    "Elements of Government",
-    "Systems of Government",
-    "Citizenship",
-    "Political Parties",
-    "Constitutions",
-    "Nigerian Government"
+    "Constitutional Development in Nigeria"
   ],
   "topics": [
     {
       "id": "political_concepts",
-      "title": "Political Concepts and Principles",
+      "title": "Basic Political Concepts",
       "week": 1,
       "subtopics": [
         {
-          "id": "basic_concepts_govt",
-          "title": "Basic Concepts in Government",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "id": "definition_politics",
+          "title": "Definition and Scope of Politics",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
           "prerequisites": [],
           "concepts": [
             "politics",
-            "government",
-            "state",
-            "nation",
             "power",
             "authority",
             "legitimacy",
-            "sovereignty",
-            "democracy",
-            "rule of law"
+            "influence",
+            "state",
+            "society",
+            "government"
           ],
           "common_misconceptions": [
-            "Government and state mean the same thing",
-            "Power and authority are identical"
+            "Politics is only about elections",
+            "Power and authority are the same",
+            "Government and state are interchangeable terms"
           ],
-          "teaching_note": "Define each concept precisely with examples. Distinguish between state (entity) and government (ruling body)."
+          "teaching_note": "Key distinctions: Politics = activities associated with governance. Power = ability to compel obedience. Authority = legitimate power. Legitimacy = acceptance by the people. State = permanent entity (people, territory, government, sovereignty). Government = temporary machinery that runs the state."
         },
         {
-          "id": "elements_state",
-          "title": "Elements and Characteristics of a State",
+          "id": "political_socialization",
+          "title": "Political Socialization",
           "waec_frequency": "high",
-          "jamb_frequency": "high",
+          "jamb_frequency": "medium",
           "prerequisites": [
-            "basic_concepts_govt"
+            "definition_politics"
           ],
           "concepts": [
-            "population",
-            "territory",
-            "government",
-            "sovereignty",
-            "permanence",
-            "universality",
-            "compulsory membership"
+            "political socialization",
+            "agents of socialization",
+            "family",
+            "peer group",
+            "school",
+            "media",
+            "religious institutions",
+            "political culture"
           ],
           "common_misconceptions": [
-            "A nation is always a state",
-            "Sovereignty can be shared completely"
+            "Political socialization only happens in schools",
+            "It is a one-time process",
+            "All agents have equal influence"
           ],
-          "teaching_note": "Use Nigeria as the primary example. Discuss the four essential elements and how they apply to Nigeria."
+          "teaching_note": "Nigerian context: Family is the first agent - children learn political attitudes from parents. Religious institutions (churches, mosques) significantly shape political values in Nigeria. The mass media including NTA, Channels TV, and social media are increasingly powerful agents. Political culture refers to attitudes, beliefs, and emotions that give order and meaning to political processes."
         }
       ]
     },
@@ -80,196 +78,306 @@
       "week": 2,
       "subtopics": [
         {
-          "id": "presidential_system",
-          "title": "Presidential System of Government",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "id": "unitary_system",
+          "title": "Unitary System of Government",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
           "prerequisites": [
             "political_concepts"
           ],
           "concepts": [
-            "separation of powers",
-            "checks and balances",
-            "executive",
-            "legislature",
-            "judiciary",
-            "president",
-            "direct election",
-            "fixed tenure"
+            "unitary government",
+            "centralization",
+            "devolution",
+            "delegated powers",
+            "unitary features",
+            "advantages",
+            "disadvantages"
           ],
           "common_misconceptions": [
-            "Complete separation of powers exists",
-            "The president is above the law"
+            "Unitary means no local government at all",
+            "Britain is a perfect example (it has devolution)",
+            "Unitary systems are always undemocratic"
           ],
-          "teaching_note": "Analyze the Nigerian presidential system. Discuss how checks and balances work in practice."
+          "teaching_note": "Key features: Single central government holds all sovereign power. Local governments exist but derive powers from center. Examples: Britain, France, Ghana. Advantages: uniformity of laws, strong central control, less expensive. Disadvantages: ignores local differences, overload on central government, may breed discontent."
         },
         {
-          "id": "parliamentary_system",
-          "title": "Parliamentary and Other Systems",
+          "id": "federal_system",
+          "title": "Federal System of Government",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "presidential_system"
+            "unitary_system"
           ],
           "concepts": [
-            "parliamentary system",
-            "prime minister",
-            "cabinet",
-            "collective responsibility",
-            "fusion of powers",
-            "monarchy",
-            "unitary system",
-            "federal system",
-            "confederal system"
+            "federalism",
+            "division of powers",
+            "exclusive list",
+            "concurrent list",
+            "residual list",
+            "features of federalism",
+            "factors necessitating federalism"
           ],
           "common_misconceptions": [
-            "Parliamentary system has no checks and balances",
-            "Unitary system means dictatorship"
+            "Federal and confederal are the same",
+            "Nigeria practices true federalism (debatable)",
+            "All federations have the same structure"
           ],
-          "teaching_note": "Compare Nigerian (presidential/federal) with British (parliamentary/unitary) systems. Discuss advantages and disadvantages."
+          "teaching_note": "Nigerian context: Nigeria adopted federalism due to: large size, ethnic diversity (250+ groups), colonial heritage, fear of domination. Exclusive list (federal): defense, foreign affairs, currency, police. Concurrent list: education, agriculture, health. Residual list (state): chieftaincy matters, local government. Current debate: restructuring, state police, resource control."
+        },
+        {
+          "id": "confederal_system",
+          "title": "Confederal and Other Systems",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "federal_system"
+          ],
+          "concepts": [
+            "confederation",
+            "loose union",
+            "sovereign states",
+            "commonwealth",
+            "presidential system",
+            "parliamentary system",
+            " Westminster model"
+          ],
+          "common_misconceptions": [
+            "Confederation is a strong union (weak - states retain sovereignty)",
+            "Presidential and parliamentary systems are the same",
+            "Nigeria uses parliamentary system (NO, presidential since 1979)"
+          ],
+          "teaching_note": "Confederation: loose union of sovereign states. Central government handles only matters delegated by states. Examples: USA under Articles of Confederation, Senegal-Gambia confederation (1982-1989). Parliamentary: executive drawn from and responsible to legislature. Presidential: separate executive elected independently. Nigeria: presidential (since 1979, reaffirmed 1999)."
+        }
+      ]
+    },
+    {
+      "id": "forms_government",
+      "title": "Forms of Government",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "monarchy",
+          "title": "Monarchy",
+          "waec_frequency": "medium",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "systems_government"
+          ],
+          "concepts": [
+            "monarchy",
+            "absolute monarchy",
+            "constitutional monarchy",
+            "king",
+            "queen",
+            "emir",
+            "Oba",
+            "divine right of kings",
+            "succession"
+          ],
+          "common_misconceptions": [
+            "All monarchies are absolute (constitutional monarchy limits power)",
+            "Monarchies cannot be democratic",
+            "Nigeria has no monarchical heritage (traditional rulers exist)"
+          ],
+          "teaching_note": "Nigerian context: Traditional rulers (Emirs, Obas, Obis, Chiefs) exist but are not part of formal government structure. They play advisory and cultural roles. Britain: constitutional monarchy. Saudi Arabia, Eswatini (Swaziland): absolute monarchy. Constitutional monarchies: Japan, Netherlands, Spain."
+        },
+        {
+          "id": "republic",
+          "title": "Republican Government and Other Forms",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "monarchy"
+          ],
+          "concepts": [
+            "republic",
+            "democracy",
+            "autocracy",
+            "totalitarianism",
+            "oligarchy",
+            "aristocracy",
+            "plutocracy",
+            "theocracy",
+            "military government"
+          ],
+          "common_misconceptions": [
+            "Republic automatically means democracy",
+            "Military government is a legitimate form (it's extra-constitutional)",
+            "Theocracy is always oppressive"
+          ],
+          "teaching_note": "Republic: head of state is elected, not hereditary. Democracy: government by the people (direct or representative). Nigeria: federal republic, practicing representative democracy. Military government in Nigeria: 1966-1979, 1983-1999. Features of military rule: decrees, suspension of constitution, centralized power."
+        }
+      ]
+    },
+    {
+      "id": "constitution",
+      "title": "Constitution",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "constitution_meaning",
+          "title": "Meaning and Sources of Constitution",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "forms_government"
+          ],
+          "concepts": [
+            "constitution",
+            "written constitution",
+            "unwritten constitution",
+            "rigid constitution",
+            "flexible constitution",
+            "sources of constitution",
+            "conventions",
+            "statutes"
+          ],
+          "common_misconceptions": [
+            "A constitution is just a document (it's the supreme law)",
+            "All countries have written constitutions (UK has unwritten)",
+            "Rigid constitution can never be amended"
+          ],
+          "teaching_note": "Constitution = supreme law that organizes government, defines powers, and protects rights. Sources: acts of parliament, conventions, judicial precedents, historical documents, constitutional conferences. Nigeria: written, rigid (requires 2/3 majority to amend). UK: unwritten, flexible. USA: written, rigid."
+        },
+        {
+          "id": "constitutional_development",
+          "title": "Constitutional Development in Nigeria",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "constitution_meaning"
+          ],
+          "concepts": [
+            "Clifford Constitution 1922",
+            "Richards Constitution 1946",
+            "Macpherson Constitution 1951",
+            "Lyttleton Constitution 1954",
+            "Independence Constitution 1960",
+            "Republican Constitution 1963",
+            "1979 Constitution",
+            "1999 Constitution"
+          ],
+          "common_misconceptions": [
+            "Nigeria's first constitution was in 1960",
+            "The 1999 constitution was written by Nigerians (it was drafted by the military)",
+            "All Nigerian constitutions have been federal"
+          ],
+          "teaching_note": "Timeline: 1922 Clifford (first, introduced legislative council), 1946 Richards (regionalism), 1951 Macpherson (majority party rule), 1954 Lyttleton (true federalism), 1960 Independence, 1963 Republican, 1979 Presidential (Second Republic), 1989 (Third Republic - never implemented), 1999 (current, Fourth Republic). 1999 Constitution criticisms: military origin, excessive centralization, needs amendment."
         }
       ]
     },
     {
       "id": "citizenship",
       "title": "Citizenship",
-      "week": 3,
+      "week": 5,
       "subtopics": [
         {
           "id": "citizenship_concepts",
-          "title": "Citizenship: Types, Rights and Duties",
+          "title": "Meaning and Types of Citizenship",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [],
           "concepts": [
+            "citizen",
+            "citizenship",
             "citizenship by birth",
             "citizenship by registration",
             "citizenship by naturalization",
             "dual citizenship",
             "rights of citizens",
             "duties of citizens",
-            "fundamental human rights"
+            "aliens"
           ],
           "common_misconceptions": [
-            "Being born in Nigeria automatically grants citizenship",
-            "Rights have no corresponding duties"
+            "Being born in Nigeria automatically makes you a citizen (not always true)",
+            "Dual citizenship is not allowed for Nigerians (it is, by birth)",
+            "Permanent residents have the same rights as citizens"
           ],
-          "teaching_note": "Explain Nigerian citizenship laws. Discuss the balance between rights and duties. Connect to the Nigerian constitution."
-        }
-      ]
-    },
-    {
-      "id": "political_parties",
-      "title": "Political Parties and Party Systems",
-      "week": 4,
-      "subtopics": [
+          "teaching_note": "Nigerian Constitution: Citizenship by birth: if born in Nigeria before independence with Nigerian parent/grandparent; OR born after independence with Nigerian parent OR grandparent who is citizen. By registration: for women married to Nigerian citizens. By naturalization: 15+ years residence, good character. Dual citizenship: allowed for citizens by birth, NOT by registration/naturalization."
+        },
         {
-          "id": "party_systems",
-          "title": "Party Systems and Political Parties",
-          "waec_frequency": "very_high",
+          "id": "rights_duties",
+          "title": "Fundamental Rights and Duties",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "systems_government"
+            "citizenship_concepts"
           ],
           "concepts": [
-            "one-party system",
-            "two-party system",
-            "multi-party system",
-            "party manifesto",
-            "ideology",
-            "party organization",
-            "party functions"
+            "fundamental human rights",
+            "right to life",
+            "right to dignity",
+            "right to fair hearing",
+            "right to privacy",
+            "freedom of expression",
+            "freedom of assembly",
+            "duties of citizens",
+            "voting"
           ],
           "common_misconceptions": [
-            "More parties mean better democracy",
-            "All political parties have clear ideologies"
+            "Rights are absolute (they can be restricted by law)",
+            "Freedom of speech means you can say anything",
+            "Only citizens have rights in Nigeria (every person in Nigeria has rights)"
           ],
-          "teaching_note": "Analyze Nigeria's party system historically and currently. Discuss the role of political parties in democratic governance."
+          "teaching_note": "Chapter IV of 1999 Constitution lists rights: right to life (s.33), dignity (s.34), personal liberty (s.35), fair hearing (s.36), privacy (s.37), freedom of thought (s.38), expression (s.39), assembly (s.40), movement (s.41), freedom from discrimination (s.42). Duties: obey laws, respect rights of others, pay taxes, vote, defend Nigeria. Limitations: rights can be restricted for public safety, order, morality, health."
         }
       ]
     },
     {
-      "id": "electoral_process",
-      "title": "The Electoral Process",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "elections",
-          "title": "Elections and Electoral Management",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "political_parties"
-          ],
-          "concepts": [
-            "election",
-            "franchise",
-            "voting",
-            "INEC",
-            "electoral commission",
-            "electoral malpractice",
-            "rigging",
-            "referendum",
-            "plebiscite"
-          ],
-          "common_misconceptions": [
-            "Elections alone define democracy",
-            "Voting is the only form of political participation"
-          ],
-          "teaching_note": "Discuss the role of INEC in Nigeria. Analyze electoral reforms and challenges. Compare Nigerian electoral system with others."
-        }
-      ]
-    },
-    {
-      "id": "constitutions",
-      "title": "Constitutions",
+      "id": "political_ideologies",
+      "title": "Political Ideologies",
       "week": 6,
       "subtopics": [
         {
-          "id": "types_constitutions",
-          "title": "Types and Features of Constitutions",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
+          "id": "major_ideologies",
+          "title": "Major Political Ideologies",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "political_concepts"
+          ],
           "concepts": [
-            "written constitution",
-            "unwritten constitution",
-            "rigid constitution",
-            "flexible constitution",
-            "unitary constitution",
-            "federal constitution",
-            "features of constitution",
-            "sources of constitution"
+            "capitalism",
+            "socialism",
+            "communism",
+            "fascism",
+            "liberalism",
+            "conservatism",
+            "nationalism",
+            "pan-Africanism",
+            "welfarism"
           ],
           "common_misconceptions": [
-            "Written constitution is always rigid",
-            "Nigeria has always had a federal constitution"
+            "Capitalism and socialism are the only ideologies",
+            "Socialism means no private property at all",
+            "Communism has been successfully implemented in many countries"
           ],
-          "teaching_note": "Analyze Nigeria's constitutional evolution from 1922 to 1999. Discuss the merits and demerits of each type."
+          "teaching_note": "Nigerian context: Nigeria has mixed economy elements. Udoji Commission, National Development Plans, Vision 2020, and current economic policies show blend of capitalist and socialist ideas. Pan-Africanism: movement for unity among African nations. Nkrumah (Ghana) and Nnamdi Azikiwe were key advocates. AU (formerly OAU) embodies pan-African ideals. Welfarism: government provision of social services - Nigeria's education, healthcare policies."
         },
         {
-          "id": "constitutional_development",
-          "title": "Nigerian Constitutional Development",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "id": "african_ideologies",
+          "title": "African Political Ideologies",
+          "waec_frequency": "medium",
+          "jamb_frequency": "medium",
           "prerequisites": [
-            "types_constitutions"
+            "major_ideologies"
           ],
           "concepts": [
-            "Clifford constitution",
-            "Richards constitution",
-            "Macpherson constitution",
-            "Lyttleton constitution",
-            "independence constitution",
-            "republican constitution",
-            "1979 constitution",
-            "1999 constitution"
+            "Negritude",
+            "African socialism",
+            "Ujamaa",
+            "Humanism (Zambia)",
+            "consciencism",
+            "pan-Africanism",
+            "non-alignment"
           ],
           "common_misconceptions": [
-            "The 1999 constitution is Nigeria's first",
-            "All colonial constitutions were imposed without input"
+            "African socialism is the same as Marxist socialism",
+            "Negritude is racist (it's cultural affirmation)",
+            "Pan-Africanism has achieved its goals"
           ],
-          "teaching_note": "Provide a chronological overview. Highlight the key features and limitations of each constitution."
+          "teaching_note": "Negritude: literary/cultural movement (Senghor, C\u00e9saire, Diop) affirming African values and identity. African socialism (Senghor): adapted to African communal traditions. Ujamaa (Nyerere, Tanzania): familyhood, collective farming. Consciencism (Nkrumah): philosophical basis for decolonization. Pan-Africanism: political/cultural movement for African unity. OAU formed 1963 (Addis Ababa), now African Union (2002)."
         }
       ]
     }

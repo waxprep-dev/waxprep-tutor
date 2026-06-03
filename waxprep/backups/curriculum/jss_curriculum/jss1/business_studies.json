@@ -1,0 +1,46 @@
+{
+  "subject": "business_studies",
+  "class_level": "JSS1",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Introduction to Business",
+    "Office Equipment",
+    "Communication",
+    "Trade",
+    "Bookkeeping"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "intro_business",
+      "title": "Introduction to Business",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "meaning_business",
+          "title": "Meaning and Importance of Business",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "business",
+            "trade",
+            "commerce",
+            "industry",
+            "production",
+            "goods",
+            "services",
+            "consumer",
+            "producer"
+          ],
+          "common_misconceptions": [
+            "Business is only about making money",
+            "You need a lot of money to start a business",
+            "Business is only for adults"
+          ],
+          "teaching_note": "Business: any activity that provides goods or services to satisfy human wants. Types: Trade (buying and selling), Commerce (trade + aids to trade), Industry (extraction, manufacturing, construction). Goods: tangible (clothes, food). Services: intangible (teaching, banking, transport). Nigerian businesses: Dangote Group, MTN, GTBank, small businesses (shops, tailoring, catering). Young entrepreneurs can start small: selling snacks, stationery, running errands."
+        }
+      ]
+    }
+  ]
+}

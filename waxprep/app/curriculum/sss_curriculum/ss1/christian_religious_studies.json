@@ -1,0 +1,257 @@
+{
+  "subject": "christian_religious_studies",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Creation and the Fall of Man",
+    "The Patriarchs",
+    "The Exodus",
+    "The Kings of Israel",
+    "The Life of Jesus",
+    "The Early Church"
+  ],
+  "jamb_high_priority_topics": [
+    "The Synoptic Gospels",
+    "The Acts of the Apostles",
+    "Pauline Epistles"
+  ],
+  "topics": [
+    {
+      "id": "creation",
+      "title": "Creation and the Fall of Man",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "creation_story",
+          "title": "Biblical Account of Creation",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "Genesis 1-2",
+            "six days of creation",
+            "day 1-6",
+            "Adam and Eve",
+            "image of God",
+            "dominion",
+            "Eden",
+            "Sabbath"
+          ],
+          "common_misconceptions": [
+            "The two creation accounts contradict each other",
+            "Creation is only about physical making",
+            "Adam and Eve were not real historical people (interpretation varies)"
+          ],
+          "teaching_note": "Genesis 1:1-2:4a (first account - chronological, majestic, God as Elohim). Genesis 2:4b-25 (second account - focused on humanity, God as Yahweh). Key teachings: God is creator of all, creation is good, humans created in God's image (imago Dei), humans have stewardship/dominion over creation, rest is important (Sabbath). Environmental implication: Christians should care for creation."
+        },
+        {
+          "id": "the_fall",
+          "title": "The Fall of Man",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "creation_story"
+          ],
+          "concepts": [
+            "Genesis 3",
+            "the serpent",
+            "temptation",
+            "forbidden fruit",
+            "the Fall",
+            "original sin",
+            "consequences",
+            "protoevangelium"
+          ],
+          "common_misconceptions": [
+            "The forbidden fruit was an apple",
+            "Eve is solely responsible for the Fall",
+            "God abandoned humanity after the Fall"
+          ],
+          "teaching_note": "Genesis 3 narrative: serpent questions God's command \u2192 Eve adds to command (not touch) \u2192 both eat \u2192 shame \u2192 blame-shifting \u2192 consequences. Consequences: serpent (crawl, enmity), woman (pain in childbirth, desire/submission), man (painful toil, thorns, return to dust), expulsion from Eden. Protoevangelium (first gospel): Genesis 3:15 - promise of redemption. Teachings: consequences of disobedience, human free will, God's mercy (clothes them), hope of redemption."
+        }
+      ]
+    },
+    {
+      "id": "patriarchs",
+      "title": "The Patriarchs",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "abraham",
+          "title": "Abraham (Abram)",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "creation"
+          ],
+          "concepts": [
+            "Abraham",
+            "Abram",
+            "Ur",
+            "call of Abraham",
+            "Genesis 12",
+            "covenant",
+            "promises",
+            "faith",
+            "circumcision",
+            "Isaac",
+            "sacrifice of Isaac"
+          ],
+          "common_misconceptions": [
+            "Abraham was always faithful",
+            "Isaac was a young child when sacrificed",
+            "The covenant was only about land"
+          ],
+          "teaching_note": "Abraham = father of faith. Call (Gen 12:1-3): leave country, great nation, bless all nations. Covenant promises: land, descendants, blessing. Key events: Lot separation, Melchizedek, Hagar/Ishmael, circumcision (sign of covenant), visitors/Sarah's laughter, Sodom and Gomorrah, sacrifice of Isaac (ultimate test of faith). Hebrews 11:8-19 - Abraham in faith hall of fame. Lessons: obedience, faith, patience, hospitality, intercession."
+        },
+        {
+          "id": "jacob",
+          "title": "Isaac, Jacob and Joseph",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "abraham"
+          ],
+          "concepts": [
+            "Isaac",
+            "Jacob",
+            "Esau",
+            "birthright",
+            "blessing",
+            "ladder",
+            "Israel",
+            "Joseph",
+            "dreams",
+            "Egypt",
+            "forgiveness",
+            "reconciliation"
+          ],
+          "common_misconceptions": [
+            "Jacob was always a deceiver who never changed",
+            "Joseph was arrogant about his dreams",
+            "Forgiveness means forgetting the wrong"
+          ],
+          "teaching_note": "Jacob: supplanter \u2192 Israel (struggles with God). Character development: deception \u2192 wrestling with God \u2192 transformed. Joseph: favored son \u2192 sold to slavery \u2192 Potiphar's house \u2192 prison \u2192 Pharaoh's dream \u2192 Prime Minister \u2192 saves Egypt and family \u2192 'What you meant for evil, God meant for good' (Gen 50:20). Themes: God's providence, forgiveness, reconciliation, God's plan through human evil."
+        }
+      ]
+    },
+    {
+      "id": "moses",
+      "title": "Moses and the Exodus",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "exodus_story",
+          "title": "The Exodus from Egypt",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "patriarchs"
+          ],
+          "concepts": [
+            "Moses",
+            "burning bush",
+            "ten plagues",
+            "Passover",
+            "Exodus",
+            "Red Sea",
+            "manna",
+            "Sinai",
+            "Ten Commandments",
+            "covenant"
+          ],
+          "common_misconceptions": [
+            "Moses wrote all of the Pentateuch",
+            "The plagues were only natural events",
+            "The Ten Commandments are the only laws"
+          ],
+          "teaching_note": "Exodus narrative: Moses' birth and rescue \u2192 call at burning bush \u2192 confrontation with Pharaoh \u2192 10 plagues (showing God's power over Egyptian gods) \u2192 Passover (lamb's blood on doorposts) \u2192 crossing Red Sea \u2192 wilderness \u2192 manna/quail/water from rock \u2192 Sinai \u2192 Ten Commandments (Decalogue) \u2192 covenant. Key themes: liberation, covenant, law, God's faithfulness, Israel's unfaithfulness. Passover: foreshadows Christ's sacrifice. Ten Commandments: relationship with God (1-4) and with others (5-10)."
+        }
+      ]
+    },
+    {
+      "id": "jesus_life",
+      "title": "The Life and Teachings of Jesus",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "birth_ministry",
+          "title": "Birth and Early Ministry",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "virgin birth",
+            "Bethlehem",
+            "John the Baptist",
+            "baptism of Jesus",
+            "temptation",
+            "Galilean ministry",
+            "disciples",
+            "apostles",
+            "Kingdom of God"
+          ],
+          "common_misconceptions": [
+            "Jesus was born on December 25",
+            "Jesus had no siblings",
+            "Jesus' ministry lasted many years (about 3 years)"
+          ],
+          "teaching_note": "Synoptic Gospels: Matthew, Mark, Luke. Birth narratives: Matthew (Joseph's perspective, Magi), Luke (Mary's perspective, shepherds). John the Baptist: forerunner, preached repentance, baptized Jesus. Temptation: 40 days in wilderness, 3 temptations (stones to bread, throw yourself down, all kingdoms). Disciples: 12 apostles chosen. Key message: 'Repent, for the kingdom of heaven is at hand.'"
+        },
+        {
+          "id": "parables_miracles",
+          "title": "Parables and Miracles",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "birth_ministry"
+          ],
+          "concepts": [
+            "parables",
+            "Good Samaritan",
+            "Prodigal Son",
+            "Sower",
+            "Mustard Seed",
+            "miracles",
+            "healing",
+            "nature miracles",
+            "raising the dead",
+            "signs"
+          ],
+          "common_misconceptions": [
+            "Parables are just nice stories",
+            "Miracles prove Jesus is God (they point to it)",
+            "All parables have the same meaning for all listeners"
+          ],
+          "teaching_note": "Parables: earthly stories with heavenly meanings. Good Samaritan: love your neighbor (even enemies). Prodigal Son: God's forgiving love. Sower: responses to God's word. Mustard Seed: kingdom starts small, grows large. Miracles: signs of God's kingdom breaking in. Categories: healing (leper, paralytic), nature (calming storm, feeding 5000), raising dead (Lazarus, Jairus' daughter). Purpose: compassion, authentication of message, revelation of God's kingdom."
+        },
+        {
+          "id": "death_resurrection",
+          "title": "Death and Resurrection",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "parables_miracles"
+          ],
+          "concepts": [
+            "Last Supper",
+            "betrayal",
+            "crucifixion",
+            "seven sayings",
+            "resurrection",
+            "appearances",
+            "Ascension",
+            "atonement",
+            "salvation"
+          ],
+          "common_misconceptions": [
+            "Jesus was crucified on a Friday (traditionally held but debated)",
+            "The resurrection is only a spiritual event",
+            "The disciples stole the body"
+          ],
+          "teaching_note": "Passion week: Triumphal entry \u2192 cleansing temple \u2192 Last Supper (institution of Eucharist) \u2192 Gethsemane \u2192 arrest \u2192 trials (Sanhedrin, Pilate, Herod) \u2192 crucifixion at Golgotha \u2192 burial \u2192 resurrection (third day) \u2192 appearances \u2192 Ascension. Seven sayings on cross: 'Father forgive them', 'Today you will be with me', 'Woman behold your son', 'My God why have you forsaken me', 'I thirst', 'It is finished', 'Into your hands I commit my spirit.' Resurrection: cornerstone of Christian faith (1 Cor 15:14-17)."
+        }
+      ]
+    }
+  ]
+}

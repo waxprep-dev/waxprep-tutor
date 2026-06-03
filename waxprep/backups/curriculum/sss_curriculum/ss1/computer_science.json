@@ -4,19 +4,16 @@
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
     "Computer Fundamentals",
+    "Data Processing",
     "Computer Hardware",
     "Computer Software",
-    "Data Processing",
     "Programming",
-    "Computer Networks",
-    "Internet and Web Technologies"
+    "Computer Ethics"
   ],
   "jamb_high_priority_topics": [
     "Computer Fundamentals",
-    "Hardware",
-    "Software",
-    "Programming",
-    "Networking"
+    "Data Representation",
+    "Programming"
   ],
   "topics": [
     {
@@ -27,26 +24,29 @@
         {
           "id": "history_computers",
           "title": "History and Development of Computers",
-          "waec_frequency": "medium",
+          "waec_frequency": "high",
           "jamb_frequency": "medium",
           "prerequisites": [],
           "concepts": [
+            "computer",
+            "abacus",
+            "Napier's bones",
+            "Pascaline",
+            "Leibniz wheel",
+            "Jacquard loom",
+            "Analytical Engine",
             "generations of computers",
             "vacuum tubes",
             "transistors",
             "integrated circuits",
-            "microprocessors",
-            "ENIAC",
-            "UNIVAC",
-            "Abacus",
-            "Charles Babbage",
-            "Ada Lovelace"
+            "microprocessors"
           ],
           "common_misconceptions": [
-            "Computers were invented in the 20th century only",
-            "Each generation completely replaces the previous"
+            "Charles Babbage invented the first computer (he designed the Analytical Engine but never built it)",
+            "Computers are only electronic devices",
+            "ENIAC was the first computer (it was the first general-purpose electronic computer)"
           ],
-          "teaching_note": "Trace computing history from ancient tools to modern computers. Discuss the evolution of storage and processing power."
+          "teaching_note": "Generations: 1st (1940-56): vacuum tubes, machine language, large size. 2nd (1956-63): transistors, assembly language. 3rd (1964-71): ICs, high-level languages. 4th (1971-present): microprocessors, VLSI, GUIs. 5th (emerging): AI, quantum computing. Key figures: Charles Babbage (father of computer), Ada Lovelace (first programmer), John von Neumann (stored program concept), Alan Turing (Turing machine). Nigerian context: NITDA, NCC promote ICT development."
         },
         {
           "id": "computer_types",
@@ -61,18 +61,21 @@
             "mainframe",
             "minicomputer",
             "microcomputer",
-            "analog computer",
-            "digital computer",
-            "hybrid computer",
-            "classification by size",
-            "classification by purpose",
-            "classification by data handling"
+            "analog",
+            "digital",
+            "hybrid",
+            "desktop",
+            "laptop",
+            "tablet",
+            "smartphone",
+            "embedded systems"
           ],
           "common_misconceptions": [
-            "Personal computers are the only type of computers",
-            "Bigger computers are always more powerful"
+            "Microcomputers are small in capability (they can be very powerful)",
+            "All computers are digital",
+            "Mainframes are obsolete (still used by banks, airlines)"
           ],
-          "teaching_note": "Show examples of each type. Discuss embedded computers in everyday devices like phones and cars."
+          "teaching_note": "Classification by size/capability: Supercomputer (fastest, weather forecasting, nuclear research), Mainframe (large organizations, banks), Minicomputer (mid-size businesses), Microcomputer (PCs, laptops, tablets). By type: Analog (continuous data, e.g., speedometer), Digital (discrete data, binary), Hybrid (combination). By purpose: General purpose, Special purpose, Embedded (in devices: washing machines, cars, ATMs)."
         }
       ]
     },
@@ -82,252 +85,111 @@
       "week": 2,
       "subtopics": [
         {
-          "id": "system_unit",
-          "title": "The System Unit and Components",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
+          "id": "hardware_components",
+          "title": "Components of Computer Hardware",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "computer_fundamentals"
+          ],
           "concepts": [
+            "hardware",
             "CPU",
             "ALU",
             "CU",
             "registers",
+            "memory",
             "RAM",
             "ROM",
+            "input devices",
+            "output devices",
+            "storage devices",
             "motherboard",
             "bus",
-            "clock speed",
-            "word length",
-            "storage devices",
-            "hard disk",
-            "SSD"
+            "ports"
           ],
           "common_misconceptions": [
-            "CPU is the entire computer case",
-            "RAM and storage are the same thing"
+            "CPU is the whole computer case (NO, it's a chip inside)",
+            "RAM and ROM are the same",
+            "More storage means faster computer (storage \u2260 memory)"
           ],
-          "teaching_note": "Use diagrams to show internal components. Explain the fetch-decode-execute cycle. Distinguish between volatile and non-volatile memory."
-        },
-        {
-          "id": "input_output",
-          "title": "Input and Output Devices",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "system_unit"
-          ],
-          "concepts": [
-            "input devices",
-            "keyboard",
-            "mouse",
-            "scanner",
-            "microphone",
-            "output devices",
-            "monitor",
-            "printer",
-            "speaker",
-            "plotter",
-            "storage devices",
-            "flash drive",
-            "optical disc"
-          ],
-          "common_misconceptions": [
-            "Touchscreen is only an input device",
-            "All printers produce the same quality output"
-          ],
-          "teaching_note": "Classify devices as input, output, or both. Discuss emerging technologies like VR headsets and biometric scanners."
+          "teaching_note": "CPU = ALU (Arithmetic Logic Unit - calculations) + CU (Control Unit - coordinates) + Registers (fast temporary storage). Memory: RAM (volatile, read-write, measured in GB) and ROM (non-volatile, read-only, stores BIOS). Storage: HDD (magnetic, spinning), SSD (flash memory, faster), optical (CD/DVD), USB flash drives. Von Neumann architecture: stored program concept - instructions and data in same memory."
         }
       ]
     },
     {
-      "id": "computer_software",
-      "title": "Computer Software",
+      "id": "data_representation",
+      "title": "Data Representation",
       "week": 3,
       "subtopics": [
         {
-          "id": "system_software",
-          "title": "System Software",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "id": "number_systems_computer",
+          "title": "Number Systems and Data Representation",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
           "prerequisites": [
             "computer_hardware"
           ],
           "concepts": [
-            "operating system",
-            "utility software",
-            "device drivers",
-            "compiler",
-            "interpreter",
-            "assembler",
-            "Windows",
-            "Linux",
-            "macOS",
-            "Android",
-            "functions of OS"
+            "binary",
+            "decimal",
+            "octal",
+            "hexadecimal",
+            "bits",
+            "bytes",
+            "ASCII",
+            "Unicode",
+            "BCD",
+            "EBCDIC",
+            "data units",
+            "kilobyte",
+            "megabyte",
+            "gigabyte",
+            "terabyte"
           ],
           "common_misconceptions": [
-            "Operating system is hardware",
-            "Application software can run without an operating system"
+            "1 KB = 1000 bytes (it's 1024 bytes = 2\u00b9\u2070)",
+            "Hexadecimal uses digits 0-16 (uses 0-9 and A-F)",
+            "Binary is only used in computers"
           ],
-          "teaching_note": "Explain the role of OS in managing hardware resources. Compare different operating systems. Explain the difference between compilers and interpreters."
-        },
-        {
-          "id": "application_software",
-          "title": "Application Software",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "system_software"
-          ],
-          "concepts": [
-            "word processor",
-            "spreadsheet",
-            "database",
-            "presentation",
-            "web browser",
-            "email client",
-            "graphics software",
-            "proprietary software",
-            "open source",
-            "freeware",
-            "shareware"
-          ],
-          "common_misconceptions": [
-            "All software must be purchased",
-            "Application software manages hardware directly"
-          ],
-          "teaching_note": "Demonstrate common application software. Discuss software licensing types and legal considerations."
-        }
-      ]
-    },
-    {
-      "id": "data_processing",
-      "title": "Data Processing",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "data_information",
-          "title": "Data and Information",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "data",
-            "information",
-            "knowledge",
-            "data processing cycle",
-            "input",
-            "processing",
-            "output",
-            "storage",
-            "feedback",
-            "data types",
-            "file organization"
-          ],
-          "common_misconceptions": [
-            "Data and information are the same",
-            "Processing only means calculations"
-          ],
-          "teaching_note": "Show how raw data becomes meaningful information. Explain the data processing cycle with examples."
+          "teaching_note": "Binary (base 2): uses 0,1. Each digit = bit. 8 bits = 1 byte. Binary to decimal: sum of powers of 2. Conversion: Decimal to binary - repeated division by 2. Binary to hex - group in 4s. Data units: 1 KB = 1024 B, 1 MB = 1024 KB, 1 GB = 1024 MB, 1 TB = 1024 GB. ASCII: 7-bit code, 128 characters. Unicode: 16-bit, supports multiple languages including Igbo, Yoruba, Hausa characters."
         }
       ]
     },
     {
       "id": "programming",
-      "title": "Programming Concepts",
-      "week": 5,
+      "title": "Introduction to Programming",
+      "week": 4,
       "subtopics": [
         {
           "id": "programming_basics",
-          "title": "Introduction to Programming",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "title": "Programming Concepts",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
           "prerequisites": [
-            "computer_software"
+            "data_representation"
           ],
           "concepts": [
+            "program",
             "algorithm",
             "flowchart",
             "pseudocode",
             "programming languages",
-            "BASIC",
-            "Python",
-            "Java",
-            "C++",
-            "variables",
-            "constants",
-            "data types",
-            "control structures"
+            "compiler",
+            "interpreter",
+            "assembler",
+            "source code",
+            "object code",
+            "syntax",
+            "semantics",
+            "debugging"
           ],
           "common_misconceptions": [
             "Programming is only for geniuses",
-            "One programming language is enough for everything"
+            "All programming languages are the same",
+            "A program without errors always produces correct output (logic errors exist)"
           ],
-          "teaching_note": "Start with flowcharts and pseudocode before actual coding. Use simple programming exercises to build confidence."
-        }
-      ]
-    },
-    {
-      "id": "networking",
-      "title": "Computer Networks",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "network_types",
-          "title": "Types and Topologies of Networks",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "computer_hardware"
-          ],
-          "concepts": [
-            "LAN",
-            "WAN",
-            "MAN",
-            "network topology",
-            "bus topology",
-            "star topology",
-            "ring topology",
-            "mesh topology",
-            "router",
-            "switch",
-            "hub",
-            "protocol",
-            "TCP/IP"
-          ],
-          "common_misconceptions": [
-            "Internet and World Wide Web are the same",
-            "LAN always covers a single room"
-          ],
-          "teaching_note": "Use diagrams to illustrate network topologies. Discuss the advantages and disadvantages of each type."
-        },
-        {
-          "id": "internet_web",
-          "title": "Internet and Web Technologies",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "network_types"
-          ],
-          "concepts": [
-            "internet",
-            "WWW",
-            "URL",
-            "HTTP",
-            "HTML",
-            "web browser",
-            "search engine",
-            "email",
-            "social media",
-            "cybersecurity",
-            "malware",
-            "firewall"
-          ],
-          "common_misconceptions": [
-            "Internet is the same as the web",
-            "All information on the internet is true"
-          ],
-          "teaching_note": "Teach digital literacy and safe internet practices. Discuss the positive and negative impacts of social media."
+          "teaching_note": "Algorithm: step-by-step solution to a problem. Properties: finite, definite, input, output, effective. Flowchart symbols: oval (start/end), rectangle (process), diamond (decision), parallelogram (input/output). Pseudocode: English-like description. Programming language levels: Machine code (binary), Assembly (mnemonics), High-level (Python, Java, C++). Translators: Compiler (converts all at once), Interpreter (line by line), Assembler (assembly to machine code). BASIC was traditionally taught in Nigerian schools; Python is increasingly popular."
         }
       ]
     }

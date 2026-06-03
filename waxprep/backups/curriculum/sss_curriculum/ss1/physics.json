@@ -3,179 +3,247 @@
   "class_level": "SS1",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Measurements and Units",
-    "Kinematics of Linear Motion",
-    "Newton's Laws of Motion",
+    "Measurements",
+    "Kinematics",
+    "Dynamics",
     "Work, Energy and Power",
     "Heat Energy",
-    "Electricity",
-    "Waves"
+    "Waves",
+    "Optics",
+    "Electricity"
   ],
   "jamb_high_priority_topics": [
-    "Measurements",
-    "Motion",
-    "Forces",
+    "Measurements and Units",
+    "Kinematics",
+    "Newton's Laws",
     "Work, Energy and Power",
-    "Heat",
-    "Current Electricity",
-    "Waves"
+    "Simple Harmonic Motion",
+    "Waves",
+    "Electrostatics",
+    "Current Electricity"
   ],
   "topics": [
     {
-      "id": "measurements_units",
+      "id": "measurements",
       "title": "Measurements and Units",
       "week": 1,
       "subtopics": [
         {
           "id": "fundamental_quantities",
           "title": "Fundamental and Derived Quantities",
-          "waec_frequency": "very_high",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [],
           "concepts": [
+            "length",
+            "mass",
+            "time",
+            "temperature",
+            "electric current",
+            "amount of substance",
+            "luminous intensity",
             "SI units",
-            "fundamental quantities",
-            "derived quantities",
-            "dimensions",
-            "meter",
-            "kilogram",
-            "second",
-            "ampere",
-            "kelvin"
+            "derived quantities"
           ],
           "common_misconceptions": [
-            "Confusing fundamental and derived quantities",
-            "Using non-SI units in calculations"
+            "Confusing mass and weight",
+            "Using CGS units instead of SI",
+            "Not understanding dimensional analysis"
           ],
-          "teaching_note": "Emphasize that all physical quantities must have units. Use practical demonstrations with measuring instruments."
+          "teaching_note": "Key equations: None. Fundamental quantities have base SI units: length (m), mass (kg), time (s), temperature (K), current (A). Derived quantities: area (m\u00b2), volume (m\u00b3), velocity (m/s), acceleration (m/s\u00b2), force (N = kg\u00b7m/s\u00b2)."
         },
         {
-          "id": "measurement_techniques",
-          "title": "Measurement Techniques and Instruments",
+          "id": "measuring_instruments",
+          "title": "Measuring Instruments",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "fundamental_quantities"
+          ],
+          "concepts": [
+            "metre rule",
+            "vernier callipers",
+            "micrometer screw gauge",
+            "beam balance",
+            "stopwatch",
+            "ammeter",
+            "voltmeter",
+            "precision",
+            "accuracy",
+            "zero error"
+          ],
+          "common_misconceptions": [
+            "Confusing precision with accuracy",
+            "Not accounting for zero error",
+            "Reading vernier scale incorrectly"
+          ],
+          "teaching_note": "Key equations: Vernier reading = main scale reading + (vernier coincidence \u00d7 least count). Micrometer reading = main scale + (circular scale \u00d7 0.01mm). Always check for zero error and apply correction."
+        },
+        {
+          "id": "scalar_vector",
+          "title": "Scalar and Vector Quantities",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
             "fundamental_quantities"
           ],
           "concepts": [
-            "vernier caliper",
-            "micrometer screw gauge",
-            "metre rule",
-            "stopwatch",
-            "beam balance",
-            "precision",
-            "accuracy",
-            "significant figures"
+            "scalar quantities",
+            "vector quantities",
+            "magnitude",
+            "direction",
+            "vector addition",
+            "resultant",
+            "parallelogram law",
+            "resolution of vectors",
+            "components"
           ],
           "common_misconceptions": [
-            "Confusing precision with accuracy",
-            "Reading vernier scale incorrectly",
-            "Not understanding zero error"
+            "Thinking all quantities with magnitude and direction are vectors",
+            "Adding vectors algebraically like scalars",
+            "Confusing resultant with equilibrant"
           ],
-          "teaching_note": "Allow students to handle actual measuring instruments. Demonstrate zero error correction on vernier calipers and micrometers."
+          "teaching_note": "Key equations: For perpendicular vectors: R = \u221a(A\u00b2 + B\u00b2), tan \u03b8 = B/A. Parallelogram law: R\u00b2 = P\u00b2 + Q\u00b2 + 2PQcos\u03b8. Resolution: Fx = Fcos\u03b8, Fy = Fsin\u03b8."
         }
       ]
     },
     {
       "id": "kinematics",
-      "title": "Kinematics of Linear Motion",
+      "title": "Kinematics",
       "week": 2,
       "subtopics": [
         {
-          "id": "concepts_of_motion",
+          "id": "motion_concepts",
           "title": "Concepts of Motion",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "measurements"
+          ],
           "concepts": [
-            "distance",
             "displacement",
+            "distance",
             "speed",
             "velocity",
             "acceleration",
-            "uniform motion",
+            "deceleration",
+            "uniform velocity",
             "uniform acceleration",
-            "rest"
+            "relative velocity"
           ],
           "common_misconceptions": [
             "Confusing distance with displacement",
-            "Thinking constant speed means zero acceleration",
-            "Confusing speed and velocity"
+            "Thinking constant speed means zero acceleration on a curved path",
+            "Confusing speed with velocity"
           ],
-          "teaching_note": "Use ticker-timer experiments to demonstrate motion concepts. Emphasize the vector nature of displacement and velocity."
+          "teaching_note": "Key equations: v = u + at; s = ut + \u00bdat\u00b2; v\u00b2 = u\u00b2 + 2as; s = \u00bd(u+v)t. For relative velocity: VAB = VA - VB. These equations apply ONLY for constant acceleration."
         },
         {
-          "id": "equations_motion",
-          "title": "Equations of Uniformly Accelerated Motion",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "id": "motion_graphs",
+          "title": "Motion Graphs",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
           "prerequisites": [
-            "concepts_of_motion"
+            "motion_concepts"
           ],
           "concepts": [
-            "v = u + at",
-            "s = ut + ½at²",
-            "v² = u² + 2as",
-            "average velocity",
-            "motion under gravity",
-            "free fall"
+            "displacement-time graph",
+            "velocity-time graph",
+            "acceleration-time graph",
+            "gradient",
+            "area under graph",
+            "interpretation of graphs"
           ],
           "common_misconceptions": [
-            "Using wrong signs for acceleration due to gravity",
-            "Assuming all motion problems involve constant acceleration"
+            "Confusing displacement-time with velocity-time graphs",
+            "Not understanding that gradient of s-t graph = velocity",
+            "Not understanding that area under v-t graph = displacement"
           ],
-          "teaching_note": "Derive the equations of motion graphically. Emphasize sign conventions for upward and downward motion."
+          "teaching_note": "Key relationships: Gradient of s-t graph = velocity. Gradient of v-t graph = acceleration. Area under v-t graph = displacement. For uniform acceleration from rest: s = \u00bdat\u00b2 (parabolic s-t graph)."
+        },
+        {
+          "id": "projectile_motion",
+          "title": "Projectile Motion",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "motion_concepts",
+            "motion_graphs"
+          ],
+          "concepts": [
+            "trajectory",
+            "horizontal projection",
+            "angled projection",
+            "time of flight",
+            "maximum height",
+            "range",
+            "components of velocity"
+          ],
+          "common_misconceptions": [
+            "Thinking horizontal motion affects vertical motion",
+            "Not resolving initial velocity into components",
+            "Using wrong formula for maximum height"
+          ],
+          "teaching_note": "Key equations: Horizontal: x = ucos\u03b8\u00b7t, ax = 0. Vertical: y = usin\u03b8\u00b7t - \u00bdgt\u00b2, vy = usin\u03b8 - gt. Max height: H = u\u00b2sin\u00b2\u03b8/(2g). Range: R = u\u00b2sin(2\u03b8)/g. Time of flight: T = 2usin\u03b8/g."
         }
       ]
     },
     {
-      "id": "forces",
-      "title": "Forces and Newton's Laws of Motion",
+      "id": "dynamics",
+      "title": "Dynamics",
       "week": 3,
       "subtopics": [
         {
-          "id": "newtons_first_law",
-          "title": "Newton's First Law (Law of Inertia)",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
+          "id": "newtons_laws",
+          "title": "Newton's Laws of Motion",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
           "prerequisites": [
             "kinematics"
           ],
           "concepts": [
-            "inertia",
             "Newton's first law",
-            "balanced forces",
-            "unbalanced forces",
-            "equilibrium",
-            "net force"
-          ],
-          "common_misconceptions": [
-            "Thinking that force is needed to maintain motion",
-            "Confusing inertia with momentum"
-          ],
-          "teaching_note": "Use demonstrations with coins on paper and objects on moving carts. Clarify that inertia is a property, not a force."
-        },
-        {
-          "id": "newtons_second_third",
-          "title": "Newton's Second and Third Laws",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "newtons_first_law"
-          ],
-          "concepts": [
-            "F = ma",
             "Newton's second law",
             "Newton's third law",
-            "action-reaction pairs",
+            "inertia",
             "momentum",
-            "impulse"
+            "impulse",
+            "force",
+            "mass",
+            "weight",
+            "friction"
           ],
           "common_misconceptions": [
-            "Thinking action-reaction pairs act on the same body",
-            "Confusing mass and weight"
+            "Thinking force is needed to maintain motion",
+            "Confusing mass and weight",
+            "Not understanding action-reaction pairs act on different bodies"
           ],
-          "teaching_note": "Use F=ma experiments with dynamics trolleys. Clarify that action and reaction forces act on different bodies."
+          "teaching_note": "Key equations: F = ma (2nd law). Momentum p = mv. Impulse = Ft = \u0394(mv). Weight W = mg. Friction: F = \u03bcR. Newton's 3rd: FAB = -FBA (equal and opposite, on DIFFERENT bodies)."
+        },
+        {
+          "id": "circular_motion",
+          "title": "Circular Motion",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "newtons_laws"
+          ],
+          "concepts": [
+            "angular velocity",
+            "linear velocity",
+            "centripetal force",
+            "centripetal acceleration",
+            "period",
+            "frequency",
+            "rpm",
+            "banking of roads"
+          ],
+          "common_misconceptions": [
+            "Thinking centrifugal force is a real force",
+            "Confusing angular and linear velocity",
+            "Not understanding that centripetal force is provided by tension, friction, or gravity"
+          ],
+          "teaching_note": "Key equations: v = r\u03c9 = 2\u03c0r/T = 2\u03c0rf. Centripetal acceleration: a = v\u00b2/r = r\u03c9\u00b2. Centripetal force: F = mv\u00b2/r = mr\u03c9\u00b2. No centrifugal force - it's a fictitious force in rotating frames."
         }
       ]
     },
@@ -185,51 +253,77 @@
       "week": 4,
       "subtopics": [
         {
-          "id": "work_done",
-          "title": "Work Done by a Force",
-          "waec_frequency": "very_high",
+          "id": "work",
+          "title": "Work",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "forces"
+            "dynamics"
           ],
           "concepts": [
-            "work",
+            "work done",
             "force",
             "displacement",
-            "W = F × d × cosθ",
-            "joule",
             "positive work",
             "negative work",
-            "zero work"
+            "zero work",
+            "work-energy theorem"
           ],
           "common_misconceptions": [
-            "Thinking that holding a heavy object involves doing work",
-            "Ignoring the angle between force and displacement"
+            "Work = force \u00d7 distance (should be displacement in direction of force)",
+            "Thinking holding a heavy object does work",
+            "Not using cos\u03b8 for angled forces"
           ],
-          "teaching_note": "Emphasize that work is done only when force causes displacement in the direction of the force."
+          "teaching_note": "Key equation: W = Fs cos\u03b8 = F\u00b7s (dot product). When force \u22a5 displacement, W = 0. Work done by gravity = mgh. Work-energy theorem: W = \u0394KE = \u00bdmv\u00b2 - \u00bdmu\u00b2. Unit: joule (J)."
         },
         {
-          "id": "energy_forms",
-          "title": "Forms of Energy and Conservation",
+          "id": "energy",
+          "title": "Energy",
           "waec_frequency": "very_high",
-          "jamb_frequency": "high",
+          "jamb_frequency": "very_high",
           "prerequisites": [
-            "work_done"
+            "work"
           ],
           "concepts": [
             "kinetic energy",
             "potential energy",
+            "gravitational PE",
+            "elastic PE",
             "mechanical energy",
             "conservation of energy",
-            "energy transformation",
-            "power",
-            "watt"
+            "energy transformations"
           ],
           "common_misconceptions": [
-            "Thinking energy is lost in transformations",
-            "Confusing power with energy"
+            "Energy is lost in transformations - NO, converted!",
+            "Confusing energy with force",
+            "Thinking PE only exists at height"
           ],
-          "teaching_note": "Demonstrate energy transformations using pendulums and rolling objects. Emphasize that energy is conserved, not lost."
+          "teaching_note": "Key equations: KE = \u00bdmv\u00b2. GPE = mgh. Conservation: ME = KE + PE = constant (without friction). For a falling body: mgh = \u00bdmv\u00b2, so v = \u221a(2gh). Total energy in a closed system is conserved."
+        },
+        {
+          "id": "power",
+          "title": "Power",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "energy"
+          ],
+          "concepts": [
+            "power",
+            "rate of doing work",
+            "watt",
+            "kilowatt",
+            "horsepower",
+            "efficiency",
+            "useful energy output",
+            "total energy input"
+          ],
+          "common_misconceptions": [
+            "Confusing power with energy",
+            "Using wrong units (watt-hour vs watt)",
+            "Thinking 100% efficiency is possible"
+          ],
+          "teaching_note": "Key equations: P = W/t = Fv. Efficiency = (useful output / total input) \u00d7 100% = (Pout/Pin) \u00d7 100%. 1 hp = 746 W. 1 kW = 1000 W. Power is rate, energy is total - like speed vs distance."
         }
       ]
     },
@@ -239,25 +333,27 @@
       "week": 5,
       "subtopics": [
         {
-          "id": "temperature_heat",
-          "title": "Temperature and Heat",
+          "id": "temperature",
+          "title": "Temperature and Thermometers",
           "waec_frequency": "high",
-          "jamb_frequency": "high",
+          "jamb_frequency": "medium",
           "prerequisites": [],
           "concepts": [
             "temperature",
             "heat",
             "thermometric properties",
-            "thermometers",
             "Celsius scale",
             "Kelvin scale",
-            "absolute zero"
+            "absolute zero",
+            "thermometers",
+            "fixed points"
           ],
           "common_misconceptions": [
             "Confusing heat with temperature",
-            "Thinking that temperature measures the amount of heat"
+            "Thinking heat is a substance (caloric theory)",
+            "Not converting Celsius to Kelvin for gas laws"
           ],
-          "teaching_note": "Distinguish clearly between temperature (a property) and heat (energy in transit). Demonstrate different types of thermometers."
+          "teaching_note": "Key: Temperature is measure of hotness (\u00b0C or K). Heat is energy transfer (J). T(K) = T(\u00b0C) + 273. Absolute zero = 0 K = -273\u00b0C. At absolute zero, molecular motion stops."
         },
         {
           "id": "thermal_expansion",
@@ -265,85 +361,82 @@
           "waec_frequency": "high",
           "jamb_frequency": "medium",
           "prerequisites": [
-            "temperature_heat"
+            "temperature"
           ],
           "concepts": [
             "linear expansion",
             "area expansion",
             "volume expansion",
-            "coefficient of expansion",
-            "anomalous expansion of water",
-            "applications"
+            "coefficient of linear expansion",
+            "real and apparent expansion",
+            "anomalous expansion of water"
           ],
           "common_misconceptions": [
-            "Thinking all substances expand equally when heated",
-            "Not understanding the anomalous expansion of water"
+            "All substances expand when heated - water is anomalous below 4\u00b0C",
+            "Confusing real and apparent expansion",
+            "Not understanding bimetallic strip applications"
           ],
-          "teaching_note": "Demonstrate expansion with bimetallic strips and ball-and-ring experiments. Explain why water expansion between 0°C and 4°C is important for aquatic life."
-        }
-      ]
-    },
-    {
-      "id": "electricity",
-      "title": "Current Electricity",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "electric_current",
-          "title": "Electric Current and Circuits",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
-          "concepts": [
-            "electric current",
-            "charge",
-            "potential difference",
-            "resistance",
-            "Ohm's law",
-            "series circuit",
-            "parallel circuit",
-            "EMF"
-          ],
-          "common_misconceptions": [
-            "Thinking current is used up in a circuit",
-            "Confusing potential difference with current"
-          ],
-          "teaching_note": "Use circuit diagrams and actual circuit building. Emphasize that current is the flow of charge, not the charge itself."
+          "teaching_note": "Key equations: \u0394L = \u03b1L\u2080\u0394\u03b8. \u0394A = \u03b2A\u2080\u0394\u03b8 = 2\u03b1A\u2080\u0394\u03b8. \u0394V = \u03b3V\u2080\u0394\u03b8 = 3\u03b1V\u2080\u0394\u03b8. Real expansion = apparent + container expansion. Water contracts from 0\u00b0C to 4\u00b0C, then expands above 4\u00b0C."
         },
         {
-          "id": "ohms_law",
-          "title": "Ohm's Law and Resistance",
+          "id": "heat_capacity",
+          "title": "Heat Capacity and Latent Heat",
           "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "jamb_frequency": "high",
           "prerequisites": [
-            "electric_current"
+            "thermal_expansion"
           ],
           "concepts": [
-            "Ohm's law",
-            "V = IR",
-            "resistors",
-            "variable resistors",
-            "resistivity",
-            "conductivity",
-            "I-V characteristics"
+            "specific heat capacity",
+            "heat capacity",
+            "latent heat",
+            "specific latent heat of fusion",
+            "specific latent heat of vaporization",
+            "calorimetry",
+            "method of mixtures"
           ],
           "common_misconceptions": [
-            "Applying Ohm's law to non-ohmic conductors",
-            "Thinking resistance depends on voltage or current"
+            "Heat capacity and specific heat capacity are the same thing",
+            "Temperature rises during phase change",
+            "Confusing latent heat of fusion with vaporization"
           ],
-          "teaching_note": "Experimentally verify Ohm's law using a resistor. Distinguish between ohmic and non-ohmic conductors."
+          "teaching_note": "Key equations: Q = mc\u0394\u03b8 (sensible heat). Q = mL (latent heat, no temperature change). Heat capacity C = mc. Method of mixtures: heat lost by hot = heat gained by cold. For water: c = 4200 J/kg\u00b7K, Lf = 3.34\u00d710\u2075 J/kg, Lv = 2.26\u00d710\u2076 J/kg."
+        },
+        {
+          "id": "gas_laws",
+          "title": "Gas Laws",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "heat_capacity"
+          ],
+          "concepts": [
+            "Boyle's law",
+            "Charles's law",
+            "pressure law",
+            "general gas equation",
+            "ideal gas equation",
+            "absolute zero",
+            "kinetic theory of gases"
+          ],
+          "common_misconceptions": [
+            "Using Celsius instead of Kelvin in gas law calculations",
+            "Confusing Boyle's and Charles's law conditions",
+            "Not understanding that ideal gases don't exist"
+          ],
+          "teaching_note": "Key equations: Boyle's law: P \u221d 1/V (constant T) \u2192 P\u2081V\u2081 = P\u2082V\u2082. Charles's law: V \u221d T (constant P) \u2192 V\u2081/T\u2081 = V\u2082/T\u2082. Pressure law: P \u221d T (constant V). Combined: P\u2081V\u2081/T\u2081 = P\u2082V\u2082/T\u2082. Ideal gas: PV = nRT where R = 8.31 J/mol\u00b7K."
         }
       ]
     },
     {
       "id": "waves",
       "title": "Waves",
-      "week": 7,
+      "week": 6,
       "subtopics": [
         {
           "id": "wave_properties",
           "title": "Properties of Waves",
-          "waec_frequency": "very_high",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [],
           "concepts": [
@@ -351,42 +444,213 @@
             "wavelength",
             "frequency",
             "period",
-            "velocity",
-            "wave equation",
+            "wave velocity",
+            "crest",
+            "trough",
             "transverse waves",
             "longitudinal waves",
-            "crest",
-            "trough"
+            "phase"
           ],
           "common_misconceptions": [
-            "Confusing frequency with amplitude",
-            "Not understanding the relationship v = fλ"
+            "Confusing transverse and longitudinal waves",
+            "Thinking amplitude affects wave speed",
+            "Not understanding the relationship between frequency and period"
           ],
-          "teaching_note": "Demonstrate waves using slinky springs and ripple tanks. Emphasize the wave equation v = fλ and its applications."
+          "teaching_note": "Key equations: v = f\u03bb. T = 1/f. For transverse waves: displacement \u22a5 direction of travel (light, water). For longitudinal: displacement \u2225 direction (sound). Wave speed depends on medium, NOT on f or \u03bb."
         },
         {
-          "id": "sound_waves",
-          "title": "Sound Waves",
+          "id": "wave_phenomena",
+          "title": "Wave Phenomena",
           "waec_frequency": "high",
-          "jamb_frequency": "medium",
+          "jamb_frequency": "high",
           "prerequisites": [
             "wave_properties"
           ],
           "concepts": [
-            "sound production",
-            "propagation",
-            "speed of sound",
-            "echo",
-            "reverberation",
-            "pitch",
-            "loudness",
-            "quality"
+            "reflection",
+            "refraction",
+            "diffraction",
+            "interference",
+            "superposition",
+            "standing waves",
+            "nodes",
+            "antinodes",
+            "resonance"
           ],
           "common_misconceptions": [
-            "Thinking sound travels faster in air than in solids",
-            "Confusing pitch with loudness"
+            "Confusing diffraction with refraction",
+            "Thinking all waves need a medium",
+            "Not understanding constructive vs destructive interference"
           ],
-          "teaching_note": "Demonstrate that sound requires a medium. Use tuning forks to show pitch and resonance."
+          "teaching_note": "Key principles: Reflection: angle of incidence = angle of reflection. Refraction: wave changes speed and direction at medium boundary. Diffraction: spreading through gaps. Interference: constructive (in phase, crest+crest) vs destructive (out of phase, crest+trough)."
+        }
+      ]
+    },
+    {
+      "id": "optics",
+      "title": "Optics",
+      "week": 7,
+      "subtopics": [
+        {
+          "id": "light_propagation",
+          "title": "Propagation of Light",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "waves"
+          ],
+          "concepts": [
+            "rectilinear propagation",
+            "speed of light",
+            "luminous objects",
+            "non-luminous objects",
+            "ray",
+            "beam",
+            "shadows",
+            "eclipses"
+          ],
+          "common_misconceptions": [
+            "Light travels instantaneously",
+            "Shadows are the same size as objects",
+            "Not understanding umbra vs penumbra"
+          ],
+          "teaching_note": "Key: Speed of light in vacuum c = 3\u00d710\u2078 m/s. Light travels slower in other media. Umbra = total shadow (total eclipse). Penumbra = partial shadow (partial eclipse). Solar eclipse: Moon between Sun and Earth. Lunar eclipse: Earth between Sun and Moon."
+        },
+        {
+          "id": "reflection_mirrors",
+          "title": "Reflection and Mirrors",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "light_propagation"
+          ],
+          "concepts": [
+            "laws of reflection",
+            "plane mirrors",
+            "spherical mirrors",
+            "concave mirror",
+            "convex mirror",
+            "principal focus",
+            "focal length",
+            "radius of curvature",
+            "real images",
+            "virtual images"
+          ],
+          "common_misconceptions": [
+            "Virtual images can only be seen in plane mirrors",
+            "Focal length = radius of curvature",
+            "Not understanding ray diagrams"
+          ],
+          "teaching_note": "Key equations: f = R/2. Mirror equation: 1/f = 1/u + 1/v. Magnification: m = v/u = image height/object height. For concave: f positive. For convex: f negative. Virtual images: v negative."
+        },
+        {
+          "id": "refraction_lenses",
+          "title": "Refraction and Lenses",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "reflection_mirrors"
+          ],
+          "concepts": [
+            "Snell's law",
+            "refractive index",
+            "critical angle",
+            "total internal reflection",
+            "convex lens",
+            "concave lens",
+            "power of lens",
+            "dioptre"
+          ],
+          "common_misconceptions": [
+            "Refractive index has units",
+            "Critical angle exists for light going from air to water",
+            "Power of diverging lens is positive"
+          ],
+          "teaching_note": "Key equations: Snell's law: n\u2081sin\u03b8\u2081 = n\u2082sin\u03b8\u2082. Refractive index n = c/v = sin i/sin r. Critical angle: sin C = 1/n (air to denser). Lens equation: 1/f = 1/u + 1/v. Power P = 1/f (in metres), unit: dioptre (D). Convex: f positive. Concave: f negative."
+        }
+      ]
+    },
+    {
+      "id": "electricity",
+      "title": "Electricity",
+      "week": 8,
+      "subtopics": [
+        {
+          "id": "electrostatics",
+          "title": "Electrostatics",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "electric charge",
+            "positive charge",
+            "negative charge",
+            "conservation of charge",
+            "Coulomb's law",
+            "electric field",
+            "electric field intensity",
+            "electric potential",
+            "electron"
+          ],
+          "common_misconceptions": [
+            "Like charges attract",
+            "Static electricity is not real electricity",
+            "Not understanding grounding"
+          ],
+          "teaching_note": "Key equations: Coulomb's law: F = kq\u2081q\u2082/r\u00b2 where k = 1/(4\u03c0\u03b5\u2080) = 9\u00d710\u2079 N\u00b7m\u00b2/C\u00b2. Electric field: E = F/q = kQ/r\u00b2. Like charges repel, unlike charges attract. Conservation: total charge in isolated system is constant."
+        },
+        {
+          "id": "current_electricity",
+          "title": "Current Electricity",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "electrostatics"
+          ],
+          "concepts": [
+            "electric current",
+            "drift velocity",
+            "conventional current",
+            "OHM'S LAW",
+            "resistance",
+            "resistivity",
+            "conductors",
+            "insulators",
+            "semiconductors",
+            "electromotive force",
+            "terminal potential difference"
+          ],
+          "common_misconceptions": [
+            "Current is used up in a circuit",
+            "Resistance depends on voltage and current (R = V/I is a ratio, not definition)",
+            "Not understanding difference between emf and p.d."
+          ],
+          "teaching_note": "Key equations: Ohm's law: V = IR (for ohmic conductors). Resistance: R = \u03c1L/A. Resistivity \u03c1 depends on material. Emf E = I(R + r) where r is internal resistance. Terminal p.d. V = IR = E - Ir. Power: P = IV = I\u00b2R = V\u00b2/R."
+        },
+        {
+          "id": "circuits",
+          "title": "Electric Circuits",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "current_electricity"
+          ],
+          "concepts": [
+            "series circuits",
+            "parallel circuits",
+            "Kirchhoff's laws",
+            "resistors in series",
+            "resistors in parallel",
+            "potential divider",
+            "Wheatstone bridge",
+            "metre bridge"
+          ],
+          "common_misconceptions": [
+            "Current is the same in parallel branches",
+            "Voltage is the same across series components",
+            "Adding resistors always increases total resistance"
+          ],
+          "teaching_note": "Key equations: Series: R_total = R\u2081 + R\u2082 + R\u2083. Parallel: 1/R_total = 1/R\u2081 + 1/R\u2082 + 1/R\u2083. For two parallel: R = R\u2081R\u2082/(R\u2081+R\u2082). Series: same current, voltage divides. Parallel: same voltage, current divides. Kirchhoff's current law: \u03a3I_in = \u03a3I_out. Kirchhoff's voltage law: \u03a3emf = \u03a3IR."
         }
       ]
     }

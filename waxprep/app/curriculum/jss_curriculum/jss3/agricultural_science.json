@@ -1,0 +1,45 @@
+{
+  "subject": "agricultural_science",
+  "class_level": "JSS3",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Animal Production",
+    "Fishery",
+    "Agricultural Economics",
+    "BECE Prep"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "animal_production",
+      "title": "Animal Production",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "livestock",
+          "title": "Livestock Farming",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "livestock",
+            "cattle",
+            "poultry",
+            "goat",
+            "sheep",
+            "pig",
+            "housing",
+            "feeding",
+            "disease control"
+          ],
+          "common_misconceptions": [
+            "Animal farming is only for Fulani people",
+            "Animals don't need vaccination",
+            "Free range is always better than intensive"
+          ],
+          "teaching_note": "Livestock: cattle (beef, dairy, draught), poultry (chicken, turkey for meat and eggs), goats and sheep (meat, skin), pigs (pork), rabbits. Housing: protect from weather and predators. Feeding: balanced diet for growth and production. Disease control: vaccination, sanitation, deworming. Nigerian livestock: Fulani cattle (Boran, White Fulani), indigenous chicken, West African Dwarf goat. Challenges: pests (tsetse fly), diseases (bird flu, foot-and-mouth), inadequate veterinary services."
+        }
+      ]
+    }
+  ]
+}

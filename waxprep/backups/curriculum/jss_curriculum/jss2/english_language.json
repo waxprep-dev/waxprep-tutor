@@ -3,167 +3,73 @@
   "class_level": "JSS2",
   "academic_year": "Junior Secondary",
   "waec_high_priority_topics": [
-    "Reading Comprehension",
-    "Summary Writing",
-    "Grammar",
-    "Essay Writing",
+    "Comprehension",
+    "Summary",
     "Vocabulary",
-    "Oral English"
+    "Formal Letter",
+    "Grammar - Tenses"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
     {
       "id": "comprehension_jss2",
-      "title": "Comprehension Skills",
+      "title": "Advanced Comprehension",
       "week": 1,
       "subtopics": [
         {
-          "id": "advanced_comprehension",
-          "title": "Reading Comprehension",
+          "id": "comprehension_skills",
+          "title": "Comprehension Skills Development",
           "waec_frequency": "high",
           "jamb_frequency": "none",
-          "prerequisites": [],
+          "prerequisites": [
+            "jss1_comprehension"
+          ],
           "concepts": [
             "literal comprehension",
             "inferential comprehension",
-            "evaluative comprehension",
+            "critical reading",
             "context clues",
-            "main idea",
-            "supporting details",
-            "author's purpose",
-            "tone"
+            "deductive reasoning",
+            "fact vs opinion"
           ],
           "common_misconceptions": [
-            "Comprehension is just reading the passage",
-            "Answers must be copied exactly"
+            "Reading once is enough",
+            "All answers are directly stated",
+            "Faster reading means better understanding"
           ],
-          "teaching_note": "Teach students to identify question types. Practice with varied text types."
+          "teaching_note": "Literal: answer is directly in passage. Inferential: read between the lines. Critical: evaluate author's viewpoint. Context clues: synonyms (or, that is), antonyms (but, however), examples (such as, for example). Practice with Nigerian authors' excerpts: Chinua Achebe, Cyprian Ekwensi, Buchi Emecheta."
         }
       ]
     },
     {
-      "id": "summary_jss2",
-      "title": "Summary Writing",
+      "id": "formal_letter_jss",
+      "title": "Formal Letter Writing",
       "week": 2,
       "subtopics": [
         {
-          "id": "summary_writing_jss2",
-          "title": "Summary Writing Techniques",
+          "id": "formal_letter_format",
+          "title": "Format of a Formal Letter",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
             "comprehension_jss2"
           ],
           "concepts": [
-            "summarization",
-            "relevant points",
-            "irrelevant details",
-            "paraphrasing",
-            "own words",
-            "word limit"
-          ],
-          "common_misconceptions": [
-            "Summary means copying the best sentences",
-            "More points mean better marks"
-          ],
-          "teaching_note": "Practice identifying main points. Use passages with clear topic sentences."
-        }
-      ]
-    },
-    {
-      "id": "grammar_jss2",
-      "title": "Grammar",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "advanced_grammar_jss2",
-          "title": "Advanced Grammar Topics",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "summary_jss2"
-          ],
-          "concepts": [
-            "tenses",
-            "present continuous",
-            "past continuous",
-            "present perfect",
-            "past perfect",
-            "reported speech",
-            "active voice",
-            "passive voice",
-            "conditional sentences"
-          ],
-          "common_misconceptions": [
-            "All past events use simple past",
-            "Passive voice is always wrong"
-          ],
-          "teaching_note": "Use timelines to teach continuous and perfect tenses. Practice converting active to passive."
-        }
-      ]
-    },
-    {
-      "id": "essay_jss2",
-      "title": "Essay Writing",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "essay_writing_jss2",
-          "title": "Essay Writing Skills",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "grammar_jss2"
-          ],
-          "concepts": [
-            "essay structure",
-            "introduction",
-            "body paragraphs",
+            "sender's address",
+            "date",
+            "recipient's address",
+            "salutation",
+            "title",
+            "body",
             "conclusion",
-            "topic sentence",
-            "unity",
-            "coherence",
-            "narrative",
-            "descriptive",
-            "argumentative"
+            "subscription"
           ],
           "common_misconceptions": [
-            "Longer essays get more marks",
-            "Introduction should be the longest paragraph"
+            "Formal letters can use informal language",
+            "You can skip the recipient's address",
+            "Any ending is acceptable"
           ],
-          "teaching_note": "Emphasize planning before writing. Practice writing clear thesis statements."
-        }
-      ]
-    },
-    {
-      "id": "oral_english_jss2",
-      "title": "Oral English",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "oral_skills",
-          "title": "Oral Communication Skills",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "essay_jss2"
-          ],
-          "concepts": [
-            "pronunciation",
-            "stress patterns",
-            "intonation",
-            "rhyme",
-            "syllables",
-            "listening skills",
-            "speaking skills",
-            "vowel sounds",
-            "consonant sounds"
-          ],
-          "common_misconceptions": [
-            "Nigerian English is wrong English",
-            "Reading aloud is the same as speaking"
-          ],
-          "teaching_note": "Practice standard English pronunciation. Use tongue twisters and poems for practice."
+          "teaching_note": "Format: Your address (top right) \u2192 Date \u2192 Recipient's address (top left) \u2192 Dear Sir/Madam \u2192 Title \u2192 Introduction (state purpose) \u2192 Body (explain details) \u2192 Conclusion (expectation) \u2192 Yours faithfully (if Dear Sir/Madam) or Yours sincerely (if named) \u2192 Signature \u2192 Full name. Common topics: letter to principal, local government chairman, newspaper editor."
         }
       ]
     }

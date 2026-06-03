@@ -3,174 +3,85 @@
   "class_level": "SS2",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Ecology",
-    "Ecosystem",
-    "Conservation of Resources",
-    "Genetics",
-    "Evolution",
     "Reproductive System",
-    "Growth and Development"
+    "Plant and Animal Nutrition",
+    "Transport Systems",
+    "Respiration",
+    "Excretion",
+    "Ecology",
+    "Conservation"
   ],
   "jamb_high_priority_topics": [
+    "Reproduction",
     "Ecology",
-    "Ecosystem",
     "Genetics",
-    "Evolution",
-    "Reproduction"
+    "Evolution"
   ],
   "topics": [
     {
-      "id": "ecology",
-      "title": "Ecology",
+      "id": "reproduction",
+      "title": "Reproduction in Organisms",
       "week": 1,
       "subtopics": [
         {
-          "id": "ecological_concepts",
-          "title": "Ecological Concepts",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
-          "concepts": [
-            "ecology",
-            "ecosystem",
-            "habitat",
-            "biosphere",
-            "niche",
-            "population",
-            "community",
-            "environment",
-            "abiotic factors",
-            "biotic factors"
-          ],
-          "common_misconceptions": [
-            "Habitat and ecosystem are the same",
-            "Ecology only studies animals"
-          ],
-          "teaching_note": "Use local Nigerian ecosystems as examples. Conduct field trips to observe ecological relationships."
-        },
-        {
-          "id": "ecological_factors",
-          "title": "Ecological Factors",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "ecological_concepts"
-          ],
-          "concepts": [
-            "temperature",
-            "rainfall",
-            "light",
-            "humidity",
-            "wind",
-            "pH",
-            "topography",
-            "edaphic factors",
-            "salinity",
-            "current"
-          ],
-          "common_misconceptions": [
-            "Abiotic factors don't affect each other",
-            "All organisms respond to factors the same way"
-          ],
-          "teaching_note": "Show how abiotic factors interact. Discuss adaptations of organisms to different ecological conditions in Nigeria."
-        }
-      ]
-    },
-    {
-      "id": "ecosystem",
-      "title": "Ecosystem Dynamics",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "food_relationships",
-          "title": "Food Relationships and Energy Flow",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "ecology"
-          ],
-          "concepts": [
-            "food chain",
-            "food web",
-            "trophic levels",
-            "producer",
-            "consumer",
-            "decomposer",
-            "energy flow",
-            "pyramid of energy",
-            "pyramid of numbers",
-            "pyramid of biomass"
-          ],
-          "common_misconceptions": [
-            "Energy is recycled in ecosystems",
-            "Carnivores are always at the top of food chains"
-          ],
-          "teaching_note": "Emphasize that energy flows while matter cycles. Construct food webs using Nigerian organisms."
-        },
-        {
-          "id": "nutrient_cycling",
-          "title": "Nutrient Cycling in Nature",
+          "id": "asexual_reproduction",
+          "title": "Asexual Reproduction",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "food_relationships"
+            "ss1_cell_biology"
           ],
           "concepts": [
-            "carbon cycle",
-            "water cycle",
-            "nitrogen cycle",
-            "decomposition",
-            "nitrification",
-            "denitrification",
-            "nitrogen fixation",
-            "symbiotic bacteria",
-            "Leguminosae"
+            "binary fission",
+            "budding",
+            "fragmentation",
+            "spore formation",
+            "vegetative propagation",
+            "runners",
+            "tubers",
+            "bulbs",
+            "grafting",
+            "cuttings"
           ],
           "common_misconceptions": [
-            "Plants get carbon from the soil",
-            "Nitrogen gas is directly usable by plants"
+            "Asexual reproduction only happens in simple organisms",
+            "Offspring from asexual reproduction are genetically identical (mostly true but mutations occur)",
+            "Vegetative propagation is unnatural"
           ],
-          "teaching_note": "Trace each cycle step by step. Explain the role of decomposers and microorganisms in nutrient cycling."
-        }
-      ]
-    },
-    {
-      "id": "conservation",
-      "title": "Conservation of Resources",
-      "week": 3,
-      "subtopics": [
+          "teaching_note": "Asexual: one parent, no gametes, offspring genetically identical (clones). Binary fission: Amoeba, bacteria. Budding: yeast, Hydra. Fragmentation: Spirogyra, planaria. Vegetative propagation: natural (runners in grass, rhizomes in ginger, tubers in yam, bulbs in onion) and artificial (cuttings, grafting, layering, tissue culture). Advantages: fast, no need for pollinators, preserves desirable traits. Disadvantages: no genetic variation, diseases affect all."
+        },
         {
-          "id": "conservation_methods",
-          "title": "Conservation and Resource Management",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
+          "id": "sexual_reproduction",
+          "title": "Sexual Reproduction in Plants and Animals",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
           "prerequisites": [
-            "ecosystem"
+            "asexual_reproduction"
           ],
           "concepts": [
-            "conservation",
-            "preservation",
-            "game reserves",
-            "national parks",
-            "deforestation",
-            "desertification",
-            "soil erosion",
-            "pollution",
-            "overgrazing",
-            "bush burning"
+            "gametes",
+            "fertilization",
+            "pollination",
+            "male reproductive system",
+            "female reproductive system",
+            "menstrual cycle",
+            "ovulation",
+            "spermatogenesis",
+            "oogenesis"
           ],
           "common_misconceptions": [
-            "Conservation means preventing all use",
-            "Pollution only affects the local area"
+            "Fertilization always occurs in the uterus (occurs in fallopian tube)",
+            "Women produce new eggs throughout life (all eggs present at birth)",
+            "Pollination is the same as fertilization"
           ],
-          "teaching_note": "Discuss Nigerian conservation efforts like Yankari Game Reserve. Connect to sustainable development goals."
+          "teaching_note": "Sexual: two parents, gametes fuse, genetic variation. Male system: testes (sperm + testosterone), epididymis, vas deferens, seminal vesicle, prostate, urethra, penis. Female system: ovaries (eggs + estrogen/progesterone), fallopian tube, uterus, cervix, vagina. Menstrual cycle: ~28 days. Follicular phase (days 1-13), ovulation (day 14), luteal phase (days 15-28). Spermatogenesis continuous from puberty. Oogenesis: all primary oocytes present at birth. Fertilization: sperm + egg \u2192 zygote in fallopian tube \u2192 implants in uterus."
         }
       ]
     },
     {
       "id": "genetics",
       "title": "Genetics",
-      "week": 4,
+      "week": 2,
       "subtopics": [
         {
           "id": "mendelian_genetics",
@@ -178,7 +89,7 @@
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "ecosystem"
+            "reproduction"
           ],
           "concepts": [
             "gene",
@@ -189,124 +100,56 @@
             "heterozygous",
             "genotype",
             "phenotype",
-            "Mendel's first law",
-            "Mendel's second law",
-            "Punnett square"
+            "Punnett square",
+            "monohybrid cross",
+            "dihybrid cross",
+            "test cross"
           ],
           "common_misconceptions": [
-            "Dominant traits are always more common",
-            "Recessive traits can disappear completely"
+            "Dominant allele is always more common in population",
+            "Recessive traits disappear in heterozygotes (they are just not expressed)",
+            "Phenotype ratio is always 3:1 (only for complete dominance monohybrid)"
           ],
-          "teaching_note": "Use Punnett squares systematically. Practice monohybrid and dihybrid cross calculations."
-        },
-        {
-          "id": "variation",
-          "title": "Variation and Inheritance",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "mendelian_genetics"
-          ],
-          "concepts": [
-            "continuous variation",
-            "discontinuous variation",
-            "sex-linked inheritance",
-            "blood group inheritance",
-            "sickle cell",
-            "co-dominance",
-            "incomplete dominance"
-          ],
-          "common_misconceptions": [
-            "All traits follow Mendelian inheritance",
-            "Sickle cell trait is the same as sickle cell disease"
-          ],
-          "teaching_note": "Discuss sickle cell in Nigerian context. Show non-Mendelian patterns with clear examples."
+          "teaching_note": "Mendel's Laws: 1) Law of Segregation - alleles separate during gamete formation. 2) Law of Independent Assortment - genes for different traits assort independently. Monohybrid cross (one trait): TT \u00d7 tt \u2192 all Tt (F1), Tt \u00d7 Tt \u2192 3:1 (F2). Dihybrid cross (two traits): 9:3:3:1 ratio. Test cross: unknown genotype \u00d7 homozygous recessive to determine genotype. Incomplete dominance: pink flowers from red \u00d7 white (1:2:1). Co-dominance: both alleles expressed (AB blood group). Sex-linked inheritance: genes on X chromosome (colour blindness, haemophilia). Blood groups: IA, IB, IO alleles \u2192 A, B, AB, O phenotypes."
         }
       ]
     },
     {
-      "id": "evolution",
-      "title": "Evolution",
-      "week": 5,
+      "id": "ecology",
+      "title": "Ecology",
+      "week": 3,
       "subtopics": [
         {
-          "id": "evolution_theory",
-          "title": "Theory of Evolution",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "genetics"
-          ],
-          "concepts": [
-            "evolution",
-            "natural selection",
-            "survival of the fittest",
-            "adaptation",
-            " Lamarck's theory",
-            "Darwin's theory",
-            "speciation",
-            "evidence of evolution"
-          ],
-          "common_misconceptions": [
-            "Evolution means humans came from monkeys",
-            "Evolution is just a theory in the casual sense"
-          ],
-          "teaching_note": "Distinguish between Darwin's and Lamarck's theories. Present evidence: fossils, comparative anatomy, embryology, molecular biology."
-        }
-      ]
-    },
-    {
-      "id": "reproductive_system",
-      "title": "Reproductive System and Development",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "human_reproduction",
-          "title": "Human Reproductive System",
+          "id": "ecosystem",
+          "title": "Ecosystem and Ecology",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "genetics"
+            "ss1_organization_life"
           ],
           "concepts": [
-            "male reproductive system",
-            "female reproductive system",
-            "sperm",
-            "ovum",
-            "ovulation",
-            "menstrual cycle",
-            "fertilization",
-            "implantation",
-            "gestation"
+            "ecology",
+            "ecosystem",
+            "habitat",
+            "niche",
+            "population",
+            "community",
+            "biotic factors",
+            "abiotic factors",
+            "producers",
+            "consumers",
+            "decomposers",
+            "food chain",
+            "food web",
+            "trophic levels",
+            "ecological pyramids"
           ],
           "common_misconceptions": [
-            "Fertilization occurs in the uterus",
-            "Menstruation is the same as ovulation"
+            "Producers only include green plants (also algae, some bacteria)",
+            "Decomposers are not important (they recycle nutrients)",
+            "Food chains have no maximum length (usually 4-5 levels due to energy loss)"
           ],
-          "teaching_note": "Use diagrams to trace the path of gametes. Explain the hormonal control of the menstrual cycle."
-        },
-        {
-          "id": "growth_development",
-          "title": "Growth and Development in Organisms",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "human_reproduction"
-          ],
-          "concepts": [
-            "growth",
-            "development",
-            "metamorphosis",
-            "complete metamorphosis",
-            "incomplete metamorphosis",
-            "life cycles",
-            "ageing"
-          ],
-          "common_misconceptions": [
-            "Growth and development are the same",
-            "All animals undergo metamorphosis"
-          ],
-          "teaching_note": "Compare growth patterns in plants and animals. Use insect metamorphosis as a clear example."
+          "teaching_note": "Ecology: study of organisms and their environment. Abiotic: light, temperature, water, soil, pH, humidity. Biotic: living components. Trophic levels: producers (autotrophs, level 1), primary consumers (herbivores, level 2), secondary consumers (carnivores, level 3), tertiary consumers (level 4), decomposers. Energy flow: unidirectional, 10% energy transfer between levels (Lindeman's 10% law). Pyramid of numbers, biomass, energy. Nigerian ecosystems: tropical rainforest (Cross River), savanna (Guinea, Sudan, Sahel), freshwater (Niger Delta), mangrove swamp."
         }
       ]
     }

@@ -3,119 +3,36 @@
   "class_level": "SS2",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Projectile Motion",
-    "Equilibrium of Forces",
     "Simple Harmonic Motion",
     "Gravitational Field",
-    "Electrostatics",
-    "Current Electricity",
+    "Electric Field",
+    "Capacitors",
+    "Electronics",
     "Atomic and Nuclear Physics"
   ],
   "jamb_high_priority_topics": [
-    "Motion",
-    "Equilibrium",
-    "Work, Energy and Power",
-    "Electrostatics",
-    "Electricity",
-    "Modern Physics"
+    "Simple Harmonic Motion",
+    "Electric Field",
+    "Capacitors",
+    "Atomic Physics",
+    "Nuclear Physics"
   ],
   "topics": [
     {
-      "id": "projectile_motion",
-      "title": "Projectile Motion",
+      "id": "shm",
+      "title": "Simple Harmonic Motion",
       "week": 1,
       "subtopics": [
         {
-          "id": "projectiles",
-          "title": "Projectiles and Trajectory",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
-          "concepts": [
-            "projectile",
-            "trajectory",
-            "horizontal projection",
-            "angle projection",
-            "time of flight",
-            "maximum height",
-            "range",
-            "components of velocity"
-          ],
-          "common_misconceptions": [
-            "Horizontal motion affects vertical motion",
-            "Acceleration is zero at maximum height"
-          ],
-          "teaching_note": "Emphasize independence of horizontal and vertical motions. Show that vertical acceleration is always g downward."
-        }
-      ]
-    },
-    {
-      "id": "equilibrium",
-      "title": "Equilibrium of Forces",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "moments",
-          "title": "Moments and Equilibrium",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "projectile_motion"
-          ],
-          "concepts": [
-            "moment of force",
-            "principle of moments",
-            "couple",
-            "torque",
-            "equilibrium conditions",
-            "center of gravity",
-            "stability"
-          ],
-          "common_misconceptions": [
-            "Equilibrium means no forces act",
-            "Center of gravity is always at the geometric center"
-          ],
-          "teaching_note": "Use meter rules and known weights to verify the principle of moments. Show how to locate center of gravity experimentally."
-        },
-        {
-          "id": "resolution_forces",
-          "title": "Resolution and Composition of Forces",
+          "id": "shm_concepts",
+          "title": "Concepts of Simple Harmonic Motion",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "moments"
+            "ss1_circular_motion"
           ],
           "concepts": [
-            "resolution of forces",
-            "components",
-            "resultant",
-            "parallelogram of forces",
-            "triangle of forces",
-            "Lami's theorem"
-          ],
-          "common_misconceptions": [
-            "The resultant is always larger than individual forces",
-            "Lami's theorem applies to any three forces"
-          ],
-          "teaching_note": "Use force boards for experimental verification. Show that resultant can be smaller than components."
-        }
-      ]
-    },
-    {
-      "id": "shm",
-      "title": "Simple Harmonic Motion",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "shm_concepts",
-          "title": "Characteristics of SHM",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "equilibrium"
-          ],
-          "concepts": [
-            "SHM definition",
+            "SHM",
             "amplitude",
             "period",
             "frequency",
@@ -123,174 +40,81 @@
             "velocity",
             "acceleration",
             "restoring force",
-            "equation of SHM"
-          ],
-          "common_misconceptions": [
-            "SHM means motion that repeats",
-            "Acceleration is constant in SHM"
-          ],
-          "teaching_note": "Use simple pendulum and mass-spring systems. Show that acceleration is proportional to displacement and directed toward equilibrium."
-        },
-        {
-          "id": "shm_applications",
-          "title": "Applications of SHM",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "shm_concepts"
-          ],
-          "concepts": [
             "simple pendulum",
-            "spiral spring",
-            "T = 2π√(L/g)",
-            "T = 2π√(m/k)",
-            "seconds pendulum",
-            "energy in SHM"
+            "loaded spring"
           ],
           "common_misconceptions": [
-            "Period of pendulum depends on mass",
-            "Amplitude affects the period significantly"
+            "SHM means the motion is simple (it means sinusoidal)",
+            "Acceleration is constant in SHM (it varies with displacement)",
+            "All oscillatory motion is SHM (only if restoring force \u221d displacement)"
           ],
-          "teaching_note": "Derive period formulas. Show experimentally that period is independent of amplitude (for small angles) and mass for pendulum."
+          "teaching_note": "Key equations: a = -\u03c9\u00b2x (acceleration proportional to displacement, opposite direction). v = \u00b1\u03c9\u221a(A\u00b2-x\u00b2). Period of simple pendulum: T = 2\u03c0\u221a(L/g). Period of loaded spring: T = 2\u03c0\u221a(m/k). \u03c9 = 2\u03c0f = 2\u03c0/T. Maximum velocity: v_max = A\u03c9 (at equilibrium). Maximum acceleration: a_max = A\u03c9\u00b2 (at extremes). Energy in SHM: KE = \u00bdm\u03c9\u00b2(A\u00b2-x\u00b2), PE = \u00bdm\u03c9\u00b2x\u00b2, Total = \u00bdm\u03c9\u00b2A\u00b2 (constant)."
         }
       ]
     },
     {
-      "id": "gravitational_field",
-      "title": "Gravitational Field",
-      "week": 4,
+      "id": "electric_field",
+      "title": "Electric Field",
+      "week": 2,
       "subtopics": [
         {
-          "id": "gravitation",
-          "title": "Newton's Law of Gravitation",
+          "id": "electric_field_strength",
+          "title": "Electric Field and Potential",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "shm"
+            "ss1_electrostatics"
           ],
           "concepts": [
-            "Newton's law of gravitation",
-            "gravitational constant",
-            "gravitational field strength",
-            "acceleration due to gravity",
-            "mass and weight",
-            "Kepler's laws"
+            "electric field intensity",
+            "electric potential",
+            "potential difference",
+            "equipotential surface",
+            "electric field lines",
+            "uniform field",
+            "parallel plates",
+            "electron volt"
           ],
           "common_misconceptions": [
-            "Gravity is the same everywhere on Earth",
-            "Mass and weight are the same"
+            "Electric field is a scalar (it's a vector)",
+            "Electric potential is the same as potential energy",
+            "Field lines can cross"
           ],
-          "teaching_note": "Distinguish mass (constant) from weight (varies with location). Use Cavendish experiment as historical context."
+          "teaching_note": "Key equations: E = F/q = kQ/r\u00b2 (field intensity, N/C or V/m). V = kQ/r (potential, scalar, V). For parallel plates: E = V/d (uniform). Force on charge: F = qE. Work done: W = qV. Potential difference: V_AB = V_A - V_B. Electron volt: 1 eV = 1.6\u00d710\u207b\u00b9\u2079 J (energy gained by electron accelerated through 1V). Field lines: start from positive, end on negative, never cross, denser where field is stronger."
         }
       ]
     },
     {
-      "id": "electrostatics",
-      "title": "Electrostatics",
-      "week": 5,
+      "id": "capacitors",
+      "title": "Capacitors",
+      "week": 3,
       "subtopics": [
         {
-          "id": "electric_fields",
-          "title": "Electric Fields and Charge",
-          "waec_frequency": "very_high",
+          "id": "capacitor_theory",
+          "title": "Capacitors and Capacitance",
+          "waec_frequency": "high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "gravitational_field"
-          ],
-          "concepts": [
-            "electric charge",
-            "Coulomb's law",
-            "electric field",
-            "electric field strength",
-            "electric field lines",
-            "potential",
-            "equipotential surfaces"
-          ],
-          "common_misconceptions": [
-            "Positive charges have more charge than negative",
-            "Electric field and electric force are the same"
-          ],
-          "teaching_note": "Compare Coulomb's law with Newton's law of gravitation. Use field line patterns for different charge configurations."
-        },
-        {
-          "id": "capacitors",
-          "title": "Capacitors",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "electric_fields"
+            "electric_field"
           ],
           "concepts": [
             "capacitor",
             "capacitance",
             "parallel plate capacitor",
-            "energy stored",
+            "dielectric",
+            "energy storage",
+            "series combination",
+            "parallel combination",
             "charging",
             "discharging",
-            "dielectric",
-            "series combination",
-            "parallel combination"
+            "time constant"
           ],
           "common_misconceptions": [
-            "Capacitors store electric charge like a battery stores energy",
-            "Capacitance is the same as charge"
+            "Capacitance depends on charge and voltage (NO, C = Q/V is definition, C depends on geometry)",
+            "Capacitors store charge (they store energy in electric field)",
+            "Series: C_total = C\u2081 + C\u2082 (NO, that's parallel)"
           ],
-          "teaching_note": "Explain that capacitors store energy in electric fields. Derive energy formula. Show combination formulas."
-        }
-      ]
-    },
-    {
-      "id": "atomic_nuclear",
-      "title": "Atomic and Nuclear Physics",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "atomic_models",
-          "title": "Atomic Models and Structure",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "electrostatics"
-          ],
-          "concepts": [
-            "Thomson model",
-            "Rutherford model",
-            "Bohr model",
-            "energy levels",
-            "electron orbits",
-            "atomic spectra",
-            "ionization energy"
-          ],
-          "common_misconceptions": [
-            "Electrons orbit like planets in exact paths",
-            "Rutherford's model was the final model"
-          ],
-          "teaching_note": "Show how each model addressed limitations of the previous. Use spectral lines as evidence for energy levels."
-        },
-        {
-          "id": "nuclear_physics",
-          "title": "Nuclear Physics and Radioactivity",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "atomic_models"
-          ],
-          "concepts": [
-            "radioactivity",
-            "alpha decay",
-            "beta decay",
-            "gamma decay",
-            "half-life",
-            "nuclear fission",
-            "nuclear fusion",
-            "binding energy",
-            "mass defect"
-          ],
-          "common_misconceptions": [
-            "All radiation is harmful at any dose",
-            "Nuclear fission and fusion are the same process"
-          ],
-          "teaching_note": "Discuss applications in medicine and energy. Explain safety measures. Use half-life calculations extensively."
+          "teaching_note": "Key equations: C = Q/V (definition, unit: farad, F). Parallel plate: C = \u03b5A/d where \u03b5 = \u03b5\u2080\u03b5\u1d63. \u03b5\u2080 = 8.85\u00d710\u207b\u00b9\u00b2 F/m. Energy stored: E = \u00bdQV = \u00bdCV\u00b2 = \u00bdQ\u00b2/C. Series: 1/C = 1/C\u2081 + 1/C\u2082. Parallel: C = C\u2081 + C\u2082. Time constant: \u03c4 = RC (charging/discharging). Charging: q = Q(1-e^(-t/RC)). Discharging: q = Qe^(-t/RC). Applications: camera flash, smoothing circuits, tuning circuits, energy storage."
         }
       ]
     }

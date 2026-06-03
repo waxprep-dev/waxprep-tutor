@@ -3,137 +3,109 @@
   "class_level": "SS1",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Introduction to Commerce",
-    "Occupation and Production",
+    "Scope of Commerce",
     "Trade",
     "Aids to Trade",
     "Business Units",
-    "Finance and Financial Institutions",
-    "Advertising and Communication"
+    "Advertising",
+    "Transportation"
   ],
   "jamb_high_priority_topics": [
-    "Commerce",
+    "Commerce and Industry",
     "Trade",
-    "Aids to Trade",
-    "Business Units",
-    "Finance"
+    "Aids to Trade"
   ],
   "topics": [
     {
-      "id": "introduction_commerce",
-      "title": "Introduction to Commerce",
+      "id": "scope_commerce",
+      "title": "Scope of Commerce",
       "week": 1,
       "subtopics": [
         {
-          "id": "scope_commerce",
-          "title": "Scope and Importance of Commerce",
+          "id": "definition_commerce",
+          "title": "Definition and Importance of Commerce",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [],
           "concepts": [
-            "commerce definition",
+            "commerce",
             "trade",
             "aids to trade",
+            "industry",
             "production",
             "distribution",
             "exchange",
-            "importance of commerce",
-            "commerce and industry"
+            "importance of commerce"
           ],
           "common_misconceptions": [
-            "Commerce is only buying and selling",
-            "Commerce and business mean the same thing"
+            "Commerce is the same as business",
+            "Commerce only involves buying and selling",
+            "Industry and commerce are separate unrelated activities"
           ],
-          "teaching_note": "Show how commerce links producers to consumers. Use flow charts to illustrate the distribution channel."
+          "teaching_note": "Commerce = all activities that facilitate the distribution and exchange of goods and services. Scope: home trade (retail, wholesale), foreign trade (import, export), aids to trade (banking, insurance, transport, warehousing, advertising, communication). Industry creates form utility; commerce creates place, time, and possession utility."
         },
         {
-          "id": "occupations",
-          "title": "Occupations and Career Opportunities in Commerce",
-          "waec_frequency": "medium",
+          "id": "divisions_commerce",
+          "title": "Divisions of Commerce",
+          "waec_frequency": "high",
           "jamb_frequency": "medium",
           "prerequisites": [
-            "scope_commerce"
+            "definition_commerce"
           ],
           "concepts": [
-            "commercial occupations",
-            "industrial occupations",
-            "service occupations",
-            "extractive occupations",
-            "manufacturing occupations",
-            "constructive occupations"
+            "trade",
+            "aids to trade",
+            "home trade",
+            "foreign trade",
+            "import trade",
+            "export trade",
+            "entreport trade"
           ],
           "common_misconceptions": [
-            "Commercial occupations are superior to others",
-            "All commerce careers require university degrees"
+            "Aids to trade are not part of commerce",
+            "Home trade only means trade within a house",
+            "All foreign trade is import trade"
           ],
-          "teaching_note": "Categorize various occupations. Discuss skills needed for different commerce-related careers."
-        }
-      ]
-    },
-    {
-      "id": "production",
-      "title": "Production",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "types_production",
-          "title": "Types and Factors of Production",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "direct production",
-            "indirect production",
-            "primary production",
-            "secondary production",
-            "tertiary production",
-            "factors of production",
-            "division of labour",
-            "specialization"
-          ],
-          "common_misconceptions": [
-            "Production only means manufacturing",
-            "Division of labour is only for factories"
-          ],
-          "teaching_note": "Use examples from Nigerian economy for each type. Discuss advantages and disadvantages of specialization."
+          "teaching_note": "Divisions: 1) Trade - buying and selling of goods (home trade: wholesale, retail; foreign trade: import, export). 2) Aids to trade - services that make trade possible (banking, insurance, transport, warehousing, advertising, communication/tourism). Nigerian context: NCS (Nigeria Customs Service) regulates foreign trade, NAFDAC regulates imports of food/drugs."
         }
       ]
     },
     {
       "id": "trade",
       "title": "Trade",
-      "week": 3,
+      "week": 2,
       "subtopics": [
         {
           "id": "home_trade",
           "title": "Home Trade",
-          "waec_frequency": "very_high",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "production"
+            "scope_commerce"
           ],
           "concepts": [
-            "retail trade",
             "wholesale trade",
-            "retailer",
-            "wholesaler",
-            "functions of retailer",
-            "functions of wholesaler",
-            "small-scale retailing",
-            "large-scale retailing",
-            "chain stores",
-            "departmental stores"
+            "retail trade",
+            "functions of wholesalers",
+            "functions of retailers",
+            "types of retailers",
+            "large-scale retailers",
+            "small-scale retailers",
+            "multiple shops",
+            "departmental stores",
+            "supermarkets"
           ],
           "common_misconceptions": [
-            "Retailers and wholesalers perform the same functions",
-            "Small-scale retailing is disappearing"
+            "Wholesalers only sell to retailers (they can sell to manufacturers too)",
+            "Retailers don't provide any valuable service",
+            "Chain stores and multiple shops are different"
           ],
-          "teaching_note": "Visit local markets to observe trade in action. Compare traditional and modern retailing."
+          "teaching_note": "Nigerian context: Alaba International Market (Lagos) - major wholesale electronics market. Onitsha Main Market - one of West Africa's largest markets. Modern retail: Shoprite, Spar, Market Square. Small-scale retailers dominate Nigerian trade: kiosks, roadside sellers, market traders. Functions of wholesalers: bulk buying, storage, financing retailers, breaking bulk, risk bearing."
         },
         {
           "id": "foreign_trade",
           "title": "Foreign Trade",
-          "waec_frequency": "very_high",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
             "home_trade"
@@ -141,116 +113,147 @@
           "concepts": [
             "import trade",
             "export trade",
-            "entrepot trade",
-            "visible exports",
-            "visible imports",
-            "invisible exports",
-            "invisible imports",
+            "entreport trade",
             "balance of trade",
             "balance of payments",
-            "tariffs",
-            "quotas",
-            "embargo"
+            "visible exports",
+            "invisible exports",
+            "favourable balance",
+            "unfavourable balance",
+            "tariffs"
           ],
           "common_misconceptions": [
-            "Export is always better than import",
-            "Balance of trade is the same as balance of payments"
+            "Balance of trade = balance of payments (BOT is only goods, BOP includes services and capital)",
+            "Favourable balance is always good (can indicate under-consumption)",
+            "Tariffs always reduce imports (they may not if demand is inelastic)"
           ],
-          "teaching_note": "Analyze Nigeria's trade patterns. Discuss government policies affecting foreign trade."
+          "teaching_note": "Nigerian context: Major exports: crude oil, cocoa, cashew, sesame seeds, urea. Major imports: refined petroleum, vehicles, machinery, chemicals. BOT = exports - imports (goods only). BOP = BOT + invisible trade + capital transfers. Nigeria typically has BOT surplus (oil exports) but BOP issues due to capital flight. Trade protection: tariffs, quotas, embargoes, subsidies."
         }
       ]
     },
     {
       "id": "aids_trade",
       "title": "Aids to Trade",
-      "week": 4,
+      "week": 3,
       "subtopics": [
         {
-          "id": "aids_trade_overview",
-          "title": "Aids to Trade Overview",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "id": "transportation",
+          "title": "Transportation",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
           "prerequisites": [
             "trade"
           ],
           "concepts": [
-            "banking",
-            "insurance",
-            "transportation",
-            "warehousing",
-            "communication",
-            "advertising",
-            "tourism",
-            "facilitators of trade"
+            "transport",
+            "modes of transport",
+            "road",
+            "rail",
+            "water",
+            "air",
+            "pipeline",
+            "advantages",
+            "disadvantages",
+            "factors affecting choice of transport"
           ],
           "common_misconceptions": [
-            "Aids to trade are less important than trade itself",
-            "Each aid operates independently"
+            "The fastest transport is always the best",
+            "Water transport is only for coastal areas",
+            "Pipeline transport carries all types of goods"
           ],
-          "teaching_note": "Show how each aid supports trade activities. Use case studies to illustrate interconnectedness."
+          "teaching_note": "Nigerian context: Road transport dominates (90%+ of freight and passengers). Challenges: poor road conditions (Lagos-Ibadan expressway, Benin-Ore road). Rail: revitalization with Chinese loans (Abuja-Kaduna standard gauge). Air: MMA (Lagos), Nnamdi Azikiwe (Abuja), Port Harcourt. Water: Lagos ports (Apapa, Tin Can), Onne, Calabar. Pipeline: crude oil and petroleum products (vandalism is a major issue)."
+        },
+        {
+          "id": "banking_insurance",
+          "title": "Banking and Insurance",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "transportation"
+          ],
+          "concepts": [
+            "banking",
+            "types of banks",
+            "insurance",
+            "types of insurance",
+            "principles of insurance",
+            "uberrimae fidei",
+            "indemnity",
+            "insurable interest",
+            "contribution",
+            "subrogation"
+          ],
+          "common_misconceptions": [
+            "Insurance is gambling (it's risk transfer)",
+            "Life insurance is a contract of indemnity (NO - it's valued policy)",
+            "All risks are insurable"
+          ],
+          "teaching_note": "Principles of insurance: Uberrimae fidei (utmost good faith), insurable interest (must have financial stake), indemnity (compensate for loss, not profit), contribution (multiple insurers share claim), subrogation (insurer takes over insured's rights), proximate cause. Types: life assurance, marine, fire, motor, accident. Nigerian insurers: AIICO, Custodian, Leadway, LASACO. NAICOM regulates."
         }
       ]
     },
     {
       "id": "business_units",
       "title": "Business Units",
-      "week": 5,
+      "week": 4,
       "subtopics": [
         {
-          "id": "forms_business_commerce",
-          "title": "Forms of Business Organizations",
-          "waec_frequency": "very_high",
+          "id": "forms_business_ownership",
+          "title": "Forms of Business Ownership",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
-          "prerequisites": [],
+          "prerequisites": [
+            "aids_trade"
+          ],
           "concepts": [
-            "sole proprietorship",
+            "sole trader",
             "partnership",
-            "limited liability company",
-            "cooperative society",
+            "private limited company",
+            "public limited company",
+            "cooperative",
             "public corporation",
-            "private company",
-            "public company",
-            "shares",
-            "debentures"
+            "advantages",
+            "disadvantages",
+            "formation"
           ],
           "common_misconceptions": [
-            "Private company cannot sell shares",
-            "Cooperatives are only for farmers"
+            "Private company cannot be listed on stock exchange (correct, but some are confused)",
+            "All companies must have PLC or Ltd in their name",
+            "Cooperatives are government-owned"
           ],
-          "teaching_note": "Compare advantages and disadvantages. Use Nigerian examples. Explain the formation process for each type."
+          "teaching_note": "Nigerian context: Registration at CAC. Most Nigerian businesses are sole traders (market traders, artisans). Partnerships common among professionals (lawyers, accountants). Major PLCs: Dangote Cement, MTN Nigeria, Guaranty Trust Bank, Zenith Bank. Public corporations: NNPC, NPA, NTA, FAAN. Privatization: started with SAP (1986), continued with Bureau of Public Enterprises. Dangote Group started as trading firm, now Africa's largest cement producer."
         }
       ]
     },
     {
-      "id": "finance",
-      "title": "Finance and Financial Institutions",
-      "week": 6,
+      "id": "advertising",
+      "title": "Advertising and Communication",
+      "week": 5,
       "subtopics": [
         {
-          "id": "sources_finance",
-          "title": "Sources of Business Finance",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
+          "id": "advertising_concepts",
+          "title": "Advertising",
+          "waec_frequency": "medium",
+          "jamb_frequency": "medium",
           "prerequisites": [
             "business_units"
           ],
           "concepts": [
-            "personal savings",
-            "bank loans",
-            "overdraft",
-            "trade credit",
-            "hire purchase",
-            "leasing",
-            "mortgage",
-            "shares",
-            "debentures",
-            "government grants"
+            "advertising",
+            "types of advertising",
+            "informative advertising",
+            "persuasive advertising",
+            "media",
+            "advantages",
+            "disadvantages",
+            " Advertising Practitioners Council of Nigeria"
           ],
           "common_misconceptions": [
-            "Bank loans are the only source of finance",
-            "Equity financing is always better than debt"
+            "Advertising and personal selling are the same",
+            "All advertising is deceptive",
+            "Advertising only benefits manufacturers"
           ],
-          "teaching_note": "Discuss short-term vs long-term financing. Explain the cost implications of each source."
+          "teaching_note": "Advertising = paid, non-personal communication to promote ideas, goods, or services. Types: informative (new product info), persuasive (brand switching), reminder (keep brand in mind). Media: TV (NTA, Channels, AIT), radio, newspapers (Punch, Vanguard, Guardian), billboards, social media, cinema. APCON regulates advertising in Nigeria. APCON was established by Act 55 of 1988."
         }
       ]
     }

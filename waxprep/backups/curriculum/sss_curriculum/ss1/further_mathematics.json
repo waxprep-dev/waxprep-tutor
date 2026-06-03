@@ -3,47 +3,74 @@
   "class_level": "SS1",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Binomial Theorem",
-    "Matrices and Determinants",
     "Complex Numbers",
-    "Mathematical Induction",
-    "Conic Sections",
-    "Differentiation",
-    "Integration"
+    "Matrices and Determinants",
+    "Vectors",
+    "Mechanics",
+    "Statistics",
+    "Conic Sections"
   ],
   "jamb_high_priority_topics": [
-    "Matrices",
     "Complex Numbers",
-    "Differentiation",
-    "Integration",
-    "Binomial Theorem"
+    "Matrices",
+    "Vectors",
+    "Conic Sections",
+    "Calculus"
   ],
   "topics": [
     {
-      "id": "binomial_theorem",
-      "title": "Binomial Theorem",
+      "id": "complex_numbers",
+      "title": "Complex Numbers",
       "week": 1,
       "subtopics": [
         {
-          "id": "binomial_expansion",
-          "title": "Binomial Expansion",
-          "waec_frequency": "very_high",
+          "id": "complex_basics",
+          "title": "Introduction to Complex Numbers",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
-          "prerequisites": [],
+          "prerequisites": [
+            "quadratic_equations"
+          ],
           "concepts": [
-            "binomial theorem",
-            "Pascal's triangle",
-            "binomial coefficients",
-            "nCr",
-            "factorial notation",
-            "general term",
-            "expansion of (a+b)^n"
+            "imaginary unit",
+            "i = \u221a(-1)",
+            "complex number",
+            "real part",
+            "imaginary part",
+            "complex conjugate",
+            "modulus",
+            "argument",
+            "Argand diagram"
           ],
           "common_misconceptions": [
-            "Binomial theorem only works for positive integers",
-            "Pascal's triangle is the only way to find coefficients"
+            "i = 1 (NO, i\u00b2 = -1)",
+            "Complex numbers are just imaginary",
+            "The conjugate of a+bi is -a-bi (NO, it's a-bi)"
           ],
-          "teaching_note": "Connect Pascal's triangle to combinations formula. Show applications in approximation and probability."
+          "teaching_note": "Definition: i = \u221a(-1), so i\u00b2 = -1. Complex number: z = a + bi where a = Re(z), b = Im(z). Conjugate: z\u0304 = a - bi. Modulus: |z| = \u221a(a\u00b2 + b\u00b2). Argument: \u03b8 = tan\u207b\u00b9(b/a). Argand diagram: complex plane with real axis (x) and imaginary axis (y). z = a + bi = r(cos \u03b8 + i sin \u03b8) = re^(i\u03b8) where r = |z|."
+        },
+        {
+          "id": "complex_operations",
+          "title": "Operations with Complex Numbers",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "complex_basics"
+          ],
+          "concepts": [
+            "addition",
+            "subtraction",
+            "multiplication",
+            "division",
+            "polar form",
+            "De Moivre's theorem"
+          ],
+          "common_misconceptions": [
+            "|z\u2081 + z\u2082| = |z\u2081| + |z\u2082| (NO, triangle inequality)",
+            "(a+bi)(a-bi) = a\u00b2 + b\u00b2 (it's a\u00b2 + b\u00b2, but without i)",
+            "Division is done by dividing real and imaginary parts separately"
+          ],
+          "teaching_note": "Addition: (a+bi) + (c+di) = (a+c) + (b+d)i. Multiplication: FOIL, remember i\u00b2 = -1. Division: multiply numerator and denominator by conjugate of denominator. De Moivre's theorem: [r(cos \u03b8 + i sin \u03b8)]\u207f = r\u207f(cos n\u03b8 + i sin n\u03b8). Roots: z^(1/n) = r^(1/n)[cos((\u03b8+2\u03c0k)/n) + i sin((\u03b8+2\u03c0k)/n)] for k = 0, 1, ..., n-1."
         }
       ]
     },
@@ -53,293 +80,127 @@
       "week": 2,
       "subtopics": [
         {
-          "id": "matrix_operations",
+          "id": "matrix_basics",
           "title": "Matrix Operations",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "complex_numbers"
+          ],
           "concepts": [
             "matrix",
-            "order of matrix",
+            "order",
+            "row",
+            "column",
+            "square matrix",
+            "diagonal matrix",
+            "identity matrix",
+            "zero matrix",
+            "transpose",
             "addition",
             "subtraction",
             "scalar multiplication",
-            "matrix multiplication",
-            "identity matrix",
-            "zero matrix",
-            "transpose"
+            "matrix multiplication"
           ],
           "common_misconceptions": [
-            "Matrix multiplication is commutative",
-            "Any two matrices can be multiplied"
+            "Matrix multiplication is commutative (NO, AB \u2260 BA generally)",
+            "All matrices can be multiplied (orders must match: m\u00d7n \u00d7 n\u00d7p)",
+            "A zero matrix has no purpose"
           ],
-          "teaching_note": "Emphasize that matrix multiplication is not commutative. Practice with real-world examples like transition matrices."
+          "teaching_note": "Matrix multiplication: for AB, A must have same number of columns as B has rows. (m\u00d7n) \u00d7 (n\u00d7p) = (m\u00d7p). Element (i,j) of AB = row i of A \u00b7 column j of B (dot product). Identity matrix I: AI = IA = A. Transpose: A^T swaps rows and columns. Properties: (AB)^T = B^T A^T, (A+B)^T = A^T + B^T."
         },
         {
           "id": "determinants_inverse",
           "title": "Determinants and Inverse Matrices",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
           "prerequisites": [
-            "matrix_operations"
+            "matrix_basics"
           ],
           "concepts": [
             "determinant",
-            "2x2 determinant",
-            "3x3 determinant",
-            "inverse matrix",
             "singular matrix",
             "non-singular matrix",
-            "adjoint",
+            "inverse matrix",
             "cofactor",
-            "minor"
+            "minor",
+            "adjoint",
+            "Cramer's rule"
           ],
           "common_misconceptions": [
-            "A matrix always has an inverse",
-            "Determinant is the same as the matrix"
+            "det(A+B) = det(A) + det(B) (NO)",
+            "If det(A) = 0, A = 0 (NO, matrix is singular but not zero)",
+            "All matrices have inverses (only non-singular square matrices)"
           ],
-          "teaching_note": "Show that only square matrices with non-zero determinants have inverses. Connect to solving simultaneous equations."
+          "teaching_note": "2\u00d72 determinant: |a b| = ad - bc. |c d|. 3\u00d73: expansion by cofactors. Inverse: A\u207b\u00b9 = (1/det(A)) \u00d7 adj(A). A\u207b\u00b9 exists iff det(A) \u2260 0. Properties: det(AB) = det(A)det(B), det(A^T) = det(A), det(kA) = k\u207f det(A) for n\u00d7n matrix. Cramer's rule for solving linear systems: x = det(A\u2093)/det(A), y = det(A\u1d67)/det(A)."
         }
       ]
     },
     {
-      "id": "complex_numbers",
-      "title": "Complex Numbers",
+      "id": "vectors",
+      "title": "Vectors",
       "week": 3,
       "subtopics": [
         {
-          "id": "complex_operations",
-          "title": "Operations with Complex Numbers",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "id": "vector_operations",
+          "title": "Vector Algebra",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
           "prerequisites": [
             "matrices"
           ],
           "concepts": [
-            "imaginary unit",
-            "real part",
-            "imaginary part",
-            "complex conjugate",
-            "modulus",
-            "argument",
-            "Argand diagram",
-            "polar form"
+            "vector",
+            "scalar",
+            "magnitude",
+            "direction",
+            "unit vector",
+            "position vector",
+            "dot product",
+            "cross product",
+            "vector equation of line"
           ],
           "common_misconceptions": [
-            "i is a variable like x",
-            "Complex numbers are not real so they have no use"
+            "a \u00b7 b = a \u00d7 b (NO, dot product is scalar, cross product is vector)",
+            "|a + b| = |a| + |b| (NO, triangle inequality)",
+            "Two vectors are equal if they have same magnitude (need same direction too)"
           ],
-          "teaching_note": "Define i = √-1. Use Argand diagrams to visualize complex numbers. Show applications in engineering and physics."
-        },
-        {
-          "id": "complex_applications",
-          "title": "Applications of Complex Numbers",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "complex_operations"
-          ],
-          "concepts": [
-            "De Moivre's theorem",
-            "roots of unity",
-            "complex equations",
-            "loci in Argand diagram",
-            "Euler's formula"
-          ],
-          "common_misconceptions": [
-            "De Moivre's theorem only works for integer powers",
-            "Complex roots always come in pairs"
-          ],
-          "teaching_note": "Demonstrate De Moivre's theorem for finding powers and roots. Connect to trigonometric identities."
-        }
-      ]
-    },
-    {
-      "id": "mathematical_induction",
-      "title": "Mathematical Induction",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "principle_induction",
-          "title": "Principle of Mathematical Induction",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [],
-          "concepts": [
-            "mathematical induction",
-            "base case",
-            "inductive step",
-            "inductive hypothesis",
-            "proof by induction",
-            "summation formulae"
-          ],
-          "common_misconceptions": [
-            "Checking a few examples is sufficient proof",
-            "The base case is always n=1"
-          ],
-          "teaching_note": "Emphasize both steps are necessary. Use domino analogy. Practice with summation and divisibility proofs."
+          "teaching_note": "Vector: a = (a\u2081, a\u2082, a\u2083) = a\u2081i + a\u2082j + a\u2083k. Magnitude: |a| = \u221a(a\u2081\u00b2 + a\u2082\u00b2 + a\u2083\u00b2). Unit vector: \u00e2 = a/|a|. Dot product: a \u00b7 b = |a||b|cos \u03b8 = a\u2081b\u2081 + a\u2082b\u2082 + a\u2083b\u2083. Cross product: a \u00d7 b = (a\u2082b\u2083-a\u2083b\u2082, a\u2083b\u2081-a\u2081b\u2083, a\u2081b\u2082-a\u2082b\u2081). |a \u00d7 b| = |a||b|sin \u03b8 = area of parallelogram. Perpendicular: a \u00b7 b = 0. Parallel: a \u00d7 b = 0."
         }
       ]
     },
     {
       "id": "conic_sections",
       "title": "Conic Sections",
-      "week": 5,
+      "week": 4,
       "subtopics": [
         {
-          "id": "parabola_ellipse",
-          "title": "Parabola and Ellipse",
+          "id": "parabola_ellipse_hyperbola",
+          "title": "Parabola, Ellipse and Hyperbola",
           "waec_frequency": "high",
-          "jamb_frequency": "medium",
+          "jamb_frequency": "high",
           "prerequisites": [
-            "complex_numbers"
+            "vectors"
           ],
           "concepts": [
             "conic sections",
             "parabola",
+            "ellipse",
+            "hyperbola",
             "focus",
             "directrix",
-            "vertex",
-            "ellipse",
-            "major axis",
-            "minor axis",
-            "foci",
-            "eccentricity"
+            "eccentricity",
+            "latus rectum",
+            "parametric equations",
+            "tangents",
+            "normals"
           ],
           "common_misconceptions": [
-            "Parabola only opens upward",
-            "Ellipse and circle are completely different"
+            "All conics are circles (circle is special case of ellipse)",
+            "e > 1 for ellipse (NO, e < 1 for ellipse)",
+            "Parabola has two foci (NO, one focus and one directrix)"
           ],
-          "teaching_note": "Show conic sections as slices of a cone. Derive standard equations from geometric definitions."
-        },
-        {
-          "id": "hyperbola",
-          "title": "Hyperbola",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "parabola_ellipse"
-          ],
-          "concepts": [
-            "hyperbola",
-            "transverse axis",
-            "conjugate axis",
-            "asymptotes",
-            "rectangular hyperbola",
-            "parametric equations"
-          ],
-          "common_misconceptions": [
-            "Hyperbola is two separate curves",
-            "Asymptotes are lines the curve never approaches"
-          ],
-          "teaching_note": "Explain asymptotes clearly. Connect to real-world applications like navigation (LORAN) and astronomy."
-        }
-      ]
-    },
-    {
-      "id": "differentiation",
-      "title": "Differentiation",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "limits_functions",
-          "title": "Limits and Continuity",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "limit",
-            "continuity",
-            "discontinuity",
-            "limit laws",
-            "one-sided limits",
-            "infinite limits",
-            "asymptotes"
-          ],
-          "common_misconceptions": [
-            "Limit is the same as function value",
-            "A function cannot have a limit at a discontinuity"
-          ],
-          "teaching_note": "Use graphical and numerical approaches to understand limits. Distinguish between limit and function value."
-        },
-        {
-          "id": "differentiation_rules",
-          "title": "Differentiation Rules and Applications",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "limits_functions"
-          ],
-          "concepts": [
-            "derivative",
-            "power rule",
-            "product rule",
-            "quotient rule",
-            "chain rule",
-            "implicit differentiation",
-            "parametric differentiation",
-            "tangent",
-            "normal",
-            "rate of change",
-            "maximum",
-            "minimum"
-          ],
-          "common_misconceptions": [
-            "Derivative is the same as the gradient of a line",
-            "The product rule is d(uv)/dx = du/dx × dv/dx"
-          ],
-          "teaching_note": "Practice each rule with varied examples. Connect derivatives to real-world rates of change. Use second derivative for curve sketching."
-        }
-      ]
-    },
-    {
-      "id": "integration",
-      "title": "Integration",
-      "week": 7,
-      "subtopics": [
-        {
-          "id": "indefinite_integration",
-          "title": "Indefinite Integration",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "differentiation"
-          ],
-          "concepts": [
-            "integral",
-            "antiderivative",
-            "constant of integration",
-            "power rule for integration",
-            "integration by substitution",
-            "integration by parts"
-          ],
-          "common_misconceptions": [
-            "Integration is just the reverse of differentiation without the constant",
-            "Integration by parts always works"
-          ],
-          "teaching_note": "Emphasize the constant of integration. Teach the LIATE rule for choosing u and dv in integration by parts."
-        },
-        {
-          "id": "definite_integration",
-          "title": "Definite Integration and Applications",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "indefinite_integration"
-          ],
-          "concepts": [
-            "definite integral",
-            "fundamental theorem of calculus",
-            "area under curve",
-            "area between curves",
-            "volume of revolution",
-            "numerical integration"
-          ],
-          "common_misconceptions": [
-            "Definite integral always gives area",
-            "Area below x-axis is positive"
-          ],
-          "teaching_note": "Show that definite integrals can be negative. Emphasize taking absolute value for area calculations."
+          "teaching_note": "General conic: ax\u00b2 + 2hxy + by\u00b2 + 2gx + 2fy + c = 0. Eccentricity e: parabola e=1, ellipse e<1, hyperbola e>1, circle e=0. Parabola: y\u00b2 = 4ax, focus (a,0), directrix x = -a. Ellipse: x\u00b2/a\u00b2 + y\u00b2/b\u00b2 = 1, foci (\u00b1ae, 0), directrices x = \u00b1a/e. Hyperbola: x\u00b2/a\u00b2 - y\u00b2/b\u00b2 = 1, asymptotes y = \u00b1(b/a)x. Latus rectum: chord through focus perpendicular to axis. Circle: x\u00b2 + y\u00b2 = r\u00b2."
         }
       ]
     }

@@ -1,0 +1,84 @@
+{
+  "subject": "fine_arts",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Introduction to Art",
+    "Elements of Art",
+    "Principles of Design",
+    "Drawing and Painting",
+    "African Art",
+    "Art Appreciation"
+  ],
+  "jamb_high_priority_topics": [
+    "Elements of Art",
+    "Principles of Design"
+  ],
+  "topics": [
+    {
+      "id": "intro_art",
+      "title": "Introduction to Art",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "meaning_art",
+          "title": "Definition and Branches of Art",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "art",
+            "visual arts",
+            "performing arts",
+            "liberal arts",
+            "fine arts",
+            "applied arts",
+            "creative arts",
+            "aesthetics"
+          ],
+          "common_misconceptions": [
+            "Art is only about drawing",
+            "Artists cannot make good living",
+            "Art has no practical value"
+          ],
+          "teaching_note": "Art = creative expression of human imagination and skill. Branches: Visual arts (drawing, painting, sculpture, printmaking, photography), Performing arts (music, dance, drama), Liberal arts (literature, philosophy, history). Functions of art: communication, expression, decoration, preservation of culture, education, economic (tourism, export). Nigerian art: Nok terracotta (500 BCE - 200 CE), Ife bronze heads, Benin bronzes, Igbo Ukwu bronzes, contemporary artists (Ben Enwonwu, Nike Davies-Okundaye, El Anatsui)."
+        }
+      ]
+    },
+    {
+      "id": "elements_art",
+      "title": "Elements of Art",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "elements",
+          "title": "The Elements of Art",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "intro_art"
+          ],
+          "concepts": [
+            "line",
+            "shape",
+            "form",
+            "colour",
+            "value",
+            "texture",
+            "space",
+            "primary colours",
+            "secondary colours",
+            "warm colours",
+            "cool colours"
+          ],
+          "common_misconceptions": [
+            "Form and shape are the same (shape is 2D, form is 3D)",
+            "There are only three primary colours (for light: RGB; for pigment: RYB)",
+            "Texture can only be felt (can be implied visually)"
+          ],
+          "teaching_note": "Line: mark with length and direction. Types: horizontal, vertical, diagonal, curved, zigzag. Shape: 2D enclosed area (geometric, organic). Form: 3D object (cube, sphere, cylinder). Colour: hue, value (tint/shade), intensity. Colour wheel: primary (red, yellow, blue), secondary (orange, green, purple), tertiary. Warm colours: red, orange, yellow (advance). Cool colours: blue, green, purple (recede). Value: lightness/darkness. Texture: actual (tactile) or implied (visual). Space: positive (filled) and negative (empty)."
+        }
+      ]
+    }
+  ]
+}

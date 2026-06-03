@@ -3,199 +3,23 @@
   "class_level": "SS2",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Demand and Supply",
-    "Elasticity",
-    "Theory of Consumer Behaviour",
-    "Theory of Production",
-    "Cost and Revenue Analysis",
-    "Market Structures",
-    "National Income"
+    "National Income",
+    "Money and Inflation",
+    "Financial Institutions",
+    "International Trade",
+    "Economic Development",
+    "Population"
   ],
   "jamb_high_priority_topics": [
-    "Demand and Supply",
-    "Elasticity",
-    "Market Structure",
     "National Income",
-    "Money and Banking"
+    "Money and Inflation",
+    "International Trade"
   ],
   "topics": [
     {
-      "id": "demand_supply",
-      "title": "Demand and Supply",
-      "week": 1,
-      "subtopics": [
-        {
-          "id": "law_demand",
-          "title": "Law of Demand",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
-          "concepts": [
-            "demand",
-            "law of demand",
-            "demand schedule",
-            "demand curve",
-            "individual demand",
-            "market demand",
-            "determinants of demand",
-            "change in demand",
-            "change in quantity demanded"
-          ],
-          "common_misconceptions": [
-            "Demand and quantity demanded are the same",
-            "Demand always decreases when price rises"
-          ],
-          "teaching_note": "Distinguish between movement along and shift of the demand curve. Use Giffen goods and Veblen goods as exceptions."
-        },
-        {
-          "id": "law_supply",
-          "title": "Law of Supply",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "law_demand"
-          ],
-          "concepts": [
-            "supply",
-            "law of supply",
-            "supply schedule",
-            "supply curve",
-            "determinants of supply",
-            "change in supply",
-            "change in quantity supplied",
-            "equilibrium"
-          ],
-          "common_misconceptions": [
-            "Supply and quantity supplied are the same",
-            "Supply curve always slopes upward"
-          ],
-          "teaching_note": "Show market equilibrium using supply and demand curves. Discuss price determination in different markets."
-        }
-      ]
-    },
-    {
-      "id": "elasticity",
-      "title": "Elasticity",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "price_elasticity",
-          "title": "Price Elasticity of Demand and Supply",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "demand_supply"
-          ],
-          "concepts": [
-            "elasticity",
-            "price elasticity of demand",
-            "inelastic",
-            "elastic",
-            "unitary elastic",
-            "perfectly elastic",
-            "perfectly inelastic",
-            "PED formula",
-            "factors affecting elasticity"
-          ],
-          "common_misconceptions": [
-            "Slope of demand curve equals elasticity",
-            "Elasticity is the same at all points on a linear curve"
-          ],
-          "teaching_note": "Use the point elasticity formula. Explain factors: substitutes, necessity vs luxury, proportion of income."
-        }
-      ]
-    },
-    {
-      "id": "consumer_behaviour",
-      "title": "Theory of Consumer Behaviour",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "utility_theory",
-          "title": "Utility Theory",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "elasticity"
-          ],
-          "concepts": [
-            "utility",
-            "total utility",
-            "marginal utility",
-            "law of diminishing marginal utility",
-            "consumer surplus",
-            "indifference curves",
-            "budget line",
-            "equilibrium"
-          ],
-          "common_misconceptions": [
-            "Utility can be measured objectively",
-            "Consumer surplus is actual money saved"
-          ],
-          "teaching_note": "Compare cardinal and ordinal approaches. Show how utility maximization determines consumer choice."
-        }
-      ]
-    },
-    {
-      "id": "production_costs",
-      "title": "Production and Costs",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "theory_production_ss2",
-          "title": "Theory of Production",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "consumer_behaviour"
-          ],
-          "concepts": [
-            "production function",
-            "total product",
-            "average product",
-            "marginal product",
-            "law of diminishing returns",
-            "stages of production",
-            "fixed input",
-            "variable input"
-          ],
-          "common_misconceptions": [
-            "Total product always declines when diminishing returns set in",
-            "Short run means a specific time period"
-          ],
-          "teaching_note": "Use numerical tables and graphs. Distinguish between short run and long run based on fixed vs variable inputs."
-        },
-        {
-          "id": "cost_analysis",
-          "title": "Cost and Revenue Analysis",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "theory_production_ss2"
-          ],
-          "concepts": [
-            "fixed cost",
-            "variable cost",
-            "total cost",
-            "average cost",
-            "marginal cost",
-            "total revenue",
-            "average revenue",
-            "marginal revenue",
-            "profit maximization"
-          ],
-          "common_misconceptions": [
-            "Fixed costs never change",
-            "Profit is maximized when total revenue is highest"
-          ],
-          "teaching_note": "Derive cost curves from production data. Show that MC = MR is the profit-maximizing condition."
-        }
-      ]
-    },
-    {
       "id": "national_income",
       "title": "National Income",
-      "week": 5,
+      "week": 1,
       "subtopics": [
         {
           "id": "measuring_national_income",
@@ -203,25 +27,96 @@
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "cost_analysis"
+            "ss1_economics"
           ],
           "concepts": [
             "GDP",
             "GNP",
             "NNP",
-            "NI",
-            "income method",
-            "expenditure method",
-            "output method",
-            "real GDP",
+            "national income",
+            "income approach",
+            "expenditure approach",
+            "output approach",
             "nominal GDP",
-            "per capita income"
+            "real GDP",
+            "per capita income",
+            "disposable income"
           ],
           "common_misconceptions": [
-            "GDP measures welfare",
-            "GNP and GDP are always different"
+            "GDP and GNP are the same (GNP = GDP + net property income from abroad)",
+            "Higher GDP always means better standard of living",
+            "National income can only be measured one way"
           ],
-          "teaching_note": "Explain the three approaches and why they should give the same result. Discuss limitations of GDP as a welfare measure."
+          "teaching_note": "GDP: total value of goods/services produced within a country in a year. GNP: GDP + net income from abroad. NNP: GNP - depreciation. Three approaches: Income (sum of all incomes), Expenditure (C+I+G+(X-M)), Output (sum of value added). Real GDP = (Nominal GDP/Price Index) \u00d7 100. Per capita income = National Income/Population. Nigerian context: GDP ~$390 billion (2024), largest in Africa. Dependent on oil (80%+ of export earnings). GDP rebasing in 2014 showed services (Nollywood, telecoms) larger than oil. Challenges: accurate measurement due to informal sector (estimated 60%+ of economy)."
+        }
+      ]
+    },
+    {
+      "id": "money_inflation",
+      "title": "Money and Inflation",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "inflation",
+          "title": "Inflation - Causes and Control",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "national_income"
+          ],
+          "concepts": [
+            "inflation",
+            "deflation",
+            "disinflation",
+            "stagflation",
+            "hyperinflation",
+            "CPI",
+            "demand-pull inflation",
+            "cost-push inflation",
+            "effects of inflation",
+            "control of inflation"
+          ],
+          "common_misconceptions": [
+            "All inflation is bad (mild inflation ~2% can encourage spending/investment)",
+            "Inflation only affects the poor (erodes savings for all)",
+            "Printing more money has no effect on inflation"
+          ],
+          "teaching_note": "Inflation: sustained increase in general price level. Measured by CPI (Consumer Price Index) or GDP deflator. Demand-pull: too much money chasing too few goods. Cost-push: rising production costs (wages, raw materials, oil prices). Effects: reduced purchasing power, menu costs, shoe-leather costs, redistribution (hurts fixed income earners, benefits debtors). Control: monetary policy (CBN raises interest rates, reduces money supply), fiscal policy (higher taxes, reduced spending), supply-side policies, price controls (subsidies). Nigerian context: Inflation ~25-30% (2024). Causes: food price increases, naira devaluation, fuel subsidy removal, insecurity affecting food production. CBN's monetary policy rate (MPR) adjustments."
+        }
+      ]
+    },
+    {
+      "id": "international_trade",
+      "title": "International Trade",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "trade_theories",
+          "title": "Theories and Terms of Trade",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "money_inflation"
+          ],
+          "concepts": [
+            "absolute advantage",
+            "comparative advantage",
+            "terms of trade",
+            "balance of trade",
+            "balance of payments",
+            "exchange rate",
+            "trade liberalization",
+            "protectionism",
+            "tariffs",
+            "quotas",
+            "embargoes"
+          ],
+          "common_misconceptions": [
+            "Absolute advantage means producing everything better (comparative advantage matters for trade)",
+            "Trade surplus is always good (can indicate under-consumption)",
+            "Free trade benefits everyone equally"
+          ],
+          "teaching_note": "Comparative advantage: countries should specialize in goods with lowest opportunity cost, then trade. Terms of trade: (Index of export prices/Index of import prices) \u00d7 100. TOT > 100: favorable. Balance of payments: current account + capital account + financial account. Exchange rate systems: fixed, floating, managed float. Nigerian context: Naira floats (managed). Persistent trade deficit in non-oil sector. Trade restrictions: tariffs (import duties), quotas (import bans on rice, poultry at times), import licensing. ECOWAS Trade Liberalization Scheme (ETLS). African Continental Free Trade Area (AfCFTA)."
         }
       ]
     }

@@ -3,169 +3,196 @@
   "class_level": "SS2",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Comprehension Skills",
+    "Advanced Comprehension",
     "Summary Writing",
-    "Essay Writing Techniques",
-    "Parts of Speech and Grammar",
-    "Lexis and Structure",
-    "Oral English and Phonetics",
-    "Register and Vocabulary"
+    "Argumentative Essay",
+    "Expository Essay",
+    "Formal Letter",
+    "Report Writing",
+    "Vocabulary Development",
+    "Advanced Grammar"
   ],
   "jamb_high_priority_topics": [
     "Comprehension",
     "Lexis and Structure",
-    "Oral Forms",
-    "Essay Writing"
+    "Oral English"
   ],
   "topics": [
     {
-      "id": "comprehension_skills",
-      "title": "Comprehension Skills",
+      "id": "advanced_comprehension",
+      "title": "Advanced Comprehension Skills",
       "week": 1,
       "subtopics": [
         {
-          "id": "reading_strategies",
-          "title": "Reading and Comprehension Strategies",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
-          "concepts": [
-            "skimming",
-            "scanning",
-            "intensive reading",
-            "context clues",
-            "inference",
-            "deduction",
-            "main idea",
-            "supporting details",
-            "tone",
-            "purpose"
-          ],
-          "common_misconceptions": [
-            "Reading slowly guarantees better comprehension",
-            "The answer is always directly stated"
-          ],
-          "teaching_note": "Practice with varied text types. Teach students to identify question types: literal, inferential, and evaluative."
-        }
-      ]
-    },
-    {
-      "id": "summary_writing_ss2",
-      "title": "Summary Writing",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "summary_techniques",
-          "title": "Summary Writing Techniques",
+          "id": "inference_deduction",
+          "title": "Inference, Deduction and Evaluation",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "reading_strategies"
+            "ss1_comprehension"
           ],
           "concepts": [
-            "summarization",
-            "relevant points",
-            "irrelevant details",
-            "paraphrasing",
-            "synthesis",
-            "conciseness",
-            "word limit",
-            "own words"
+            "inference",
+            "deduction",
+            "evaluation",
+            "critical reading",
+            "reading between lines",
+            "writer's tone",
+            "writer's purpose",
+            "fact vs opinion"
           ],
           "common_misconceptions": [
-            "Summary is just copying key sentences",
-            "More points always mean better marks"
+            "Inference is guessing (it's evidence-based conclusion)",
+            "The writer's opinion is always correct",
+            "Literal comprehension is sufficient for SS2"
           ],
-          "teaching_note": "Teach the process: read, identify, draft, check. Practice with passages of varying complexity."
+          "teaching_note": "Grammar rule: Inference = conclusion drawn from evidence in text + background knowledge. Deduction = logical conclusion that MUST be true given the evidence. Evaluation = judging the quality/validity of arguments. Tone indicators: sarcastic ('Oh great'), critical ('unfortunately'), approving ('remarkably'). Practice with editorials from Nigerian newspapers (The Guardian, Vanguard, Punch)."
         }
       ]
     },
     {
-      "id": "essay_techniques",
-      "title": "Essay Writing Techniques",
+      "id": "essay_writing_ss2",
+      "title": "Advanced Essay Writing",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "argumentative_essay",
+          "title": "Argumentative Essay",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "low",
+          "prerequisites": [
+            "ss1_essay_writing"
+          ],
+          "concepts": [
+            "argumentative essay",
+            "thesis statement",
+            "evidence",
+            "counter-argument",
+            "refutation",
+            "logical fallacies",
+            "persuasive techniques",
+            "conclusion"
+          ],
+          "common_misconceptions": [
+            "Argumentative essay means angry writing",
+            "Only one side should be presented",
+            "Emotional appeals are stronger than evidence"
+          ],
+          "teaching_note": "Structure: Introduction (hook + background + thesis statement) \u2192 Body paragraphs (point + evidence + explanation) \u2192 Counter-argument + refutation \u2192 Conclusion (restate thesis + call to action). Evidence types: statistics, expert testimony, examples, analogies. Nigerian topics: 'Education is better than money', 'Social media does more harm than good', 'Federal character principle promotes mediocrity'. Avoid fallacies: ad hominem, straw man, false dilemma."
+        },
+        {
+          "id": "expository_essay",
+          "title": "Expository Essay",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "low",
+          "prerequisites": [
+            "argumentative_essay"
+          ],
+          "concepts": [
+            "expository essay",
+            "cause and effect",
+            "compare and contrast",
+            "process analysis",
+            "definition",
+            "classification",
+            "examples"
+          ],
+          "common_misconceptions": [
+            "Expository essay includes personal opinions",
+            "Any organization pattern works",
+            "Expository means explaining only processes"
+          ],
+          "teaching_note": "Expository = explain, inform, describe. No personal opinion. Patterns: cause-effect (why something happened), compare-contrast (similarities/differences), process (how-to steps), definition (extended definition with examples). Thesis: clear statement of what will be explained. Body: topic sentences, transitions (furthermore, however, consequently). Nigerian topics: 'Causes of unemployment in Nigeria', 'How to prepare for WAEC', 'The effects of climate change on agriculture'."
+        }
+      ]
+    },
+    {
+      "id": "report_writing",
+      "title": "Report Writing",
       "week": 3,
       "subtopics": [
         {
-          "id": "essay_development",
-          "title": "Developing Different Essay Types",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
+          "id": "formal_report",
+          "title": "Formal Report Writing",
+          "waec_frequency": "high",
+          "jamb_frequency": "low",
+          "prerequisites": [
+            "ss2_essay_writing"
+          ],
           "concepts": [
-            "narrative essay",
-            "descriptive essay",
-            "argumentative essay",
-            "expository essay",
-            "formal letter",
-            "informal letter",
-            "speech",
-            "article"
+            "report",
+            "title page",
+            "terms of reference",
+            "procedure",
+            "findings",
+            "conclusion",
+            "recommendations",
+            "formal language",
+            "passive voice"
           ],
           "common_misconceptions": [
-            "One essay format fits all questions",
-            "Introduction should be the longest paragraph"
+            "A report is the same as an essay",
+            "First person is acceptable in formal reports (use passive voice instead)",
+            "Recommendations should be vague"
           ],
-          "teaching_note": "Analyze past WAEC/JAMB questions. Practice planning and writing under timed conditions."
+          "teaching_note": "Format: Title \u2192 Terms of Reference (who asked, what for) \u2192 Procedure (how information was gathered) \u2192 Findings (what was discovered, use headings/subheadings) \u2192 Conclusion (summary of findings) \u2192 Recommendations (specific, actionable suggestions). Use passive voice: 'It was observed that...' not 'I observed that...'. Use formal language, avoid contractions. Numbered sections improve readability. Nigerian context: accident reports, inspection reports, project reports."
         }
       ]
     },
     {
-      "id": "grammar_lexis",
-      "title": "Grammar and Lexis",
+      "id": "advanced_grammar",
+      "title": "Advanced Grammar",
       "week": 4,
       "subtopics": [
         {
-          "id": "advanced_grammar",
-          "title": "Advanced Grammar Topics",
+          "id": "reported_speech",
+          "title": "Reported Speech",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
-          "prerequisites": [],
+          "prerequisites": [
+            "ss1_grammar"
+          ],
           "concepts": [
-            "tenses",
-            "concord",
-            "subject-verb agreement",
+            "direct speech",
             "reported speech",
-            "active and passive voice",
-            "conditionals",
-            "relative clauses",
-            "phrasal verbs",
-            "idioms"
+            "backshift",
+            "tense changes",
+            "pronoun changes",
+            "time expression changes",
+            "reporting verbs"
           ],
           "common_misconceptions": [
-            "Complex sentences always score higher",
-            "Grammar rules never have exceptions"
+            "Tense always changes in reported speech (no change if reporting something still true)",
+            "Say and tell are used the same way",
+            "Question marks are used in reported questions"
           ],
-          "teaching_note": "Focus on common errors in examination contexts. Use error-correction exercises extensively."
-        }
-      ]
-    },
-    {
-      "id": "oral_english_ss2",
-      "title": "Oral English",
-      "week": 5,
-      "subtopics": [
+          "teaching_note": "Grammar rules: Present \u2192 Past, Past \u2192 Past Perfect, will \u2192 would, can \u2192 could, may \u2192 might. 'Say' doesn't take indirect object: 'He said that...'. 'Tell' takes indirect object: 'He told me that...'. Reported questions: word order becomes statement form, no question mark. 'Where are you going?' \u2192 He asked where I was going. 'Are you coming?' \u2192 He asked if/whether I was coming. Time: now \u2192 then, today \u2192 that day, yesterday \u2192 the previous day, tomorrow \u2192 the following day."
+        },
         {
-          "id": "phonetics",
-          "title": "Phonetics and Phonology",
+          "id": "conditional_sentences",
+          "title": "Conditional Sentences",
           "waec_frequency": "high",
           "jamb_frequency": "high",
-          "prerequisites": [],
+          "prerequisites": [
+            "reported_speech"
+          ],
           "concepts": [
-            "IPA",
-            "vowel sounds",
-            "consonant sounds",
-            "stress",
-            "intonation",
-            "syllable",
-            "rhyme",
-            "minimal pairs",
-            "homophones"
+            "zero conditional",
+            "first conditional",
+            "second conditional",
+            "third conditional",
+            "mixed conditional",
+            "if clauses",
+            "unless",
+            "provided that",
+            "as long as"
           ],
           "common_misconceptions": [
-            "English spelling indicates pronunciation",
-            "Stress doesn't change meaning"
+            "Second conditional uses 'was' for all subjects (use 'were' for all in formal English)",
+            "Third conditional refers to future events",
+            "Will can be used in if-clause (NO in standard conditionals)"
           ],
-          "teaching_note": "Use audio materials and transcription exercises. Practice identifying sounds in Nigerian English context."
+          "teaching_note": "Zero: If + present simple, present simple (general truths). 'If you heat water, it boils.' First: If + present simple, will + infinitive (real future). 'If it rains, I will stay home.' Second: If + past simple, would + infinitive (unreal present/future). 'If I were rich, I would travel.' Third: If + past perfect, would have + past participle (unreal past). 'If I had studied, I would have passed.' Mixed: If + past perfect, would + infinitive (past condition, present result). 'If I had studied medicine, I would be a doctor now.'"
         }
       ]
     }

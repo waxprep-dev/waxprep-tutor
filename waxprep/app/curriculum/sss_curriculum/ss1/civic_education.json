@@ -1,0 +1,168 @@
+{
+  "subject": "civic_education",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "National Values",
+    "Citizenship",
+    "Human Rights",
+    "Civil Society",
+    "Governance",
+    "Responsible Leadership"
+  ],
+  "jamb_high_priority_topics": [
+    "National Ethics",
+    "Discipline",
+    "Human Rights"
+  ],
+  "topics": [
+    {
+      "id": "national_values",
+      "title": "National Values",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "meaning_values",
+          "title": "Meaning and Types of Values",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "values",
+            "positive values",
+            "negative values",
+            "honesty",
+            "integrity",
+            "hard work",
+            "discipline",
+            "selflessness",
+            "justice",
+            "fairness",
+            "respect",
+            "tolerance"
+          ],
+          "common_misconceptions": [
+            "Values are the same for all cultures",
+            "Values cannot change over time",
+            "Only religious people have good values"
+          ],
+          "teaching_note": "Nigerian context: The 1999 Constitution (Chapter 2, Section 23) specifies national ethics: Discipline, Integrity, Dignity of Labour, Social Justice, Religious Tolerance, Self-reliance, Patriotism. However, corruption, electoral malpractice, and ethnic conflicts show values gap. Teaching should connect values to everyday Nigerian life: queuing, obeying traffic rules, rejecting bribery, reporting corruption to EFCC/ICPC."
+        },
+        {
+          "id": "discipline",
+          "title": "Discipline",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "meaning_values"
+          ],
+          "concepts": [
+            "discipline",
+            "self-control",
+            "obedience",
+            "punctuality",
+            "regularity",
+            "perseverance",
+            "consequences of indiscipline"
+          ],
+          "common_misconceptions": [
+            "Discipline means punishment",
+            "Discipline restricts freedom",
+            "Indiscipline is only in young people"
+          ],
+          "teaching_note": "Discipline = ability to do what is right even when no one is watching. Aspects: self-discipline (control of one's actions), obedience (following rules), punctuality (being on time), perseverance (not giving up). Consequences of indiscipline in Nigeria: traffic chaos (disobeying traffic lights), corruption (disobeying laws), examination malpractice (cheating in WAEC/NECO), cultism in universities. Benefits: personal success, national development, peaceful coexistence."
+        }
+      ]
+    },
+    {
+      "id": "citizenship_civic",
+      "title": "Citizenship",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "meaning_citizenship",
+          "title": "Meaning and Types of Citizenship",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "national_values"
+          ],
+          "concepts": [
+            "citizenship",
+            "citizen",
+            "types of citizenship",
+            "rights",
+            "duties",
+            "responsibilities",
+            "naturalization",
+            "registration",
+            "birth"
+          ],
+          "common_misconceptions": [
+            "Anyone born in Nigeria is a citizen (not always true)",
+            "Permanent residents have the same rights as citizens",
+            "Dual citizenship is illegal for all Nigerians"
+          ],
+          "teaching_note": "Nigerian Constitution: Citizenship by birth (if born in Nigeria before independence with Nigerian ancestor; OR born after independence with Nigerian parent/grandparent). By registration (foreign women married to Nigerian men). By naturalization (15+ years residence, good character, acceptable livelihood). Dual citizenship: allowed for citizens by birth; NOT for naturalized citizens."
+        },
+        {
+          "id": "duties_responsibilities",
+          "title": "Duties and Responsibilities of Citizens",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "meaning_citizenship"
+          ],
+          "concepts": [
+            "duties of citizens",
+            "obeying laws",
+            "voting",
+            "paying taxes",
+            "national service",
+            "protecting public property",
+            "defending Nigeria"
+          ],
+          "common_misconceptions": [
+            "Citizens only have rights, not duties",
+            "Voting doesn't matter in Nigeria",
+            "Tax evasion is a victimless crime"
+          ],
+          "teaching_note": "Nigerian citizen duties (Constitution): obey laws, respect rights of others, promote national unity, render national service (NYSC for graduates), protect public property, pay taxes (FIRS), defend Nigeria. NYSC: one-year mandatory service for graduates under 30, established 1973. Voting: INEC conducts elections. Taxation: PAYE (Pay As You Earn), VAT (Value Added Tax 7.5%), company income tax."
+        }
+      ]
+    },
+    {
+      "id": "human_rights",
+      "title": "Human Rights",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "meaning_human_rights",
+          "title": "Meaning and Types of Human Rights",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "citizenship_civic"
+          ],
+          "concepts": [
+            "human rights",
+            "civil rights",
+            "political rights",
+            "economic rights",
+            "social rights",
+            "cultural rights",
+            "UN Universal Declaration",
+            "African Charter",
+            "NHRC"
+          ],
+          "common_misconceptions": [
+            "Human rights are only for citizens",
+            "Rights are absolute (they can be limited by law)",
+            "Freedom of speech means saying anything"
+          ],
+          "teaching_note": "Sources: UN Universal Declaration of Human Rights (1948), African Charter on Human and Peoples' Rights (1981), Nigerian Constitution Chapter IV (1999). Types: Civil/political (life, liberty, fair trial, vote), Economic/social (work, education, health), Cultural (language, religion, customs). National Human Rights Commission (NHRC) Nigeria: investigates human rights violations. Limitations: rights can be restricted for public safety, order, morality, health - but must be 'reasonably justifiable in a democratic society.'"
+        }
+      ]
+    }
+  ]
+}

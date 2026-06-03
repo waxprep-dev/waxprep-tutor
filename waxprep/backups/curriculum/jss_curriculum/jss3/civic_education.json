@@ -1,0 +1,44 @@
+{
+  "subject": "civic_education",
+  "class_level": "JSS3",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "National Consciousness",
+    "Citizenship",
+    "Human Rights",
+    "Civic Responsibilities"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "civic_bece_prep",
+      "title": "BECE Civic Education Preparation",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "civic_revision",
+          "title": "Revision for BECE Civic Education",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "values",
+            "citizenship",
+            "rights",
+            "responsibilities",
+            "democracy",
+            "rule of law",
+            "human rights",
+            "nationalism"
+          ],
+          "common_misconceptions": [
+            "Civic education is only about voting",
+            "Human rights mean you can do anything",
+            "Nationalism means hating other countries"
+          ],
+          "teaching_note": "Key topics for BECE: National values (honesty, integrity, hard work), Citizenship (types, duties, rights), Human rights (right to life, education, freedom of speech), Responsibilities (obeying laws, paying taxes, voting), Democracy (features, importance), Rule of law (nobody is above the law), Nationalism (love for country, promoting national interest). Nigerian national symbols: flag (green-white-green), coat of arms, national anthem ('Arise, O Compatriots')."
+        }
+      ]
+    }
+  ]
+}

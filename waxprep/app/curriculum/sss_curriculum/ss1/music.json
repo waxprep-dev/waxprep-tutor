@@ -1,0 +1,88 @@
+{
+  "subject": "music",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Elements of Music",
+    "Music Theory",
+    "African Music",
+    "Nigerian Traditional Music",
+    "Western Music",
+    "Musical Instruments"
+  ],
+  "jamb_high_priority_topics": [
+    "Elements of Music",
+    "Music Theory"
+  ],
+  "topics": [
+    {
+      "id": "elements_music",
+      "title": "Elements of Music",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "music_elements",
+          "title": "The Elements of Music",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [],
+          "concepts": [
+            "pitch",
+            "melody",
+            "harmony",
+            "rhythm",
+            "tempo",
+            "dynamics",
+            "timbre",
+            "texture",
+            "form",
+            "tone colour"
+          ],
+          "common_misconceptions": [
+            "Rhythm and beat are the same",
+            "Higher pitch always means louder",
+            "Melody and harmony are the same"
+          ],
+          "teaching_note": "Pitch: highness or lowness of sound. Melody: organized sequence of pitches (tune). Harmony: simultaneous combination of sounds (chords). Rhythm: pattern of long and short sounds. Tempo: speed of music (allegro=fast, adagio=slow). Dynamics: loudness/softness (forte=loud, piano=soft). Timbre: tone colour/quality that distinguishes instruments. Texture: how layers of sound relate (monophonic, polyphonic, homophonic). Form: structure of musical piece (binary, ternary, rondo, sonata)."
+        }
+      ]
+    },
+    {
+      "id": "african_music",
+      "title": "African and Nigerian Music",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "nigerian_music",
+          "title": "Traditional Nigerian Music",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "elements_music"
+          ],
+          "concepts": [
+            "folk music",
+            "traditional music",
+            "call and response",
+            "polyrhythm",
+            "drumming",
+            "Yoruba music",
+            "Hausa music",
+            "Igbo music",
+            "highlife",
+            "juju",
+            "apala",
+            "fuji",
+            "afrobeat"
+          ],
+          "common_misconceptions": [
+            "African music is only drumming",
+            "Traditional music is primitive",
+            "Nigerian music only started recently"
+          ],
+          "teaching_note": "Characteristics of African music: polyrhythm (multiple rhythms simultaneously), call and response, communal participation, oral transmission, connection to dance. Yoruba music: Sakara, Apala, Juju (King Sunny Ade, Ebenezer Obey), Fuji (Kollington Ayinla, Wasiu Ayinde). Igbo music: Highlife (Osita Osadebe, Oliver De Coque), Egwu Ekpili, Ogene. Hausa music: Hausa classical, Waka (Barmani Choge), modern Hausa pop. Afrobeat: Fela Kuti (created), Femi Kuti, Seun Kuti, Burna Boy (modern afro-fusion). Musical instruments: membranophones (drums), idiophones (bells, rattles), chordophones (strings), aerophones (flutes, horns)."
+        }
+      ]
+    }
+  ]
+}

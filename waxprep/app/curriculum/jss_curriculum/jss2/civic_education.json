@@ -1,0 +1,46 @@
+{
+  "subject": "civic_education",
+  "class_level": "JSS2",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Democracy",
+    "Rule of Law",
+    "Human Rights",
+    "Citizenship"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "democracy_jss2",
+      "title": "Democracy and Democratic Institutions",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "democracy_concepts",
+          "title": "Understanding Democracy",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [
+            "jss1_values"
+          ],
+          "concepts": [
+            "democracy",
+            "people",
+            "elections",
+            "voting",
+            "representatives",
+            "political parties",
+            "INEC",
+            "accountability"
+          ],
+          "common_misconceptions": [
+            "Democracy is only about voting",
+            "Nigeria is not truly democratic",
+            "Young people cannot participate in democracy"
+          ],
+          "teaching_note": "Democracy: government of the people, by the people, for the people (Abraham Lincoln). Features: free and fair elections, rule of law, protection of human rights, freedom of speech. INEC: Independent National Electoral Commission - organizes elections in Nigeria. How young people can participate: join school government, debate current issues, vote when eligible (18+), encourage adults to vote. Democratic institutions: legislature, executive, judiciary, civil society."
+        }
+      ]
+    }
+  ]
+}

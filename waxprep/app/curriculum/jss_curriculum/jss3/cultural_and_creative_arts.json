@@ -1,0 +1,44 @@
+{
+  "subject": "cultural_and_creative_arts",
+  "class_level": "JSS3",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Nigerian Art",
+    "Drama",
+    "Music",
+    "BECE Prep"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "nigerian_art",
+      "title": "Nigerian Traditional Art",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "traditional_art",
+          "title": "Traditional Nigerian Art Forms",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "Nok art",
+            "Ife art",
+            "Benin art",
+            "Igbo ukwu",
+            "adire",
+            "akwete",
+            "calabash carving",
+            "pottery"
+          ],
+          "common_misconceptions": [
+            "African art is primitive",
+            "Nigerian art only started recently",
+            "Traditional art has no value"
+          ],
+          "teaching_note": "Nok culture (500 BCE - 200 CE): terracotta sculptures, earliest known African sculptures. Ife art (12th-15th century): realistic bronze and terracotta heads. Benin art (15th-19th century): bronze plaques, ivory carvings, royal heads. Igbo Ukwu (9th century): intricate bronze ceremonial vessels. Textile arts: Adire (Yoruba indigo resist-dyeing), Akwete (Igbo weaving), Aso Oke. Contemporary: Ben Enwonwu (painter, sculptor), Nike Davies-Okundaye (textile artist), El Anatsui (sculptor - bottle-cap tapestries)."
+        }
+      ]
+    }
+  ]
+}

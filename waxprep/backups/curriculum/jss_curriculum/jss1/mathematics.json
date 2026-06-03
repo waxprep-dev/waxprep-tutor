@@ -6,10 +6,9 @@
     "Whole Numbers",
     "Fractions",
     "Decimals",
-    "Percentages",
-    "Algebraic Expressions",
-    "Geometry",
-    "Statistics"
+    "LCM and HCF",
+    "Basic Operations",
+    "Simple Equations"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
@@ -27,23 +26,26 @@
           "concepts": [
             "counting numbers",
             "whole numbers",
+            "natural numbers",
             "place value",
-            "expanded form",
-            "number line",
-            "comparing numbers",
-            "ordering numbers",
-            "rounding off"
+            "digit",
+            "tens",
+            "hundreds",
+            "thousands",
+            "millions",
+            "billions"
           ],
           "common_misconceptions": [
-            "Zero is not a number",
-            "Bigger numbers always have more digits"
+            "Zero is not a whole number (it is)",
+            "The largest number exists (no largest number)",
+            "Place value and face value are the same"
           ],
-          "teaching_note": "Use number lines and place value charts. Connect to real-life counting scenarios."
+          "teaching_note": "Place value: Each digit in a number has a value depending on its position. Example: In 3,456, 3 is thousands (3000), 4 is hundreds (400), 5 is tens (50), 6 is units (6). Reading large numbers: group in threes from right. Nigerian context: population numbers (200+ million), budget figures (Nigeria's budget in trillions of naira). Face value = digit itself. Place value = digit \u00d7 position value."
         },
         {
-          "id": "number_operations",
-          "title": "Basic Operations with Whole Numbers",
-          "waec_frequency": "very_high",
+          "id": "operations_whole",
+          "title": "Basic Operations on Whole Numbers",
+          "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
             "number_system"
@@ -53,15 +55,19 @@
             "subtraction",
             "multiplication",
             "division",
-            "BODMAS",
-            "order of operations",
-            "estimation"
+            "sum",
+            "difference",
+            "product",
+            "quotient",
+            "remainder",
+            "BODMAS"
           ],
           "common_misconceptions": [
-            "Multiplication always makes numbers bigger",
-            "Division always makes numbers smaller"
+            "Multiplication always makes numbers bigger (not with fractions/decimals)",
+            "Division always makes numbers smaller",
+            "BODMAS doesn't matter (it determines correct order)"
           ],
-          "teaching_note": "Emphasize BODMAS rule. Use word problems to connect operations to real life."
+          "teaching_note": "BODMAS: Brackets, Orders (powers), Division, Multiplication, Addition, Subtraction. Worked example: 3 + 4 \u00d7 2 = 3 + 8 = 11 (NOT 7 \u00d7 2 = 14). (3 + 4) \u00d7 2 = 7 \u00d7 2 = 14. Division with remainder: 17 \u00f7 5 = 3 remainder 2. Check: 5 \u00d7 3 + 2 = 17. Word problems: identify key words - 'sum' means add, 'difference' means subtract, 'product' means multiply, 'shared equally' means divide."
         }
       ]
     },
@@ -71,12 +77,12 @@
       "week": 2,
       "subtopics": [
         {
-          "id": "fraction_concepts",
-          "title": "Understanding Fractions",
-          "waec_frequency": "very_high",
+          "id": "fraction_basics",
+          "title": "Types and Operations on Fractions",
+          "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
-            "whole_numbers"
+            "operations_whole"
           ],
           "concepts": [
             "fraction",
@@ -86,237 +92,49 @@
             "improper fraction",
             "mixed number",
             "equivalent fractions",
-            "simplifying fractions"
-          ],
-          "common_misconceptions": [
-            "Bigger denominator means bigger fraction",
-            "Fractions are always less than 1"
-          ],
-          "teaching_note": "Use fraction strips and area models. Show that fractions represent division."
-        },
-        {
-          "id": "fraction_operations",
-          "title": "Operations with Fractions",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "fraction_concepts"
-          ],
-          "concepts": [
-            "adding fractions",
-            "subtracting fractions",
-            "multiplying fractions",
-            "dividing fractions",
+            "simplification",
             "LCM",
-            "common denominator",
-            "reciprocal"
+            "HCF"
           ],
           "common_misconceptions": [
-            "Add numerators and denominators directly",
-            "Division of fractions means divide numerator and denominator"
+            "Bigger denominator means bigger fraction (1/4 < 1/2)",
+            "Fractions cannot be added directly (need common denominator)",
+            "Mixed numbers and improper fractions are different values (they're equal)"
           ],
-          "teaching_note": "Find common denominators before adding/subtracting. Use 'keep, change, flip' for division."
+          "teaching_note": "Proper: numerator < denominator (3/4). Improper: numerator \u2265 denominator (5/4). Mixed: whole number + fraction (1\u00be). Converting: Improper to mixed: 5/4 = 1\u00bc. Mixed to improper: 1\u00be = (4\u00d71+3)/4 = 7/4. Equivalent fractions: multiply/divide numerator and denominator by same number. 1/2 = 2/4 = 3/6. Adding/subtracting: find common denominator (LCM of denominators). Multiplying: multiply numerators, multiply denominators. Dividing: multiply by reciprocal."
         }
       ]
     },
     {
-      "id": "decimals",
-      "title": "Decimals and Percentages",
+      "id": "lcm_hcf",
+      "title": "LCM and HCF",
       "week": 3,
       "subtopics": [
         {
-          "id": "decimal_concepts",
-          "title": "Decimals",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "fractions"
-          ],
-          "concepts": [
-            "decimal",
-            "decimal point",
-            "tenths",
-            "hundredths",
-            "thousandths",
-            "converting fractions to decimals",
-            "converting decimals to fractions",
-            "rounding decimals"
-          ],
-          "common_misconceptions": [
-            "More decimal places means a bigger number",
-            "0.5 is bigger than 0.50"
-          ],
-          "teaching_note": "Connect decimals to fractions (denominators of 10, 100, 1000). Use money examples for practical understanding."
-        },
-        {
-          "id": "percentages",
-          "title": "Percentages",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "decimal_concepts"
-          ],
-          "concepts": [
-            "percentage",
-            "percent",
-            "converting percentages to fractions",
-            "converting percentages to decimals",
-            "percentage of quantities",
-            "expressing one quantity as percentage of another"
-          ],
-          "common_misconceptions": [
-            "Percentages are always out of 100",
-            "Percentage cannot be more than 100%"
-          ],
-          "teaching_note": "Show that percentage means 'per hundred'. Practice conversions between fractions, decimals, and percentages."
-        }
-      ]
-    },
-    {
-      "id": "algebraic_expressions_jss1",
-      "title": "Algebraic Expressions",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "introduction_algebra",
-          "title": "Introduction to Algebra",
+          "id": "lcm_hcf_methods",
+          "title": "LCM and HCF of Numbers",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
-            "decimals"
+            "fraction_basics"
           ],
           "concepts": [
-            "variable",
-            "constant",
-            "algebraic expression",
-            "term",
-            "coefficient",
-            "like terms",
-            "unlike terms",
-            "simplifying expressions",
-            "substitution"
+            "LCM",
+            "HCF",
+            "GCD",
+            "multiple",
+            "factor",
+            "prime factorization",
+            "division method",
+            "common multiples",
+            "common factors"
           ],
           "common_misconceptions": [
-            "Letters in algebra always stand for specific numbers",
-            "2x means 2 + x"
+            "LCM is always larger than HCF (not necessarily)",
+            "Prime numbers are odd numbers (2 is prime and even)",
+            "1 is a prime number (NO, prime has exactly 2 factors)"
           ],
-          "teaching_note": "Use concrete materials (cups and counters) to represent variables. Emphasize that 2x means 2 multiplied by x."
-        },
-        {
-          "id": "simple_equations",
-          "title": "Simple Linear Equations",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "introduction_algebra"
-          ],
-          "concepts": [
-            "equation",
-            "linear equation",
-            "solving equations",
-            "balance method",
-            "transposition",
-            "word problems",
-            "checking solutions"
-          ],
-          "common_misconceptions": [
-            "The variable must always be on the left side",
-            "You can only add/subtract the same number, not expression"
-          ],
-          "teaching_note": "Use balance model for equations. Emphasize doing the same operation to both sides."
-        }
-      ]
-    },
-    {
-      "id": "geometry_jss1",
-      "title": "Basic Geometry",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "lines_angles",
-          "title": "Lines and Angles",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [],
-          "concepts": [
-            "point",
-            "line",
-            "line segment",
-            "ray",
-            "angle",
-            "types of angles",
-            "acute",
-            "obtuse",
-            "right",
-            "reflex",
-            "straight",
-            "complementary",
-            "supplementary",
-            "vertically opposite"
-          ],
-          "common_misconceptions": [
-            "Angle size depends on arm length",
-            "Obtuse angle is bigger than reflex angle"
-          ],
-          "teaching_note": "Use protractors for accurate measurement. Show that angle size depends on rotation, not arm length."
-        },
-        {
-          "id": "plane_shapes",
-          "title": "Plane Shapes",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "lines_angles"
-          ],
-          "concepts": [
-            "triangle",
-            "quadrilateral",
-            "rectangle",
-            "square",
-            "parallelogram",
-            "rhombus",
-            "trapezium",
-            "polygon",
-            "circle",
-            "perimeter",
-            "area"
-          ],
-          "common_misconceptions": [
-            "Square is not a rectangle",
-            "All quadrilaterals with equal sides are squares"
-          ],
-          "teaching_note": "Use Venn diagrams to show relationships between shapes. Derive area formulas from basic principles."
-        }
-      ]
-    },
-    {
-      "id": "statistics_jss1",
-      "title": "Introduction to Statistics",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "data_collection",
-          "title": "Data Collection and Presentation",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [],
-          "concepts": [
-            "data",
-            "frequency table",
-            "tally marks",
-            "pictogram",
-            "bar chart",
-            "pie chart",
-            "mean",
-            "median",
-            "mode",
-            "range"
-          ],
-          "common_misconceptions": [
-            "Mean is always a whole number",
-            "Mode must be a number in the data set"
-          ],
-          "teaching_note": "Collect data from the classroom. Construct various charts by hand. Discuss when each average is most useful."
+          "teaching_note": "LCM (Least Common Multiple): smallest number that is a multiple of all given numbers. HCF/GCD (Highest Common Factor): largest number that divides all given numbers. Methods: 1) Listing multiples/factors. 2) Prime factorization. 3) Division method. Worked example: LCM of 12 and 18. 12 = 2\u00b2 \u00d7 3, 18 = 2 \u00d7 3\u00b2. LCM = 2\u00b2 \u00d7 3\u00b2 = 36. HCF = 2 \u00d7 3 = 6. Applications: LCM for finding common denominators, scheduling. HCF for simplifying fractions, dividing things equally."
         }
       ]
     }

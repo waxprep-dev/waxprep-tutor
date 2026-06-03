@@ -3,211 +3,40 @@
   "class_level": "JSS3",
   "academic_year": "Junior Secondary",
   "waec_high_priority_topics": [
-    "Bookkeeping",
-    "Trade",
+    "BECE Business Prep",
     "Office Practice",
-    "Commerce",
-    "Banking",
-    "Insurance",
-    "Business Management"
+    "Trade",
+    "Consumer Rights"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
     {
-      "id": "bookkeeping",
-      "title": "Introduction to Bookkeeping",
+      "id": "business_bece_prep",
+      "title": "BECE Business Studies Preparation",
       "week": 1,
       "subtopics": [
         {
-          "id": "bookkeeping_basics",
-          "title": "Principles of Bookkeeping",
+          "id": "business_revision",
+          "title": "Revision for BECE Business Studies",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [],
           "concepts": [
             "bookkeeping",
-            "accounting",
             "double entry",
-            "debit",
-            "credit",
-            "ledger",
-            "journal",
             "cash book",
-            "trial balance",
-            "assets",
-            "liabilities",
-            "capital"
-          ],
-          "common_misconceptions": [
-            "Bookkeeping is only for large businesses",
-            "Debit means decrease and credit means increase"
-          ],
-          "teaching_note": "Start with simple transactions. Use the accounting equation as foundation."
-        }
-      ]
-    },
-    {
-      "id": "trade_jss3",
-      "title": "Trade",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "types_trade",
-          "title": "Home and Foreign Trade",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "bookkeeping"
-          ],
-          "concepts": [
-            "trade",
-            "home trade",
-            "foreign trade",
-            "retail trade",
-            "wholesale trade",
-            "import",
-            "export",
-            "balance of trade",
-            "tariff",
-            "quota"
-          ],
-          "common_misconceptions": [
-            "Trade is only about buying and selling",
-            "Imports are always bad for the economy"
-          ],
-          "teaching_note": "Discuss Nigerian trade patterns. Explain the role of trade in economic development."
-        }
-      ]
-    },
-    {
-      "id": "office_practice",
-      "title": "Office Practice",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "office_procedures",
-          "title": "Office Procedures and Equipment",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "trade_jss3"
-          ],
-          "concepts": [
-            "office",
+            "source documents",
             "office equipment",
-            "filing",
-            "indexing",
-            "correspondence",
-            "memo",
-            "minutes",
-            "telephone etiquette",
-            "customer service"
+            "trade",
+            "consumer",
+            "saving"
           ],
           "common_misconceptions": [
-            "Office work is easy",
-            "Technology has eliminated office procedures"
+            "Bookkeeping is only for big businesses",
+            "You don't need records for small transactions",
+            "Saving is only for adults"
           ],
-          "teaching_note": "Demonstrate proper filing and indexing. Practice writing business correspondence."
-        }
-      ]
-    },
-    {
-      "id": "banking",
-      "title": "Banking",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "banking_services",
-          "title": "Banking Services",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "office_practice"
-          ],
-          "concepts": [
-            "bank",
-            "commercial bank",
-            "central bank",
-            "savings account",
-            "current account",
-            "fixed deposit",
-            "cheque",
-            "loan",
-            "interest",
-            "ATM",
-            "mobile banking"
-          ],
-          "common_misconceptions": [
-            "Banks only store money",
-            "You need a lot of money to open a bank account"
-          ],
-          "teaching_note": "Discuss CBN's role. Explain different types of accounts and their features."
-        }
-      ]
-    },
-    {
-      "id": "insurance",
-      "title": "Insurance",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "insurance_basics",
-          "title": "Principles of Insurance",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "banking"
-          ],
-          "concepts": [
-            "insurance",
-            "premium",
-            "policy",
-            "claim",
-            "risk",
-            "life insurance",
-            "motor insurance",
-            "fire insurance",
-            "principles of insurance",
-            "indemnity"
-          ],
-          "common_misconceptions": [
-            "Insurance is gambling",
-            "Young people don't need insurance"
-          ],
-          "teaching_note": "Explain how insurance pools risk. Discuss types of insurance relevant to Nigeria."
-        }
-      ]
-    },
-    {
-      "id": "business_management",
-      "title": "Business Management",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "management",
-          "title": "Introduction to Business Management",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "insurance"
-          ],
-          "concepts": [
-            "management",
-            "planning",
-            "organizing",
-            "staffing",
-            "directing",
-            "controlling",
-            "leadership",
-            "motivation",
-            "communication",
-            "decision making"
-          ],
-          "common_misconceptions": [
-            "Management is only for big companies",
-            "Leaders are born, not made"
-          ],
-          "teaching_note": "Discuss management in everyday contexts. Explore qualities of effective managers."
+          "teaching_note": "BECE Business Studies: Double entry system (debit and credit), Cash book (recording cash transactions), Source documents (receipt, invoice, debit note, credit note), Office equipment (computer, photocopier, stapler), Types of trade (retail, wholesale, import, export), Consumer rights (right to safety, information, choice, redress), Saving and investment. Practical skills: filling forms, writing receipts, basic calculations."
         }
       ]
     }

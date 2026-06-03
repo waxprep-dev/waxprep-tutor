@@ -1,0 +1,113 @@
+{
+  "subject": "food_and_nutrition",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Food and Nutrition",
+    "Food Nutrients",
+    "Food Preparation",
+    "Kitchen Equipment",
+    "Food Safety",
+    "Meal Planning"
+  ],
+  "jamb_high_priority_topics": [
+    "Food and Nutrition",
+    "Nutrients"
+  ],
+  "topics": [
+    {
+      "id": "food_nutrition_intro",
+      "title": "Introduction to Food and Nutrition",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "definition_food",
+          "title": "Definition and Importance of Food",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "food",
+            "nutrition",
+            "nutrients",
+            "diet",
+            "malnutrition",
+            "balanced diet",
+            "undernutrition",
+            "overnutrition",
+            "food groups"
+          ],
+          "common_misconceptions": [
+            "Food and nutrition are the same",
+            "Expensive food is more nutritious",
+            "Skipping meals helps with weight loss"
+          ],
+          "teaching_note": "Food = any substance consumed to provide nutritional support. Nutrition = science of how food affects the body. Nutrients = chemical compounds in food used by the body. Balanced diet contains all nutrients in correct proportions. Nigerian context: Common staples: garri, rice, yam, plantain, beans. Protein sources: fish, meat, eggs, beans, soybeans. Vegetables: ugu, efo, bitter leaf. Fruits: mango, pawpaw, pineapple, orange. Malnutrition: kwashiorkor (protein deficiency), marasmus (calorie deficiency)."
+        }
+      ]
+    },
+    {
+      "id": "food_nutrients",
+      "title": "Food Nutrients",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "macronutrients",
+          "title": "Macronutrients",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "food_nutrition_intro"
+          ],
+          "concepts": [
+            "carbohydrates",
+            "proteins",
+            "fats",
+            "lipids",
+            "oils",
+            "energy",
+            "calories",
+            "essential amino acids",
+            "essential fatty acids",
+            "saturated",
+            "unsaturated"
+          ],
+          "common_misconceptions": [
+            "All fats are bad",
+            "Carbohydrates cause weight gain",
+            "Protein is only for building muscles"
+          ],
+          "teaching_note": "Carbohydrates: main energy source. 1g = 4 kcal. Sources: rice, yam, garri, bread, cereals. Simple carbs: sugars. Complex carbs: starch, fibre. Proteins: body building and repair. 1g = 4 kcal. Sources: beans, fish, meat, eggs, soybeans. Complete proteins contain all essential amino acids (animal sources). Fats: energy storage, insulation, hormone production. 1g = 9 kcal. Saturated (animal fats, solid at room temp) vs unsaturated (plant oils, liquid at room temp). Trans fats should be avoided."
+        },
+        {
+          "id": "micronutrients",
+          "title": "Vitamins and Minerals",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "macronutrients"
+          ],
+          "concepts": [
+            "vitamins",
+            "minerals",
+            "fat-soluble vitamins",
+            "water-soluble vitamins",
+            "calcium",
+            "iron",
+            "iodine",
+            "vitamin A",
+            "vitamin C",
+            "vitamin D",
+            "deficiency diseases"
+          ],
+          "common_misconceptions": [
+            "Vitamins provide energy",
+            "More vitamins are always better",
+            "Minerals and vitamins are the same"
+          ],
+          "teaching_note": "Vitamins: organic compounds needed in small amounts. Fat-soluble: A, D, E, K (stored in body). Water-soluble: B-complex, C (not stored, need daily). Key vitamins: A (vision, sources: liver, carrots), B1 (beriberi prevention), C (immunity, scurvy prevention, sources: citrus), D (bone health, rickets prevention, from sunlight). Minerals: inorganic. Calcium (bones, teeth, sources: milk), Iron (blood, anaemia prevention, sources: liver, green vegetables), Iodine (thyroid, goitre prevention, sources: iodized salt). Nigerian diet: vitamin A deficiency common - golden rice and vitamin A fortification programs."
+        }
+      ]
+    }
+  ]
+}

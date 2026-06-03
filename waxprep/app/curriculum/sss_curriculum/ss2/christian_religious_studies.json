@@ -1,0 +1,125 @@
+{
+  "subject": "christian_religious_studies",
+  "class_level": "SS2",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "The Early Church",
+    "Paul's Missionary Journeys",
+    "Christian Ethics",
+    "Epistles",
+    "Faith and Works",
+    "Church Administration"
+  ],
+  "jamb_high_priority_topics": [
+    "Acts of the Apostles",
+    "Pauline Epistles",
+    "James and Peter"
+  ],
+  "topics": [
+    {
+      "id": "early_church",
+      "title": "The Early Church",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "pentecost",
+          "title": "The Day of Pentecost",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "ss1_death_resurrection"
+          ],
+          "concepts": [
+            "Pentecost",
+            "Holy Spirit",
+            "Acts 2",
+            "tongues of fire",
+            "speaking in tongues",
+            "Peter's sermon",
+            "3000 baptized",
+            "birth of the Church"
+          ],
+          "common_misconceptions": [
+            "Speaking in tongues means speaking gibberish (in Acts, it was real languages)",
+            "Pentecost is only about speaking in tongues (it's about empowerment for witness)",
+            "The Church started before Pentecost (officially born at Pentecost)"
+          ],
+          "teaching_note": "Acts 2: Pentecost (50 days after Passover/Resurrection). Symbols: wind (spirit's power), tongues of fire (purification), speaking in tongues (ability to witness to all nations). Peter's sermon: quotes Joel 2 (prophecy fulfilled), Psalm 16 (David spoke of resurrection), Psalm 110 (Lord said to my Lord). 3000 baptized. Significance: universal church born, Holy Spirit indwells believers, gospel for all nations. Nigerian context: Pentecostal movement is very strong - Deeper Life, Redeemed Christian Church of God, Living Faith (Winners), Mountain of Fire."
+        }
+      ]
+    },
+    {
+      "id": "paul_missionary",
+      "title": "Paul's Missionary Journeys",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "paul_journeys",
+          "title": "The Three Missionary Journeys",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "early_church"
+          ],
+          "concepts": [
+            "Paul",
+            "Saul",
+            "Damascus road",
+            "Barnabas",
+            "Silas",
+            "Timothy",
+            "First missionary journey",
+            "Second missionary journey",
+            "Third missionary journey",
+            "Antioch",
+            "Ephesus",
+            "Corinth",
+            "Philippi",
+            "Thessalonica"
+          ],
+          "common_misconceptions": [
+            "Paul was one of the original twelve (he was an apostle but not one of the twelve)",
+            "Paul's conversion happened immediately on the road (he was blinded then, baptized later in Damascus)",
+            "Paul always traveled alone (had various companions)"
+          ],
+          "teaching_note": "Paul (formerly Saul): persecuted Christians \u2192 converted on Damascus road (Acts 9). Missionary journeys: 1st (Acts 13-14): Cyprus, Pamphylia, Galatia with Barnabas. 2nd (Acts 15-18): through Asia Minor to Macedonia (Philippi, Thessalonica, Berea, Athens, Corinth) with Silas. 3rd (Acts 18-21): strengthened churches in Galatia and Phrygia, long stay in Ephesus, collection for Jerusalem. Key events: stoning at Lystra, Philippian jail, Areopagus sermon in Athens, riot at Ephesus. Letters written during journeys: Galatians, 1&2 Thessalonians, 1&2 Corinthians, Romans."
+        }
+      ]
+    },
+    {
+      "id": "pauline_epistles",
+      "title": "Pauline Epistles",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "romans",
+          "title": "Romans and Corinthians",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "paul_missionary"
+          ],
+          "concepts": [
+            "Romans",
+            "justification by faith",
+            "sin",
+            "grace",
+            "salvation",
+            "1 Corinthians",
+            "spiritual gifts",
+            "love",
+            "resurrection",
+            "2 Corinthians",
+            "ministry of reconciliation"
+          ],
+          "common_misconceptions": [
+            "Paul taught that works don't matter (he taught works don't save, but should follow salvation)",
+            "1 Corinthians 13 is only for weddings (it's about all Christian relationships)",
+            "2 Corinthians is just about money (it's about authentic ministry)"
+          ],
+          "teaching_note": "Romans: systematic theology. Justification by faith alone (Rom 1:17, 3:28). All have sinned (3:23). Salvation by grace through faith (Eph 2:8-9, elaborated in Romans). 1 Corinthians: problems in Corinth church - divisions, immorality, lawsuits, marriage, food sacrificed to idols, worship (ch 11-14), resurrection (ch 15). 1 Cor 13: love chapter - love is patient, kind, not envious, not proud. 2 Corinthians: Paul's defense of his apostleship, ministry of reconciliation (5:17-21), collection for Jerusalem."
+        }
+      ]
+    }
+  ]
+}

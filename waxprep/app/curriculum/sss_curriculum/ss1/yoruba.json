@@ -1,0 +1,117 @@
+{
+  "subject": "yoruba",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Gbolohun Ati Oro",
+    "Itupale Akewi",
+    "Aroko",
+    "Litireso Yoruba",
+    "Asa Ati Ise Yoruba",
+    "Ed\u00e9 Gb\u00f3l\u00f3h\u00f9n"
+  ],
+  "jamb_high_priority_topics": [
+    "Gbolohun Ati Oro",
+    "Itupale Akewi"
+  ],
+  "topics": [
+    {
+      "id": "gbolohun_oro",
+      "title": "Gbolohun Ati Oro Yoruba",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "idiwon_oro",
+          "title": "Idiwon Oro (Parts of Speech)",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "oruko (noun)",
+            "oruko ami (pronoun)",
+            "oro ase (verb)",
+            "opo oro (adverb)",
+            "apejorewe (adjective)",
+            "ilakaka (preposition)",
+            "apironu (conjunction)",
+            "aro (interjection)"
+          ],
+          "common_misconceptions": [
+            "Oruko nikan ni won maa npe ni oruko (oruko oruko, oruko ami, oruko ije wa)",
+            "Gbolohun kan le wa lai ni oro ase",
+            "Opolopo ede Yoruba kii se oruko"
+          ],
+          "teaching_note": "Ed\u00e8 Yoruba ni ede ti o wa ni Naijiria, orile-ede Benin, ati Togo. Iye eniyan ti o n so ede Yoruba to 45 million lo. Idiwon oro: Oruko - eniyan, nkan, ibi (ile, iwe, ade). Oro ase - iwa, ise (rin, je, ka). Apejorewe - asejewe oruko (nla, dara, feran). Opo oro - apejuwe ise (yara, daradara). Ilakaka - fifinhan ibi (sinu, lori, nitosi)."
+        }
+      ]
+    },
+    {
+      "id": "itupale_akewi",
+      "title": "Itupale Akewi",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "akewi_yoruba",
+          "title": "Awon Akewi Gbaj\u00fam\u00f2",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "gbolohun_oro"
+          ],
+          "concepts": [
+            "akewi",
+            "D.A. Fagunwa",
+            "J.F. Odunjo",
+            "Adebayo Faleti",
+            "Akinwunmi Isola",
+            "Niyi Osundare",
+            "ewe",
+            "ewi oriki",
+            "ewi ayajo"
+          ],
+          "common_misconceptions": [
+            "Fagunwa kikun ni D.O. Fagunwa (D.A. Fagunwa lo je)",
+            "Ewi kan pere ni Yoruba nko (oriki, rara, ayajo, oge, opa wa)",
+            "Akewi Yoruba ko se ko iwe nla"
+          ],
+          "teaching_note": "D.A. Fagunwa (1903-1963): Ogbeni oye Akewi, akewe iwe Irinkerindo Ninu Igbo Elegbeje (1938). J.F. Odunjo: akewe Awon Asa Ati Orisa Ile Yoruba. Adebayo Faleti: akewi, osere, ati onise itumohun. Niyi Osundare: akewi ti o gba ami eya agbaye (Nobel ti ede). Ewi Yoruba: Ewi oriki (iyin), Ewi ayajo (epe), Ewi rara (eko), Ewi oge (ere idaraya)."
+        }
+      ]
+    },
+    {
+      "id": "asa_yoruba",
+      "title": "Asa Ati Ise Yoruba",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "ise_yoruba",
+          "title": "Ise Ati Igbesi Aye Yoruba",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "itupale_akewi"
+          ],
+          "concepts": [
+            "asa",
+            "ise",
+            "eya",
+            "idile",
+            "ijoba ibile",
+            "egungun",
+            "orisa",
+            "sango",
+            "ifa",
+            "ogo",
+            "ayeye"
+          ],
+          "common_misconceptions": [
+            "Gbogbo Yoruba ni won nse ifa (ko si be)",
+            "Sango je orisa ina nikan (o je oba Oyo tele)",
+            "Egungun je nkan ibi (je iranti awon baba nla)"
+          ],
+          "teaching_note": "Asa Yoruba: Eku odun (eya), Isomoloruko (oruko oruko), Igbeyawo (idana), Iku (isinku). Oro isenbaye: Omoluwabi (eni ti o ni iwa rere), Ako ni, abo ni, ki i se ako tabi abo (odi). Juju (kii se ohun ibi, tumo si idan). Sango: Oba Oyo to tele ti o di orisa ina. Ifa: ohuftanbi imo, ogbo ato (ogbon ati imoran)."
+        }
+      ]
+    }
+  ]
+}

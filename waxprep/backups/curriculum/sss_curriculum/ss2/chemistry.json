@@ -3,296 +3,194 @@
   "class_level": "SS2",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Acids, Bases and Salts",
-    "Oxidation and Reduction",
-    "Electrolysis",
-    "Carbon and Its Compounds",
+    "Organic Chemistry",
     "Hydrocarbons",
-    "Chemical Equilibrium",
-    "Energy Changes"
+    "Alkanols",
+    "Alkanoic Acids",
+    "Electrochemistry",
+    "Rate of Reaction",
+    "Chemical Equilibrium"
   ],
   "jamb_high_priority_topics": [
-    "Redox Reactions",
-    "Electrolysis",
-    "Acids and Bases",
     "Organic Chemistry",
-    "Energy Changes"
+    "Electrochemistry",
+    "Energy Changes",
+    "Rate of Reaction"
   ],
   "topics": [
     {
-      "id": "acids_bases",
-      "title": "Acids, Bases and Salts",
+      "id": "organic_chemistry",
+      "title": "Introduction to Organic Chemistry",
       "week": 1,
       "subtopics": [
         {
-          "id": "acid_base_theory",
-          "title": "Theories of Acids and Bases",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
-          "concepts": [
-            "Arrhenius theory",
-            "Brønsted-Lowry theory",
-            "acid",
-            "base",
-            "proton donor",
-            "proton acceptor",
-            "conjugate acid-base pair",
-            "amphoteric",
-            "strong acid",
-            "weak acid"
-          ],
-          "common_misconceptions": [
-            "All acids are dangerous",
-            "Strong acids always have lower pH than weak acids"
-          ],
-          "teaching_note": "Use indicators to demonstrate acid-base properties. Show that strength and concentration are different concepts."
-        },
-        {
-          "id": "ph_salts",
-          "title": "pH and Salts",
+          "id": "organic_basics",
+          "title": "Fundamentals of Organic Chemistry",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "acid_base_theory"
+            "ss1_chemical_bonds"
           ],
-          "concepts": [
-            "pH scale",
-            "pH meter",
-            "universal indicator",
-            "salt hydrolysis",
-            "acidic salts",
-            "basic salts",
-            "neutral salts",
-            "buffer solutions"
-          ],
-          "common_misconceptions": [
-            "All salts are neutral",
-            "pH 7 means no ions present"
-          ],
-          "teaching_note": "Demonstrate pH measurement of various solutions. Explain salt hydrolysis using examples of different salt types."
-        }
-      ]
-    },
-    {
-      "id": "redox",
-      "title": "Oxidation and Reduction",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "redox_concepts",
-          "title": "Concepts of Oxidation and Reduction",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
-          "concepts": [
-            "oxidation",
-            "reduction",
-            "oxidizing agent",
-            "reducing agent",
-            "oxidation number",
-            "electron transfer",
-            "half-reactions",
-            "disproportionation"
-          ],
-          "common_misconceptions": [
-            "Oxidation always involves oxygen",
-            "The oxidizing agent is oxidized"
-          ],
-          "teaching_note": "Use OIL RIG mnemonic (Oxidation Is Loss, Reduction Is Gain of electrons). Emphasize that the oxidizing agent gets reduced."
-        },
-        {
-          "id": "balancing_redox",
-          "title": "Balancing Redox Equations",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "redox_concepts"
-          ],
-          "concepts": [
-            "ion-electron method",
-            "half-equation method",
-            "acidic medium",
-            "basic medium",
-            "redox titration"
-          ],
-          "common_misconceptions": [
-            "Hydrogen and oxygen must always be balanced first",
-            "Charge doesn't need to balance"
-          ],
-          "teaching_note": "Teach the systematic method: split into half-reactions, balance atoms, balance charge with electrons, combine."
-        }
-      ]
-    },
-    {
-      "id": "electrolysis",
-      "title": "Electrolysis",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "electrolysis_principles",
-          "title": "Principles of Electrolysis",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "redox"
-          ],
-          "concepts": [
-            "electrolyte",
-            "non-electrolyte",
-            "electrode",
-            "anode",
-            "cathode",
-            "electrolysis",
-            "Faraday's laws",
-            "ionic theory",
-            "selective discharge"
-          ],
-          "common_misconceptions": [
-            "Electrolysis is the same as conduction in metals",
-            "Cathode is always negative"
-          ],
-          "teaching_note": "Distinguish between electrolytic and metallic conduction. Note that cathode is negative in electrolysis but positive in cells."
-        },
-        {
-          "id": "electrolysis_applications",
-          "title": "Applications of Electrolysis",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "electrolysis_principles"
-          ],
-          "concepts": [
-            "extraction of metals",
-            "electroplating",
-            "purification of metals",
-            "Faraday's first law",
-            "Faraday's second law",
-            "calculations"
-          ],
-          "common_misconceptions": [
-            "All metals can be extracted by electrolysis economically",
-            "Electroplating is only for decoration"
-          ],
-          "teaching_note": "Show calculations using Faraday's constant (96500 C/mol). Discuss industrial applications like aluminum extraction."
-        }
-      ]
-    },
-    {
-      "id": "carbon_compounds",
-      "title": "Carbon and Its Compounds",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "organic_intro",
-          "title": "Introduction to Organic Chemistry",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
           "concepts": [
             "organic chemistry",
             "catenation",
-            "tetravalency of carbon",
             "hydrocarbons",
-            "functional groups",
+            "functional group",
             "homologous series",
-            "isomerism",
-            "structural formula",
-            "molecular formula"
-          ],
-          "common_misconceptions": [
-            "Organic means natural/biological",
-            "Organic compounds don't contain metals"
-          ],
-          "teaching_note": "Explain that organic chemistry is the chemistry of carbon compounds. Show the diversity of organic compounds."
-        },
-        {
-          "id": "alkanes_alkenes",
-          "title": "Alkanes and Alkenes",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "organic_intro"
-          ],
-          "concepts": [
-            "alkane",
-            "alkene",
-            "alkyne",
-            "saturated",
-            "unsaturated",
             "general formula",
-            "nomenclature",
-            "IUPAC naming",
-            "structural isomerism",
-            "geometric isomerism"
+            "structural formula",
+            "displayed formula",
+            "isomerism",
+            "saturated",
+            "unsaturated"
           ],
           "common_misconceptions": [
-            "Alkanes are more reactive than alkenes",
-            "Isomers have different molecular formulas"
+            "Organic chemistry only studies living things (studies carbon compounds)",
+            "All carbon compounds are organic (CO\u2082, carbonates, carbides are inorganic exceptions)",
+            "Isomers have different properties (physical may differ, chemical similar if same functional group)"
           ],
-          "teaching_note": "Teach IUPAC naming systematically. Show that alkenes are more reactive due to the double bond."
+          "teaching_note": "Organic chemistry: study of carbon compounds (except CO, CO\u2082, carbonates, carbides). Carbon's unique properties: catenation (forms chains/rings), tetravalency, forms covalent bonds with C, H, O, N, halogens. Homologous series: group of compounds with same functional group, each differing by CH\u2082. Members show gradual change in physical properties, similar chemical properties. Functional groups determine chemical behavior. Types of formulae: molecular (C\u2082H\u2086), structural (CH\u2083CH\u2083), displayed (showing all bonds)."
         }
       ]
     },
     {
       "id": "hydrocarbons",
-      "title": "Hydrocarbons and Petroleum",
-      "week": 5,
+      "title": "Hydrocarbons",
+      "week": 2,
       "subtopics": [
         {
-          "id": "petroleum",
-          "title": "Petroleum and Petrochemicals",
+          "id": "alkanes",
+          "title": "Alkanes",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "alkanes_alkenes"
+            "organic_chemistry"
           ],
           "concepts": [
-            "petroleum",
-            "crude oil",
-            "fractional distillation",
-            "refining",
-            "petrochemicals",
-            "octane number",
-            "knocking",
-            "cracking",
-            "reforming"
+            "alkanes",
+            "paraffins",
+            "saturated",
+            "general formula",
+            "CnH2n+2",
+            "methane",
+            "ethane",
+            "propane",
+            "butane",
+            "isomerism",
+            "substitution reaction",
+            "combustion",
+            "cracking"
           ],
           "common_misconceptions": [
-            "Petroleum is only used for fuel",
-            "Cracking just breaks large molecules randomly"
+            "Alkanes are unreactive (they undergo combustion and substitution)",
+            "All alkanes are gases (C1-C4 gases, C5-C17 liquids, C18+ solids)",
+            "Cracking produces only smaller alkanes (produces alkenes too)"
           ],
-          "teaching_note": "Connect to Nigerian economy. Explain the fractionating column and uses of each fraction."
+          "teaching_note": "Alkanes: saturated hydrocarbons (only single C-C bonds). General formula: CnH\u2082n\u208a\u2082. Sources: natural gas (methane), petroleum (crude oil). Reactions: Combustion (complete: CO\u2082 + H\u2082O; incomplete: CO + C). Substitution: with halogens in UV light. Cracking: thermal decomposition of long-chain alkanes to shorter alkanes + alkenes. Uses: fuels (petrol, diesel, kerosene, cooking gas). Nigerian context: crude oil from Niger Delta, refined at Port Harcourt, Warri, Kaduna refineries."
+        },
+        {
+          "id": "alkenes_alkynes",
+          "title": "Alkenes and Alkynes",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "alkanes"
+          ],
+          "concepts": [
+            "alkenes",
+            "olefins",
+            "unsaturated",
+            "CnH2n",
+            "ethylene",
+            "propylene",
+            "double bond",
+            "addition reaction",
+            "hydrogenation",
+            "halogenation",
+            "hydration",
+            "alkynes",
+            "CnH2n-2",
+            "triple bond",
+            "ethyne"
+          ],
+          "common_misconceptions": [
+            "Alkenes only undergo addition (also polymerization, oxidation)",
+            "Bromine water test only works for alkenes (works for any unsaturated compound)",
+            "Alkynes are more reactive than alkenes"
+          ],
+          "teaching_note": "Alkenes: unsaturated, C=C double bond. General formula: CnH\u2082n. Test for unsaturation: decolorizes bromine water (red-brown \u2192 colorless), decolorizes acidified KMnO\u2084 (purple \u2192 colorless). Addition reactions: hydrogenation (H\u2082, Ni catalyst \u2192 alkane), halogenation (Br\u2082 \u2192 dibromoalkane), hydration (H\u2082O, H\u2082SO\u2084 \u2192 alkanol). Polymerization: ethene \u2192 polyethene (polythene). Alkynes: C\u2261C triple bond. General formula: CnH\u2082n\u208b\u2082. Ethyne (acetylene) used in oxy-acetylene welding."
         }
       ]
     },
     {
-      "id": "energy_changes",
-      "title": "Energy Changes in Chemical Reactions",
-      "week": 6,
+      "id": "alkanols",
+      "title": "Alkanols (Alcohols)",
+      "week": 3,
       "subtopics": [
         {
-          "id": "thermochemistry",
-          "title": "Thermochemistry",
+          "id": "alcohols",
+          "title": "Alcohols",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "electrolysis"
+            "hydrocarbons"
           ],
           "concepts": [
-            "exothermic reaction",
-            "endothermic reaction",
-            "enthalpy change",
-            "Hess's law",
-            "bond energy",
-            "activation energy",
-            "energy profile diagram"
+            "alkanols",
+            "alcohols",
+            "hydroxyl group",
+            "primary alcohol",
+            "secondary alcohol",
+            "tertiary alcohol",
+            "CnH2n+1OH",
+            "methanol",
+            "ethanol",
+            "fermentation",
+            "dehydration",
+            "oxidation"
           ],
           "common_misconceptions": [
-            "Exothermic reactions don't need activation energy",
-            "Breaking bonds releases energy"
+            "All alcohols are safe to drink (methanol is poisonous)",
+            "Primary, secondary, tertiary refer to number of OH groups (refer to carbon bearing OH)",
+            "Fermentation produces pure ethanol (produces ~15% max, needs distillation)"
           ],
-          "teaching_note": "Use energy profile diagrams. Emphasize that bond breaking requires energy while bond forming releases energy."
+          "teaching_note": "Alcohols: contain -OH (hydroxyl) functional group. Classification: Primary (1\u00b0): -CH\u2082OH (oxidizes to aldehyde then carboxylic acid). Secondary (2\u00b0): >CHOH (oxidizes to ketone). Tertiary (3\u00b0): >COH (resistant to oxidation). Ethanol production: fermentation (enzymes break glucose to ethanol + CO\u2082, 35-55\u00b0C) and hydration of ethene (H\u2082SO\u2084 catalyst, 300\u00b0C, 60-70 atm). Dehydration: ethanol \u2192 ethene + H\u2082O (conc H\u2082SO\u2084, 170\u00b0C). Uses: solvents, fuels, beverages (palm wine in Nigeria), antiseptics, sterilization."
+        }
+      ]
+    },
+    {
+      "id": "electrochemistry",
+      "title": "Electrochemistry",
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "electrolysis",
+          "title": "Electrolysis",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "ss1_redox"
+          ],
+          "concepts": [
+            "electrolysis",
+            "electrolyte",
+            "non-electrolyte",
+            "electrodes",
+            "anode",
+            "cathode",
+            "anion",
+            "cation",
+            "Faraday's laws",
+            "electroplating",
+            "electrolysis of water",
+            "electrolysis of brine"
+          ],
+          "common_misconceptions": [
+            "Electrolytes conduct electricity in solid state (need to be molten or aqueous)",
+            "Anode is always positive (positive in electrolysis, negative in galvanic cells)",
+            "The mass deposited is proportional to voltage (it's proportional to charge/current \u00d7 time)"
+          ],
+          "teaching_note": "Electrolysis: decomposition of compound by electric current. Electrolyte: substance that conducts electricity when molten/aqueous (ionic compound). At cathode (negative): cations gain electrons (reduction). At anode (positive): anions lose electrons (oxidation). Faraday's 1st law: mass deposited \u221d charge passed (m = ZIt where Z = electrochemical equivalent). Faraday's 2nd law: same charge deposits masses proportional to chemical equivalents. 1 Faraday = 96,500 C = 1 mole of electrons. Applications: extraction of aluminium, electroplating (chromium, silver, gold), purification of copper."
         }
       ]
     }

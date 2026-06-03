@@ -1,0 +1,116 @@
+{
+  "subject": "technical_drawing",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Introduction to Technical Drawing",
+    "Drawing Instruments",
+    "Geometrical Constructions",
+    "Orthographic Projection",
+    "Pictorial Drawing"
+  ],
+  "jamb_high_priority_topics": [
+    "Technical Drawing Fundamentals",
+    "Projection"
+  ],
+  "topics": [
+    {
+      "id": "intro_technical_drawing",
+      "title": "Introduction to Technical Drawing",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "definition_td",
+          "title": "Definition and Importance of Technical Drawing",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "technical drawing",
+            "engineering drawing",
+            "blueprint",
+            "drafting",
+            "CAD",
+            "drawing standards",
+            "ISO",
+            "ANSI"
+          ],
+          "common_misconceptions": [
+            "Technical drawing is just sketching",
+            "CAD has replaced manual drawing completely",
+            "Only engineers need technical drawing"
+          ],
+          "teaching_note": "Technical drawing = precise, detailed graphic representation of objects using standard symbols and conventions. Used by engineers, architects, builders, manufacturers. Standards: ISO (International), ANSI (American), BS (British). Nigerian standard: adopt ISO/BS. Careers: mechanical engineer, civil engineer, architect, interior designer, industrial designer. Software: AutoCAD, SolidWorks, ArchiCAD, SketchUp."
+        }
+      ]
+    },
+    {
+      "id": "drawing_instruments",
+      "title": "Drawing Instruments and Materials",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "instruments",
+          "title": "Drawing Instruments",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "intro_technical_drawing"
+          ],
+          "concepts": [
+            "drawing board",
+            "T-square",
+            "set squares",
+            "protractor",
+            "compass",
+            "divider",
+            "ruler",
+            "scale",
+            "pencils",
+            "eraser",
+            "French curves"
+          ],
+          "common_misconceptions": [
+            "Any pencil can be used for technical drawing (use 2H, H, HB grades)",
+            "Drawing board is just a table",
+            "Set squares only come in 45\u00b0"
+          ],
+          "teaching_note": "Standard instruments: Drawing board (A0, A1, A2, A3 sizes). T-square: for horizontal lines. Set squares: 45\u00b0 and 30\u00b0-60\u00b0 triangles, used together for various angles. Pencil grades: 6H (hardest, lightest) to 6B (softest, darkest). Technical drawing: use 2H for construction lines, H for outlines, HB for lettering. Compass: for circles and arcs. Divider: for transferring measurements. Paper sizes: A0 (841\u00d71189mm), A1 (594\u00d7841mm), A2 (420\u00d7594mm), A3 (297\u00d7420mm), A4 (210\u00d7297mm)."
+        }
+      ]
+    },
+    {
+      "id": "geometrical_constructions",
+      "title": "Geometrical Constructions",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "basic_constructions",
+          "title": "Basic Geometrical Constructions",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "drawing_instruments"
+          ],
+          "concepts": [
+            "bisection",
+            "perpendicular",
+            "parallel lines",
+            "angles",
+            "polygons",
+            "circles",
+            "tangents",
+            "arcs",
+            "ellipses"
+          ],
+          "common_misconceptions": [
+            "Construction lines should be dark like outline lines",
+            "Estimation is acceptable in technical drawing",
+            "All angles can be drawn with just a protractor"
+          ],
+          "teaching_note": "Key constructions: 1) Bisect a line. 2) Bisect an angle. 3) Draw perpendicular from point to line. 4) Draw parallel lines. 5) Divide a line into equal parts. 6) Construct polygons (triangle, square, pentagon, hexagon). 7) Draw tangents to circles. Construction lines should be LIGHT (2H pencil). Final lines DARKER (H or HB). NEVER estimate - use compass and ruler for precision."
+        }
+      ]
+    }
+  ]
+}

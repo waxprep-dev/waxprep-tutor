@@ -3,208 +3,77 @@
   "class_level": "JSS2",
   "academic_year": "Junior Secondary",
   "waec_high_priority_topics": [
-    "Living Things and Their Environment",
-    "Reproduction",
-    "Respiratory System",
-    "Circulatory System",
-    "Physical and Chemical Changes",
-    "Acids and Bases",
-    "Forces and Machines"
+    "Measurement",
+    "Force and Motion",
+    "Work and Energy",
+    "Light Energy",
+    "Sound Energy"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
     {
-      "id": "living_things_environment",
-      "title": "Living Things and Their Environment",
+      "id": "measurement",
+      "title": "Measurement",
       "week": 1,
       "subtopics": [
         {
-          "id": "habitat",
-          "title": "Habitat and Adaptation",
+          "id": "measuring_quantities",
+          "title": "Measurement of Physical Quantities",
           "waec_frequency": "high",
           "jamb_frequency": "none",
-          "prerequisites": [],
+          "prerequisites": [
+            "jss1_matter"
+          ],
           "concepts": [
-            "habitat",
-            "terrestrial",
-            "aquatic",
-            "arboreal",
-            "adaptation",
-            "structural adaptation",
-            "behavioral adaptation",
-            "survival"
+            "length",
+            "mass",
+            "time",
+            "volume",
+            "area",
+            "temperature",
+            "measuring instruments",
+            "SI units"
           ],
           "common_misconceptions": [
-            "Adaptation happens quickly",
-            "All organisms in the same habitat look the same"
+            "Mass and weight are the same",
+            "Volume and capacity are different",
+            "Temperature is measured in grams"
           ],
-          "teaching_note": "Use Nigerian examples: camels in the north, mangroves in the Niger Delta."
+          "teaching_note": "Length: metre rule, tape measure, vernier calliper. Mass: beam balance, electronic balance. Time: stopwatch, clock. Volume: measuring cylinder (liquids), formula (regular solids). SI units: length (metre, m), mass (kilogram, kg), time (second, s), temperature (Kelvin, K; Celsius, \u00b0C). Conversions: 1 km = 1000 m, 1 m = 100 cm, 1 kg = 1000 g, 1 hour = 3600 s, 1 L = 1000 cm\u00b3."
         }
       ]
     },
     {
-      "id": "reproduction",
-      "title": "Reproduction in Organisms",
+      "id": "force_motion",
+      "title": "Force and Motion",
       "week": 2,
       "subtopics": [
         {
-          "id": "types_reproduction",
-          "title": "Sexual and Asexual Reproduction",
+          "id": "forces",
+          "title": "Types and Effects of Forces",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
-            "living_things_environment"
-          ],
-          "concepts": [
-            "asexual reproduction",
-            "sexual reproduction",
-            "binary fission",
-            "budding",
-            "spore formation",
-            "fragmentation",
-            "pollination",
-            "fertilization",
-            "seeds"
-          ],
-          "common_misconceptions": [
-            "All plants reproduce asexually",
-            "Sexual reproduction requires two organisms"
-          ],
-          "teaching_note": "Compare advantages and disadvantages. Show examples from flowering plants."
-        }
-      ]
-    },
-    {
-      "id": "respiratory_system",
-      "title": "Respiratory System",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "respiration_concepts",
-          "title": "Respiration and Breathing",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "reproduction"
-          ],
-          "concepts": [
-            "respiration",
-            "breathing",
-            "inhalation",
-            "exhalation",
-            "lungs",
-            "trachea",
-            "bronchi",
-            "alveoli",
-            "oxygen",
-            "carbon dioxide",
-            "aerobic respiration",
-            "anaerobic respiration"
-          ],
-          "common_misconceptions": [
-            "Breathing is the same as respiration",
-            "Plants don't respire"
-          ],
-          "teaching_note": "Distinguish breathing (physical) from respiration (chemical). Demonstrate that plants respire."
-        }
-      ]
-    },
-    {
-      "id": "circulatory_system",
-      "title": "Circulatory System",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "circulation",
-          "title": "Blood and Circulation",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "respiratory_system"
-          ],
-          "concepts": [
-            "heart",
-            "blood vessels",
-            "arteries",
-            "veins",
-            "capillaries",
-            "blood",
-            "red blood cells",
-            "white blood cells",
-            "platelets",
-            "plasma",
-            "pulse",
-            "heartbeat"
-          ],
-          "common_misconceptions": [
-            "Arteries always carry oxygenated blood",
-            "The heart creates blood"
-          ],
-          "teaching_note": "Use diagrams to trace blood flow. Explain the double circulation system."
-        }
-      ]
-    },
-    {
-      "id": "physical_chemical_changes",
-      "title": "Physical and Chemical Changes",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "changes",
-          "title": "Differences Between Physical and Chemical Changes",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "circulatory_system"
-          ],
-          "concepts": [
-            "physical change",
-            "chemical change",
-            "reversible",
-            "irreversible",
-            "new substance",
-            "signs of chemical change",
-            "conservation of mass"
-          ],
-          "common_misconceptions": [
-            "All irreversible changes are chemical",
-            "Melting is a chemical change"
-          ],
-          "teaching_note": "Demonstrate various changes. Emphasize that chemical change produces new substances."
-        }
-      ]
-    },
-    {
-      "id": "forces_machines",
-      "title": "Forces and Simple Machines",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "simple_machines",
-          "title": "Simple Machines",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "physical_chemical_changes"
+            "measurement"
           ],
           "concepts": [
             "force",
-            "lever",
-            "pulley",
-            "inclined plane",
-            "wedge",
-            "screw",
-            "wheel and axle",
-            "fulcrum",
-            "load",
-            "effort",
-            "mechanical advantage"
+            "push",
+            "pull",
+            "friction",
+            "gravity",
+            "weight",
+            "balanced forces",
+            "unbalanced forces",
+            "speed",
+            "velocity"
           ],
           "common_misconceptions": [
-            "Machines create energy",
-            "Complex machines are always better"
+            "Force is needed to keep things moving",
+            "Gravity only acts downward on Earth (it pulls towards center)",
+            "Friction is always bad"
           ],
-          "teaching_note": "Build simple machines using classroom materials. Calculate mechanical advantage."
+          "teaching_note": "Force: push or pull. Unit: Newton (N). Types: Contact force (friction, tension) and Non-contact (gravity, magnetic, electrostatic). Friction: opposes motion. Useful (walking, braking) and harmful (wear and tear). Gravity: pulls objects towards Earth. Weight = mass \u00d7 gravity (W = mg). Speed = distance/time. Balanced forces: object at rest or constant speed. Unbalanced: causes acceleration. Nigerian context: road safety (friction between tyres and road), gravity (objects fall down)."
         }
       ]
     }

@@ -3,294 +3,247 @@
   "class_level": "SS2",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Algebraic Functions",
-    "Quadratic Functions",
-    "Simultaneous Equations",
-    "Trigonometry",
+    "Matrices and Determinants",
+    "Linear Programming",
+    "Differentiation",
+    "Integration",
     "Circle Geometry",
-    "Mensuration",
-    "Probability",
-    "Statistics"
+    "Trigonometric Functions",
+    "Permutations and Combinations"
   ],
   "jamb_high_priority_topics": [
-    "Functions",
-    "Quadratic Equations",
-    "Trigonometric Functions",
-    "Circle Theorems",
-    "Probability",
-    "Permutation and Combination"
+    "Differentiation",
+    "Integration",
+    "Matrices",
+    "Circle Geometry",
+    "Statistics"
   ],
   "topics": [
     {
-      "id": "algebraic_functions",
-      "title": "Algebraic Functions",
+      "id": "functions",
+      "title": "Functions",
       "week": 1,
       "subtopics": [
         {
-          "id": "functions_concepts",
-          "title": "Functions and Relations",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
+          "id": "function_types",
+          "title": "Types of Functions",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "ss1_algebraic_expressions"
+          ],
           "concepts": [
-            "function",
-            "relation",
             "domain",
             "range",
             "codomain",
-            "mapping",
-            "one-to-one",
-            "many-to-one",
+            "one-one function",
+            "onto function",
+            "bijective function",
             "inverse function",
-            "composite function"
+            "composite function",
+            "modulus function",
+            "piecewise function"
           ],
           "common_misconceptions": [
-            "All relations are functions",
-            "f(x) means f multiplied by x"
+            "A function can have two outputs for one input",
+            "Inverse function means reciprocal",
+            " fog = gof (composition is not commutative)"
           ],
-          "teaching_note": "Use the vertical line test for functions. Emphasize that f(x) is notation for function output, not multiplication."
+          "teaching_note": "Function: rule that assigns each element in domain to exactly one element in range. One-one (injective): different inputs give different outputs. Onto (surjective): every element in range is mapped. Bijective: both one-one and onto (has inverse). Composite: fog(x) = f(g(x)), apply g first then f. Inverse: f\u207b\u00b9 swaps domain and range. Worked example: If f(x) = 2x+3 and g(x) = x\u00b2, find fog(2). g(2) = 4, f(4) = 11."
         }
       ]
     },
     {
-      "id": "quadratic_functions",
-      "title": "Quadratic Functions",
+      "id": "matrices_ss2",
+      "title": "Matrices and Determinants",
       "week": 2,
       "subtopics": [
         {
-          "id": "graphing_quadratics",
-          "title": "Graphing Quadratic Functions",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "id": "matrix_operations_ss2",
+          "title": "Matrix Operations",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
           "prerequisites": [
-            "functions_concepts"
+            "ss1_matrices"
           ],
           "concepts": [
-            "parabola",
-            "vertex",
-            "axis of symmetry",
-            "minimum point",
-            "maximum point",
-            "roots",
-            "intercept form",
-            "vertex form"
+            "matrix addition",
+            "scalar multiplication",
+            "matrix multiplication",
+            "identity matrix",
+            "transpose",
+            "determinant",
+            "inverse of 2x2",
+            "Cramer's rule"
           ],
           "common_misconceptions": [
-            "All parabolas open upward",
-            "The vertex is always the y-intercept"
+            "Matrix multiplication is commutative",
+            "det(A+B) = det(A) + det(B)",
+            "A matrix with determinant zero is the zero matrix"
           ],
-          "teaching_note": "Use completing the square to find vertex form. Show how the coefficient of x² determines the direction of opening."
-        },
-        {
-          "id": "simultaneous_equations",
-          "title": "Simultaneous Equations",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "graphing_quadratics"
-          ],
-          "concepts": [
-            "simultaneous linear equations",
-            "simultaneous linear and quadratic",
-            "elimination method",
-            "substitution method",
-            "graphical method"
-          ],
-          "common_misconceptions": [
-            "Always choose elimination over substitution",
-            "Graphical method is the most accurate"
-          ],
-          "teaching_note": "Teach students to choose the most efficient method. Emphasize checking solutions by substitution."
+          "teaching_note": "Matrix multiplication: (m\u00d7n) \u00d7 (n\u00d7p) = (m\u00d7p). Element (i,j) = row i of A \u00b7 column j of B. det|a b| = ad-bc. Inverse A\u207b\u00b9 = (1/det) \u00d7 adj(A). Cramer's rule: x = det(A\u2093)/det(A). |c d|"
         }
       ]
     },
     {
-      "id": "advanced_trigonometry",
-      "title": "Advanced Trigonometry",
+      "id": "linear_programming",
+      "title": "Linear Programming",
       "week": 3,
       "subtopics": [
         {
-          "id": "trig_identities",
-          "title": "Trigonometric Identities and Equations",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
-          "concepts": [
-            "sin²x + cos²x = 1",
-            "1 + tan²x = sec²x",
-            "trigonometric identities",
-            "solving trig equations",
-            " CAST diagram",
-            "reference angles",
-            "general solutions"
-          ],
-          "common_misconceptions": [
-            "sin(x+y) = sin x + sin y",
-            "Only use positive roots when solving"
-          ],
-          "teaching_note": "Derive the Pythagorean identity. Use the CAST diagram for finding all solutions. Practice deriving other identities from the basic one."
-        },
-        {
-          "id": "sine_cosine_rules",
-          "title": "Sine and Cosine Rules",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "id": "linear_inequalities",
+          "title": "Linear Inequalities and Optimization",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
           "prerequisites": [
-            "trig_identities"
+            "ss1_graphs"
           ],
           "concepts": [
-            "sine rule",
-            "cosine rule",
-            "area of triangle",
-            "ambiguous case",
-            "bearings",
-            "three-figure bearings"
+            "linear inequality",
+            "feasible region",
+            "objective function",
+            "constraints",
+            "vertices",
+            "optimization",
+            "graphical method"
           ],
           "common_misconceptions": [
-            "Sine rule works for all triangles including right-angled",
-            "Bearings are measured clockwise from south"
+            "The optimal solution is always at the center",
+            "Constraints don't need to be graphed",
+            "Inequalities are solved the same way as equations (sign flips when multiplying by negative)"
           ],
-          "teaching_note": "Compare when to use sine rule vs cosine rule. Emphasize that bearings are measured clockwise from north."
+          "teaching_note": "Steps: 1) Define variables. 2) Write constraints as inequalities. 3) Graph constraints to find feasible region. 4) Identify corner points. 5) Evaluate objective function at each corner. 6) Choose optimal. Worked example: Maximize P = 3x + 2y subject to x+y \u2264 10, x \u2265 0, y \u2265 0. Corner points: (0,0)=0, (10,0)=30, (0,10)=20. Maximum at (10,0)."
         }
       ]
     },
     {
-      "id": "circle_geometry",
-      "title": "Circle Geometry",
+      "id": "differentiation_ss2",
+      "title": "Differentiation",
       "week": 4,
       "subtopics": [
         {
-          "id": "circle_theorems",
-          "title": "Circle Theorems",
+          "id": "differentiation_rules",
+          "title": "Rules of Differentiation",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "sine_cosine_rules"
+            "ss1_differentiation"
           ],
           "concepts": [
-            "angle at center",
-            "angle at circumference",
-            "angles in same segment",
-            "angle in semicircle",
-            "cyclic quadrilateral",
-            "alternate segment theorem",
-            "tangent properties"
+            "power rule",
+            "product rule",
+            "quotient rule",
+            "chain rule",
+            "dy/dx notation",
+            "second derivative",
+            "stationary points",
+            "maxima",
+            "minima",
+            "points of inflection"
           ],
           "common_misconceptions": [
-            "Angle at center equals angle at circumference",
-            "All quadrilaterals are cyclic"
+            "Product rule: d(uv)/dx = du/dx \u00d7 dv/dx (NO, it's u\u00b7dv/dx + v\u00b7du/dx)",
+            "Chain rule is only for composite functions (that's exactly what it's for)",
+            "Second derivative zero means point of inflection (not always - need sign change)"
           ],
-          "teaching_note": "Prove each theorem using isosceles triangles and angles on a straight line. Practice identifying which theorem applies in complex diagrams."
+          "teaching_note": "Product rule: d(uv)/dx = u(dv/dx) + v(du/dx). Quotient rule: d(u/v)/dx = (v\u00b7du/dx - u\u00b7dv/dx)/v\u00b2. Chain rule: dy/dx = dy/du \u00d7 du/dx. Stationary points: dy/dx = 0. Second derivative test: d\u00b2y/dx\u00b2 > 0 \u2192 minimum, d\u00b2y/dx\u00b2 < 0 \u2192 maximum. Worked example: Find max/min of y = x\u00b3 - 3x\u00b2. dy/dx = 3x\u00b2 - 6x = 0 \u2192 x = 0 or 2. d\u00b2y/dx\u00b2 = 6x - 6. At x=0: -6 < 0 \u2192 max. At x=2: 6 > 0 \u2192 min."
         }
       ]
     },
     {
-      "id": "mensuration",
-      "title": "Mensuration",
+      "id": "integration_ss2",
+      "title": "Integration",
       "week": 5,
       "subtopics": [
         {
-          "id": "plane_mensuration",
-          "title": "Mensuration of Plane Shapes",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
+          "id": "integration_techniques",
+          "title": "Techniques of Integration",
+          "waec_frequency": "high",
+          "jamb_frequency": "very_high",
           "prerequisites": [
-            "circle_geometry"
+            "differentiation_ss2"
           ],
           "concepts": [
-            "area of triangle",
-            "area of parallelogram",
-            "area of trapezium",
-            "area of circle",
-            "area of sector",
-            "area of segment",
-            "arc length",
-            "perimeter",
-            "composite shapes"
+            "indefinite integral",
+            "definite integral",
+            "power rule for integration",
+            "integration by substitution",
+            "area under curve",
+            "area between curves",
+            "volume of revolution",
+            "trapezium rule"
           ],
           "common_misconceptions": [
-            "Area of sector uses 360° instead of 180°",
-            "Perimeter of circle is called circumference"
+            "Integration is just reverse differentiation (mostly true but techniques needed)",
+            "Definite integral always gives positive area (can be negative if below x-axis)",
+            "Trapezium rule gives exact area (it's an approximation)"
           ],
-          "teaching_note": "Derive area formulas from basic principles. Emphasize the difference between arc length and area of sector."
-        },
-        {
-          "id": "solid_mensuration",
-          "title": "Mensuration of Solids",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "plane_mensuration"
-          ],
-          "concepts": [
-            "volume of prism",
-            "volume of cylinder",
-            "volume of cone",
-            "volume of sphere",
-            "surface area",
-            "curved surface area",
-            "total surface area",
-            "frustum"
-          ],
-          "common_misconceptions": [
-            "Volume and capacity are different units",
-            "Surface area and volume have the same units"
-          ],
-          "teaching_note": "Use real objects to demonstrate volume. Show the relationship between units of volume and capacity."
+          "teaching_note": "\u222bx\u207f dx = x\u207f\u207a\u00b9/(n+1) + C (n \u2260 -1). \u222b(ax+b)\u207f dx = (ax+b)\u207f\u207a\u00b9/[a(n+1)] + C. Area under curve: \u222b\u2090\u1d47 y dx. If curve goes below x-axis, split into positive and negative parts. Area between curves: \u222b\u2090\u1d47 (y_top - y_bottom) dx. Trapezium rule: \u00bdh[(y\u2080+y\u2099) + 2(y\u2081+y\u2082+...+y\u2099\u208b\u2081)] where h = (b-a)/n."
         }
       ]
     },
     {
-      "id": "probability",
-      "title": "Probability",
+      "id": "circle_geometry_ss2",
+      "title": "Circle Geometry",
       "week": 6,
       "subtopics": [
         {
-          "id": "probability_basics",
-          "title": "Basic Probability Concepts",
+          "id": "circle_theorems_ss2",
+          "title": "Circle Theorems and Applications",
           "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "ss1_circle_theorems"
+          ],
           "concepts": [
-            "experiment",
-            "outcome",
-            "sample space",
-            "event",
-            "probability scale",
-            "mutually exclusive",
-            "independent events",
-            "complementary events"
+            "equation of circle",
+            "centre-radius form",
+            "general form",
+            "tangent to circle",
+            "normal",
+            "length of tangent",
+            "intersecting chords theorem"
           ],
           "common_misconceptions": [
-            "Probability of 1 means it always happens",
-            "Previous outcomes affect independent events (gambler's fallacy)"
+            "x\u00b2 + y\u00b2 = r\u00b2 is the only circle equation (that's for center at origin)",
+            "Tangent is perpendicular to radius at point of contact",
+            "All lines that touch the circle are tangents (must touch at exactly one point)"
           ],
-          "teaching_note": "Use coin tosses and dice throws for experiments. Address the gambler's fallacy explicitly."
-        },
+          "teaching_note": "Centre-radius form: (x-a)\u00b2 + (y-b)\u00b2 = r\u00b2 where (a,b) is center, r is radius. General form: x\u00b2 + y\u00b2 + 2gx + 2fy + c = 0, center = (-g, -f), radius = \u221a(g\u00b2+f\u00b2-c). Tangent at (x\u2081,y\u2081): xx\u2081 + yy\u2081 + g(x+x\u2081) + f(y+y\u2081) + c = 0. Length of tangent from external point (x\u2081,y\u2081): L = \u221a(x\u2081\u00b2+y\u2081\u00b2+2gx\u2081+2fy\u2081+c). Intersecting chords: PA \u00d7 PB = PC \u00d7 PD."
+        }
+      ]
+    },
+    {
+      "id": "permutations_combinations",
+      "title": "Permutations and Combinations",
+      "week": 7,
+      "subtopics": [
         {
-          "id": "permutation_combination",
-          "title": "Permutation and Combination",
+          "id": "counting_principles",
+          "title": "Counting Principles",
           "waec_frequency": "high",
-          "jamb_frequency": "very_high",
+          "jamb_frequency": "high",
           "prerequisites": [
-            "probability_basics"
+            "ss1_probability"
           ],
           "concepts": [
+            "factorial",
             "permutation",
             "combination",
-            "factorial",
             "nPr",
             "nCr",
             "arrangement",
             "selection",
-            "repetition allowed",
-            "circular permutation"
+            "circular permutation",
+            "repetition",
+            "probability applications"
           ],
           "common_misconceptions": [
-            "Permutation and combination are the same",
-            "Order matters in combinations"
+            "Permutation and combination are the same (permutation: order matters, combination: order doesn't)",
+            "0! = 0 (NO, 0! = 1)",
+            "nCr = nPr (NO, nCr = nPr/r!)"
           ],
-          "teaching_note": "Use real scenarios: arrangement of books (permutation) vs selection of team (combination)."
+          "teaching_note": "nPr = n!/(n-r)! (arrangements where order matters). nCr = n!/[r!(n-r)!] (selections where order doesn't). nCr = nC(n-r). Worked example: How many ways to select 3 students from 10? \u00b9\u2070C\u2083 = 10!/(3!\u00d77!) = 120. How many arrangements of 3 from 10? \u00b9\u2070P\u2083 = 10!/7! = 720. Circular permutation: (n-1)!. With repetition: n\u02b3."
         }
       ]
     }

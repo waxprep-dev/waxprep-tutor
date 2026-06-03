@@ -6,10 +6,8 @@
     "Family",
     "Culture",
     "Socialization",
-    "Friendship",
-    "Communication",
-    "Cooperation",
-    "National Values"
+    "Values",
+    "Community"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
@@ -30,26 +28,26 @@
             "extended family",
             "polygamous family",
             "monogamous family",
-            "functions of family",
-            "family tree",
-            "roles in family"
+            "family functions",
+            "primary socialization"
           ],
           "common_misconceptions": [
-            "Nuclear family is the only proper family type",
-            "Family only includes blood relatives"
+            "Nuclear family is the best type",
+            "Extended family is outdated",
+            "Family only means parents and children"
           ],
-          "teaching_note": "Respect diverse family structures. Discuss how family shapes values and behavior."
+          "teaching_note": "Nigerian context: Extended family is common and culturally valued. Family provides: emotional support, economic support, socialization, protection, identity. Types: Nuclear (parents + children), Extended (grandparents, uncles, aunts), Polygamous (one man, multiple wives - common in Northern Nigeria and among Muslims), Monogamous (one husband, one wife). Family is the first agent of socialization - children learn language, values, customs."
         }
       ]
     },
     {
-      "id": "culture",
-      "title": "Culture and Cultural Values",
+      "id": "culture_values",
+      "title": "Culture and Values",
       "week": 2,
       "subtopics": [
         {
-          "id": "culture_concepts",
-          "title": "Understanding Culture",
+          "id": "nigerian_culture",
+          "title": "Nigerian Culture and Values",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
@@ -57,151 +55,21 @@
           ],
           "concepts": [
             "culture",
+            "values",
+            "norms",
             "customs",
             "traditions",
-            "beliefs",
-            "values",
-            "language",
-            "food",
-            "dress",
-            "music",
-            "dance",
+            "material culture",
+            "non-material culture",
             "cultural diversity",
-            "Nigerian cultures"
+            "ethnic groups"
           ],
           "common_misconceptions": [
-            "One culture is superior to others",
-            "Culture never changes"
+            "All Nigerians have the same culture",
+            "Modern culture is better than traditional",
+            "Culture cannot change"
           ],
-          "teaching_note": "Celebrate Nigerian cultural diversity. Discuss positive and negative aspects of cultural practices."
-        }
-      ]
-    },
-    {
-      "id": "socialization",
-      "title": "Socialization",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "socialization_process",
-          "title": "The Process of Socialization",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "culture"
-          ],
-          "concepts": [
-            "socialization",
-            "agents of socialization",
-            "family",
-            "school",
-            "peer group",
-            "religion",
-            "media",
-            "community",
-            "social norms",
-            "values"
-          ],
-          "common_misconceptions": [
-            "Socialization only happens in childhood",
-            "School is the most important agent"
-          ],
-          "teaching_note": "Discuss how different agents contribute to socialization. Analyze positive and negative influences."
-        }
-      ]
-    },
-    {
-      "id": "friendship",
-      "title": "Friendship and Relationships",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "healthy_friendships",
-          "title": "Building Healthy Relationships",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "socialization"
-          ],
-          "concepts": [
-            "friendship",
-            "trust",
-            "respect",
-            "loyalty",
-            "honesty",
-            "peer pressure",
-            "bullying",
-            "conflict resolution",
-            "healthy relationships"
-          ],
-          "common_misconceptions": [
-            "Good friends always agree",
-            "Peer pressure is always negative"
-          ],
-          "teaching_note": "Discuss how to choose friends wisely. Teach strategies for resisting negative peer pressure."
-        }
-      ]
-    },
-    {
-      "id": "communication",
-      "title": "Communication",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "communication_skills",
-          "title": "Effective Communication",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "friendship"
-          ],
-          "concepts": [
-            "communication",
-            "verbal communication",
-            "non-verbal communication",
-            "listening",
-            "speaking",
-            "writing",
-            "body language",
-            "barriers to communication"
-          ],
-          "common_misconceptions": [
-            "Communication is only talking",
-            "Good communicators are born, not made"
-          ],
-          "teaching_note": "Practice active listening and clear expression. Discuss barriers and how to overcome them."
-        }
-      ]
-    },
-    {
-      "id": "national_values",
-      "title": "National Values",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "nigerian_values",
-          "title": "Nigerian Core Values",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "communication"
-          ],
-          "concepts": [
-            "values",
-            "discipline",
-            "integrity",
-            "diligence",
-            "selflessness",
-            "patriotism",
-            "national unity",
-            "religious tolerance",
-            "social justice"
-          ],
-          "common_misconceptions": [
-            "National values don't apply to individuals",
-            "Values are only for religious settings"
-          ],
-          "teaching_note": "Connect values to everyday actions. Discuss how values contribute to national development."
+          "teaching_note": "Nigeria: over 250 ethnic groups. Major: Hausa-Fulani, Yoruba, Igbo. Each has unique language, dress, food, festivals. Material culture: tangible (clothing, food, houses, tools). Non-material: intangible (language, beliefs, values, customs). Nigerian values: respect for elders, hospitality (welcoming guests with food), communal living, hard work, religion. Cultural diversity: unity in diversity, Federal Character Principle. Challenges: ethnic conflicts, religious intolerance, cultural erosion from globalization."
         }
       ]
     }

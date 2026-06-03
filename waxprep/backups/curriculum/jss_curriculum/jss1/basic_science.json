@@ -7,14 +7,12 @@
     "The Human Body",
     "Plants",
     "Matter",
-    "Energy",
-    "Earth and Space",
-    "Environmental Science"
+    "Energy"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
     {
-      "id": "living_non_living",
+      "id": "living_things",
       "title": "Living and Non-Living Things",
       "week": 1,
       "subtopics": [
@@ -34,116 +32,21 @@
             "reproduction",
             "excretion",
             "sensitivity",
-            "life processes"
+            "irritability"
           ],
           "common_misconceptions": [
-            "All moving things are living",
-            "Plants don't respire",
-            "Growth only means getting bigger"
+            "Plants don't move (they move towards light, water)",
+            "Growth only means getting bigger (also includes development)",
+            "All living things reproduce the same way"
           ],
-          "teaching_note": "Use diverse examples including plants and microorganisms. Demonstrate that plants do move (phototropism) and respire."
-        },
-        {
-          "id": "classification",
-          "title": "Classification of Living Things",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "characteristics_living"
-          ],
-          "concepts": [
-            "classification",
-            "kingdoms",
-            "plants",
-            "animals",
-            "Monera",
-            "Protista",
-            "Fungi",
-            "vertebrates",
-            "invertebrates",
-            "binomial nomenclature"
-          ],
-          "common_misconceptions": [
-            "Bacteria are animals",
-            "All fungi are plants",
-            "Viruses are living organisms"
-          ],
-          "teaching_note": "Use local Nigerian organisms as examples. Explain why viruses are not classified as living."
-        }
-      ]
-    },
-    {
-      "id": "human_body",
-      "title": "The Human Body",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "body_systems",
-          "title": "Introduction to Body Systems",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "living_non_living"
-          ],
-          "concepts": [
-            "cells",
-            "tissues",
-            "organs",
-            "systems",
-            "skeletal system",
-            "muscular system",
-            "digestive system",
-            "circulatory system",
-            "nervous system",
-            "respiratory system"
-          ],
-          "common_misconceptions": [
-            "Bones are dry and dead",
-            "The heart pumps blood to the whole body at once"
-          ],
-          "teaching_note": "Use models and diagrams. Emphasize the interconnection between body systems."
-        }
-      ]
-    },
-    {
-      "id": "plants",
-      "title": "Plants",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "plant_structure",
-          "title": "Structure and Functions of Plants",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "human_body"
-          ],
-          "concepts": [
-            "roots",
-            "stem",
-            "leaves",
-            "flowers",
-            "fruits",
-            "photosynthesis",
-            "chlorophyll",
-            "xylem",
-            "phloem",
-            "transpiration",
-            "germination"
-          ],
-          "common_misconceptions": [
-            "Plants get their food from the soil",
-            "Leaves are only for photosynthesis",
-            "All plants have flowers"
-          ],
-          "teaching_note": "Demonstrate starch test on leaves. Show that plants make their own food through photosynthesis."
+          "teaching_note": "MRS GREN: Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, Nutrition. Living things are organized: cells \u2192 tissues \u2192 organs \u2192 systems \u2192 organism. Examples: animals, plants, fungi, bacteria. Non-living: rocks, water, air, plastic. Differences: living things need food/water/air, can reproduce, respond to stimuli, have lifespan. Nigerian context: diverse flora and fauna - tropical forests, savanna animals (lions, elephants in Yankari), domestic animals."
         }
       ]
     },
     {
       "id": "matter",
       "title": "Matter",
-      "week": 4,
+      "week": 2,
       "subtopics": [
         {
           "id": "states_matter",
@@ -151,125 +54,28 @@
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
-            "plants"
+            "living_things"
           ],
           "concepts": [
             "matter",
             "solid",
             "liquid",
             "gas",
-            "state change",
+            "volume",
+            "shape",
+            "particle theory",
             "melting",
             "freezing",
-            "boiling",
             "evaporation",
             "condensation",
-            "sublimation",
-            "particle theory"
+            "sublimation"
           ],
           "common_misconceptions": [
-            "Steam is visible water vapor",
-            "All solids are hard",
-            "Gases have no weight"
+            "Air is not matter (it has mass and occupies space)",
+            "Solids cannot change shape at all (they can be broken)",
+            "Boiling and evaporation are the same"
           ],
-          "teaching_note": "Use demonstrations to show state changes. Explain particle theory using models."
-        },
-        {
-          "id": "mixtures",
-          "title": "Mixtures and Separation",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "states_matter"
-          ],
-          "concepts": [
-            "mixture",
-            "solution",
-            "solute",
-            "solvent",
-            "suspension",
-            "colloid",
-            "filtration",
-            "evaporation",
-            "distillation",
-            "chromatography",
-            "magnetic separation"
-          ],
-          "common_misconceptions": [
-            "Solutions are always liquid",
-            "Filtration can separate dissolved substances"
-          ],
-          "teaching_note": "Demonstrate each separation technique. Emphasize that dissolving is a physical change."
-        }
-      ]
-    },
-    {
-      "id": "energy",
-      "title": "Energy",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "energy_concepts",
-          "title": "Forms and Transformation of Energy",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "matter"
-          ],
-          "concepts": [
-            "energy",
-            "kinetic energy",
-            "potential energy",
-            "heat energy",
-            "light energy",
-            "sound energy",
-            "electrical energy",
-            "chemical energy",
-            "energy transformation",
-            "conservation of energy"
-          ],
-          "common_misconceptions": [
-            "Energy is used up",
-            "Energy and force are the same",
-            "Machines create energy"
-          ],
-          "teaching_note": "Emphasize that energy is transformed, not destroyed. Use everyday examples of energy transformations."
-        }
-      ]
-    },
-    {
-      "id": "earth_space",
-      "title": "Earth and Space",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "solar_system",
-          "title": "The Solar System",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "energy"
-          ],
-          "concepts": [
-            "sun",
-            "planets",
-            "earth",
-            "moon",
-            "stars",
-            "solar system",
-            "orbit",
-            "rotation",
-            "revolution",
-            "day and night",
-            "seasons",
-            "eclipse"
-          ],
-          "common_misconceptions": [
-            "The sun orbits the earth",
-            "The earth is the largest planet",
-            "Eclipses are caused by magic"
-          ],
-          "teaching_note": "Use models and simulations. Demonstrate day/night and seasons using globes and light sources."
+          "teaching_note": "Particle theory: All matter is made of tiny particles. Solids: fixed shape, fixed volume, particles vibrate in fixed positions. Liquids: fixed volume, takes shape of container, particles move past each other. Gases: no fixed shape or volume, particles move freely, spread out. Changes of state: Melting (solid \u2192 liquid), Freezing (liquid \u2192 solid), Evaporation (liquid \u2192 gas at surface), Boiling (liquid \u2192 gas throughout), Condensation (gas \u2192 liquid), Sublimation (solid \u2192 gas, e.g., naphthalene, dry ice)."
         }
       ]
     }

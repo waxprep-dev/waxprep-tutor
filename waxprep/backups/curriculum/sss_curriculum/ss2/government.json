@@ -3,226 +3,112 @@
   "class_level": "SS2",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
+    "Political Parties",
+    "Pressure Groups",
+    "Electoral Systems",
     "Public Administration",
-    "Civil Service",
     "Local Government",
-    "Federal System in Nigeria",
-    "Political Development in Nigeria",
-    "Foreign Policy",
-    "International Organizations"
+    "Foreign Policy"
   ],
   "jamb_high_priority_topics": [
-    "Nigerian Government",
-    "Public Administration",
-    "International Relations",
+    "Political Parties and Party Systems",
+    "Pressure Groups",
+    "Electoral Systems",
     "Local Government"
   ],
   "topics": [
     {
-      "id": "public_administration",
-      "title": "Public Administration",
+      "id": "political_parties",
+      "title": "Political Parties",
       "week": 1,
       "subtopics": [
         {
-          "id": "civil_service",
-          "title": "The Civil Service",
+          "id": "party_definition",
+          "title": "Political Parties - Definition and Functions",
           "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "ss1_systems_government"
+          ],
           "concepts": [
-            "civil service",
-            "public service",
-            "bureaucracy",
-            "hierarchy",
-            "permanence",
-            "neutrality",
-            "anonymity",
-            "impartiality",
-            "civil service commission"
+            "political party",
+            "party system",
+            "one-party system",
+            "two-party system",
+            "multi-party system",
+            "functions of political parties",
+            "party manifesto"
           ],
           "common_misconceptions": [
-            "Civil service and public service are the same",
-            "Civil servants make policy decisions"
+            "Political parties and pressure groups are the same",
+            "One-party system means only one party is allowed (could be dominant party system)",
+            "Nigeria has a two-party system"
           ],
-          "teaching_note": "Explain the characteristics of the civil service. Discuss reforms and challenges in the Nigerian civil service."
-        },
+          "teaching_note": "Nigerian context: First Republic (1960-66): AG, NPC, NCNC, NNDP. Second Republic (1979-83): NPN, UPN, NPP, PRP, GNPP, NAP. Fourth Republic (1999-present): PDP, APC, APGA, Labour Party, NNPP. Multi-party system. INEC registers parties. Functions: aggregate interests, select candidates (primaries), form government, opposition, political education. Party systems: one-party (China), two-party (USA - Democrats/Republicans), multi-party (most European countries, Nigeria). Criticisms of Nigerian parties: lack of ideology, ethnic/regional bases, godfatherism, election rigging, party switching."
+        }
+      ]
+    },
+    {
+      "id": "pressure_groups",
+      "title": "Pressure Groups",
+      "week": 2,
+      "subtopics": [
         {
-          "id": "public_corporations",
-          "title": "Public Corporations",
-          "waec_frequency": "very_high",
+          "id": "pressure_groups_definition",
+          "title": "Pressure Groups - Types and Functions",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "civil_service"
+            "political_parties"
           ],
           "concepts": [
-            "public corporation",
-            "parastatal",
-            "statutory corporation",
-            "government-owned enterprise",
-            "NNPC",
-            "PHCN",
-            "NPA",
-            "advantages",
-            "disadvantages",
-            "privatization"
+            "pressure group",
+            "interest group",
+            "promotional group",
+            "protective group",
+            "trade union",
+            "professional association",
+            "civil society organization",
+            "methods of pressure groups"
           ],
           "common_misconceptions": [
-            "Public corporations are part of the civil service",
-            "Privatization always improves efficiency"
+            "Pressure groups are anti-government (they seek to influence, not overthrow)",
+            "All pressure groups use violent methods",
+            "Pressure groups are illegal in Nigeria"
           ],
-          "teaching_note": "Analyze Nigerian public corporations. Discuss privatization and commercialization policies."
+          "teaching_note": "Pressure groups: organized groups seeking to influence government policy without seeking power. Types: Promotional (promote causes - human rights, environment), Protective (protect member interests - trade unions, professional bodies). Nigerian examples: NLC (Nigeria Labour Congress), NUT (Nigeria Union of Teachers), NBA (Nigerian Bar Association), NMA (Nigerian Medical Association), civil society groups (SERAP, Enough is Enough, BBOG). Methods: lobbying, protests, strikes, media campaigns, litigation, dialogue. Difference from political parties: don't contest elections, focus on specific issues, can be non-partisan."
         }
       ]
     },
     {
       "id": "local_government",
       "title": "Local Government",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "local_govt_system",
-          "title": "Local Government in Nigeria",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "public_administration"
-          ],
-          "concepts": [
-            "local government",
-            "third tier",
-            "functions",
-            "sources of revenue",
-            "problems",
-            "1976 reform",
-            "creation of local governments",
-            "chairman",
-            "councillors"
-          ],
-          "common_misconceptions": [
-            "Local government is controlled by the state governor",
-            "Local governments have sufficient funding"
-          ],
-          "teaching_note": "Discuss the relationship between state and local governments. Analyze funding challenges and reforms."
-        }
-      ]
-    },
-    {
-      "id": "federal_system",
-      "title": "Federal System in Nigeria",
       "week": 3,
       "subtopics": [
         {
-          "id": "federalism_nigeria",
-          "title": "Federalism and Its Practice in Nigeria",
+          "id": "local_gov_nigeria",
+          "title": "Local Government in Nigeria",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "local_government"
+            "pressure_groups"
           ],
           "concepts": [
-            "federalism",
-            "federal character",
-            "revenue allocation",
-            "exclusive list",
-            "concurrent list",
-            "residual list",
-            "fiscal federalism",
-            "derivation principle"
+            "local government",
+            "grassroots government",
+            "LG functions",
+            "sources of LG revenue",
+            "LG reforms",
+            "1976 LG reform",
+            "LG autonomy",
+            "LG creation"
           ],
           "common_misconceptions": [
-            "Federalism means equal powers for all tiers",
-            "The federal government should control everything"
+            "Local governments are created by the federal government (created by state governments)",
+            "LG chairmen are appointed (elected under 1999 Constitution)",
+            "Local governments have no constitutional backing"
           ],
-          "teaching_note": "Trace Nigeria's federal evolution. Discuss revenue allocation formulas and agitations for restructuring."
-        }
-      ]
-    },
-    {
-      "id": "political_development",
-      "title": "Political Development in Nigeria",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "pre_colonial",
-          "title": "Pre-colonial Political Systems",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "federal_system"
-          ],
-          "concepts": [
-            "Hausa-Fulani system",
-            "Emirate system",
-            "Yoruba system",
-            "Igbo system",
-            "Benin system",
-            "direct rule",
-            "indirect rule",
-            "centralized",
-            "decentralized"
-          ],
-          "common_misconceptions": [
-            "All pre-colonial systems were primitive",
-            "Indirect rule was the same everywhere"
-          ],
-          "teaching_note": "Compare the three major pre-colonial systems. Analyze how colonial rule affected traditional structures."
-        },
-        {
-          "id": "nigerian_nationalism",
-          "title": "Nigerian Nationalism and Independence",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "pre_colonial"
-          ],
-          "concepts": [
-            "nationalism",
-            "Herbert Macaulay",
-            "Nnamdi Azikiwe",
-            "Obafemi Awolowo",
-            "Ahmadu Bello",
-            "Amalgamation",
-            "Richard constitution",
-            "independence",
-            "political parties"
-          ],
-          "common_misconceptions": [
-            "Independence was given without struggle",
-            "All nationalists wanted the same thing"
-          ],
-          "teaching_note": "Discuss contributions of key nationalists. Analyze the regional basis of early political parties."
-        }
-      ]
-    },
-    {
-      "id": "foreign_policy",
-      "title": "Foreign Policy and International Relations",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "nigeria_foreign_policy",
-          "title": "Nigeria's Foreign Policy",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "political_development"
-          ],
-          "concepts": [
-            "foreign policy",
-            "diplomacy",
-            "non-alignment",
-            "Africa as centerpiece",
-            "ECOWAS",
-            "OAU/AU",
-            "Commonwealth",
-            "UN",
-            "bilateral relations"
-          ],
-          "common_misconceptions": [
-            "Foreign policy is only about war and peace",
-            "Nigeria's foreign policy never changes"
-          ],
-          "teaching_note": "Analyze Nigeria's foreign policy principles. Discuss contributions to peacekeeping and African integration."
+          "teaching_note": "Nigerian context: 1976 reform by Obasanjo (military) created uniform LG system. 1999 Constitution: Section 7 guarantees democratically elected LG councils. Functions: primary education, healthcare, roads, markets, sanitation, birth/death registration, agriculture extension. Sources: federal allocations (Federation Account), state allocations, rates/tenement, licenses, fines. 774 LGs in Nigeria. Problems: financial dependence on state/federal, state government interference, corruption, poor funding, creation of LCDAs (development areas) by some states without constitutional backing. LG autonomy debate: ongoing calls for direct funding from federal, removal of state joint accounts."
         }
       ]
     }

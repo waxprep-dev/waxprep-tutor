@@ -1,0 +1,43 @@
+{
+  "subject": "home_economics",
+  "class_level": "JSS1",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Home and Family",
+    "Personal Hygiene",
+    "Food and Nutrition",
+    "Clothing and Textiles"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "home_family",
+      "title": "Home and Family Living",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "home_management",
+          "title": "The Home and its Management",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "home",
+            "family",
+            "house",
+            "management",
+            "resources",
+            "household chores",
+            "cleanliness"
+          ],
+          "common_misconceptions": [
+            "Home management is only for girls",
+            "Managing a home is easy",
+            "Resources only mean money"
+          ],
+          "teaching_note": "Home: place where people live as a family. Management: using resources wisely to achieve family goals. Resources: time, energy, money, skills, space. Household chores: cleaning, cooking, washing, organizing. Everyone in the family should contribute to home management. Personal hygiene: bathing regularly, brushing teeth, washing hands, keeping nails clean and short, wearing clean clothes."
+        }
+      ]
+    }
+  ]
+}

@@ -3,155 +3,68 @@
   "class_level": "SS3",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Electromagnetic Waves",
-    "Geometric Optics",
-    "Physical Optics",
-    "Electronics",
-    "Semiconductors",
     "Radioactivity",
-    "Energy and Power"
+    "Atomic Physics",
+    "Electronics",
+    "Modern Physics",
+    "Revision of SS1-SS2"
   ],
   "jamb_high_priority_topics": [
-    "Optics",
+    "Atomic Physics",
+    "Nuclear Physics",
     "Electronics",
-    "Wave-Particle Duality",
-    "Modern Physics"
+    "Photoelectric Effect"
   ],
   "topics": [
     {
-      "id": "electromagnetic_waves",
-      "title": "Electromagnetic Waves",
+      "id": "radioactivity",
+      "title": "Radioactivity",
       "week": 1,
       "subtopics": [
         {
-          "id": "em_spectrum",
-          "title": "The Electromagnetic Spectrum",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "electromagnetic waves",
-            "spectrum",
-            "radio waves",
-            "microwaves",
-            "infrared",
-            "visible light",
-            "ultraviolet",
-            "X-rays",
-            "gamma rays",
-            "wavelength",
-            "frequency",
-            "speed of light"
-          ],
-          "common_misconceptions": [
-            "EM waves need a medium to travel",
-            "All EM waves are harmful"
-          ],
-          "teaching_note": "Emphasize that all EM waves travel at the same speed in vacuum. Discuss applications of each type."
-        }
-      ]
-    },
-    {
-      "id": "geometric_optics",
-      "title": "Geometric Optics",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "reflection",
-          "title": "Reflection of Light",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "em_spectrum"
-          ],
-          "concepts": [
-            "laws of reflection",
-            "plane mirror",
-            "spherical mirror",
-            "concave mirror",
-            "convex mirror",
-            "principal focus",
-            "focal length",
-            "radius of curvature",
-            "mirror formula",
-            "magnification"
-          ],
-          "common_misconceptions": [
-            "Image in plane mirror is formed on the mirror surface",
-            "Real images can be seen without a screen"
-          ],
-          "teaching_note": "Use ray diagrams extensively. Derive the mirror formula. Explain sign conventions clearly."
-        },
-        {
-          "id": "refraction",
-          "title": "Refraction of Light",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "reflection"
-          ],
-          "concepts": [
-            "laws of refraction",
-            "refractive index",
-            "Snell's law",
-            "total internal reflection",
-            "critical angle",
-            "lenses",
-            "convex lens",
-            "concave lens",
-            "lens formula",
-            "power of lens"
-          ],
-          "common_misconceptions": [
-            "Light always bends toward the normal",
-            "Total internal reflection can occur going from air to water"
-          ],
-          "teaching_note": "Demonstrate refraction with glass blocks. Explain total internal reflection and its applications (fiber optics)."
-        }
-      ]
-    },
-    {
-      "id": "physical_optics",
-      "title": "Physical Optics",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "wave_optics",
-          "title": "Wave Nature of Light",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "refraction"
-          ],
-          "concepts": [
-            "interference",
-            "diffraction",
-            "polarization",
-            "Young's double slit experiment",
-            "fringe spacing",
-            "coherent sources",
-            "path difference"
-          ],
-          "common_misconceptions": [
-            "Light is only a particle",
-            "Interference only occurs with sound waves"
-          ],
-          "teaching_note": "Describe Young's experiment as evidence for wave nature. Calculate fringe spacing using the formula."
-        }
-      ]
-    },
-    {
-      "id": "electronics",
-      "title": "Electronics",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "semiconductors",
-          "title": "Semiconductors and Devices",
+          "id": "nuclear_physics",
+          "title": "Atomic and Nuclear Physics",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "wave_optics"
+            "ss2_physics"
+          ],
+          "concepts": [
+            "atom",
+            "nucleus",
+            "protons",
+            "neutrons",
+            "isotopes",
+            "radioactivity",
+            "alpha decay",
+            "beta decay",
+            "gamma decay",
+            "half-life",
+            "nuclear fission",
+            "nuclear fusion",
+            "chain reaction"
+          ],
+          "common_misconceptions": [
+            "All radiation is harmful (background radiation is natural)",
+            "Nuclear fission and fusion are the same",
+            "Half-life means half the atoms die"
+          ],
+          "teaching_note": "Key equations: Alpha (\u03b1): \u2074\u2082He nucleus, stopped by paper. Beta (\u03b2): electron (\u2070\u208b\u2081e), stopped by aluminium. Gamma (\u03b3): electromagnetic, stopped by lead. Half-life: time for half of radioactive atoms to decay. N = N\u2080(1/2)^(t/T\u00bd). Activity A = \u03bbN. Fission: heavy nucleus splits (uranium-235 + neutron \u2192 smaller nuclei + energy). Fusion: light nuclei combine (H + H \u2192 He + energy, occurs in stars). Applications: nuclear power, medical imaging, radiocarbon dating, sterilization. Nigerian context: Nigeria plans nuclear power with Rosatom (Russia). A.E. Ekukinam Nuclear Research Centre at UniPort."
+        }
+      ]
+    },
+    {
+      "id": "electronics_ss3",
+      "title": "Electronics",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "semiconductors",
+          "title": "Semiconductors and Electronic Devices",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "radioactivity"
           ],
           "concepts": [
             "semiconductor",
@@ -159,75 +72,21 @@
             "n-type",
             "diode",
             "transistor",
-            "LED",
             "logic gates",
             "AND",
             "OR",
             "NOT",
             "NAND",
             "NOR",
-            "integrated circuit"
+            "amplifier",
+            "rectifier"
           ],
           "common_misconceptions": [
-            "Semiconductors are partial conductors",
-            "Transistors only amplify signals"
+            "Semiconductors are partial conductors (conductivity can be controlled)",
+            "Transistors only amplify (also used as switches)",
+            "Logic gates are only theoretical (basis of all digital devices)"
           ],
-          "teaching_note": "Explain doping process. Show how logic gates combine to form circuits. Connect to computer technology."
-        }
-      ]
-    },
-    {
-      "id": "modern_physics",
-      "title": "Modern Physics",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "quantum_physics",
-          "title": "Quantum Physics and Photoelectric Effect",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "electronics"
-          ],
-          "concepts": [
-            "photoelectric effect",
-            "threshold frequency",
-            "work function",
-            "Planck's constant",
-            "photon",
-            "wave-particle duality",
-            "de Broglie wavelength",
-            "quantization"
-          ],
-          "common_misconceptions": [
-            "Light intensity determines photoelectron energy",
-            "Wave-particle duality means light is both simultaneously"
-          ],
-          "teaching_note": "Use Einstein's photoelectric equation. Explain that light exhibits wave or particle nature depending on the experiment."
-        },
-        {
-          "id": "nuclear_energy",
-          "title": "Nuclear Energy and Applications",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "quantum_physics"
-          ],
-          "concepts": [
-            "mass-energy equivalence",
-            "E=mc²",
-            "nuclear fission",
-            "nuclear fusion",
-            "chain reaction",
-            "nuclear reactor",
-            "binding energy",
-            "mass defect"
-          ],
-          "common_misconceptions": [
-            "Nuclear fission and fusion are the same",
-            "All nuclear energy is dangerous"
-          ],
-          "teaching_note": "Compare fission and fusion. Discuss advantages and challenges of nuclear power. Connect to medical applications."
+          "teaching_note": "Semiconductors: Si, Ge. Doping: adding impurities. N-type: excess electrons (P, As dopants). P-type: holes (B, Al dopants). PN junction = diode. Forward bias: conducts. Reverse bias: blocks. Transistor: NPN or PNP. Amplification: small input controls larger output. Logic gates: AND (all inputs 1 \u2192 output 1), OR (any input 1 \u2192 output 1), NOT (inverts), NAND, NOR. Truth tables. Applications: computers, phones, calculators, radios. Nigerian context: electronics market at Alaba International, computer village Ikeja."
         }
       ]
     }

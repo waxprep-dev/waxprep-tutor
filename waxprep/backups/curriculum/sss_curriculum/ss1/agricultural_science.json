@@ -3,130 +3,133 @@
   "class_level": "SS1",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Introduction to Agriculture",
+    "Meaning and Importance of Agriculture",
     "Agricultural Ecology",
-    "Soil Science",
     "Crop Production",
     "Animal Production",
-    "Agricultural Economics",
-    "Agricultural Extension"
+    "Agricultural Engineering",
+    "Agricultural Economics"
   ],
   "jamb_high_priority_topics": [
-    "Agriculture in Nigeria",
-    "Soil Science",
-    "Crop Production",
-    "Animal Production",
-    "Agricultural Economics"
+    "General Agriculture",
+    "Agricultural Ecology",
+    "Animal Nutrition"
   ],
   "topics": [
     {
-      "id": "introduction_agriculture",
-      "title": "Introduction to Agriculture",
+      "id": "meaning_importance",
+      "title": "Meaning and Importance of Agriculture",
       "week": 1,
       "subtopics": [
         {
-          "id": "meaning_importance",
-          "title": "Meaning and Importance of Agriculture",
+          "id": "definition_agriculture",
+          "title": "Definition and Branches of Agriculture",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [],
           "concepts": [
-            "agriculture definition",
-            "branches of agriculture",
+            "agriculture",
+            "crop science",
+            "animal science",
+            "soil science",
+            "agricultural economics",
+            "agricultural extension",
+            "agricultural engineering",
+            "forestry",
+            "fishery",
+            "horticulture"
+          ],
+          "common_misconceptions": [
+            "Agriculture is only about farming",
+            "Agriculture is for uneducated people",
+            "Nigeria doesn't need agriculture because of oil"
+          ],
+          "teaching_note": "Nigerian context: Agriculture contributes about 23% of Nigeria's GDP and employs ~70% of the population. Before oil (pre-1970s), agriculture was the mainstay (groundnut pyramids in Kano, cocoa in West, palm oil in East, cotton in North). Current challenges: climate change, Fulani herdsmen conflicts, inadequate storage, poor funding. Federal Ministry of Agriculture and Rural Development. Programs: Anchor Borrowers' Programme, N-Power Agro."
+        },
+        {
+          "id": "importance_agriculture",
+          "title": "Importance of Agriculture",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "definition_agriculture"
+          ],
+          "concepts": [
             "food production",
             "employment",
             "foreign exchange",
             "raw materials",
-            "GDP contribution"
+            "revenue",
+            "market for industrial goods",
+            "environmental balance"
           ],
           "common_misconceptions": [
-            "Agriculture is only crop farming",
-            "Agriculture is for uneducated people"
+            "Agriculture only provides food",
+            "Agricultural development happens quickly",
+            "Only rural people benefit from agriculture"
           ],
-          "teaching_note": "Show agriculture as a business and science. Discuss Nigerian agricultural statistics and potential."
-        },
-        {
-          "id": "agricultural_systems",
-          "title": "Agricultural Systems in Nigeria",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "meaning_importance"
-          ],
-          "concepts": [
-            "shifting cultivation",
-            "bush fallowing",
-            "subsistence farming",
-            "commercial farming",
-            "plantation farming",
-            "mixed farming",
-            "nomadic herding",
-            "intensive farming",
-            "extensive farming"
-          ],
-          "common_misconceptions": [
-            "Commercial farming is always large-scale",
-            "Shifting cultivation is still widely practiced in Nigeria"
-          ],
-          "teaching_note": "Compare traditional and modern systems. Discuss advantages and disadvantages of each system."
+          "teaching_note": "Importance: 1) Food security - feeds the nation. 2) Employment - largest employer in Nigeria. 3) Foreign exchange - cocoa, sesame, cashew exports. 4) Raw materials for industries - cotton for textiles, rubber for tyres, timber for furniture. 5) Revenue for government - taxes, export duties. 6) Market for industrial products - fertilizers, tractors, pesticides. 7) Cultural significance - festivals, traditions."
         }
       ]
     },
     {
-      "id": "soil_science",
-      "title": "Soil Science",
+      "id": "agricultural_ecology",
+      "title": "Agricultural Ecology",
       "week": 2,
       "subtopics": [
         {
-          "id": "soil_formation",
-          "title": "Soil Formation and Composition",
-          "waec_frequency": "very_high",
+          "id": "ecosystem",
+          "title": "Agricultural Ecosystems",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
-          "prerequisites": [],
+          "prerequisites": [
+            "meaning_importance"
+          ],
+          "concepts": [
+            "ecosystem",
+            "biotic factors",
+            "abiotic factors",
+            "producers",
+            "consumers",
+            "decomposers",
+            "food chain",
+            "food web",
+            "energy flow",
+            "ecological pyramids"
+          ],
+          "common_misconceptions": [
+            "Humans are not part of the ecosystem",
+            "All insects are pests",
+            "Decomposers are unnecessary"
+          ],
+          "teaching_note": "Agro-ecosystem: interaction between crops/animals and their environment. Biotic factors: living (plants, animals, microbes, pests, pollinators). Abiotic factors: non-living (rainfall, temperature, soil, light, wind). Food chain: producer \u2192 primary consumer \u2192 secondary consumer \u2192 tertiary consumer. Energy flow: unidirectional, 10% energy transfer between trophic levels (Lindeman's 10% law). Pyramids: number, biomass, energy. Pest management: integrated pest management (IPM) combines biological, cultural, chemical methods."
+        },
+        {
+          "id": "soil",
+          "title": "Soil Science",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "ecosystem"
+          ],
           "concepts": [
             "soil formation",
-            "parent material",
-            "climate",
-            "organisms",
-            "topography",
-            "time",
             "soil profile",
-            "horizons",
             "soil texture",
-            "soil structure"
+            "soil structure",
+            "soil pH",
+            "nutrients",
+            "macro nutrients",
+            "micro nutrients",
+            "soil fertility",
+            "soil conservation"
           ],
           "common_misconceptions": [
             "Soil is just dirt",
-            "All soil is the same"
+            "All plants need the same soil type",
+            "Fertilizer equals soil fertility"
           ],
-          "teaching_note": "Take students to observe soil profiles. Demonstrate soil texture by feel method and mechanical analysis."
-        },
-        {
-          "id": "soil_fertility",
-          "title": "Soil Fertility and Management",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "soil_formation"
-          ],
-          "concepts": [
-            "soil fertility",
-            "soil nutrients",
-            "macronutrients",
-            "micronutrients",
-            "organic matter",
-            "soil pH",
-            "liming",
-            "fertilizers",
-            "manures",
-            "crop rotation",
-            "legumes"
-          ],
-          "common_misconceptions": [
-            "More fertilizer always means better yield",
-            "Organic farming means no inputs at all"
-          ],
-          "teaching_note": "Explain balanced fertilizer use. Discuss organic vs inorganic fertilizers. Practice soil pH testing."
+          "teaching_note": "Soil profile: O (organic), A (topsoil), B (subsoil), C (parent material), R (bedrock). Texture: sand (>0.05mm), silt (0.002-0.05mm), clay (<0.002mm). Loam = ideal mixture. Structure: how particles aggregate (granular, platy, blocky, prismatic, columnar). pH: acidic (<7), neutral (=7), alkaline (>7). Most crops prefer pH 6-7. Macronutrients: N, P, K (primary); Ca, Mg, S (secondary). Micronutrients: Fe, Mn, Zn, Cu, B, Mo, Cl. Fertilizers: organic (manure, compost) vs inorganic (NPK, urea)."
         }
       ]
     },
@@ -140,136 +143,56 @@
           "title": "Classification of Crops",
           "waec_frequency": "high",
           "jamb_frequency": "high",
-          "prerequisites": [],
+          "prerequisites": [
+            "agricultural_ecology"
+          ],
           "concepts": [
             "food crops",
             "cash crops",
             "cereals",
             "legumes",
-            "tubers",
+            "tuber crops",
             "vegetables",
             "fruits",
             "oil crops",
-            "beverage crops",
-            "fibres",
-            "latex crops"
+            "fibre crops",
+            "annuals",
+            "biennials",
+            "perennials"
           ],
           "common_misconceptions": [
-            "Cassava is a cereal",
-            "Cash crops are only for export"
+            "Cash crops are not food crops (some are both)",
+            "All tubers are roots (some are stems)",
+            "Cereals and legumes are the same"
           ],
-          "teaching_note": "Use local Nigerian crops as examples. Classify crops by their botanical families and uses."
+          "teaching_note": "Nigerian context: Major food crops: maize, rice, sorghum, millet, yam, cassava, cocoyam, plantain, beans. Cash crops: cocoa (Ondo, Ogun, Ekiti), palm oil (South-East/South-South), groundnut (North), cotton (North), rubber (Edo, Delta), sesame. Cereals: grass family, staple grains. Legumes: nitrogen-fixing, protein-rich. Tubers: underground storage organs. Classification by life cycle: annuals (complete in one season), biennials (two seasons), perennials (live many years)."
         },
         {
-          "id": "crop_practices",
-          "title": "Agronomic Practices",
+          "id": "farming_systems",
+          "title": "Farming Systems and Practices",
           "waec_frequency": "high",
           "jamb_frequency": "medium",
           "prerequisites": [
             "crop_classification"
           ],
           "concepts": [
-            "land preparation",
-            "planting",
-            "spacing",
-            "thinning",
-            "supplying",
-            "weeding",
-            "fertilizer application",
-            "harvesting",
-            "storage",
-            "processing"
+            "shifting cultivation",
+            "bush fallowing",
+            "crop rotation",
+            "mixed farming",
+            "mono cropping",
+            "inter cropping",
+            "relay cropping",
+            "multiple cropping",
+            "organic farming",
+            "mechanized farming"
           ],
           "common_misconceptions": [
-            "Any time is good for planting",
-            "Harvesting is the final step"
+            "Shifting cultivation is sustainable in modern Nigeria (population pressure makes it unsustainable)",
+            "Monocropping always gives highest yield",
+            "Organic farming means no pest control"
           ],
-          "teaching_note": "Demonstrate proper planting techniques. Emphasize timing for each agronomic practice."
-        }
-      ]
-    },
-    {
-      "id": "animal_production",
-      "title": "Animal Production",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "livestock",
-          "title": "Livestock Management",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "cattle",
-            "sheep",
-            "goats",
-            "pigs",
-            "poultry",
-            "rabbits",
-            "breeds",
-            "feeding",
-            "housing",
-            "health management",
-            "reproduction"
-          ],
-          "common_misconceptions": [
-            "Animal husbandry is only for meat production",
-            "Free-range is always better than intensive"
-          ],
-          "teaching_note": "Discuss products from livestock: meat, milk, eggs, wool, hides. Compare management systems."
-        },
-        {
-          "id": "animal_health",
-          "title": "Animal Health and Diseases",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "livestock"
-          ],
-          "concepts": [
-            "animal diseases",
-            "parasites",
-            "vaccination",
-            "disease prevention",
-            "symptoms",
-            "treatment",
-            "veterinary services",
-            "biosecurity"
-          ],
-          "common_misconceptions": [
-            "All animal diseases affect humans",
-            "Traditional medicine is always safe for animals"
-          ],
-          "teaching_note": "Identify common Nigerian livestock diseases. Emphasize prevention over cure. Discuss zoonotic diseases."
-        }
-      ]
-    },
-    {
-      "id": "agricultural_economics",
-      "title": "Agricultural Economics",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "farm_accounts",
-          "title": "Farm Accounts and Records",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [],
-          "concepts": [
-            "farm records",
-            "production records",
-            "inventory records",
-            "financial records",
-            "profit and loss",
-            "balance sheet",
-            "farm budgeting",
-            "cash flow"
-          ],
-          "common_misconceptions": [
-            "Small farms don't need records",
-            "Profit is the same as cash in hand"
-          ],
-          "teaching_note": "Show simple record-keeping formats. Emphasize that records help decision-making on the farm."
+          "teaching_note": "Farming systems: Shifting cultivation (slash and burn, move when soil exhausted) - common in rainforests but becoming unsustainable. Bush fallowing: land left to rest 3-5 years. Crop rotation: growing different crops in sequence on same land (legumes \u2192 cereals \u2192 root crops). Mixed farming: crops + livestock. Mono cropping: single crop (plantation). Inter cropping: two or more crops together (maize + beans). Relay cropping: planting next crop before harvesting current one. Mechanization: tractors, harvesters, irrigation. Nigerian challenge: low mechanization rate (~5%)."
         }
       ]
     }

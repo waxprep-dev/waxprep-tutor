@@ -3,228 +3,92 @@
   "class_level": "SS2",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Climatic Change",
-    "Soil and Vegetation",
-    "Population Geography",
-    "Settlement Geography",
-    "Agriculture",
-    "Mining and Industry",
-    "Transport and Trade"
-  ],
-  "jamb_high_priority_topics": [
     "Climate",
+    "Vegetation",
     "Soil",
     "Population",
-    "Economic Geography"
+    "Settlement",
+    "Agriculture"
+  ],
+  "jamb_high_priority_topics": [
+    "Climate and Vegetation",
+    "Population",
+    "Settlement"
   ],
   "topics": [
     {
-      "id": "climatic_change",
-      "title": "Climatic Change",
+      "id": "climate",
+      "title": "Climate",
       "week": 1,
       "subtopics": [
         {
-          "id": "climate_change_concepts",
-          "title": "Climate Change and Variability",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "climate change",
-            "global warming",
-            "greenhouse effect",
-            "greenhouse gases",
-            "carbon dioxide",
-            "methane",
-            "deforestation",
-            "ozone depletion",
-            "sea level rise"
-          ],
-          "common_misconceptions": [
-            "Climate change and weather are the same",
-            "Global warming means everywhere gets hotter"
-          ],
-          "teaching_note": "Use data from Nigerian weather stations. Discuss local and global impacts of climate change."
-        }
-      ]
-    },
-    {
-      "id": "soil_vegetation",
-      "title": "Soil and Vegetation",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "soil_geography",
-          "title": "Soil: Formation, Types and Distribution",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "climate_change"
-          ],
-          "concepts": [
-            "soil profile",
-            "soil horizons",
-            "lateritic soils",
-            "alluvial soils",
-            "sandy soils",
-            "clay soils",
-            "loam",
-            "soil erosion",
-            "soil conservation"
-          ],
-          "common_misconceptions": [
-            "All tropical soils are fertile",
-            "Soil erosion only happens in rural areas"
-          ],
-          "teaching_note": "Discuss Nigerian soil types by region. Connect to agricultural productivity and conservation efforts."
-        },
-        {
-          "id": "vegetation",
-          "title": "Vegetation Types and Distribution",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "soil_geography"
-          ],
-          "concepts": [
-            "tropical rainforest",
-            "savanna",
-            "Sudan savanna",
-            "Sahel savanna",
-            "mangrove swamp",
-            "montane vegetation",
-            "vegetation belts",
-            "deforestation"
-          ],
-          "common_misconceptions": [
-            "Savanna is just grassland with no trees",
-            "Nigeria is mostly rainforest"
-          ],
-          "teaching_note": "Map vegetation zones across Nigeria. Discuss human impact on vegetation through agriculture and urbanization."
-        }
-      ]
-    },
-    {
-      "id": "population_geography",
-      "title": "Population Geography",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "population_concepts",
-          "title": "Population: Distribution, Growth and Structure",
+          "id": "climate_factors",
+          "title": "Factors Affecting Climate",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "soil_vegetation"
+            "ss1_latitude_longitude"
           ],
           "concepts": [
-            "population distribution",
-            "population density",
+            "climate",
+            "weather",
+            "latitude",
+            "altitude",
+            "distance from sea",
+            "ocean currents",
+            "prevailing winds",
+            "continentality",
+            "relief",
+            "climatic types",
+            "tropical climate",
+            "equatorial",
+            "tropical rainforest",
+            "savanna",
+            "desert"
+          ],
+          "common_misconceptions": [
+            "Climate and weather are the same (weather is short-term, climate is long-term average)",
+            "Equatorial regions are always hot (also wet, with little temperature variation)",
+            "Deserts are always hot (cold deserts exist)"
+          ],
+          "teaching_note": "Climate factors: Latitude (determines insolation angle), Altitude (lapse rate: 1\u00b0C per 165m), Distance from sea (maritime vs continental), Ocean currents (warm currents increase temperature, humidity), Prevailing winds, Relief (windward = wet, leeward = rain shadow). Nigerian climates: Equatorial (south - Cross River, Rivers, heavy rainfall year-round), Tropical monsoon (coastal), Tropical savanna (most of Nigeria - distinct wet/dry seasons), Sahel (north - semi-arid). Rainfall pattern: decreases northward (4000mm in south \u2192 500mm in far north)."
+        }
+      ]
+    },
+    {
+      "id": "population",
+      "title": "Population",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "population_concepts",
+          "title": "Population Studies",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "climate"
+          ],
+          "concepts": [
+            "population",
+            "census",
             "birth rate",
             "death rate",
-            "natural increase",
+            "fertility rate",
             "migration",
-            "push factors",
-            "pull factors",
-            "population pyramid",
+            "population density",
+            "population distribution",
+            "overpopulation",
+            "underpopulation",
+            "optimum population",
+            "dependency ratio",
             "demographic transition"
           ],
           "common_misconceptions": [
-            "High population always means overpopulation",
-            "Migration is always bad for the source country"
+            "High population density always means overpopulation",
+            "Population growth is always bad",
+            "Census in Nigeria is accurate (challenges: politicization, nomadic populations)"
           ],
-          "teaching_note": "Analyze Nigerian census data. Discuss implications of population growth for development planning."
-        }
-      ]
-    },
-    {
-      "id": "settlement_geography",
-      "title": "Settlement Geography",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "settlements",
-          "title": "Rural and Urban Settlements",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "population_geography"
-          ],
-          "concepts": [
-            "rural settlement",
-            "urban settlement",
-            "urbanization",
-            "conurbation",
-            "megacity",
-            "Lagos",
-            "Abuja",
-            "slum",
-            "urban sprawl",
-            "rural-urban migration"
-          ],
-          "common_misconceptions": [
-            "Urban areas are always better than rural areas",
-            "Urbanization is always negative"
-          ],
-          "teaching_note": "Compare rural and urban settlements in Nigeria. Discuss challenges of rapid urbanization in Lagos."
-        }
-      ]
-    },
-    {
-      "id": "economic_geography",
-      "title": "Economic Geography",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "agriculture",
-          "title": "Agricultural Geography",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "settlement_geography"
-          ],
-          "concepts": [
-            "subsistence farming",
-            "commercial farming",
-            "plantation",
-            "cash crops",
-            "food crops",
-            "irrigation",
-            "mechanization",
-            "agricultural zones",
-            "problems of agriculture"
-          ],
-          "common_misconceptions": [
-            "Nigeria can feed itself without imports",
-            "Traditional farming is always sustainable"
-          ],
-          "teaching_note": "Map agricultural zones in Nigeria. Discuss the role of agriculture in the economy and food security."
-        },
-        {
-          "id": "mining_industry",
-          "title": "Mining and Industrial Development",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "agriculture"
-          ],
-          "concepts": [
-            "mineral resources",
-            "crude oil",
-            "coal",
-            "tin",
-            "limestone",
-            "solid minerals",
-            "manufacturing",
-            "industrialization",
-            "import substitution",
-            "SAP"
-          ],
-          "common_misconceptions": [
-            "Nigeria only has oil",
-            "Industrialization happened quickly in developed countries"
-          ],
-          "teaching_note": "Discuss Nigeria's over-dependence on oil. Explore other mineral resources and industrial development strategies."
+          "teaching_note": "Nigerian context: Population ~220 million (2024), largest in Africa, 6th largest globally. Growth rate ~2.4% (one of highest). Population pyramid: broad base (young population, 40%+ under 15). Density: 240+/km\u00b2 (2024), highly uneven (Lagos 3000+/km\u00b2, Borno <100/km\u00b2). Census history: contentious, last credible attempt 2006. NPC (National Population Commission) conducts censuses. Challenges: youth bulge, unemployment, pressure on infrastructure. Demographic transition: Stage 2 (high birth rate, falling death rate). Population policies: National Population Policy (1988, revised)."
         }
       ]
     }

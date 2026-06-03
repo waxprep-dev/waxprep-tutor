@@ -1,0 +1,82 @@
+{
+  "subject": "hausa",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Jigon Rubutu",
+    "Tsarin Rubutu",
+    "Al'adu da Harshen Hausa",
+    "Adabin Hausa",
+    "Nahawu",
+    "Fassara"
+  ],
+  "jamb_high_priority_topics": [
+    "Nahawu",
+    "Fassara"
+  ],
+  "topics": [
+    {
+      "id": "nahawu",
+      "title": "Nahawun Hausa",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "kalmomi",
+          "title": "Kalmomi da Rukuninsu",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "suna (noun)",
+            "aikatauci (verb)",
+            "siffa (adjective)",
+            "yanayi (adverb)",
+            "wake (preposition)",
+            "ha\u0257e (conjunction)",
+            " barkwanci (interjection)"
+          ],
+          "common_misconceptions": [
+            "Harshen Hausa baya da ka'idoji (yana da ka'idoji sosai)",
+            "Duk kalmar da ta \u0199are da 'a' suna ce mace (ba duka ba)",
+            "Hausa ba harshe mai zurfi ba ne"
+          ],
+          "teaching_note": "Harshen Hausa shine mafi yawa a Afirka ta Yamma. Mutane sama da miliyan 80 ne ke jin harshen. Kalmomi: Suna - mutum, dabba, abu. Aikatauci - ya zo, ya tafi, ya ci. Siffa - babba, \u0199arami, kyakkyawa. Rukunin magana: Jumla ta \u0199ararruwa, Jumla ta tambaya, Jumla ta umurni."
+        }
+      ]
+    },
+    {
+      "id": "alada_hausa",
+      "title": "Al'adu da Harshen Hausa",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "baki_hausa",
+          "title": "Bakin Hausa da Al'adunsa",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "nahawu"
+          ],
+          "concepts": [
+            "al'ada",
+            "biki",
+            "aure",
+            "noman rani",
+            "biranar sallah",
+            "bu\u0257e kai",
+            "\u0257aukar ciki",
+            "salla",
+            "azumi",
+            "zaka"
+          ],
+          "common_misconceptions": [
+            "Bakin Hausa kawai suna da al'ada \u0257aya (aikaba)",
+            "Musulunci shine al'adar Hausa kawai (Kiristoci da sauran addinai suna cikin Hausawa)",
+            "Harshen Hausa bai yi \u0199ari ba"
+          ],
+          "teaching_note": "Al'adar Hausa: Biki na biki (Sallah, Idi, \u0198arar). Aure: ana yin sa bisa ka'idoji dabam dabam. Noman rani: lokacin da ake noma. Hausawa suna da tarihi mai zurfi wanda ya shafi kasuwanci, noma, da sana'o'i. Sarakuna da sarakuna suna da matsayi mai muhimmanci cikin al'umar Hausawa."
+        }
+      ]
+    }
+  ]
+}

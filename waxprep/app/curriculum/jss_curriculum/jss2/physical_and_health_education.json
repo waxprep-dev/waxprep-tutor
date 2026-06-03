@@ -1,0 +1,44 @@
+{
+  "subject": "physical_and_health_education",
+  "class_level": "JSS2",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Athletics",
+    "Ball Games",
+    "Health Education",
+    "First Aid"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "athletics",
+      "title": "Track and Field Events",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "track_events",
+          "title": "Running Events",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "sprint",
+            "middle distance",
+            "relay race",
+            "hurdles",
+            "start",
+            "finish",
+            "baton",
+            "track"
+          ],
+          "common_misconceptions": [
+            "Sprinting doesn't need technique",
+            "Relay baton can be thrown",
+            "Only fast people should do athletics"
+          ],
+          "teaching_note": "Sprints: short distances (100m, 200m, 400m). Explosive start from blocks. Middle distance: 800m, 1500m (requires pacing). Relay: 4 \u00d7 100m, 4 \u00d7 400m. Baton exchange in designated zone. Hurdles: jumping over barriers without knocking them down. Technique: arm action opposite to legs, lean forward at finish. Safety: warm up before exercise, cool down after, proper footwear. Nigerian athletes: Tobi Amusan (world record holder, 100m hurdles)."
+        }
+      ]
+    }
+  ]
+}

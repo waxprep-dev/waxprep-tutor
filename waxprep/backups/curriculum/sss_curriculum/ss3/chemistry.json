@@ -3,259 +3,81 @@
   "class_level": "SS3",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Organic Chemistry",
-    "Alkanols",
-    "Alkanoic Acids",
-    "Alkanoates",
-    "Carbohydrates",
-    "Proteins",
-    "Polymers",
-    "Chemical Industry"
+    "Organic Chemistry Revision",
+    "Chemical Equilibrium",
+    "Energy Changes",
+    "Redox and Electrochemistry",
+    "Qualitative Analysis"
   ],
   "jamb_high_priority_topics": [
     "Organic Chemistry",
-    "Alkanols and Alkanoic Acids",
-    "Biochemistry",
-    "Polymers"
+    "Chemical Equilibrium",
+    "Energy Changes"
   ],
   "topics": [
     {
-      "id": "organic_chemistry",
-      "title": "Organic Chemistry",
+      "id": "ss3_chemistry",
+      "title": "SS3 Chemistry - Revision and Practical",
       "week": 1,
       "subtopics": [
         {
-          "id": "hydrocarbons_ss3",
-          "title": "Hydrocarbons",
+          "id": "chemistry_revision",
+          "title": "Comprehensive Chemistry Revision",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [],
           "concepts": [
-            "alkane",
-            "alkene",
-            "alkyne",
-            "aromatic hydrocarbon",
-            "benzene",
-            "nomenclature",
-            "IUPAC naming",
-            "isomerism",
-            "structural isomerism",
-            "stereoisomerism"
+            "atomic structure",
+            "periodic table",
+            "chemical bonding",
+            "stoichiometry",
+            "acids bases salts",
+            "redox",
+            "electrochemistry",
+            "organic chemistry",
+            "energy changes",
+            "chemical equilibrium",
+            "rate of reaction"
           ],
           "common_misconceptions": [
-            "Benzene has alternating single and double bonds",
-            "All organic compounds are flammable"
+            "SS3 chemistry is entirely new (it's mainly revision and practical)",
+            "Organic chemistry is the hardest topic",
+            "Practical chemistry doesn't count much"
           ],
-          "teaching_note": "Explain benzene structure using resonance. Teach systematic nomenclature for all hydrocarbon classes."
-        },
-        {
-          "id": "alkanols",
-          "title": "Alkanols (Alcohols)",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "hydrocarbons_ss3"
-          ],
-          "concepts": [
-            "alcohol",
-            "primary alcohol",
-            "secondary alcohol",
-            "tertiary alcohol",
-            "ethanol",
-            "methanol",
-            "fermentation",
-            "dehydration",
-            "oxidation",
-            "classification tests"
-          ],
-          "common_misconceptions": [
-            "All alcohols are safe to drink",
-            "Fermentation produces pure ethanol"
-          ],
-          "teaching_note": "Distinguish between different classes of alcohols. Explain fermentation and industrial production of ethanol."
+          "teaching_note": "WAEC Chemistry format: Paper 1 (Obj, 50 questions), Paper 2 (Essay, 5 questions), Paper 3 (Practical, 3 questions). Practical skills: volumetric analysis (titration), qualitative analysis (salt analysis), general practical. Titration tips: read burette at eye level, remove funnel before titrating, use white tile, repeat for concordant values (within 0.10 cm\u00b3). Salt analysis: systematic procedure (appearance, dilute HCl, NaOH, NH\u2083, flame test). Common cations: Pb\u00b2\u207a, Cu\u00b2\u207a, Fe\u00b2\u207a, Fe\u00b3\u207a, Al\u00b3\u207a, Ca\u00b2\u207a, Zn\u00b2\u207a, NH\u2084\u207a. Common anions: CO\u2083\u00b2\u207b, SO\u2084\u00b2\u207b, Cl\u207b, NO\u2083\u207b."
         }
       ]
     },
     {
-      "id": "alkanoic_acids",
-      "title": "Alkanoic Acids and Derivatives",
+      "id": "qualitative_analysis",
+      "title": "Qualitative Analysis",
       "week": 2,
       "subtopics": [
         {
-          "id": "carboxylic_acids",
-          "title": "Alkanoic Acids (Carboxylic Acids)",
+          "id": "salt_analysis",
+          "title": "Systematic Salt Analysis",
           "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "alkanols"
-          ],
-          "concepts": [
-            "carboxylic acid",
-            "ethanoic acid",
-            "methanoic acid",
-            "weak acid",
-            "esterification",
-            "reaction with carbonates",
-            "reaction with metals",
-            "reduction"
-          ],
-          "common_misconceptions": [
-            "Carboxylic acids are strong acids",
-            "All carboxylic acids are liquids at room temperature"
-          ],
-          "teaching_note": "Show that carboxylic acids are weak acids. Demonstrate esterification reaction with practical examples."
-        },
-        {
-          "id": "esters",
-          "title": "Alkanoates (Esters)",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "carboxylic_acids"
-          ],
-          "concepts": [
-            "ester",
-            "esterification",
-            "hydrolysis",
-            "saponification",
-            "soap",
-            "detergent",
-            "fragrances",
-            "flavors",
-            "fats",
-            "oils"
-          ],
-          "common_misconceptions": [
-            "Soap and detergent are the same chemically",
-            "All esters have pleasant smells"
-          ],
-          "teaching_note": "Explain the chemistry of soap making. Distinguish between soaps (salts of fatty acids) and synthetic detergents."
-        }
-      ]
-    },
-    {
-      "id": "biochemistry",
-      "title": "Biochemistry",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "carbohydrates",
-          "title": "Carbohydrates",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "alkanoic_acids"
-          ],
-          "concepts": [
-            "monosaccharide",
-            "disaccharide",
-            "polysaccharide",
-            "glucose",
-            "fructose",
-            "sucrose",
-            "starch",
-            "cellulose",
-            "glycosidic bond",
-            "hydrolysis",
-            "iodine test",
-            "Benedict's test"
-          ],
-          "common_misconceptions": [
-            "All carbohydrates are sweet",
-            "Cellulose is digestible by humans"
-          ],
-          "teaching_note": "Classify carbohydrates by size. Explain why humans cannot digest cellulose. Demonstrate food tests."
-        },
-        {
-          "id": "proteins",
-          "title": "Proteins",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "carbohydrates"
-          ],
-          "concepts": [
-            "amino acid",
-            "peptide bond",
-            "polypeptide",
-            "protein structure",
-            "primary structure",
-            "secondary structure",
-            "tertiary structure",
-            "enzymes",
-            "denaturation",
-            "biuret test"
-          ],
-          "common_misconceptions": [
-            "Proteins are only for muscle building",
-            "Cooking does not affect protein nutritional value"
-          ],
-          "teaching_note": "Explain protein structure levels. Discuss enzymes as biological catalysts. Show effect of heat on proteins."
-        }
-      ]
-    },
-    {
-      "id": "polymers",
-      "title": "Polymers",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "polymer_chemistry",
-          "title": "Natural and Synthetic Polymers",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "biochemistry"
-          ],
-          "concepts": [
-            "polymer",
-            "monomer",
-            "polymerization",
-            "addition polymerization",
-            "condensation polymerization",
-            "polyethene",
-            "polypropene",
-            "PVC",
-            "nylon",
-            "protein polymer",
-            "starch polymer"
-          ],
-          "common_misconceptions": [
-            "All plastics are the same type of polymer",
-            "Natural polymers are always biodegradable"
-          ],
-          "teaching_note": "Distinguish addition and condensation polymerization. Discuss environmental impact of synthetic polymers."
-        }
-      ]
-    },
-    {
-      "id": "chemical_industry",
-      "title": "Chemical Industry",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "nigerian_chemical_industry",
-          "title": "Chemical Industry in Nigeria",
-          "waec_frequency": "high",
           "jamb_frequency": "medium",
           "prerequisites": [
-            "polymers"
+            "chemistry_revision"
           ],
           "concepts": [
-            "petrochemical industry",
-            "fertilizer production",
-            "cement industry",
-            "soap and detergent industry",
-            "pharmaceutical industry",
-            "NAFDAC",
-            "pollution control",
-            "environmental impact"
+            "cation test",
+            "anion test",
+            "flame test",
+            "dilute HCl test",
+            "NaOH test",
+            "NH\u2083 test",
+            "precipitate",
+            "color change",
+            "gas evolution"
           ],
           "common_misconceptions": [
-            "Nigeria has no chemical industry",
-            "Chemical industries only cause pollution"
+            "Adding excess reagent doesn't matter (it does - some precipitates dissolve in excess)",
+            "Flame test is unreliable (it's a quick preliminary test)",
+            "All chlorides are white precipitates"
           ],
-          "teaching_note": "Tour local industries if possible. Discuss the role of chemical industry in national development."
+          "teaching_note": "Preliminary: Note color of salt (Cu\u00b2\u207a = blue/green, Fe\u00b2\u207a = pale green, Fe\u00b3\u207a = brown, Ni\u00b2\u207a = green). Flame test: Na\u207a (yellow), K\u207a (lilac), Ca\u00b2\u207a (brick red), Cu\u00b2\u207a (blue-green). Action of dilute HCl: CO\u2083\u00b2\u207b (effervescence, CO\u2082 turns limewater milky), SO\u2083\u00b2\u207b (SO\u2082 smell). Action of NaOH: Cu\u00b2\u207a (blue ppt, insoluble in excess), Fe\u00b2\u207a (green ppt \u2192 brown), Fe\u00b3\u207a (red-brown ppt), Al\u00b3\u207a (white ppt, soluble in excess), Zn\u00b2\u207a (white ppt, soluble in excess), Pb\u00b2\u207a (white ppt, soluble in excess), Ca\u00b2\u207a (white ppt, insoluble in excess). NH\u2083 similar to NaOH but Al\u00b3\u207a and Pb\u00b2\u207a don't dissolve in excess NH\u2083."
         }
       ]
     }

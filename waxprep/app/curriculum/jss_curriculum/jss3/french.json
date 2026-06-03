@@ -1,0 +1,45 @@
+{
+  "subject": "french",
+  "class_level": "JSS3",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Verbs",
+    "Vocabulary",
+    "Comprehension",
+    "BECE Prep"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "french_verbs",
+      "title": "French Verbs and Conjugation",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "common_verbs",
+          "title": "Common French Verbs",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "etre",
+            "avoir",
+            "aller",
+            "faire",
+            "parler",
+            "manger",
+            "dormir",
+            "conjugation",
+            "present tense"
+          ],
+          "common_misconceptions": [
+            "French verbs are random",
+            "Conjugation is not important",
+            "Je suis and J'ai are interchangeable"
+          ],
+          "teaching_note": "\u00eatre (to be): je suis, tu es, il/elle est, nous sommes, vous \u00eates, ils/elles sont. avoir (to have): j'ai, tu as, il/elle a, nous avons, vous avez, ils/elles ont. aller (to go): je vais, tu vas, il/elle va, nous allons, vous allez, ils/elles vont. -er verbs (parler): drop -er, add -e, -es, -e, -ons, -ez, -ent. Useful phrases: Je mange (I eat), Je parle anglais (I speak English), Je vais \u00e0 l'\u00e9cole (I go to school)."
+        }
+      ]
+    }
+  ]
+}

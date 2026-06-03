@@ -1,0 +1,84 @@
+{
+  "subject": "physical_education",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "History of Physical Education",
+    "Track and Field",
+    "Ball Games",
+    "Gymnastics",
+    "Swimming",
+    "Sports Administration"
+  ],
+  "jamb_high_priority_topics": [
+    "History and Foundation of Physical Education",
+    "Track and Field"
+  ],
+  "topics": [
+    {
+      "id": "history_pe",
+      "title": "History and Philosophy of Physical Education",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "meaning_pe",
+          "title": "Meaning and Importance of Physical Education",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "physical education",
+            "sports",
+            "exercise",
+            "fitness",
+            "health",
+            "wellness",
+            "recreation",
+            "leisure",
+            "motor skills"
+          ],
+          "common_misconceptions": [
+            "Physical education is just playing games",
+            "PE is not an academic subject",
+            "Only athletes need physical education"
+          ],
+          "teaching_note": "Physical education = education through physical activity. Develops physical, mental, social, and emotional well-being. Components: physical fitness, motor skills, knowledge, social development, emotional health. Historical figures: Johann Basedow (modern PE founder), Friedrich Jahn (German gymnastics), Per Henrik Ling (Swedish gymnastics). Nigerian PE: organized sports in schools, NIS (National Institute for Sports) in Lagos, NSF (Nigeria Sports Festival), NSF (National Sports Festival). Benefits: reduces obesity, improves academic performance, develops teamwork, builds character."
+        }
+      ]
+    },
+    {
+      "id": "track_field",
+      "title": "Track and Field Events",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "sprints",
+          "title": "Sprints and Middle Distance",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "history_pe"
+          ],
+          "concepts": [
+            "sprint",
+            "middle distance",
+            "long distance",
+            "hurdles",
+            "steeplechase",
+            "relay",
+            "baton",
+            "starting blocks",
+            "false start",
+            "lanes"
+          ],
+          "common_misconceptions": [
+            "Sprinting and jogging use the same technique",
+            "Arms are not important in sprinting",
+            "The baton can be thrown in relay"
+          ],
+          "teaching_note": "Sprints: 100m, 200m, 400m. Technique: starting blocks (on your marks, set, go), drive phase, acceleration, maintenance, finish. Arm action: pump vigorously, opposite arm to leg. Middle distance: 800m, 1500m. Requires speed and endurance. Relay: 4\u00d7100m, 4\u00d7400m. Baton exchange: visual (upward sweep) or non-visual (downward sweep). Changeover zone: 20m. Nigerian athletes: Tobi Amusan (100m hurdles world record holder), Blessing Okagbare, Davidson Ezinwa, Enefiok Udo-Obong."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "subject": "igbo",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Nsupe Igbo",
+    "Akiko Utoasusu",
+    "Mkpokwa Okwu",
+    "Omenala Ndi Igbo",
+    "Ejije Igbo",
+    "Akwukwo Igbo"
+  ],
+  "jamb_high_priority_topics": [
+    "Nsupe Igbo",
+    "Akiko Utoasusu"
+  ],
+  "topics": [
+    {
+      "id": "nsupe_igbo",
+      "title": "Nsupe Igbo",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "okwu_igbo",
+          "title": "Mmalite Okwu Igbo",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "aha (noun)",
+            "mgbaama (pronoun)",
+            "omumaatu (adjective)",
+            "omume (verb)",
+            "nkowa (adverb)",
+            "njiko (conjunction)",
+            "mmee (interjection)",
+            "utomkpokwa (preposition)"
+          ],
+          "common_misconceptions": [
+            "Igbo bu asusu otu (Igbo nwere orlu, owerri, onitsha, bida, nkwa)",
+            "Aha nwoke na nwaanyi di otu (agagh)",
+            "Okwu Igbo doro anya nile"
+          ],
+          "teaching_note": "Asusu Igbo bu asusu ndi Igbo na Naijiria. Ndi Igbo di na Abia, Anambra, Ebonyi, Enugu, Imo. Ihe kar\u1ecbr\u1ecb nde 30 na-asu Igbo. Akwa okwu Igbo: Aha - nmadu, anu, nri, ulo. Omume - riri, gara, kuru. Mgbaama - m, g\u1ecb, \u1ecd, any\u1ecb, unu, ha. Omumaatu - oma, oke, nta. Nkowa - nke \u1ecdma, ngwa ngwa."
+        }
+      ]
+    },
+    {
+      "id": "omenala_igbo",
+      "title": "Omenala Ndi Igbo",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "omenala_ndi_igbo",
+          "title": "Omenala Ndi Igbo",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "nsupe_igbo"
+          ],
+          "concepts": [
+            "omenala",
+            "\u1ecdf\u1ecd",
+            "omenala igbo",
+            "ewu ukwu",
+            "ihe ncheta",
+            "ilo umu nwaany\u1ecb",
+            "igba nkwu",
+            "iwa akwa",
+            "igba nkwu nwaany\u1ecb"
+          ],
+          "common_misconceptions": [
+            "\u1eccf\u1ecd bu nani ekwensu (\u1ecd bu ekpere nke di oke mkpa)",
+            "Igba nkwu bu ihe na-ach\u1ecdsi ike",
+            "Omenala Igbo nile buru ibu"
+          ],
+          "teaching_note": "\u1eccf\u1ecd: ekpere ndi Igbo, nke na-egosi eziokwu na ikpe ziri ezi. Igba nkwu: emume a na-eme maka iri nkwu \u1ecdh\u1ee5r\u1ee5. Igbu ewu ukwu: emume ncheta nna nna. Akwam ozu: ilo nne nne na nna nna. Igba nkwu nwaany\u1ecb: emume e si aba nwaany\u1ecb nke abuo. Omenala Igbo na-akwanyere \u00f9gw\u00f9 onye \u1ecd b\u1ee5la \u00f9gw\u00f9."
+        }
+      ]
+    }
+  ]
+}

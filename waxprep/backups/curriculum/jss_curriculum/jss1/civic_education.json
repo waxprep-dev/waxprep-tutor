@@ -3,223 +3,41 @@
   "class_level": "JSS1",
   "academic_year": "Junior Secondary",
   "waec_high_priority_topics": [
-    "Citizenship",
-    "Rights and Duties",
     "National Values",
-    "Responsibility",
-    "Community Service",
-    "Government",
-    "Rule of Law"
+    "Citizenship",
+    "Rights and Responsibilities",
+    "National Symbols"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
     {
-      "id": "citizenship",
-      "title": "Citizenship",
+      "id": "national_values_jss",
+      "title": "National Values",
       "week": 1,
       "subtopics": [
         {
-          "id": "what_is_citizenship",
-          "title": "What is Citizenship?",
+          "id": "values_jss1",
+          "title": "Understanding National Values",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [],
           "concepts": [
-            "citizen",
-            "citizenship",
-            "Nigerian citizen",
-            "birth citizenship",
-            "naturalization",
-            "dual citizenship",
-            "foreigner",
-            "alien",
-            "deportation"
-          ],
-          "common_misconceptions": [
-            "Being born in Nigeria automatically makes you a citizen",
-            "Citizenship cannot be taken away"
-          ],
-          "teaching_note": "Explain ways of acquiring Nigerian citizenship. Discuss rights that come with citizenship."
-        }
-      ]
-    },
-    {
-      "id": "rights_duties",
-      "title": "Rights and Duties",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "fundamental_rights",
-          "title": "Fundamental Human Rights",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "citizenship"
-          ],
-          "concepts": [
-            "human rights",
-            "right to life",
-            "right to dignity",
-            "right to fair hearing",
-            "right to freedom of expression",
-            "right to religion",
-            "right to education",
-            "right to vote",
-            "Universal Declaration of Human Rights"
-          ],
-          "common_misconceptions": [
-            "Rights have no limits",
-            "Children have no rights"
-          ],
-          "teaching_note": "Discuss the Nigerian Constitution's provisions on rights. Explain that rights come with responsibilities."
-        },
-        {
-          "id": "duties",
-          "title": "Duties and Obligations of Citizens",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "fundamental_rights"
-          ],
-          "concepts": [
-            "duties",
-            "obedience to law",
-            "payment of taxes",
-            "voting",
-            "defense of country",
-            "promotion of national unity",
-            "protection of public property"
-          ],
-          "common_misconceptions": [
-            "Only adults have duties",
-            "Paying tax is optional"
-          ],
-          "teaching_note": "Connect rights and duties. Show how citizens' duties contribute to national development."
-        }
-      ]
-    },
-    {
-      "id": "responsibility",
-      "title": "Responsibility",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "types_responsibility",
-          "title": "Types of Responsibility",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "rights_duties"
-          ],
-          "concepts": [
-            "responsibility",
-            "personal responsibility",
-            "family responsibility",
-            "community responsibility",
-            "social responsibility",
-            "accountability",
-            "consequences of actions"
-          ],
-          "common_misconceptions": [
-            "Responsibility only means doing chores",
-            "Being responsible limits freedom"
-          ],
-          "teaching_note": "Use real-life scenarios to illustrate responsibility. Discuss how responsibility builds character."
-        }
-      ]
-    },
-    {
-      "id": "community_service",
-      "title": "Community Service",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "service",
-          "title": "Community Service and Development",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "responsibility"
-          ],
-          "concepts": [
-            "community",
-            "community service",
-            "volunteering",
-            "selfless service",
-            "community development",
-            "cooperation",
-            "collaboration",
-            "social impact"
-          ],
-          "common_misconceptions": [
-            "Community service is punishment",
-            "One person cannot make a difference"
-          ],
-          "teaching_note": "Highlight Nigerian examples of community service. Encourage students to participate in community projects."
-        }
-      ]
-    },
-    {
-      "id": "rule_of_law",
-      "title": "Rule of Law",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "law_and_order",
-          "title": "Understanding the Rule of Law",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "community_service"
-          ],
-          "concepts": [
-            "rule of law",
-            "law",
+            "values",
+            "honesty",
+            "integrity",
+            "hard work",
+            "discipline",
+            "selflessness",
             "justice",
-            "equality before the law",
-            "fair trial",
-            "punishment",
-            "law enforcement",
-            "constitution"
+            "fairness",
+            "patriotism"
           ],
           "common_misconceptions": [
-            "The law only applies to poor people",
-            "Breaking small laws is okay"
+            "Values are not important for young people",
+            "Nigerian values are only about respect",
+            "Values cannot be learned"
           ],
-          "teaching_note": "Explain why rule of law is essential for society. Discuss how laws protect citizens."
-        }
-      ]
-    },
-    {
-      "id": "government_basics",
-      "title": "Introduction to Government",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "what_is_government",
-          "title": "What is Government?",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "rule_of_law"
-          ],
-          "concepts": [
-            "government",
-            "types of government",
-            "democracy",
-            "monarchy",
-            "dictatorship",
-            "levels of government",
-            "federal",
-            "state",
-            "local",
-            "functions of government"
-          ],
-          "common_misconceptions": [
-            "Government is only the president",
-            "Democracy means everyone makes all decisions"
-          ],
-          "teaching_note": "Explain the three tiers of Nigerian government. Introduce democratic principles simply."
+          "teaching_note": "Constitutional values (Section 23): discipline, integrity, dignity of labour, social justice, religious tolerance, self-reliance, patriotism. Teaching values through examples: honesty (returning lost money), discipline (obeying school rules), hard work (studying regularly), selflessness (helping others). Nigerian heroes who exemplify values: MKO Abiola (democracy), Chinua Achebe (integrity), Dora Akunyili (anti-counterfeiting), Fela Kuti (speaking truth to power)."
         }
       ]
     }

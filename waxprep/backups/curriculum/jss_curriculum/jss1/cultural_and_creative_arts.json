@@ -1,0 +1,43 @@
+{
+  "subject": "cultural_and_creative_arts",
+  "class_level": "JSS1",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Visual Arts",
+    "Music",
+    "Drama",
+    "Dance"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "visual_arts",
+      "title": "Visual Arts",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "intro_visual_arts",
+          "title": "Introduction to Visual Arts",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "visual arts",
+            "drawing",
+            "painting",
+            "sculpture",
+            "crafts",
+            "pottery",
+            "textile design"
+          ],
+          "common_misconceptions": [
+            "Visual arts is just drawing",
+            "Art is not a real subject",
+            "Only talented people can do art"
+          ],
+          "teaching_note": "Visual arts: art forms you can see. Drawing: using pencils, charcoal, crayons. Painting: using watercolour, oil paint, acrylic. Sculpture: 3D art (clay, wood, metal). Crafts: functional art (basket weaving, bead making, tie-dye). Nigerian traditional arts: Adire (Yoruba tie-dye), Akwete (Igbo weaving), Uli (Igbo body/wall painting), Nok terracotta (ancient sculpture), Benin bronzes. Everyone can learn art - practice improves skill."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "subject": "computer_studies",
+  "class_level": "JSS1",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "History of Computers",
+    "Parts of Computer",
+    "Computer Hardware",
+    "Computer Software",
+    "Using the Computer"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "computer_intro",
+      "title": "Introduction to Computers",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "what_is_computer",
+          "title": "What is a Computer?",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "computer",
+            "electronic device",
+            "data",
+            "information",
+            "input",
+            "processing",
+            "output",
+            "storage"
+          ],
+          "common_misconceptions": [
+            "A computer is just the monitor",
+            "Computers are only for games",
+            "Computers are too difficult to learn"
+          ],
+          "teaching_note": "Computer: electronic device that accepts data, processes it according to instructions, and produces information. Parts: Monitor (display), System unit (CPU), Keyboard (input), Mouse (input). How it works: Input \u2192 Processing \u2192 Output \u2192 Storage. Types: Desktop, Laptop, Tablet. Uses: education, business, communication, entertainment, research. Nigerian context: ICT in schools, N-Power Tech, computer villages (Ikeja, Port Harcourt), mobile phone penetration."
+        }
+      ]
+    }
+  ]
+}

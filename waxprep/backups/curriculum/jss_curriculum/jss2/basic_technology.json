@@ -3,207 +3,40 @@
   "class_level": "JSS2",
   "academic_year": "Junior Secondary",
   "waec_high_priority_topics": [
-    "Workshop Tools",
+    "Materials",
     "Woodwork",
     "Metalwork",
-    "Technical Drawing",
-    "Electrical Circuits",
-    "Energy and Power",
-    "Safety"
+    "Building Construction"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
     {
-      "id": "workshop_tools_jss2",
-      "title": "Workshop Tools and Equipment",
+      "id": "materials",
+      "title": "Materials in Technology",
       "week": 1,
       "subtopics": [
         {
-          "id": "woodwork_tools",
-          "title": "Woodwork Tools",
+          "id": "types_materials",
+          "title": "Types and Properties of Materials",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [],
           "concepts": [
-            "marking tools",
-            "measuring tools",
-            "cutting tools",
-            "boring tools",
-            "driving tools",
-            "planing tools",
-            "saw",
-            "chisel",
-            "plane",
-            "hammer",
-            "screwdriver"
+            "wood",
+            "metal",
+            "plastic",
+            "ceramic",
+            "glass",
+            "rubber",
+            "properties",
+            "uses"
           ],
           "common_misconceptions": [
-            "Any tool can be used for any job",
-            "Tools don't need maintenance"
+            "Plastics are all the same",
+            "Wood is weaker than metal",
+            "Materials cannot be recycled"
           ],
-          "teaching_note": "Demonstrate correct use and care of tools. Emphasize safety at all times."
-        }
-      ]
-    },
-    {
-      "id": "woodwork",
-      "title": "Woodwork",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "wood",
-          "title": "Wood and Wood Products",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "workshop_tools_jss2"
-          ],
-          "concepts": [
-            "hardwood",
-            "softwood",
-            "timber",
-            "plywood",
-            "MDF",
-            "veneer",
-            "grain",
-            "seasoning",
-            "preservation",
-            "joints"
-          ],
-          "common_misconceptions": [
-            "Hardwood is always hard and softwood always soft",
-            "All wood floats"
-          ],
-          "teaching_note": "Show samples of different wood types. Discuss sustainable forestry in Nigeria."
-        }
-      ]
-    },
-    {
-      "id": "metalwork",
-      "title": "Metalwork",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "metals",
-          "title": "Metals and Their Properties",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "woodwork"
-          ],
-          "concepts": [
-            "ferrous metals",
-            "non-ferrous metals",
-            "iron",
-            "steel",
-            "aluminum",
-            "copper",
-            "properties of metals",
-            "uses of metals",
-            "corrosion",
-            "protection"
-          ],
-          "common_misconceptions": [
-            "All metals are magnetic",
-            "All metals rust"
-          ],
-          "teaching_note": "Show samples of common metals. Demonstrate properties like conductivity and magnetism."
-        }
-      ]
-    },
-    {
-      "id": "technical_drawing_jss2",
-      "title": "Technical Drawing",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "drawing_techniques",
-          "title": "Drawing Techniques",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "metalwork"
-          ],
-          "concepts": [
-            "line work",
-            "lettering",
-            "dimensioning",
-            "geometric constructions",
-            "orthographic projection",
-            "first angle",
-            "third angle"
-          ],
-          "common_misconceptions": [
-            "Technical drawing is just sketching",
-            "Dimensions can be estimated"
-          ],
-          "teaching_note": "Practice neat lettering and accurate line work. Introduce orthographic projection."
-        }
-      ]
-    },
-    {
-      "id": "electrical_circuits",
-      "title": "Electrical Circuits",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "electricity_basics",
-          "title": "Basic Electricity and Circuits",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "technical_drawing_jss2"
-          ],
-          "concepts": [
-            "electric current",
-            "voltage",
-            "resistance",
-            "circuit",
-            "series circuit",
-            "parallel circuit",
-            "switch",
-            "bulb",
-            "battery",
-            "conductor",
-            "insulator"
-          ],
-          "common_misconceptions": [
-            "Current is used up in a circuit",
-            "Bigger wires always carry more current"
-          ],
-          "teaching_note": "Build simple circuits. Use circuit diagrams. Explain safety around electricity."
-        }
-      ]
-    },
-    {
-      "id": "energy_power_jss2",
-      "title": "Energy and Power",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "energy_conversion",
-          "title": "Energy Conversion and Power",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "electrical_circuits"
-          ],
-          "concepts": [
-            "energy conversion",
-            "kinetic energy",
-            "potential energy",
-            "mechanical energy",
-            "electrical energy",
-            "heat energy",
-            "power",
-            "work",
-            "efficiency"
-          ],
-          "common_misconceptions": [
-            "Energy can be created",
-            "Power and energy are the same"
-          ],
-          "teaching_note": "Demonstrate energy conversions. Show that energy is conserved in conversions."
+          "teaching_note": "Wood: softwood (pine, used for furniture), hardwood (iroko, mahogany, more durable). Metal: ferrous (iron, steel), non-ferrous (aluminium, copper). Plastic: thermoplastic (meltable, recyclable), thermosetting (rigid, not meltable). Properties: strength, hardness, flexibility, conductivity, durability. Material selection depends on purpose, cost, availability."
         }
       ]
     }

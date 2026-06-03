@@ -3,150 +3,143 @@
   "class_level": "SS1",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Introduction to Economics",
-    "Economic Systems",
+    "Nature and Scope of Economics",
     "Theory of Production",
+    "Theory of Costs",
     "Business Organizations",
     "Market Structures",
-    "Money and Banking",
-    "International Trade"
+    "Money and Banking"
   ],
   "jamb_high_priority_topics": [
     "Economics as a Science",
     "Economic Systems",
-    "Production",
-    "Market Structure",
-    "Money and Inflation",
-    "International Trade"
+    "Theory of Production",
+    "Market Structures",
+    "Money and Inflation"
   ],
   "topics": [
     {
-      "id": "introduction_economics",
-      "title": "Introduction to Economics",
+      "id": "nature_economics",
+      "title": "Nature and Scope of Economics",
       "week": 1,
       "subtopics": [
         {
-          "id": "nature_economics",
-          "title": "Nature and Scope of Economics",
+          "id": "definition_economics",
+          "title": "Definition of Economics",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [],
           "concepts": [
-            "economics definition",
+            "Adam Smith definition",
+            "Alfred Marshall definition",
+            "Lionel Robbins definition",
             "scarcity",
             "choice",
-            "scale of preference",
             "opportunity cost",
-            "microeconomics",
-            "macroeconomics",
-            "positive economics",
-            "normative economics"
+            "wants",
+            "resources"
           ],
           "common_misconceptions": [
             "Economics is only about money",
-            "Economics only studies the economy of a country"
+            "Scarcity means shortage",
+            " Robbins' definition ignores welfare aspect"
           ],
-          "teaching_note": "Start with the basic economic problem: unlimited wants vs limited resources. Use real-life examples to illustrate opportunity cost."
+          "teaching_note": "Key definitions: Adam Smith - 'Science of wealth.' Alfred Marshall - 'Study of mankind in the ordinary business of life.' Lionel Robbins - 'Science which studies human behaviour as a relationship between ends and scarce means which have alternative uses.' Scarcity is the central economic problem - unlimited wants vs limited resources."
         },
         {
-          "id": "basic_concepts",
+          "id": "economic_concepts",
           "title": "Basic Economic Concepts",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "nature_economics"
+            "definition_economics"
           ],
           "concepts": [
-            "wants",
-            "needs",
-            "goods",
-            "services",
-            "factors of production",
-            "land",
-            "labour",
-            "capital",
-            "entrepreneur",
+            "scarcity",
+            "choice",
+            "scale of preference",
+            "opportunity cost",
+            "rationality",
             "production possibility curve",
-            "utility"
+            "frontier",
+            "efficiency"
           ],
           "common_misconceptions": [
-            "Capital only means money",
-            "Labour refers only to manual work"
+            "Opportunity cost is only monetary",
+            "Points inside PPC represent efficiency (they represent inefficiency)",
+            "Economic growth shifts PPC inward"
           ],
-          "teaching_note": "Explain the four factors of production with Nigerian examples. Use the PPC to illustrate scarcity, choice, and opportunity cost."
-        }
-      ]
-    },
-    {
-      "id": "economic_systems",
-      "title": "Economic Systems",
-      "week": 2,
-      "subtopics": [
+          "teaching_note": "Opportunity cost: value of the next best alternative foregone. Scale of preference: ranking of wants in order of importance. PPC: shows maximum combinations of two goods producible with given resources. Points ON curve = efficient. INSIDE = inefficient. OUTSIDE = unattainable. Shift outward = economic growth (more resources or better technology)."
+        },
         {
-          "id": "types_economic_systems",
-          "title": "Types of Economic Systems",
-          "waec_frequency": "very_high",
+          "id": "economic_systems",
+          "title": "Economic Systems",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "introduction_economics"
+            "economic_concepts"
           ],
           "concepts": [
             "capitalism",
+            "free market",
             "socialism",
+            "command economy",
             "mixed economy",
             "price mechanism",
             "central planning",
-            "command economy",
-            "free market",
-            "private sector",
-            "public sector"
+            "public sector",
+            "private sector"
           ],
           "common_misconceptions": [
-            "Pure capitalism or socialism exists today",
-            "Mixed economy means equal private and public ownership"
+            "Pure capitalism and pure socialism exist in practice",
+            "Mixed economy means equal mix of both",
+            "Nigeria is purely capitalist"
           ],
-          "teaching_note": "Compare and contrast each system using real-world examples. Discuss Nigeria as a mixed economy."
+          "teaching_note": "Nigerian context: Nigeria operates a mixed economy. Before SAP (1986): more socialist leaning with state-owned enterprises (NITEL, NEPA, NNPC). Post-SAP: privatization and commercialization. Features: private sector dominance with government regulation. Government provides infrastructure, education, healthcare while private sector drives production."
         }
       ]
     },
     {
-      "id": "theory_production",
+      "id": "production",
       "title": "Theory of Production",
-      "week": 3,
+      "week": 2,
       "subtopics": [
         {
           "id": "factors_production",
-          "title": "Factors of Production and Their Rewards",
+          "title": "Factors of Production",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
-          "prerequisites": [],
+          "prerequisites": [
+            "nature_economics"
+          ],
           "concepts": [
             "land",
-            "rent",
             "labour",
-            "wages",
             "capital",
-            "interest",
             "entrepreneur",
-            "profit",
-            "division of labour",
-            "specialization"
+            "rewards of factors",
+            "rent",
+            "wages",
+            "interest",
+            "profit"
           ],
           "common_misconceptions": [
-            "Profit is the reward for capital",
-            "Division of labour only applies to factories"
+            "Land only means soil (it includes all natural resources)",
+            "Capital only means money (it includes manufactured tools/machinery)",
+            "Entrepreneur is just a business owner"
           ],
-          "teaching_note": "Link each factor to its reward clearly. Use examples of specialization from Nigerian industries."
+          "teaching_note": "Land: all natural resources. Reward = rent. Characteristics: fixed supply, no cost of production, subject to diminishing returns. Labour: human effort (mental and physical). Reward = wages. Capital: man-made goods used to produce other goods. Reward = interest. Entrepreneur: organizes other factors, bears risk, makes decisions. Reward = profit."
         },
         {
-          "id": "law_diminishing_returns",
-          "title": "Law of Diminishing Returns",
+          "id": "production_function",
+          "title": "Production Function and Laws of Returns",
           "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
             "factors_production"
           ],
           "concepts": [
+            "production function",
             "total product",
             "average product",
             "marginal product",
@@ -156,10 +149,45 @@
             "variable inputs"
           ],
           "common_misconceptions": [
-            "Total product always decreases when diminishing returns set in",
-            "Diminishing returns means negative returns"
+            "Law of diminishing returns applies to all industries (only short run)",
+            "TP falling means MP is negative",
+            "AP maximum = MP maximum"
           ],
-          "teaching_note": "Use numerical examples and graphs. Emphasize that diminishing returns refers to marginal product declining, not necessarily total product."
+          "teaching_note": "Production function: Q = f(L, K) - relationship between inputs and output. TP = total output. AP = TP/L. MP = \u0394TP/\u0394L. Law of diminishing returns: as more variable input is added to fixed input, MP eventually decreases. Stage 1: AP increasing. Stage 2: AP decreasing, TP still increasing (rational producer operates here). Stage 3: TP decreasing."
+        }
+      ]
+    },
+    {
+      "id": "theory_costs",
+      "title": "Theory of Costs",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "cost_concepts",
+          "title": "Types of Costs",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "production"
+          ],
+          "concepts": [
+            "fixed cost",
+            "variable cost",
+            "total cost",
+            "average cost",
+            "marginal cost",
+            "short run",
+            "long run",
+            "explicit cost",
+            "implicit cost",
+            "opportunity cost"
+          ],
+          "common_misconceptions": [
+            "Fixed costs never change (they don't vary with output)",
+            "MC intersects AC at AC minimum (TRUE - emphasize this)",
+            "Average cost = marginal cost always"
+          ],
+          "teaching_note": "Key relationships: TC = FC + VC. AC = TC/Q. MC = \u0394TC/\u0394Q. When MC < AC, AC is falling. When MC > AC, AC is rising. When MC = AC, AC is at minimum. This is a crucial relationship for exam questions. Short run: at least one fixed input. Long run: all inputs variable."
         }
       ]
     },
@@ -171,25 +199,26 @@
         {
           "id": "forms_business",
           "title": "Forms of Business Organization",
-          "waec_frequency": "very_high",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
-          "prerequisites": [],
+          "prerequisites": [
+            "theory_costs"
+          ],
           "concepts": [
             "sole proprietorship",
             "partnership",
             "limited liability company",
-            "cooperative society",
-            "public corporation",
-            "private company",
             "public company",
-            "shares",
-            "dividends"
+            "private company",
+            "cooperative society",
+            "public corporation"
           ],
           "common_misconceptions": [
-            "Partnership always means equal sharing",
-            "Public company means government-owned"
+            "Private company can sell shares to public (NO)",
+            "Sole proprietorship has limited liability (NO - unlimited)",
+            "All partnerships have unlimited liability (limited partnerships exist)"
           ],
-          "teaching_note": "Compare advantages and disadvantages of each form. Use Nigerian examples like Dangote Group, cooperative societies."
+          "teaching_note": "Nigerian context: CAC (Corporate Affairs Commission) registers businesses. Sole proprietorship: one owner, unlimited liability, easy to form. Partnership: 2-20 partners, Deed of Partnership. Limited liability company: separate legal personality. Private: ltd, 2-50 members, restricts share transfer. Public: PLC, minimum 7 members, can sell shares to public. Cooperative: common economic interest. Public corporation: government-owned (NNPC, NPA, FAAN)."
         }
       ]
     },
@@ -199,12 +228,12 @@
       "week": 5,
       "subtopics": [
         {
-          "id": "types_market",
+          "id": "types_markets",
           "title": "Types of Market Structures",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
-            "economic_systems"
+            "business_organizations"
           ],
           "concepts": [
             "perfect competition",
@@ -214,13 +243,14 @@
             "price taker",
             "price maker",
             "barriers to entry",
-            "market power"
+            "product differentiation"
           ],
           "common_misconceptions": [
-            "Perfect competition is common in reality",
-            "Monopoly always charges the highest possible price"
+            "Perfect competition exists in reality (it's theoretical)",
+            "Monopoly always charges highest possible price",
+            "Oligopoly and monopoly are the same"
           ],
-          "teaching_note": "Emphasize that perfect competition is theoretical. Use real-world Nigerian examples for each market type."
+          "teaching_note": "Comparison: Perfect competition: many buyers/sellers, homogeneous product, free entry/exit, no market power. Monopoly: single seller, barriers to entry, price maker, unique product. Monopolistic: many sellers, differentiated products, some pricing power. Oligopoly: few sellers, interdependent decisions, barriers to entry. Nigerian examples: NERC-regulated electricity (monopoly elements), MTN/Airtel/Glo (oligopoly in telecoms), open markets near perfect competition."
         }
       ]
     },
@@ -230,82 +260,57 @@
       "week": 6,
       "subtopics": [
         {
-          "id": "functions_money",
-          "title": "Money: Types and Functions",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [],
-          "concepts": [
-            "medium of exchange",
-            "measure of value",
-            "store of value",
-            "standard of deferred payment",
-            "legal tender",
-            "commodity money",
-            "fiat money",
-            "representative money"
-          ],
-          "common_misconceptions": [
-            "Money must have intrinsic value",
-            "Money and currency are exactly the same"
-          ],
-          "teaching_note": "Trace the evolution of money from barter to digital currencies. Discuss the characteristics of good money."
-        },
-        {
-          "id": "central_banking",
-          "title": "Central Banking and Monetary Policy",
+          "id": "money",
+          "title": "Money - Definition, Types and Functions",
           "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "functions_money"
-          ],
-          "concepts": [
-            "Central Bank of Nigeria",
-            "CBN",
-            "monetary policy",
-            "bank rate",
-            "cash reserve ratio",
-            "liquidity ratio",
-            "open market operations",
-            "inflation targeting"
-          ],
-          "common_misconceptions": [
-            "Central banks exist to make profit",
-            "Monetary policy only affects banks"
-          ],
-          "teaching_note": "Explain the role of CBN as banker to government and banks. Discuss how monetary policy tools affect the Nigerian economy."
-        }
-      ]
-    },
-    {
-      "id": "international_trade",
-      "title": "International Trade",
-      "week": 7,
-      "subtopics": [
-        {
-          "id": "trade_basics",
-          "title": "Basis and Types of International Trade",
-          "waec_frequency": "very_high",
           "jamb_frequency": "high",
           "prerequisites": [
             "market_structures"
           ],
           "concepts": [
-            "absolute advantage",
-            "comparative advantage",
-            "exports",
-            "imports",
-            "balance of trade",
-            "balance of payments",
-            "terms of trade",
-            "tariffs",
-            "quotas"
+            "money",
+            "barter",
+            "medium of exchange",
+            "measure of value",
+            "store of value",
+            "standard of deferred payment",
+            "types of money",
+            "legal tender",
+            "fiat money"
           ],
           "common_misconceptions": [
-            "Countries should only produce what they are best at absolutely",
-            "Trade surplus is always good"
+            "Money must be backed by gold (fiat money is not)",
+            "Anything used as money IS money (must be generally acceptable)",
+            "Inflation means prices of all goods rise equally"
           ],
-          "teaching_note": "Use comparative advantage examples relevant to Nigeria (crude oil exports, food imports). Discuss trade policies."
+          "teaching_note": "Functions of money: medium of exchange (solves barter's double coincidence problem), measure of value (common denominator), store of value (saves purchasing power), standard of deferred payment (enables borrowing/lending). Characteristics: portability, durability, divisibility, recognizability, stability of value. Nigerian currency: Naira (\u20a6) and kobo. CBN is the sole issuer."
+        },
+        {
+          "id": "banking",
+          "title": "Financial Institutions and Banking",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "money"
+          ],
+          "concepts": [
+            "Central Bank",
+            "commercial banks",
+            "merchant banks",
+            "development banks",
+            "microfinance banks",
+            "functions of CBN",
+            "monetary policy",
+            "bank rate",
+            "cash reserve ratio",
+            "liquidity ratio"
+          ],
+          "common_misconceptions": [
+            "CBB lends directly to individuals (it lends to commercial banks)",
+            "Commercial banks create money (they do - through lending)",
+            "All banks perform the same functions"
+          ],
+          "teaching_note": "Nigerian context: CBN (established 1958, Act 2007): issues currency, banker to government, banker's bank, lender of last resort, foreign reserve management, monetary policy. Commercial banks: First Bank, UBA, GTBank, Zenith, Access. Deposit money banks accept deposits and give loans. Monetary policy tools: open market operations, cash reserve ratio (CRR), liquidity ratio (LR), monetary policy rate (MPR)."
         }
       ]
     }

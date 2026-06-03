@@ -1,0 +1,44 @@
+{
+  "subject": "agricultural_science",
+  "class_level": "JSS2",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Crop Production",
+    "Soil",
+    "Agricultural Tools",
+    "Pests and Diseases"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "crop_production_jss2",
+      "title": "Crop Production",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "crops",
+          "title": "Crops and their Cultivation",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "crop",
+            "cereal",
+            "legume",
+            "tuber",
+            "vegetable",
+            "planting",
+            "harvesting",
+            "storage"
+          ],
+          "common_misconceptions": [
+            "All crops grow the same way",
+            "You can plant crops anytime",
+            "Harvested crops don't need special storage"
+          ],
+          "teaching_note": "Major crops in Nigeria: Maize, Rice, Yam, Cassava, Beans, Groundnut, Cocoa, Palm oil, Cotton. Factors for crop growth: soil, water, sunlight, temperature. Crop stages: land preparation, planting, weeding, pest control, harvesting, storage, marketing. Storage methods: barns, silos, refrigeration, drying."
+        }
+      ]
+    }
+  ]
+}

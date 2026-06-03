@@ -3,195 +3,355 @@
   "class_level": "SS1",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Comprehension and Summary",
+    "Comprehension Skills",
+    "Summary Writing",
     "Essay Writing",
     "Lexis and Structure",
-    "Speech Work",
-    "Listening Skills",
-    "Grammar - Parts of Speech",
-    "Tenses and Concord"
+    "Oral English",
+    "Grammar"
   ],
   "jamb_high_priority_topics": [
     "Comprehension",
     "Lexis and Structure",
-    "Oral English",
-    "Essay Writing"
+    "Oral English"
   ],
   "topics": [
     {
-      "id": "comprehension_summary",
-      "title": "Comprehension and Summary Writing",
+      "id": "comprehension",
+      "title": "Comprehension Skills",
       "week": 1,
       "subtopics": [
         {
-          "id": "reading_comprehension",
-          "title": "Reading Comprehension Skills",
+          "id": "reading_techniques",
+          "title": "Reading and Comprehension Techniques",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [],
           "concepts": [
+            "skimming",
+            "scanning",
+            "intensive reading",
+            "inference",
+            "deduction",
             "literal comprehension",
-            "inferential comprehension",
-            "evaluative comprehension",
-            "context clues",
-            "main idea",
+            "inferential comprehension"
+          ],
+          "common_misconceptions": [
+            "Reading word by word instead of in chunks",
+            "Not reading questions before the passage",
+            "Spending too much time on one question"
+          ],
+          "teaching_note": "Grammar rule: Train students to read the questions first before the passage. This helps them know what to look for. Skim for main ideas (30 seconds), then scan for specific details. Practice with WAEC past questions regularly."
+        },
+        {
+          "id": "answer_types",
+          "title": "Types of Comprehension Answers",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "reading_techniques"
+          ],
+          "concepts": [
+            "literal answers",
+            "inferential answers",
+            "evaluative answers",
+            "vocabulary in context",
+            "main idea identification",
             "supporting details"
           ],
           "common_misconceptions": [
-            "Comprehension is just reading the passage",
-            "Answers can always be found word-for-word in the passage"
+            "Copying directly from passage without paraphrasing",
+            "Adding personal opinions not in passage",
+            "Not using complete sentences for answers"
           ],
-          "teaching_note": "Teach students to identify question types (literal, inferential, evaluative). Practice with varied passage types including descriptive, narrative, and argumentative texts."
-        },
+          "teaching_note": "Grammar rule: Answers must be in complete sentences unless otherwise stated. Never copy directly from the passage - paraphrase using your own words."
+        }
+      ]
+    },
+    {
+      "id": "summary_writing",
+      "title": "Summary Writing",
+      "week": 2,
+      "subtopics": [
         {
-          "id": "summary_writing",
+          "id": "summary_techniques",
           "title": "Summary Writing Techniques",
           "waec_frequency": "very_high",
-          "jamb_frequency": "high",
+          "jamb_frequency": "medium",
           "prerequisites": [
-            "reading_comprehension"
+            "comprehension"
           ],
           "concepts": [
-            "summarization",
+            "condensation",
             "paraphrasing",
             "main points",
-            "conciseness",
-            "own words",
-            "relevant points",
-            "irrelevant details"
+            "relevant vs irrelevant details",
+            "word count limits",
+            "note-taking for summary"
           ],
           "common_misconceptions": [
-            "Summary is just copying from the passage",
-            "Including as many points as possible makes a better summary"
+            "Including examples and illustrations in summary",
+            "Exceeding word limit",
+            "Copying sentences directly from passage",
+            "Adding personal opinions"
           ],
-          "teaching_note": "Teach the process: read, identify main points, draft in own words, check word count. Emphasize paraphrasing over direct copying."
+          "teaching_note": "Grammar rule: A summary must be in continuous prose (paragraphs), NOT point form. Use connectives: firstly, moreover, consequently, finally. Count words carefully - WAEC usually specifies 150 words."
+        },
+        {
+          "id": "relevance_selection",
+          "title": "Selecting Relevant Points",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [
+            "summary_techniques"
+          ],
+          "concepts": [
+            "identifying main points",
+            "eliminating examples",
+            "eliminating repetitions",
+            "eliminating illustrations",
+            "synopsis writing"
+          ],
+          "common_misconceptions": [
+            "Treating examples as main points",
+            "Including all points regardless of relevance",
+            "Not numbering points when required"
+          ],
+          "teaching_note": "Rule: Examples, illustrations, and repetitions are NOT main points. If the question asks for numbered points, number them clearly. Read the question carefully - it may specify how many points to include."
         }
       ]
     },
     {
       "id": "essay_writing",
       "title": "Essay Writing",
-      "week": 2,
+      "week": 3,
       "subtopics": [
-        {
-          "id": "essay_structure",
-          "title": "Structure and Organization of Essays",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "introduction",
-            "body paragraphs",
-            "conclusion",
-            "thesis statement",
-            "topic sentence",
-            "unity",
-            "coherence",
-            "transition words"
-          ],
-          "common_misconceptions": [
-            "Longer essays always score higher",
-            "Introduction and conclusion are optional",
-            "Essays don't need planning"
-          ],
-          "teaching_note": "Emphasize planning before writing. Teach the hamburger model for paragraph structure. Practice all essay types: narrative, descriptive, argumentative, expository."
-        },
         {
           "id": "essay_types",
           "title": "Types of Essays",
           "waec_frequency": "very_high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "essay_structure"
-          ],
+          "jamb_frequency": "low",
+          "prerequisites": [],
           "concepts": [
             "narrative essay",
             "descriptive essay",
             "argumentative essay",
             "expository essay",
+            "article writing",
             "formal letter",
             "informal letter",
-            "article writing",
             "speech writing"
           ],
           "common_misconceptions": [
-            "All essays follow the same format",
-            "Formal and informal letters have the same tone"
+            "Mixing formal and informal tones",
+            "Not planning before writing",
+            "Writing less than required length"
           ],
-          "teaching_note": "Teach the features of each essay type. Practice letter formats with proper addresses and salutations. Emphasize audience awareness in speech writing."
+          "teaching_note": "Grammar rule: Every essay must have an introduction, body paragraphs, and conclusion. Plan for 5 minutes before writing. Aim for at least 450 words. Use paragraphs - each main idea gets its own paragraph."
+        },
+        {
+          "id": "formal_letter",
+          "title": "Formal Letter Writing",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "low",
+          "prerequisites": [
+            "essay_types"
+          ],
+          "concepts": [
+            "writer's address",
+            "date",
+            "recipient's address",
+            "salutation",
+            "title",
+            "body",
+            "conclusion",
+            "subscription",
+            "signature",
+            "Yours faithfully",
+            "Yours sincerely"
+          ],
+          "common_misconceptions": [
+            "Using 'Dear Sir' without addressing a specific person",
+            "Writing 'Yours faithfully' when using a name",
+            "Not including both addresses"
+          ],
+          "teaching_note": "Format rule: If salutation is 'Dear Sir/Madam', use 'Yours faithfully'. If salutation uses a name (Dear Mr. Ade), use 'Yours sincerely'. Always include writer's address at top right and date."
+        },
+        {
+          "id": "speech_writing",
+          "title": "Speech Writing",
+          "waec_frequency": "high",
+          "jamb_frequency": "low",
+          "prerequisites": [
+            "essay_types"
+          ],
+          "concepts": [
+            "title",
+            "salutation",
+            "introduction",
+            "body",
+            "conclusion",
+            "audience awareness",
+            "persuasive techniques"
+          ],
+          "common_misconceptions": [
+            "Writing like an essay without addressing the audience",
+            "Using 'Dear Sir' instead of addressing the audience directly",
+            "Not including a title"
+          ],
+          "teaching_note": "Format: Start with title (e.g., 'A WELCOME ADDRESS'), then salutation (The Principal, staff, and fellow students...). Use direct address: 'I stand before you today...'. End with 'Thank you'."
         }
       ]
     },
     {
       "id": "lexis_structure",
       "title": "Lexis and Structure",
-      "week": 3,
+      "week": 4,
+      "subtopics": [
+        {
+          "id": "synonyms_antonyms",
+          "title": "Synonyms and Antonyms",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "synonyms",
+            "antonyms",
+            "words in context",
+            "nearest in meaning",
+            "opposite in meaning",
+            "word relationships"
+          ],
+          "common_misconceptions": [
+            "Choosing a synonym without considering context",
+            "Confusing antonyms with synonyms",
+            "Not reading the full sentence for context"
+          ],
+          "teaching_note": "Grammar rule: Always consider the CONTEXT when choosing synonyms. 'Bright' can mean intelligent (bright student) or shining (bright light) - context determines meaning."
+        },
+        {
+          "id": "word_formation",
+          "title": "Word Formation and Vocabulary Development",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "synonyms_antonyms"
+          ],
+          "concepts": [
+            "prefixes",
+            "suffixes",
+            "roots",
+            "compounding",
+            "derivation",
+            "affixation",
+            "word families"
+          ],
+          "common_misconceptions": [
+            "Adding wrong prefix for negation",
+            "Confusing noun-forming and adjective-forming suffixes",
+            "Not recognizing Latin/Greek roots"
+          ],
+          "teaching_note": "Common prefixes: un-, re-, dis-, mis-, pre-, over-. Common suffixes: -tion (noun), -ful (adjective), -ly (adverb), -ment (noun). Root 'spect' = see (inspect, respect, spectator)."
+        }
+      ]
+    },
+    {
+      "id": "grammar",
+      "title": "Grammar",
+      "week": 5,
       "subtopics": [
         {
           "id": "parts_speech",
           "title": "Parts of Speech",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
           "prerequisites": [],
           "concepts": [
-            "nouns",
-            "pronouns",
-            "verbs",
-            "adjectives",
-            "adverbs",
-            "prepositions",
-            "conjunctions",
-            "interjections",
+            "noun",
+            "pronoun",
+            "verb",
+            "adjective",
+            "adverb",
+            "preposition",
+            "conjunction",
+            "interjection",
+            "determiners",
             "articles"
           ],
           "common_misconceptions": [
-            "Every word ending in -ly is an adverb",
-            "All verbs show action"
+            "Confusing adjectives with adverbs",
+            "Not recognizing gerunds as nouns",
+            "Misidentifying prepositions"
           ],
-          "teaching_note": "Use sentence analysis to identify parts of speech. Emphasize that word function determines its part of speech, not just form."
+          "teaching_note": "Grammar rules: Adjectives describe nouns (beautiful girl). Adverbs describe verbs (run quickly). A word can be different parts of speech depending on usage: 'book' the noun vs 'book' the verb."
         },
         {
-          "id": "tenses_concord",
-          "title": "Tenses and Subject-Verb Agreement",
+          "id": "tenses",
+          "title": "Tenses and Verb Forms",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [
             "parts_speech"
           ],
           "concepts": [
-            "simple present",
-            "simple past",
-            "simple future",
+            "present simple",
             "present continuous",
-            "past continuous",
             "present perfect",
+            "past simple",
+            "past continuous",
             "past perfect",
-            "subject-verb agreement",
-            "concord rules"
+            "future tense",
+            "subject-verb agreement"
           ],
           "common_misconceptions": [
-            "Subject-verb agreement only applies to simple tenses",
-            "Collective nouns always take plural verbs"
+            "Using present continuous for habitual actions",
+            "Confusing past simple with present perfect",
+            "Subject-verb agreement errors with collective nouns"
           ],
-          "teaching_note": "Teach concord rules systematically. Practice error correction exercises. Focus on tricky cases: collective nouns, indefinite pronouns, and inverted sentences."
+          "teaching_note": "Grammar rules: Present simple for habits (I eat rice daily). Present continuous for now (I am eating now). Present perfect for unfinished time (I have eaten today). Past simple for completed actions (I ate yesterday)."
+        },
+        {
+          "id": "sentence_structure",
+          "title": "Sentence Structure",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "tenses"
+          ],
+          "concepts": [
+            "simple sentence",
+            "compound sentence",
+            "complex sentence",
+            "compound-complex sentence",
+            "clauses",
+            "main clause",
+            "subordinate clause",
+            "relative clause"
+          ],
+          "common_misconceptions": [
+            "Writing sentence fragments instead of complete sentences",
+            "Comma splices (joining two independent clauses with just a comma)",
+            "Run-on sentences"
+          ],
+          "teaching_note": "Grammar rules: A simple sentence has one main clause. A compound sentence has two+ main clauses joined by coordinating conjunctions (FANBOYS: for, and, nor, but, or, yet, so). A complex sentence has one main clause and one+ subordinate clauses."
         }
       ]
     },
     {
       "id": "oral_english",
       "title": "Oral English",
-      "week": 4,
+      "week": 6,
       "subtopics": [
         {
           "id": "vowels_consonants",
           "title": "Vowels and Consonants",
           "waec_frequency": "high",
-          "jamb_frequency": "high",
+          "jamb_frequency": "very_high",
           "prerequisites": [],
           "concepts": [
             "pure vowels",
             "diphthongs",
-            "triphthongs",
+            "monophthongs",
             "consonant clusters",
             "voiced consonants",
             "voiceless consonants",
@@ -199,89 +359,59 @@
             "manner of articulation"
           ],
           "common_misconceptions": [
-            "Every letter has only one sound",
-            "The number of letters equals the number of sounds"
+            "Confusing vowel sounds with vowel letters",
+            "Pronouncing silent letters",
+            "Not distinguishing between minimal pairs"
           ],
-          "teaching_note": "Use the International Phonetic Alphabet (IPA). Focus on sounds that differ from Nigerian language phonemes. Practice minimal pairs."
+          "teaching_note": "Pronunciation guide: English has 20 vowel sounds (12 pure + 8 diphthongs) but only 5 vowel letters. Pure vowels: /i\u02d0/ (see), /\u026a/ (sit), /e/ (bed), /\u00e6/ (cat), /\u0251\u02d0/ (car), /\u0252/ (hot), /\u0254\u02d0/ (law), /\u028a/ (put), /u\u02d0/ (food), /\u028c/ (cup), /\u025c\u02d0/ (bird), /\u0259/ (about)."
         },
         {
-          "id": "rhythm_intonation",
-          "title": "Rhythm, Stress and Intonation",
+          "id": "stress_rhythm",
+          "title": "Stress and Rhythm",
           "waec_frequency": "high",
-          "jamb_frequency": "medium",
+          "jamb_frequency": "very_high",
           "prerequisites": [
             "vowels_consonants"
           ],
           "concepts": [
             "word stress",
             "sentence stress",
+            "syllables",
+            "stressed syllables",
+            "unstressed syllables",
             "intonation patterns",
-            "rising tone",
-            "falling tone",
-            "rhythm",
-            "schwa sound"
+            "rhythm"
           ],
           "common_misconceptions": [
-            "Stressing every word equally in a sentence",
-            "Intonation doesn't affect meaning"
+            "Stressing every syllable equally",
+            "Not understanding that stress can change word meaning",
+            "Using flat intonation"
           ],
-          "teaching_note": "Demonstrate how stress and intonation change meaning. Use recorded materials for listening practice. Practice with question types: WH vs yes/no questions."
-        }
-      ]
-    },
-    {
-      "id": "vocabulary_development",
-      "title": "Vocabulary Development",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "word_formation",
-          "title": "Word Formation Processes",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "prefixes",
-            "suffixes",
-            "roots",
-            "compounding",
-            "blending",
-            "acronyms",
-            "derivation",
-            "antonyms",
-            "synonyms",
-            "homophones"
-          ],
-          "common_misconceptions": [
-            "Adding any prefix creates the opposite meaning",
-            "Synonyms can always be used interchangeably"
-          ],
-          "teaching_note": "Build vocabulary through word analysis. Teach common prefixes and suffixes with their meanings. Practice identifying word parts."
+          "teaching_note": "Stress rule: Two-syllable nouns are usually stressed on the first syllable (TAble, WAter). Two-syllable verbs are usually stressed on the second syllable (beGIN, aRRIVE). JAMB frequently tests word stress."
         },
         {
-          "id": "idioms_proverbs",
-          "title": "Idioms, Proverbs and Figures of Speech",
-          "waec_frequency": "high",
+          "id": "rhyme_alliteration",
+          "title": "Rhyme, Alliteration and Assonance",
+          "waec_frequency": "medium",
           "jamb_frequency": "medium",
           "prerequisites": [
-            "word_formation"
+            "stress_rhythm"
           ],
           "concepts": [
-            "simile",
-            "metaphor",
-            "personification",
-            "hyperbole",
-            "euphemism",
-            "irony",
-            "idioms",
-            "proverbs",
-            "collocations"
+            "rhyme",
+            "rhyme scheme",
+            "alliteration",
+            "assonance",
+            "consonance",
+            "onomatopoeia",
+            "poetic devices"
           ],
           "common_misconceptions": [
-            "Idioms should be interpreted literally",
-            "Figurative language is only for literature"
+            "Confusing alliteration with assonance",
+            "Thinking rhymes must be spelled similarly",
+            "Not identifying rhyme schemes correctly"
           ],
-          "teaching_note": "Teach idioms in context. Compare English idioms with Nigerian language equivalents. Practice identifying figures of speech in everyday language."
+          "teaching_note": "Definitions: Alliteration = repeated consonant sounds at word beginnings (Peter Piper). Assonance = repeated vowel sounds (sld owly). Rhyme = same ending sounds (cat/hat). Rhyme scheme is marked with letters (ABAB)."
         }
       ]
     }

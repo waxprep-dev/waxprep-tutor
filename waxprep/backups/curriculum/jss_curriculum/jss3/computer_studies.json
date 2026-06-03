@@ -1,0 +1,43 @@
+{
+  "subject": "computer_studies",
+  "class_level": "JSS3",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Programming",
+    "Internet",
+    "BECE Prep"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "internet_web",
+      "title": "Internet and World Wide Web",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "internet_basics",
+          "title": "Understanding the Internet",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "internet",
+            "WWW",
+            "website",
+            "browser",
+            "URL",
+            "email",
+            "social media",
+            "cyber safety"
+          ],
+          "common_misconceptions": [
+            "Internet and WWW are the same",
+            "Everything on the internet is true",
+            "You can't be harmed online"
+          ],
+          "teaching_note": "Internet: global network of connected computers. WWW (World Wide Web): information system on the internet using hyperlinks. Browser: software to access web (Chrome, Firefox, Edge). URL: web address (e.g., www.google.com). Email: electronic mail. Social media: Facebook, Instagram, Twitter/X, TikTok. Cyber safety: don't share passwords, don't meet online friends alone, report cyberbullying, don't click suspicious links. Nigerian tech: Flutterwave, Paystack, Andela, tech hubs in Lagos (Yaba)."
+        }
+      ]
+    }
+  ]
+}

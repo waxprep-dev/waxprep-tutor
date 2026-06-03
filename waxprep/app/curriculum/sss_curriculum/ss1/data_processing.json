@@ -1,0 +1,119 @@
+{
+  "subject": "data_processing",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "Introduction to Data Processing",
+    "Data Processing Cycle",
+    "Data Processing Tools",
+    "Data Organization",
+    "Computer Applications"
+  ],
+  "jamb_high_priority_topics": [
+    "Data Processing Fundamentals",
+    "Electronic Spreadsheet"
+  ],
+  "topics": [
+    {
+      "id": "intro_data_processing",
+      "title": "Introduction to Data Processing",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "definition_dp",
+          "title": "Definition and Importance of Data Processing",
+          "waec_frequency": "high",
+          "jamb_frequency": "medium",
+          "prerequisites": [],
+          "concepts": [
+            "data",
+            "information",
+            "processing",
+            "data processing",
+            "raw facts",
+            "meaningful data",
+            "types of data",
+            "analog data",
+            "digital data",
+            "data life cycle"
+          ],
+          "common_misconceptions": [
+            "Data and information are the same",
+            "Data processing is only done with computers",
+            "All data is useful without processing"
+          ],
+          "teaching_note": "Key distinction: Data = raw, unorganized facts (numbers, text, images). Information = processed, organized data that is meaningful. Data processing = collection, recording, organizing, storage, retrieval, transformation, and presentation of data. Nigerian context: NPC (National Population Commission) processes census data, NBS (National Bureau of Statistics) processes economic data, WAEC processes examination results."
+        }
+      ]
+    },
+    {
+      "id": "data_processing_cycle",
+      "title": "Data Processing Cycle",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "dp_cycle",
+          "title": "Stages of Data Processing",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "intro_data_processing"
+          ],
+          "concepts": [
+            "data collection",
+            "data preparation",
+            "data input",
+            "processing",
+            "data output",
+            "data storage",
+            "feedback",
+            "distribution",
+            "GIGO"
+          ],
+          "common_misconceptions": [
+            "Data processing is a linear process (it's cyclic)",
+            "Output is always printed documents",
+            "Storage is the final stage"
+          ],
+          "teaching_note": "Data Processing Cycle: 1) Collection - gathering raw data (surveys, sensors). 2) Preparation - sorting, verifying, classifying. 3) Input - entering data into computer. 4) Processing - calculations, sorting, summarizing. 5) Output - results (reports, graphs). 6) Storage - saving for future use. 7) Distribution - sending to users. GIGO: Garbage In, Garbage Out - quality of output depends on quality of input. Feedback loop: output can become new input."
+        }
+      ]
+    },
+    {
+      "id": "electronic_spreadsheet",
+      "title": "Electronic Spreadsheet",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "spreadsheet_basics",
+          "title": "Introduction to Spreadsheets",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "data_processing_cycle"
+          ],
+          "concepts": [
+            "spreadsheet",
+            "workbook",
+            "worksheet",
+            "cell",
+            "row",
+            "column",
+            "range",
+            "formula",
+            "function",
+            "relative reference",
+            "absolute reference",
+            "chart"
+          ],
+          "common_misconceptions": [
+            "Spreadsheets are only for calculations",
+            "Excel and spreadsheets are different things",
+            "Formulas and functions are the same"
+          ],
+          "teaching_note": "Spreadsheet software: Microsoft Excel, Google Sheets, LibreOffice Calc. Cell reference: column letter + row number (A1, B2). Cell range: A1:C5. Formulas start with = sign. Common functions: SUM, AVERAGE, MAX, MIN, COUNT, IF. Relative reference: A1 (changes when copied). Absolute reference: $A$1 (stays fixed when copied). Mixed: $A1 or A$1. Charts: column, bar, pie, line. Nigerian application: budgeting, payroll, student records, sales tracking."
+        }
+      ]
+    }
+  ]
+}

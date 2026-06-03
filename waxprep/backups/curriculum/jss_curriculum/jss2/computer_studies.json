@@ -1,0 +1,45 @@
+{
+  "subject": "computer_studies",
+  "class_level": "JSS2",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Word Processing",
+    "Spreadsheets",
+    "Internet",
+    "Email"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "word_processing",
+      "title": "Word Processing",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "ms_word",
+          "title": "Introduction to Word Processing",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "word processor",
+            "Microsoft Word",
+            "typing",
+            "formatting",
+            "font",
+            "paragraph",
+            "alignment",
+            "save",
+            "print"
+          ],
+          "common_misconceptions": [
+            "Word processing is just typing",
+            "Formatting doesn't matter",
+            "You don't need to save your work often"
+          ],
+          "teaching_note": "Word processing software: Microsoft Word, Google Docs, LibreOffice Writer. Basic operations: typing text, selecting text (Ctrl+A), copying (Ctrl+C), pasting (Ctrl+V), cutting (Ctrl+X). Formatting: bold (Ctrl+B), italic (Ctrl+I), underline (Ctrl+U), font size, font type, color. Alignment: left, center, right, justified. Paragraph: line spacing, indentation. Save: Ctrl+S (save frequently!). Print: Ctrl+P."
+        }
+      ]
+    }
+  ]
+}

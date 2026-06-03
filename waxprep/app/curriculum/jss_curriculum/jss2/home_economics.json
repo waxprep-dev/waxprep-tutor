@@ -1,0 +1,42 @@
+{
+  "subject": "home_economics",
+  "class_level": "JSS2",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Food and Nutrition",
+    "Cooking Methods",
+    "Kitchen Safety"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "food_nutrition_jss2",
+      "title": "Food and Nutrition",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "nutrients_jss",
+          "title": "Classes of Food Nutrients",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "carbohydrates",
+            "proteins",
+            "fats",
+            "vitamins",
+            "minerals",
+            "water",
+            "balanced diet"
+          ],
+          "common_misconceptions": [
+            "Fats are always bad",
+            "Proteins are only in meat",
+            "Vitamins give energy"
+          ],
+          "teaching_note": "Carbohydrates: energy food (garri, rice, yam, bread). Proteins: body building (beans, fish, meat, eggs). Fats: energy storage (palm oil, butter, groundnut oil). Vitamins: protect against diseases (fruits, vegetables). Minerals: for strong bones and blood (milk, vegetables). Water: for digestion and temperature control. Balanced diet: contains all nutrients in right proportions. Nigerian foods: egusi soup (protein), eba (carbohydrate), ugu vegetable (vitamins/minerals)."
+        }
+      ]
+    }
+  ]
+}

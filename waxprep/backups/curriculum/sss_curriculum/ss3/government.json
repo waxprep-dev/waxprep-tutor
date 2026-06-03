@@ -3,183 +3,46 @@
   "class_level": "SS3",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Military Rule in Nigeria",
-    "Federalism in Nigeria",
-    "Democracy and Development",
+    "Nigerian Federalism",
+    "Constitutional Development",
     "Political Parties in Nigeria",
-    "Electoral Processes",
-    "International Relations",
-    "International Organizations"
+    "Nigeria and the World",
+    "Current Affairs"
   ],
   "jamb_high_priority_topics": [
-    "Nigerian Government",
-    "Political Development",
-    "International Relations",
-    "Comparative Government"
+    "Nigerian Government and Politics",
+    "International Relations"
   ],
   "topics": [
     {
-      "id": "military_rule",
-      "title": "Military Rule in Nigeria",
+      "id": "nigerian_politics",
+      "title": "Nigerian Government and Politics",
       "week": 1,
       "subtopics": [
         {
-          "id": "military_interventions",
-          "title": "Military Interventions and Administrations",
+          "id": "nigeria_government",
+          "title": "Structure and Functions of Nigerian Government",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [],
           "concepts": [
-            "military coup",
-            "military government",
-            "Ironsi",
-            "Gowon",
-            "Murtala",
-            "Obasanjo (military)",
-            "Buhari (military)",
-            "Babangida",
-            "Abacha",
-            "Abdulsalami",
-            "justifications",
-            "consequences"
+            "federalism",
+            "executive",
+            "legislature",
+            "judiciary",
+            "president",
+            "national assembly",
+            "supreme court",
+            "constitution",
+            "democracy",
+            "elections"
           ],
           "common_misconceptions": [
-            "All military regimes were identical",
-            "Military rule was better than civilian rule"
+            "Nigeria has a parliamentary system (presidential system)",
+            "The President is above the law (not under 1999 Constitution)",
+            "State governments have no powers (they have significant powers under federalism)"
           ],
-          "teaching_note": "Compare different military regimes. Analyze reasons for military intervention and their impact."
-        }
-      ]
-    },
-    {
-      "id": "democracy_development",
-      "title": "Democracy and Political Development",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "fourth_republic",
-          "title": "The Fourth Republic",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "military_rule"
-          ],
-          "concepts": [
-            "Fourth Republic",
-            "1999 constitution",
-            "Obasanjo civilian",
-            "Yar'Adua",
-            "Jonathan",
-            "Buhari civilian",
-            "democratic consolidation",
-            "challenges of democracy",
-            "electoral reforms"
-          ],
-          "common_misconceptions": [
-            "Democracy automatically brings development",
-            "Nigeria's democracy is identical to Western models"
-          ],
-          "teaching_note": "Assess the successes and challenges of the Fourth Republic. Discuss factors affecting democratic consolidation."
-        }
-      ]
-    },
-    {
-      "id": "international_relations",
-      "title": "International Relations",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "foreign_policy",
-          "title": "Nigeria's Foreign Policy",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "democracy_development"
-          ],
-          "concepts": [
-            "foreign policy",
-            "diplomacy",
-            "non-alignment",
-            "Africa as centerpiece",
-            "ECOWAS",
-            "OAU/AU",
-            "United Nations",
-            "Commonwealth",
-            "bilateral relations",
-            "multilateral relations"
-          ],
-          "common_misconceptions": [
-            "Foreign policy is only about trade",
-            "Nigeria's foreign policy never changes"
-          ],
-          "teaching_note": "Analyze the principles guiding Nigeria's foreign policy. Assess Nigeria's role in international organizations."
-        }
-      ]
-    },
-    {
-      "id": "international_organizations",
-      "title": "International Organizations",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "global_organizations",
-          "title": "Global and Regional Organizations",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "foreign_policy"
-          ],
-          "concepts": [
-            "United Nations",
-            "UN organs",
-            "Security Council",
-            "General Assembly",
-            "ECOWAS",
-            "AU",
-            "EU",
-            "Commonwealth",
-            "OPEC",
-            "NATO",
-            "WHO",
-            "UNESCO"
-          ],
-          "common_misconceptions": [
-            "The UN can force countries to obey",
-            "International organizations are controlled by superpowers"
-          ],
-          "teaching_note": "Discuss the structure and functions of key organizations. Evaluate their effectiveness and limitations."
-        }
-      ]
-    },
-    {
-      "id": "comparative_government",
-      "title": "Comparative Government",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "government_systems",
-          "title": "Comparison of Government Systems",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "international_organizations"
-          ],
-          "concepts": [
-            "presidential system",
-            "parliamentary system",
-            "unitary system",
-            "federal system",
-            "UK system",
-            "US system",
-            "French system",
-            "Nigerian system",
-            "comparative analysis"
-          ],
-          "common_misconceptions": [
-            "One system is best for all countries",
-            "Nigeria should adopt another country's system"
-          ],
-          "teaching_note": "Compare features of different systems. Discuss suitability to Nigerian context."
+          "teaching_note": "Nigerian government structure: Executive (President, Vice President, Federal Executive Council/Cabinet, Ministries). Legislature (National Assembly: Senate - 109 members, House of Representatives - 360 members). Judiciary (Supreme Court, Court of Appeal, Federal High Court, State High Courts, Sharia Court of Appeal, Customary Court of Appeal). Federal character: principle of proportional representation. Creation of states: 3 regions (1960) \u2192 4 (1963) \u2192 12 (1967) \u2192 19 (1976) \u2192 21 (1987) \u2192 30 (1991) \u2192 36 (1996) + FCT. Revenue allocation: derivation principle, need principle, population, equality of states."
         }
       ]
     }

@@ -7,7 +7,6 @@
     "Simple Equations",
     "Geometry",
     "Angles",
-    "Construction",
     "Statistics",
     "Ratio and Proportion"
   ],
@@ -19,233 +18,95 @@
       "week": 1,
       "subtopics": [
         {
-          "id": "expanding_brackets_jss2",
-          "title": "Expanding and Simplifying Algebraic Expressions",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "none",
-          "prerequisites": [],
-          "concepts": [
-            "algebraic expression",
-            "like terms",
-            "unlike terms",
-            "simplifying",
-            "expanding brackets",
-            "factorization",
-            "common factors",
-            "substitution"
-          ],
-          "common_misconceptions": [
-            "2x + 3x = 5x²",
-            "Brackets can be removed without changing signs"
-          ],
-          "teaching_note": "Emphasize combining like terms only. Use area models for expansion."
-        },
-        {
-          "id": "simple_equations_jss2",
-          "title": "Simple Linear Equations",
-          "waec_frequency": "very_high",
+          "id": "algebra_basics",
+          "title": "Introduction to Algebra",
+          "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
-            "expanding_brackets_jss2"
+            "jss1_whole_numbers"
           ],
           "concepts": [
-            "equation",
-            "solution",
-            "balance method",
-            "transposition",
-            "variables on both sides",
-            "bracket equations",
-            "word problems"
+            "algebra",
+            "variable",
+            "constant",
+            "coefficient",
+            "term",
+            "expression",
+            "simplification",
+            "like terms",
+            "unlike terms"
           ],
           "common_misconceptions": [
-            "You can move a term without changing its sign",
-            "x must always be on the left"
+            "Letters in algebra represent words",
+            "2x means 2 + x (NO, it means 2 \u00d7 x)",
+            "x + x = x\u00b2 (NO, x + x = 2x)"
           ],
-          "teaching_note": "Use balance analogy. Check solutions by substitution."
+          "teaching_note": "Algebra uses letters to represent unknown numbers. Variable: letter that can take different values (x, y, n). Constant: fixed number (3, 5, -2). Coefficient: number multiplying a variable (in 3x, 3 is the coefficient). Expression: combination of terms (3x + 2y - 5). Simplifying: combine like terms (terms with same variable). Example: 3x + 2y + 5x - y = 8x + y. Worked examples: If x = 3, find 2x + 5. 2(3) + 5 = 11."
         }
       ]
     },
     {
-      "id": "geometry_jss2",
-      "title": "Geometry",
+      "id": "simple_equations",
+      "title": "Simple Equations",
       "week": 2,
       "subtopics": [
         {
-          "id": "angles_parallel",
-          "title": "Angles Associated with Parallel Lines",
+          "id": "linear_equations",
+          "title": "Solving Linear Equations",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
             "algebraic_expressions_jss2"
           ],
           "concepts": [
-            "parallel lines",
-            "transversal",
-            "corresponding angles",
-            "alternate angles",
-            "interior angles",
-            "vertically opposite angles",
-            "angles on a straight line",
-            "angles at a point"
+            "equation",
+            "solution",
+            "balancing method",
+            "transposition",
+            "linear equation",
+            "unknown"
           ],
           "common_misconceptions": [
-            "Corresponding angles are always equal",
-            "Alternate angles are on the same side"
+            "You can add different terms together",
+            "Moving a term across = doesn't change sign",
+            "2x means x + x (true, but 2x also means 2 \u00d7 x)"
           ],
-          "teaching_note": "Use Z, F, C patterns for identification. Practice with algebraic angle problems."
-        },
-        {
-          "id": "triangles",
-          "title": "Triangles and Their Properties",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "angles_parallel"
-          ],
-          "concepts": [
-            "types of triangles",
-            "equilateral",
-            "isosceles",
-            "scalene",
-            "right-angled",
-            "angle sum",
-            "exterior angle",
-            "Pythagoras theorem"
-          ],
-          "common_misconceptions": [
-            "All triangles have a right angle",
-            "Isosceles triangles must have one angle at the top"
-          ],
-          "teaching_note": "Derive angle sum property. Introduce Pythagoras theorem for right-angled triangles."
+          "teaching_note": "Equation: mathematical sentence with = sign. Golden rule: Do the same to both sides. Steps: 1) Simplify both sides. 2) Collect variable terms on one side, constants on the other. 3) Divide by coefficient. Worked example: 2x + 5 = 13. 2x = 13 - 5. 2x = 8. x = 4. Check: 2(4) + 5 = 13 \u2713. Word problems: Translate words to equations. 'Three times a number plus 7 equals 22' \u2192 3x + 7 = 22 \u2192 x = 5."
         }
       ]
     },
     {
-      "id": "construction_jss2",
-      "title": "Geometric Constructions",
+      "id": "geometry_jss2",
+      "title": "Geometry",
       "week": 3,
       "subtopics": [
         {
-          "id": "basic_constructions",
-          "title": "Basic Geometric Constructions",
+          "id": "angles_lines",
+          "title": "Angles and Lines",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [
-            "geometry_jss2"
+            "simple_equations"
           ],
           "concepts": [
-            "bisector of a line",
-            "bisector of an angle",
-            "perpendicular lines",
+            "angle",
+            "point",
+            "line",
             "parallel lines",
-            "constructing triangles",
-            "SSS",
-            "SAS",
-            "ASA"
+            "transversal",
+            "vertically opposite angles",
+            "alternate angles",
+            "corresponding angles",
+            "interior angles",
+            "sum of angles on straight line",
+            "sum of angles at point"
           ],
           "common_misconceptions": [
-            "Construction is the same as drawing",
-            "Any compass setting works for all constructions"
+            "Parallel lines never meet (in Euclidean geometry)",
+            "Alternate angles are always equal (only for parallel lines)",
+            "All angles that look equal are equal"
           ],
-          "teaching_note": "Emphasize leaving construction lines visible. Practice with ruler and compass only."
-        }
-      ]
-    },
-    {
-      "id": "statistics_jss2",
-      "title": "Statistics",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "data_handling",
-          "title": "Data Collection and Presentation",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "construction_jss2"
-          ],
-          "concepts": [
-            "data collection",
-            "frequency table",
-            "tally",
-            "bar chart",
-            "pie chart",
-            "pictogram",
-            "mean",
-            "median",
-            "mode",
-            "range"
-          ],
-          "common_misconceptions": [
-            "Mean is always a whole number",
-            "Mode must appear most frequently"
-          ],
-          "teaching_note": "Collect real data from class. Construct charts by hand and discuss interpretation."
-        }
-      ]
-    },
-    {
-      "id": "ratio_proportion",
-      "title": "Ratio, Proportion and Rates",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "ratio",
-          "title": "Ratio and Proportion",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "statistics_jss2"
-          ],
-          "concepts": [
-            "ratio",
-            "simplifying ratio",
-            "dividing in a ratio",
-            "proportion",
-            "direct proportion",
-            "inverse proportion",
-            "rate",
-            "speed",
-            "unitary method"
-          ],
-          "common_misconceptions": [
-            "Ratio is the same as fraction",
-            "Doubling one quantity doubles the other in inverse proportion"
-          ],
-          "teaching_note": "Use real-life examples like recipes and maps. Practice dividing quantities in given ratios."
-        }
-      ]
-    },
-    {
-      "id": "mensuration_jss2",
-      "title": "Mensuration",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "area_perimeter",
-          "title": "Area and Perimeter of Plane Shapes",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "ratio_proportion"
-          ],
-          "concepts": [
-            "perimeter",
-            "area",
-            "rectangle",
-            "square",
-            "triangle",
-            "parallelogram",
-            "trapezium",
-            "circle",
-            "circumference",
-            "pi"
-          ],
-          "common_misconceptions": [
-            "Area and perimeter are the same thing",
-            "Pi equals exactly 22/7"
-          ],
-          "teaching_note": "Use grid paper to demonstrate area. Show that pi is approximately 3.14 or 22/7."
+          "teaching_note": "Key facts: Angles on a straight line sum to 180\u00b0. Angles at a point sum to 360\u00b0. Vertically opposite angles are equal. Parallel lines cut by transversal: Alternate angles are equal (Z-shape), Corresponding angles are equal (F-shape), Interior angles sum to 180\u00b0 (C-shape/U-shape). Types of angles: acute (< 90\u00b0), right (= 90\u00b0), obtuse (90\u00b0 < angle < 180\u00b0), reflex (> 180\u00b0). Complementary: sum to 90\u00b0. Supplementary: sum to 180\u00b0."
         }
       ]
     }

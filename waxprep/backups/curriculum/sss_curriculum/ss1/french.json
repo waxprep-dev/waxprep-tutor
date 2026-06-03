@@ -1,0 +1,148 @@
+{
+  "subject": "french",
+  "class_level": "SS1",
+  "academic_year": "Senior Secondary",
+  "waec_high_priority_topics": [
+    "French Grammar",
+    "Comprehension",
+    "Oral French",
+    "Vocabulary",
+    "Composition",
+    "Culture and Civilization"
+  ],
+  "jamb_high_priority_topics": [
+    "French Grammar",
+    "Comprehension",
+    "Oral French"
+  ],
+  "topics": [
+    {
+      "id": "french_grammar",
+      "title": "French Grammar",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "articles",
+          "title": "Articles",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [],
+          "concepts": [
+            "article defini",
+            "article indefini",
+            "article contracte",
+            "le",
+            "la",
+            "les",
+            "un",
+            "une",
+            "des",
+            "du",
+            "de la",
+            "des",
+            "au",
+            "a la",
+            "aux"
+          ],
+          "common_misconceptions": [
+            "All nouns ending in -e are feminine",
+            "Articles are not important in French",
+            "Partitive articles are the same as indefinite"
+          ],
+          "teaching_note": "Pronunciation guide: le [l\u0259], la [la], les [le]. Masculine nouns generally take le/un, feminine take la/une. Articles contractes: de + le = du, de + les = des, a + le = au, a + les = aux. Partitive: used for uncountable nouns (du pain, de l'eau). Agreement is crucial in French - article, adjective, and noun must agree in gender and number."
+        },
+        {
+          "id": "verbs_present",
+          "title": "Verbes au Present",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "articles"
+          ],
+          "concepts": [
+            "conjugaison",
+            "premier groupe",
+            "deuxieme groupe",
+            "troisieme groupe",
+            "etre",
+            "avoir",
+            "aller",
+            "faire",
+            "verbes reguliers",
+            "verbes irreguliers"
+          ],
+          "common_misconceptions": [
+            "French verb conjugation is random (there are patterns)",
+            "Avoir and etre are only used as main verbs",
+            "All -er verbs are regular"
+          ],
+          "teaching_note": "Premier groupe (-er verbs): parler \u2192 je parle, tu parles, il/elle/on parle, nous parlons, vous parlez, ils/elles parlent. Deuxieme groupe (-ir verbs with -issons): finir \u2192 je finis, nous finissons. Troisieme groupe (irregular): etre (je suis, tu es, il est, nous sommes, vous etes, ils sont), avoir (j'ai, tu as, il a, nous avons, vous avez, ils ont), aller (je vais, tu vas, il va, nous allons, vous allez, ils vont). \u00eatre and avoir are auxiliary verbs used in compound tenses."
+        }
+      ]
+    },
+    {
+      "id": "french_vocabulary",
+      "title": "Vocabulary Building",
+      "week": 2,
+      "subtopics": [
+        {
+          "id": "daily_vocabulary",
+          "title": "Vocabulaire Quotidien",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "french_grammar"
+          ],
+          "concepts": [
+            "salutations",
+            "nombres",
+            "jours de la semaine",
+            "mois de l'annee",
+            "saison",
+            "couleurs",
+            "nourriture",
+            "famille",
+            "maison"
+          ],
+          "common_misconceptions": [
+            "French numbers are simple (70 = 60+10, 80 = 4\u00d720)",
+            "Months are capitalized in French (NO, only proper nouns)",
+            "Salut is always formal"
+          ],
+          "teaching_note": "Pronunciation guide: Salutations: Bonjour [b\u0254\u0303\u0292u\u0281] (good day), Bonsoir [b\u0254\u0303swa\u0281] (good evening), Salut [saly] (hi/bye - informal). Numbers: 70 = soixante-dix (60+10), 80 = quatre-vingts (4\u00d720), 90 = quatre-vingt-dix. Days: lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche (lowercase). Family: pere, mere, frere, soeur, fils, fille. Nigerian context: French is Nigeria's second official language due to neighboring Francophone countries (Benin, Niger, Cameroon). Useful for ECOWAS trade and diplomacy."
+        }
+      ]
+    },
+    {
+      "id": "comprehension",
+      "title": "Comprehension Ecrite",
+      "week": 3,
+      "subtopics": [
+        {
+          "id": "reading_french",
+          "title": "Reading Comprehension",
+          "waec_frequency": "high",
+          "jamb_frequency": "high",
+          "prerequisites": [
+            "french_vocabulary"
+          ],
+          "concepts": [
+            "comprehension",
+            "questions",
+            "reponses",
+            "texte",
+            "reperage",
+            "deduction",
+            "vocabulaire en contexte"
+          ],
+          "common_misconceptions": [
+            "Translate every word to understand",
+            "Answer in English when question is in French",
+            "Skip unknown words"
+          ],
+          "teaching_note": "Technique: 1) Read passage once for gist. 2) Read questions. 3) Scan for specific information. 4) Answer in complete French sentences. Common question words: Qui? (who), Qu'est-ce que? (what), O\u00f9? (where), Quand? (when), Pourquoi? (why), Comment? (how). Pay attention to cognates (words similar to English): information, nation, culture, impossible."
+        }
+      ]
+    }
+  ]
+}

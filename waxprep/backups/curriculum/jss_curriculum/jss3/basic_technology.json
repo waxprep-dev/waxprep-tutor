@@ -3,205 +3,39 @@
   "class_level": "JSS3",
   "academic_year": "Junior Secondary",
   "waec_high_priority_topics": [
-    "Materials and Processing",
     "Mechanical Systems",
     "Electrical Systems",
-    "Technical Drawing",
-    "Energy and Power",
-    "ICT",
-    "Entrepreneurship"
+    "Transportation",
+    "BECE Prep"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
     {
-      "id": "materials_processing",
-      "title": "Materials and Processing",
+      "id": "simple_machines",
+      "title": "Simple Machines",
       "week": 1,
       "subtopics": [
         {
-          "id": "materials_jss3",
-          "title": "Properties and Uses of Materials",
+          "id": "types_machines",
+          "title": "Types and Uses of Simple Machines",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [],
           "concepts": [
-            "metals",
-            "non-metals",
-            "ceramics",
-            "polymers",
-            "composites",
-            "mechanical properties",
-            "physical properties",
-            "chemical properties",
-            "selection criteria"
+            "lever",
+            "pulley",
+            "inclined plane",
+            "wedge",
+            "screw",
+            "wheel and axle",
+            "mechanical advantage"
           ],
           "common_misconceptions": [
-            "Expensive materials are always better",
-            "All metals are strong"
+            "Simple machines are only for simple tasks",
+            "They reduce the amount of work done",
+            "All levers are the same"
           ],
-          "teaching_note": "Discuss material selection for specific purposes. Consider availability and cost."
-        }
-      ]
-    },
-    {
-      "id": "mechanical_systems",
-      "title": "Mechanical Systems",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "machines_jss3",
-          "title": "Machines and Mechanisms",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "materials_processing"
-          ],
-          "concepts": [
-            "machine",
-            "mechanism",
-            "gear",
-            "pulley system",
-            "lever system",
-            "cam",
-            "follower",
-            "linkage",
-            "mechanical advantage",
-            "velocity ratio",
-            "efficiency"
-          ],
-          "common_misconceptions": [
-            "Machines create energy",
-            "Efficiency can exceed 100%"
-          ],
-          "teaching_note": "Build simple mechanisms. Calculate mechanical advantage for various machines."
-        }
-      ]
-    },
-    {
-      "id": "electrical_systems",
-      "title": "Electrical Systems",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "electricity_jss3",
-          "title": "Electrical Principles and Applications",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "mechanical_systems"
-          ],
-          "concepts": [
-            "electric circuit",
-            "current",
-            "voltage",
-            "resistance",
-            "Ohm's law",
-            "series circuit",
-            "parallel circuit",
-            "electrical power",
-            "electrical safety",
-            " earthing"
-          ],
-          "common_misconceptions": [
-            "Current is used up in a circuit",
-            "Thinner wires are safer"
-          ],
-          "teaching_note": "Use circuit simulation software if available. Emphasize safety procedures."
-        }
-      ]
-    },
-    {
-      "id": "technical_drawing_jss3",
-      "title": "Technical Drawing",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "advanced_drawing",
-          "title": "Advanced Technical Drawing",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "electrical_systems"
-          ],
-          "concepts": [
-            "orthographic projection",
-            "isometric drawing",
-            "sectional views",
-            "dimensioning",
-            "scale",
-            "assembly drawing",
-            "exploded view"
-          ],
-          "common_misconceptions": [
-            "Technical drawing is just art",
-            "Dimensions are optional"
-          ],
-          "teaching_note": "Practice accurate drawing to scale. Use drawing instruments correctly."
-        }
-      ]
-    },
-    {
-      "id": "ict",
-      "title": "Introduction to ICT",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "information_technology",
-          "title": "Information and Communication Technology",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "technical_drawing_jss3"
-          ],
-          "concepts": [
-            "computer",
-            "hardware",
-            "software",
-            "input devices",
-            "output devices",
-            "storage",
-            "network",
-            "internet",
-            "email",
-            "safety online"
-          ],
-          "common_misconceptions": [
-            "Computers are only for entertainment",
-            "The internet and the web are the same"
-          ],
-          "teaching_note": "Discuss productive uses of technology. Teach basic digital literacy and safety."
-        }
-      ]
-    },
-    {
-      "id": "entrepreneurship",
-      "title": "Entrepreneurship",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "entrepreneurship_basics",
-          "title": "Introduction to Entrepreneurship",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "ict"
-          ],
-          "concepts": [
-            "entrepreneur",
-            "entrepreneurship",
-            "business",
-            "innovation",
-            "risk-taking",
-            "opportunity",
-            "startup",
-            "business plan",
-            "self-employment"
-          ],
-          "common_misconceptions": [
-            "Entrepreneurship is only about making money",
-            "You need lots of money to start a business"
-          ],
-          "teaching_note": "Share Nigerian entrepreneurial success stories. Discuss small business opportunities."
+          "teaching_note": "Simple machines make work easier by changing direction or magnitude of force. Lever: seesaw, crowbar, scissors (fulcrum, effort, load). Three classes: 1st (fulcrum in middle), 2nd (load in middle), 3rd (effort in middle). Pulley: flagpole, construction. Inclined plane: ramp, staircase. Wedge: knife, axe. Screw: bolt, jar lid. Wheel and axle: bicycle, car, door knob. Mechanical advantage = output force / input force. Nigerian examples: grinding stone (lever), local palm oil press."
         }
       ]
     }

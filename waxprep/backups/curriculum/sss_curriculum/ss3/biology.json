@@ -3,229 +3,47 @@
   "class_level": "SS3",
   "academic_year": "Senior Secondary",
   "waec_high_priority_topics": [
-    "Nervous System",
-    "Sense Organs",
-    "Endocrine System",
-    "Homeostasis",
-    "Ecology and Conservation",
-    "Genetics and Inheritance",
-    "Adaptation and Evolution"
+    "Ecology",
+    "Genetics and Evolution",
+    "Adaptation",
+    "Conservation",
+    "Reproduction",
+    "Growth and Development"
   ],
   "jamb_high_priority_topics": [
-    "Regulatory Systems",
+    "Ecology",
     "Genetics",
-    "Evolution",
-    "Ecology"
+    "Evolution"
   ],
   "topics": [
     {
-      "id": "nervous_system",
-      "title": "Nervous System and Sense Organs",
+      "id": "ss3_biology_revision",
+      "title": "SS3 Biology - Revision and Exam Preparation",
       "week": 1,
       "subtopics": [
         {
-          "id": "nervous_coordination",
-          "title": "Nervous Coordination",
+          "id": "biology_revision",
+          "title": "Comprehensive Biology Revision",
           "waec_frequency": "very_high",
           "jamb_frequency": "very_high",
           "prerequisites": [],
           "concepts": [
-            "central nervous system",
-            "peripheral nervous system",
-            "brain",
-            "spinal cord",
-            "neuron",
-            "dendrite",
-            "axon",
-            "synapse",
-            "reflex action",
-            "reflex arc",
-            "cranial nerves",
-            "spinal nerves"
-          ],
-          "common_misconceptions": [
-            "Reflex actions involve the brain",
-            "All nerves carry impulses to the brain"
-          ],
-          "teaching_note": "Use diagrams of neurons and reflex arcs. Explain the direction of nerve impulse transmission."
-        },
-        {
-          "id": "sense_organs",
-          "title": "Sense Organs",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "nervous_coordination"
-          ],
-          "concepts": [
-            "eye",
-            "ear",
-            "nose",
-            "tongue",
-            "skin",
-            "retina",
-            "lens",
-            "cornea",
-            "cochlea",
-            "semicircular canals",
-            "optic nerve",
-            "auditory nerve"
-          ],
-          "common_misconceptions": [
-            "The eye lens is the only structure that focuses light",
-            "We hear with only the ear drum"
-          ],
-          "teaching_note": "Compare camera with the eye. Explain how defects like myopia and hypermetropia can be corrected."
-        }
-      ]
-    },
-    {
-      "id": "endocrine_system",
-      "title": "Endocrine System and Homeostasis",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "hormonal_control",
-          "title": "Hormonal Control",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "nervous_system"
-          ],
-          "concepts": [
-            "endocrine system",
-            "hormone",
-            "pituitary gland",
-            "thyroid gland",
-            "adrenal gland",
-            "pancreas",
-            "insulin",
-            "glucagon",
-            "feedback mechanism",
-            "growth hormone"
-          ],
-          "common_misconceptions": [
-            "Hormones travel through nerves",
-            "Endocrine and exocrine glands are the same"
-          ],
-          "teaching_note": "Compare nervous and hormonal control. Explain negative feedback using blood glucose regulation as example."
-        },
-        {
-          "id": "homeostasis",
-          "title": "Homeostasis",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "hormonal_control"
-          ],
-          "concepts": [
-            "homeostasis",
-            "internal environment",
-            "thermoregulation",
-            "osmoregulation",
-            "blood glucose regulation",
-            "feedback mechanisms",
-            "negative feedback",
-            "positive feedback",
-            "skin in thermoregulation"
-          ],
-          "common_misconceptions": [
-            "Homeostasis means keeping the body temperature constant",
-            "Sweating cools the body by removing heat"
-          ],
-          "teaching_note": "Explain that sweating cools by evaporation. Show how multiple systems work together for homeostasis."
-        }
-      ]
-    },
-    {
-      "id": "ecology_conservation_ss3",
-      "title": "Ecology and Conservation",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "ecosystem_dynamics",
-          "title": "Ecosystem Dynamics and Conservation",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "endocrine_system"
-          ],
-          "concepts": [
-            "food chain",
-            "food web",
-            "trophic levels",
-            "energy flow",
-            "ecological pyramid",
-            "nutrient cycling",
-            "conservation",
-            "pollution",
-            "deforestation",
-            "global warming",
-            "biodiversity"
-          ],
-          "common_misconceptions": [
-            "Energy is recycled in ecosystems",
-            "Humans are not part of food chains"
-          ],
-          "teaching_note": "Emphasize that energy flows while nutrients cycle. Discuss human impact on ecosystems."
-        }
-      ]
-    },
-    {
-      "id": "genetics_ss3",
-      "title": "Genetics and Inheritance",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "advanced_genetics",
-          "title": "Advanced Genetics",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "very_high",
-          "prerequisites": [
-            "ecology_conservation_ss3"
-          ],
-          "concepts": [
-            "Mendel's laws",
-            "monohybrid inheritance",
-            "dihybrid inheritance",
-            "incomplete dominance",
-            "co-dominance",
-            "multiple alleles",
-            "sex-linked inheritance",
-            "blood groups",
-            "sickle cell",
-            "genetic counseling"
-          ],
-          "common_misconceptions": [
-            "Dominant traits are always more common",
-            "Sickle cell carriers have the disease"
-          ],
-          "teaching_note": "Use Punnett squares for complex crosses. Discuss genetic counseling in Nigerian context for sickle cell."
-        },
-        {
-          "id": "adaptation_evolution",
-          "title": "Adaptation and Evolution",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "advanced_genetics"
-          ],
-          "concepts": [
-            "adaptation",
-            "structural adaptation",
-            "physiological adaptation",
-            "behavioral adaptation",
+            "cell biology",
+            "transport",
+            "respiration",
+            "excretion",
+            "reproduction",
+            "genetics",
+            "ecology",
             "evolution",
-            "natural selection",
-            "survival of the fittest",
-            "speciation",
-            "evidence of evolution"
+            "conservation"
           ],
           "common_misconceptions": [
-            "Adaptation happens because organisms need it",
-            "Evolution is just a theory without evidence"
+            "SS3 has completely new topics (mostly revision of SS1-SS2)",
+            "Practical biology is not important (WAEC has Paper 3 - Practical)",
+            "Theory is enough without diagrams"
           ],
-          "teaching_note": "Clarify that adaptation is a result, not a purposeful process. Present fossil and molecular evidence for evolution."
+          "teaching_note": "SS3 Biology focuses on revision and practical skills. WAEC format: Paper 1 (Obj, 50 questions, 1 hour), Paper 2 (Essay, 6 questions, 2 hours), Paper 3 (Practical, 2 questions, 1.5 hours). Practical topics: food tests, osmosis, photosynthesis, respiration, ecology (quadrat sampling), microscope work, specimens identification. Key areas: Genetics (Mendelian crosses, pedigree analysis), Ecology (pyramids, energy flow, succession), Evolution (Darwin, Lamarck, evidence). Practical tips: label diagrams clearly, state observations before conclusions, show workings for genetics problems."
         }
       ]
     }

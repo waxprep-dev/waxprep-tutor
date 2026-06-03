@@ -1,0 +1,43 @@
+{
+  "subject": "home_economics",
+  "class_level": "JSS3",
+  "academic_year": "Junior Secondary",
+  "waec_high_priority_topics": [
+    "Adolescence",
+    "Personal Hygiene",
+    "Home Management",
+    "BECE Prep"
+  ],
+  "jamb_high_priority_topics": [],
+  "topics": [
+    {
+      "id": "adolescence",
+      "title": "Adolescence and Personal Development",
+      "week": 1,
+      "subtopics": [
+        {
+          "id": "teenage_challenges",
+          "title": "Challenges of Adolescence",
+          "waec_frequency": "high",
+          "jamb_frequency": "none",
+          "prerequisites": [],
+          "concepts": [
+            "adolescence",
+            "puberty",
+            "hygiene",
+            "peer pressure",
+            "self-esteem",
+            "substance abuse",
+            "responsible behavior"
+          ],
+          "common_misconceptions": [
+            "Adolescence is a disease",
+            "Peer pressure is always bad",
+            "You can't say no to friends"
+          ],
+          "teaching_note": "Adolescence: period between childhood and adulthood (ages 10-19). Physical changes: growth spurt, voice changes, body hair, menstruation (girls), wet dreams (boys). Emotional changes: mood swings, desire for independence, interest in opposite sex. Hygiene: bathe daily, use deodorant, change clothes, menstrual hygiene. Peer pressure: can be positive (studying together) or negative (smoking, drugs). Saying no: be firm, give reasons, suggest alternatives. Substance abuse: alcohol, tobacco, tramadol, codeine - all harmful and illegal for minors."
+        }
+      ]
+    }
+  ]
+}

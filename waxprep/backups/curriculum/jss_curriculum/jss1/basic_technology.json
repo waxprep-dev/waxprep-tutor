@@ -4,12 +4,10 @@
   "academic_year": "Junior Secondary",
   "waec_high_priority_topics": [
     "Workshop Safety",
-    "Basic Tools",
+    "Tools and Equipment",
     "Materials",
-    "Measurement",
-    "Drawing",
-    "Construction",
-    "Energy and Power"
+    "Drawing Instruments",
+    "Simple Machines"
   ],
   "jamb_high_priority_topics": [],
   "topics": [
@@ -20,191 +18,25 @@
       "subtopics": [
         {
           "id": "safety_rules",
-          "title": "Workshop Safety Rules and Practices",
+          "title": "Safety Rules in the Workshop",
           "waec_frequency": "high",
           "jamb_frequency": "none",
           "prerequisites": [],
           "concepts": [
             "safety",
-            "workshop rules",
-            "personal protective equipment",
+            "workshop",
+            "safety rules",
             "first aid",
+            "protective equipment",
             "fire safety",
-            "tool safety",
-            "electrical safety",
             "accident prevention"
           ],
           "common_misconceptions": [
             "Accidents only happen to careless people",
-            "Safety rules are just suggestions"
+            "Safety rules slow down work",
+            "First aid is only for serious injuries"
           ],
-          "teaching_note": "Emphasize that safety is everyone's responsibility. Demonstrate proper use of PPE."
-        }
-      ]
-    },
-    {
-      "id": "basic_tools",
-      "title": "Basic Tools",
-      "week": 2,
-      "subtopics": [
-        {
-          "id": "hand_tools",
-          "title": "Hand Tools and Their Uses",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "workshop_safety"
-          ],
-          "concepts": [
-            "hammer",
-            "screwdriver",
-            "pliers",
-            "wrench",
-            "saw",
-            "chisel",
-            "file",
-            "measuring tools",
-            "marking tools",
-            "cutting tools"
-          ],
-          "common_misconceptions": [
-            "Any tool can be used for any job",
-            "Power tools are always better than hand tools"
-          ],
-          "teaching_note": "Demonstrate correct use of each tool. Emphasize maintenance and proper storage."
-        }
-      ]
-    },
-    {
-      "id": "materials",
-      "title": "Materials",
-      "week": 3,
-      "subtopics": [
-        {
-          "id": "types_materials",
-          "title": "Types and Properties of Materials",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "basic_tools"
-          ],
-          "concepts": [
-            "wood",
-            "metal",
-            "plastic",
-            "ceramics",
-            "glass",
-            "rubber",
-            "natural materials",
-            "synthetic materials",
-            "properties",
-            "uses"
-          ],
-          "common_misconceptions": [
-            "Plastics are always bad",
-            "Natural materials are always better than synthetic"
-          ],
-          "teaching_note": "Discuss advantages and disadvantages of each material. Connect to sustainability."
-        }
-      ]
-    },
-    {
-      "id": "measurement",
-      "title": "Measurement",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "measuring_tools",
-          "title": "Measurement in Technology",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "materials"
-          ],
-          "concepts": [
-            "measurement",
-            "units",
-            "length",
-            "mass",
-            "volume",
-            "time",
-            "temperature",
-            "ruler",
-            "tape measure",
-            "caliper",
-            "micrometer"
-          ],
-          "common_misconceptions": [
-            "Estimation is not important in technology",
-            "All measurements are equally precise"
-          ],
-          "teaching_note": "Practice accurate measurement. Discuss importance of precision in technology."
-        }
-      ]
-    },
-    {
-      "id": "technical_drawing",
-      "title": "Technical Drawing",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "drawing_basics",
-          "title": "Introduction to Technical Drawing",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "measurement"
-          ],
-          "concepts": [
-            "drawing instruments",
-            "pencil",
-            "ruler",
-            "compass",
-            "protractor",
-            "T-square",
-            "set square",
-            "scale drawing",
-            "lines",
-            "angles"
-          ],
-          "common_misconceptions": [
-            "Technical drawing is only for engineers",
-            "Freehand sketches are not useful"
-          ],
-          "teaching_note": "Start with basic shapes and lines. Emphasize neatness and accuracy in technical drawing."
-        }
-      ]
-    },
-    {
-      "id": "energy_power",
-      "title": "Energy and Power",
-      "week": 6,
-      "subtopics": [
-        {
-          "id": "energy_sources",
-          "title": "Sources and Uses of Energy",
-          "waec_frequency": "high",
-          "jamb_frequency": "none",
-          "prerequisites": [
-            "technical_drawing"
-          ],
-          "concepts": [
-            "energy",
-            "sources of energy",
-            "solar",
-            "wind",
-            "water",
-            "fossil fuels",
-            "electricity",
-            "renewable energy",
-            "non-renewable energy",
-            "power"
-          ],
-          "common_misconceptions": [
-            "Electricity is a source of energy",
-            "Renewable energy is always expensive"
-          ],
-          "teaching_note": "Discuss energy sources available in Nigeria. Emphasize importance of renewable energy."
+          "teaching_note": "Workshop safety rules: 1) Wear appropriate clothing (no loose items). 2) Use safety equipment (goggles, gloves). 3) Keep workshop clean and tidy. 4) Know location of fire extinguishers and first aid box. 5) Report all accidents immediately. 6) Never operate machines without supervision. 7) Tie back long hair. Common workshop hazards: cuts from tools, burns from hot materials, eye injuries, electric shocks. First aid: immediate treatment before medical help arrives."
         }
       ]
     }

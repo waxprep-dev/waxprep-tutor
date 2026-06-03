@@ -8,15 +8,12 @@
     "Map Reading",
     "Weather and Climate",
     "Rocks and Weathering",
-    "Earthquakes and Volcanoes",
-    "Rivers and Drainage"
+    "Rivers"
   ],
   "jamb_high_priority_topics": [
-    "The Earth",
-    "Latitude and Longitude",
-    "Map Reading",
-    "Climate",
-    "Geomorphology"
+    "The Earth and its Planetary System",
+    "Maps and Map Reading",
+    "Elements of Weather and Climate"
   ],
   "topics": [
     {
@@ -25,53 +22,62 @@
       "week": 1,
       "subtopics": [
         {
-          "id": "earth_structure",
-          "title": "Structure of the Earth",
-          "waec_frequency": "high",
+          "id": "solar_system",
+          "title": "The Solar System",
+          "waec_frequency": "medium",
           "jamb_frequency": "medium",
           "prerequisites": [],
           "concepts": [
-            "crust",
-            "mantle",
-            "core",
-            "lithosphere",
-            "asthenosphere",
-            "mesosphere",
-            "inner core",
-            "outer core",
-            "continental crust",
-            "oceanic crust"
+            "solar system",
+            "sun",
+            "planets",
+            "Mercury",
+            "Venus",
+            "Earth",
+            "Mars",
+            "Jupiter",
+            "Saturn",
+            "Uranus",
+            "Neptune",
+            "moon",
+            "asteroids",
+            "comets",
+            "meteors"
           ],
           "common_misconceptions": [
-            "The crust is uniformly thick everywhere",
-            "The core is entirely liquid"
+            "The sun is a planet",
+            "There are more than 8 planets (Pluto was reclassified)",
+            "The earth is perfectly spherical (it's an oblate spheroid)"
           ],
-          "teaching_note": "Compare thicknesses of crust, mantle, and core. Discuss evidence from seismic waves."
+          "teaching_note": "The solar system: Sun at center, 8 planets orbiting. Terrestrial planets (Mercury, Venus, Earth, Mars) - rocky, inner. Gas giants (Jupiter, Saturn) and ice giants (Uranus, Neptune) - outer. Earth: third planet from sun, average distance 149.6 million km (1 AU), only known planet with life. Earth's shape: oblate spheroid (flattened at poles, bulging at equator). Equatorial diameter = 12,756 km, Polar diameter = 12,714 km."
         },
         {
           "id": "earth_rotation",
-          "title": "Earth's Rotation and Revolution",
-          "waec_frequency": "very_high",
+          "title": "Rotation and Revolution of the Earth",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
-            "earth_structure"
+            "solar_system"
           ],
           "concepts": [
             "rotation",
             "revolution",
+            "axis",
+            "tilt",
             "day and night",
-            "seasons",
-            "equinox",
-            "solstice",
-            "international date line",
             "time zones",
-            "local time"
+            "sunrise",
+            "sunset",
+            "orbit",
+            "year",
+            "leap year"
           ],
           "common_misconceptions": [
-            "Seasons are caused by Earth's distance from the sun",
-            "The equator is always closest to the sun"
+            "Seasons are caused by distance from sun (caused by tilt)",
+            "The earth's axis is perpendicular to orbital plane (tilted at 23.5\u00b0)",
+            "All countries have 12 hours day and night year-round (only at equator)"
           ],
-          "teaching_note": "Use globe demonstrations. Emphasize that seasons result from tilt, not distance. Practice time zone calculations."
+          "teaching_note": "Rotation: earth spins on axis (west to east) \u2192 day and night. Period = 24 hours. Revolution: earth orbits sun \u2192 year. Period = 365.25 days (leap year every 4 years). Tilt of axis = 23.5\u00b0 \u2192 seasons. Summer solstice (June 21): North Pole tilts toward sun. Winter solstice (Dec 22): North Pole tilts away. Equinoxes (March 21, Sept 23): equal day and night worldwide. Time zones: 24 zones, 15\u00b0 longitude each. Nigeria: GMT+1 (one time zone)."
         }
       ]
     },
@@ -81,10 +87,10 @@
       "week": 2,
       "subtopics": [
         {
-          "id": "coordinates",
-          "title": "Coordinates and Great Circles",
+          "id": "lat_long_basics",
+          "title": "Latitude and Longitude",
           "waec_frequency": "very_high",
-          "jamb_frequency": "high",
+          "jamb_frequency": "very_high",
           "prerequisites": [
             "earth_planet"
           ],
@@ -93,190 +99,107 @@
             "longitude",
             "parallels",
             "meridians",
-            "equator",
-            "prime meridian",
-            "tropics",
-            "arctic circle",
-            "antarctic circle",
+            "Equator",
+            "Prime Meridian",
+            "Tropic of Cancer",
+            "Tropic of Capricorn",
+            "Arctic Circle",
+            "Antarctic Circle",
             "great circle",
-            "small circle"
+            "small circle",
+            "hemispheres"
           ],
           "common_misconceptions": [
-            "Latitude lines run north-south",
-            "All meridians are great circles but not all parallels are"
+            "Latitude lines run north-south (they run east-west)",
+            "Longitude lines are parallel (they converge at poles)",
+            "The Prime Meridian passes through Paris (it passes through Greenwich, London)"
           ],
-          "teaching_note": "Use globes and maps. Practice locating places using coordinates. Calculate distances using latitude."
+          "teaching_note": "Latitude: angular distance north/south of Equator (0\u00b0 to 90\u00b0N/S). Key parallels: Equator 0\u00b0, Tropic of Cancer 23.5\u00b0N, Tropic of Capricorn 23.5\u00b0S, Arctic Circle 66.5\u00b0N, Antarctic Circle 66.5\u00b0S. Longitude: angular distance east/west of Prime Meridian (0\u00b0 to 180\u00b0E/W). Prime Meridian through Greenwich, London. Important longitudes: 0\u00b0 (Greenwich), 15\u00b0E (Central European Time), 180\u00b0 (International Date Line). Nigeria: approximately 4\u00b0N to 14\u00b0N, 3\u00b0E to 14\u00b0E. Great circle: shortest distance between two points on earth's surface."
+        },
+        {
+          "id": "calculations",
+          "title": "Calculations on Latitude and Longitude",
+          "waec_frequency": "very_high",
+          "jamb_frequency": "very_high",
+          "prerequisites": [
+            "lat_long_basics"
+          ],
+          "concepts": [
+            "distance along parallel",
+            "distance along meridian",
+            "time calculation",
+            "local time",
+            "GMT",
+            "time zones",
+            "international date line"
+          ],
+          "common_misconceptions": [
+            "1\u00b0 of longitude = same distance everywhere (varies by latitude)",
+            "Time difference uses latitude (uses longitude)",
+            "Crossing date line adds time (changes date)"
+          ],
+          "teaching_note": "Key formulas: Distance along meridian = difference in latitude \u00d7 111 km. Distance along parallel = difference in longitude \u00d7 111 km \u00d7 cos(latitude). Time: earth rotates 360\u00b0 in 24 hours \u2192 15\u00b0 per hour \u2192 1\u00b0 per 4 minutes. Local time difference = longitude difference \u00d7 4 minutes. GMT+1 for Nigeria. International Date Line: 180\u00b0 longitude, cross westward \u2192 add a day; cross eastward \u2192 subtract a day."
         }
       ]
     },
     {
       "id": "map_reading",
-      "title": "Map Reading and Interpretation",
+      "title": "Map Reading",
       "week": 3,
       "subtopics": [
         {
           "id": "map_types",
-          "title": "Types of Maps and Map Scales",
-          "waec_frequency": "very_high",
+          "title": "Types and Uses of Maps",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
             "latitude_longitude"
           ],
           "concepts": [
+            "map",
             "topographic map",
-            "thematic map",
+            " atlas",
+            "globe",
+            "plan",
+            "sketch",
             "scale",
-            "linear scale",
-            "representative fraction",
-            "statement scale",
             "large scale",
             "small scale",
-            "map symbols",
-            "conventional signs"
+            "contours",
+            "conventional signs",
+            "grid references"
           ],
           "common_misconceptions": [
-            "Large scale maps show large areas",
-            "All maps use the same scale"
+            "Large scale means large area (NO - large scale = large detail, small area)",
+            "All maps are drawn to scale",
+            "North is always at the top of a map"
           ],
-          "teaching_note": "Practice converting between scale types. Use real topographic maps for exercises."
+          "teaching_note": "Map = representation of earth's surface on flat paper. Scale: ratio between map distance and ground distance. Large scale: 1:10,000 (small area, more detail). Small scale: 1:1,000,000 (large area, less detail). Representative Fraction (RF): 1:50,000 means 1cm on map = 50,000cm (500m) on ground. Conventional signs: standardized symbols for features. Grid references: 4-figure (area) and 6-figure (precise point). Nigeria's topographic maps produced by Surveyor General's Office."
         },
         {
           "id": "map_interpretation",
-          "title": "Map Interpretation Techniques",
-          "waec_frequency": "very_high",
+          "title": "Map Interpretation",
+          "waec_frequency": "high",
           "jamb_frequency": "high",
           "prerequisites": [
             "map_types"
           ],
           "concepts": [
-            "contour lines",
-            "gradient",
-            "cross-section",
-            "intervisibility",
             "relief",
+            "intervisibility",
+            "gradient",
+            "cross section",
+            "vertical exaggeration",
+            "watershed",
             "drainage pattern",
-            "settlement pattern",
-            "land use",
-            "bearing"
+            "settlement patterns"
           ],
           "common_misconceptions": [
-            "Close contour lines always mean steep slopes",
-            "Cross-sections are drawn without vertical exaggeration"
+            "Intervisibility only considers direct line of sight (consider contour heights too)",
+            "Gradient = horizontal distance (it's vertical/horizontal)",
+            "All drainage patterns are the same"
           ],
-          "teaching_note": "Practice drawing cross-sections and calculating gradients. Use maps of Nigerian locations."
-        }
-      ]
-    },
-    {
-      "id": "weather_climate",
-      "title": "Weather and Climate",
-      "week": 4,
-      "subtopics": [
-        {
-          "id": "weather_elements",
-          "title": "Elements of Weather",
-          "waec_frequency": "very_high",
-          "jamb_frequency": "high",
-          "prerequisites": [],
-          "concepts": [
-            "temperature",
-            "rainfall",
-            "humidity",
-            "pressure",
-            "wind",
-            "sunshine",
-            "cloud cover",
-            "weather instruments",
-            " Stevenson screen"
-          ],
-          "common_misconceptions": [
-            "Weather and climate are the same",
-            "Temperature and heat are identical"
-          ],
-          "teaching_note": "Set up a school weather station. Distinguish clearly between weather (short-term) and climate (long-term)."
-        },
-        {
-          "id": "climate_types",
-          "title": "Climate Types and Their Characteristics",
-          "waec_frequency": "high",
-          "jamb_frequency": "high",
-          "prerequisites": [
-            "weather_elements"
-          ],
-          "concepts": [
-            "equatorial climate",
-            "tropical climate",
-            "desert climate",
-            "Mediterranean climate",
-            "tundra climate",
-            "monsoon climate",
-            "Koppen classification",
-            "factors affecting climate"
-          ],
-          "common_misconceptions": [
-            "Nigeria has only one climate type",
-            "Temperature depends only on latitude"
-          ],
-          "teaching_note": "Map the climate types of Nigeria. Discuss how altitude, distance from sea, and prevailing winds affect climate."
-        }
-      ]
-    },
-    {
-      "id": "geomorphology",
-      "title": "Geomorphology",
-      "week": 5,
-      "subtopics": [
-        {
-          "id": "rocks",
-          "title": "Rocks and Weathering",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "weather_climate"
-          ],
-          "concepts": [
-            "igneous rocks",
-            "sedimentary rocks",
-            "metamorphic rocks",
-            "weathering",
-            "erosion",
-            "physical weathering",
-            "chemical weathering",
-            "biological weathering",
-            "rock cycle"
-          ],
-          "common_misconceptions": [
-            "Rocks are permanent and unchanging",
-            "Weathering and erosion are the same"
-          ],
-          "teaching_note": "Display rock samples in class. Explain the rock cycle. Distinguish weathering (in situ) from erosion (movement)."
-        },
-        {
-          "id": "volcanoes_earthquakes",
-          "title": "Volcanoes and Earthquakes",
-          "waec_frequency": "high",
-          "jamb_frequency": "medium",
-          "prerequisites": [
-            "rocks"
-          ],
-          "concepts": [
-            "volcano",
-            "magma",
-            "lava",
-            "types of volcanoes",
-            "earthquake",
-            "focus",
-            "epicenter",
-            "seismic waves",
-            "Richter scale",
-            "Mercalli scale",
-            "plate tectonics"
-          ],
-          "common_misconceptions": [
-            "Volcanoes only occur on land",
-            "Earthquakes are increasing in frequency"
-          ],
-          "teaching_note": "Explain plate tectonics theory. Show distribution maps. Discuss Nigerian geological stability."
+          "teaching_note": "Relief: shape of land surface shown by contours, spot heights, trigonometric stations. Intervisibility: can one point be seen from another? Check if contour between them is higher than line of sight. Gradient = vertical interval / horizontal equivalent (VI/HE), often expressed as 1:X or ratio. Cross section: profile of land along a line. Vertical exaggeration = vertical scale / horizontal scale. Settlement patterns: dispersed, nucleated, linear. Drainage patterns: dendritic, radial, trellis, rectangular, centripetal."
         }
       ]
     }
