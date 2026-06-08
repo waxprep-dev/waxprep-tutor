@@ -22,7 +22,7 @@ class WaxPrepBrain:
     def __init__(self):
         self.model_url = os.environ.get("WAXPREP_MODEL_URL", "https://wazawax-waxprepmodel.hf.space/generate")
         self.health_url = os.environ.get("WAXPREP_MODEL_HEALTH_URL", "https://wazawax-waxprepmodel.hf.space/health")
-        self.timeout = float(os.environ.get("WAXPREP_MODEL_TIMEOUT", "45"))
+        self.timeout = float(os.environ.get("WAXPREP_MODEL_TIMEOUT", "120"))
         self._consecutive_failures = 0
         self._circuit_open_until = 0.0
 
