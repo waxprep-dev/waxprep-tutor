@@ -71,10 +71,42 @@ class WaxPrepBrain:
         elapsed = int((time.time() - start) * 1000)
         logger.info(f"Brain responded: {student_id[:8]} | {elapsed}ms")
 
+        # NEW — Check if we should ask why-question next
+        why_question = None
+        try:
+            from waxprep.app.brain.elaborative_interrogation import detect_teaching_moment, generate_why_question, should_ask_why
+            from waxprep.app.database.client import get_db
+            
+            concept = detect_teaching_moment(clean)
+            if concept:
+                # Emit teaching moment tools
+                db = get_db()
+                conv = db.table("conversations").select("id, last_teaching_concept").eq("student_id", student_id).eq("is_active", True).order("started_at", desc=True).limit(1).execute()
+                if conv.data:
+                    conv_id = conv.data[0]["id"]
+                    # Update teaching concept
+                    db.table("conversations").update({"last_teaching_concept": concept}).eq("id", conv_id).execute()
+                    
+                    # Check if we should ask why-question
+                    if should_ask_why({
+                        "messages": memory_layers.get("short_term", {}).get("messages", []),
+                        "emotional_state": memory_layers.get("long_term", {}).get("emotional_state", "neutral"),
+                        "socratic_pressure_score": memory_layers.get("long_term", {}).get("socratic_pressure_score", 5.0),
+                    }):
+                        subject = memory_layers.get("long_term", {}).get("current_subject", "")
+                        why_question = generate_why_question(concept, subject)
+                        logger.info(f"Why-question generated: {concept} -> {why_question[:50]}...")
+        except Exception as e:
+            logger.debug(f"Elaborative interrogation check: {e}")
+
         asyncio.create_task(
             self._update_memory_background(student_id, student_message, clean)
         )
 
+        # Append why-question if generated
+        if why_question:
+            return f"{clean}\n\n{why_question}"
+        
         return clean
 
     async def _call_gemini(self, prompt: str) -> Optional[str]:
@@ -161,7 +193,7 @@ class WaxPrepBrain:
             if db_updates:
                 await memory.update_dna(student_id, db_updates)
 
-            # NEW — SOCRATIC PRESSURE CALIBRATION
+            # SOCRATIC PRESSURE CALIBRATION
             try:
                 from waxprep.app.brain.socratic_pressure import analyze_interaction, calculate_pressure
                 from waxprep.app.database.client import get_db
@@ -175,13 +207,34 @@ class WaxPrepBrain:
 
                 new_score, reason = calculate_pressure(current_score, signals)
 
-                # Only update if score changed meaningfully
                 if abs(new_score - current_score) >= 0.5:
                     db.table("student_profiles").update({"socratic_pressure_score": new_score}).eq("student_id", student_id).execute()
                     await memory.update_dna(student_id, {"socratic_pressure_score": new_score})
                     logger.info(f"Socratic pressure: {student_id[:8]} {current_score} -> {new_score} ({reason})")
             except Exception as e:
                 logger.debug(f"Socratic pressure update: {e}")
+
+            # NEW — EVALUATE WHY-QUESTION ANSWER
+            try:
+                from waxprep.app.brain.elaborative_interrogation import evaluate_why_answer
+                from waxprep.app.database.client import get_db
+                
+                db = get_db()
+                conv = db.table("conversations").select("last_teaching_concept").eq("student_id", student_id).eq("is_active", True).order("started_at", desc=True).limit(1).execute()
+                if conv.data and conv.data[0].get("last_teaching_concept"):
+                    concept = conv.data[0]["last_teaching_concept"]
+                    feedback, score = evaluate_why_answer(message, concept)
+                    if score >= 0.6:
+                        await memory.update_knowledge_map(student_id, concept, "general", score)
+                        await memory.save_episodic_memory(
+                            student_id=student_id,
+                            memory_type="elaborative_interrogation",
+                            description=f"Answered why-question about {concept}: {feedback}",
+                            emotion="excited" if score >= 0.8 else "neutral",
+                        )
+                        logger.info(f"Why-answer evaluated: {student_id[:8]} {concept} score={score}")
+            except Exception as e:
+                logger.debug(f"Why-answer evaluation: {e}")
 
         except Exception as e:
             logger.debug(f"Background memory update: {e}")
