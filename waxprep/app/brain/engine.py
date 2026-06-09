@@ -44,7 +44,7 @@ class WaxPrepBrain:
         from waxprep.app.brain.memory import memory
         from waxprep.app.brain.prompt import build_prompt
         from waxprep.app.brain.tools import parse_tools
-        from waxprep.app.brain.tool_executor import execute_all
+        from waxprep.app.tool_executor import execute_all
 
         memory_layers = await memory.load_all(student_id)
         prompt = build_prompt(memory_layers, student_message)
@@ -71,7 +71,7 @@ class WaxPrepBrain:
         elapsed = int((time.time() - start) * 1000)
         logger.info(f"Brain responded: {student_id[:8]} | {elapsed}ms")
 
-        # NEW — Check if we should ask why-question next
+        # Check if we should ask why-question next
         why_question = None
         try:
             from waxprep.app.brain.elaborative_interrogation import detect_teaching_moment, generate_why_question, should_ask_why
@@ -79,15 +79,12 @@ class WaxPrepBrain:
             
             concept = detect_teaching_moment(clean)
             if concept:
-                # Emit teaching moment tools
                 db = get_db()
                 conv = db.table("conversations").select("id, last_teaching_concept").eq("student_id", student_id).eq("is_active", True).order("started_at", desc=True).limit(1).execute()
                 if conv.data:
                     conv_id = conv.data[0]["id"]
-                    # Update teaching concept
                     db.table("conversations").update({"last_teaching_concept": concept}).eq("id", conv_id).execute()
                     
-                    # Check if we should ask why-question
                     if should_ask_why({
                         "messages": memory_layers.get("short_term", {}).get("messages", []),
                         "emotional_state": memory_layers.get("long_term", {}).get("emotional_state", "neutral"),
@@ -103,7 +100,6 @@ class WaxPrepBrain:
             self._update_memory_background(student_id, student_message, clean)
         )
 
-        # Append why-question if generated
         if why_question:
             return f"{clean}\n\n{why_question}"
         
@@ -181,9 +177,15 @@ class WaxPrepBrain:
             elif pidgin_score >= 1:
                 db_updates["pidgin_preference"] = "adaptive"
 
+            # EMOTIONAL STATE: IMMEDIATE (reactive, last message only)
             frustration_words = ["give up", "forget it", "too hard", "hopeless", "abeg forget", "i don't understand"]
             if any(w in msg_lower for w in frustration_words):
                 db_updates["emotional_state_current"] = "frustrated"
+            else:
+                # If student seems okay, clear frustration
+                positive_words = ["yes", "got it", "understand", "sharp", "correct", "thanks"]
+                if any(w in msg_lower for w in positive_words):
+                    db_updates["emotional_state_current"] = "neutral"
 
             import pytz
             from datetime import datetime, timezone
@@ -193,7 +195,7 @@ class WaxPrepBrain:
             if db_updates:
                 await memory.update_dna(student_id, db_updates)
 
-            # SOCRATIC PRESSURE CALIBRATION
+            # SOCRATIC PRESSURE: TREND-BASED (cumulative, last 10 interactions)
             try:
                 from waxprep.app.brain.socratic_pressure import analyze_interaction, calculate_pressure
                 from waxprep.app.database.client import get_db
@@ -207,6 +209,7 @@ class WaxPrepBrain:
 
                 new_score, reason = calculate_pressure(current_score, signals)
 
+                # Only update if change is meaningful (>= 0.5) to avoid jitter
                 if abs(new_score - current_score) >= 0.5:
                     db.table("student_profiles").update({"socratic_pressure_score": new_score}).eq("student_id", student_id).execute()
                     await memory.update_dna(student_id, {"socratic_pressure_score": new_score})
@@ -214,7 +217,7 @@ class WaxPrepBrain:
             except Exception as e:
                 logger.debug(f"Socratic pressure update: {e}")
 
-            # NEW — EVALUATE WHY-QUESTION ANSWER
+            # EVALUATE WHY-QUESTION ANSWER
             try:
                 from waxprep.app.brain.elaborative_interrogation import evaluate_why_answer
                 from waxprep.app.database.client import get_db
