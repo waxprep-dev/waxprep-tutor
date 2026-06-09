@@ -18,6 +18,13 @@ def start_scheduler():
     _scheduler.add_job(run_re_engagement, trigger=CronTrigger(hour=9, minute=0), id="re_engagement", replace_existing=True)
     _scheduler.add_job(run_dedup_cleanup, trigger=CronTrigger(hour=2, minute=0), id="dedup_cleanup", replace_existing=True)
 
+    # NEW — Review session cleanup every 30 minutes
+    from waxprep.app.conversation.manager import conversation_manager
+    async def run_review_cleanup():
+        await conversation_manager.close_stale_reviews()
+    
+    _scheduler.add_job(run_review_cleanup, trigger=IntervalTrigger(minutes=30), id="review_cleanup", replace_existing=True)
+
     _scheduler.start()
     logger.info("All background jobs running")
 

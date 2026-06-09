@@ -72,6 +72,62 @@ class ConversationManager:
             logger.error(f"Close stale sessions failed: {e}")
             return 0
 
+    # NEW — Close stale review sessions (2 hours idle)
+    async def close_stale_reviews(self) -> int:
+        try:
+            review_timeout = (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat()
+            stale_reviews = (
+                self.db.table("conversations")
+                .select("id, student_id")
+                .eq("is_active", True)
+                .eq("session_state", "review")
+                .lt("last_message_at", review_timeout)
+                .execute()
+            )
+            count = 0
+            for s in (stale_reviews.data or []):
+                conv_id = s["id"]
+                student_id = s["student_id"]
+                
+                # Clear review_session_id from knowledge_maps
+                self.db.table("knowledge_maps").update({
+                    "review_session_id": None,
+                }).eq("student_id", student_id).eq("review_session_id", conv_id).execute()
+                
+                # Close the review conversation
+                self.db.table("conversations").update({
+                    "is_active": False,
+                    "ended_at": datetime.now(timezone.utc).isoformat(),
+                    "summary": "Review session ended (2 hours idle).",
+                }).eq("id", conv_id).execute()
+                
+                count += 1
+                logger.info(f"Closed stale review: {student_id[:8]}")
+            
+            return count
+        except Exception as e:
+            logger.error(f"Close stale reviews failed: {e}")
+            return 0
+
+    # NEW — Complete review session after 3 questions
+    async def complete_review_session(self, conversation_id: str, student_id: str) -> None:
+        try:
+            # Clear review_session_id from knowledge_maps
+            self.db.table("knowledge_maps").update({
+                "review_session_id": None,
+            }).eq("student_id", student_id).eq("review_session_id", conversation_id).execute()
+            
+            # Close the review conversation
+            self.db.table("conversations").update({
+                "is_active": False,
+                "ended_at": datetime.now(timezone.utc).isoformat(),
+                "summary": "Review session completed (3 questions done).",
+            }).eq("id", conversation_id).execute()
+            
+            logger.info(f"Completed review session: {student_id[:8]}")
+        except Exception as e:
+            logger.warning(f"Complete review session failed: {e}")
+
     async def _summarize_and_close(self, conversation_id: str, student_id: str) -> None:
         try:
             msgs = (
