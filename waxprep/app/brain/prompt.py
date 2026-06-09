@@ -120,6 +120,33 @@ def build_dna_context(dna: Dict) -> str:
         parts.append("Student struggles — always build from fundamentals.")
     return " ".join(parts)
 
+def get_socratic_context(pressure_score: float) -> str:
+    """
+    Generate teaching style instruction based on socratic pressure score.
+    """
+    if pressure_score is None:
+        return ""
+    
+    if pressure_score <= 3.0:
+        return (
+            f"Socratic pressure: {pressure_score}/10 (GENTLE). "
+            "This student frustrates easily. Give direct answers first, "
+            "then gentle nudges. Never ask more than 1 question at a time. "
+            "Build confidence before challenging."
+        )
+    elif pressure_score <= 6.0:
+        return (
+            f"Socratic pressure: {pressure_score}/10 (BALANCED). "
+            "Mix explanations with guiding questions. Ask 1-2 questions per response. "
+            "Give hints if they struggle for more than 2 messages."
+        )
+    else:
+        return (
+            f"Socratic pressure: {pressure_score}/10 (CHALLENGING). "
+            "Pure Socratic method. Ask 2-3 questions per response. "
+            "Minimal hints. Let them discover. Only give direct answers if stuck for 3+ messages."
+        )
+
 def build_prompt(memory_layers: Dict, current_message: str) -> str:
     lt = memory_layers.get("long_term", {})
     st = memory_layers.get("short_term", {})
@@ -160,6 +187,13 @@ def build_prompt(memory_layers: Dict, current_message: str) -> str:
     emotional = lt.get("emotional_state", "neutral")
     if emotional in ("frustrated", "anxious", "discouraged"):
         student_context.append(f"Emotional state: {emotional}. Give them a win first.")
+
+    # NEW — SOCRATIC PRESSURE CONTEXT
+    pressure_score = lt.get("socratic_pressure_score")
+    if pressure_score is not None:
+        socratic_ctx = get_socratic_context(pressure_score)
+        if socratic_ctx:
+            student_context.append(socratic_ctx)
 
     mastered = lt.get("mastered_concepts", [])
     if mastered:

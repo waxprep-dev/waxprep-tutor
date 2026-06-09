@@ -161,6 +161,28 @@ class WaxPrepBrain:
             if db_updates:
                 await memory.update_dna(student_id, db_updates)
 
+            # NEW — SOCRATIC PRESSURE CALIBRATION
+            try:
+                from waxprep.app.brain.socratic_pressure import analyze_interaction, calculate_pressure
+                from waxprep.app.database.client import get_db
+
+                signals = analyze_interaction(message, response)
+                db = get_db()
+                profile = db.table("student_profiles").select("socratic_pressure_score").eq("student_id", student_id).execute()
+                current_score = 5.0
+                if profile.data and profile.data[0].get("socratic_pressure_score") is not None:
+                    current_score = float(profile.data[0]["socratic_pressure_score"])
+
+                new_score, reason = calculate_pressure(current_score, signals)
+
+                # Only update if score changed meaningfully
+                if abs(new_score - current_score) >= 0.5:
+                    db.table("student_profiles").update({"socratic_pressure_score": new_score}).eq("student_id", student_id).execute()
+                    await memory.update_dna(student_id, {"socratic_pressure_score": new_score})
+                    logger.info(f"Socratic pressure: {student_id[:8]} {current_score} -> {new_score} ({reason})")
+            except Exception as e:
+                logger.debug(f"Socratic pressure update: {e}")
+
         except Exception as e:
             logger.debug(f"Background memory update: {e}")
 

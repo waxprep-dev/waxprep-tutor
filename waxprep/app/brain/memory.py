@@ -132,6 +132,7 @@ class FiveLayerMemory:
                 "active_misconceptions": [m.get("description", "") for m in misc[:3]],
                 "data_mode": p.get("data_mode", "standard") or "standard",
                 "emotional_state": p.get("emotional_state_current", "neutral") or "neutral",
+                "socratic_pressure_score": p.get("socratic_pressure_score"),  # NEW
                 "dna": {
                     "example_preference": p.get("example_preference", "general") or "general",
                     "explanation_depth": p.get("explanation_depth", "moderate") or "moderate",
