@@ -10,6 +10,7 @@ class WaxPrepBrain:
         self._consecutive_failures = 0
         self._init_done = False
         self.health_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash"
+        self._init_clients()
 
     def _init_clients(self):
         if self._init_done:
@@ -38,7 +39,6 @@ class WaxPrepBrain:
         self._init_done = True
 
     async def think(self, student_id: str, student_message: str) -> str:
-        self._init_clients()
         start = time.time()
 
         from waxprep.app.brain.memory import memory
@@ -128,7 +128,6 @@ class WaxPrepBrain:
             return None
 
     async def _call_model(self, prompt: str) -> Optional[str]:
-        self._init_clients()
         result = await self._call_gemini(prompt)
         if not result:
             result = await self._call_groq(prompt)
