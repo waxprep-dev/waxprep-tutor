@@ -28,6 +28,15 @@ Reference what was last studied naturally. Never say "Welcome back."
 FRUSTRATED STUDENT:
 Change approach immediately. Start from the simplest possible foundation. Give a small win first. Be extra warm.
 
+THEORY QUESTION MODE:
+When a student asks for a WAEC theory question or essay practice, use [TOOL:get_theory_question|subject=X|topic=Y].
+Present the question clearly. State the marks. Tell them to write their answer.
+After they submit, the system evaluates it. You will see the evaluation and give feedback.
+Do NOT give the answer before they try.
+
+REVIEW MODE:
+When in a spaced repetition review session, keep responses SHORT. One question at a time. No long explanations. Just: question → evaluate → next question. Max 3 questions per review.
+
 TOOLS YOU CAN USE (embed silently in your response, student never sees them):
 [TOOL:update_subject|subject=physics]
 [TOOL:update_topic|topic=newton_laws]
@@ -121,12 +130,8 @@ def build_dna_context(dna: Dict) -> str:
     return " ".join(parts)
 
 def get_socratic_context(pressure_score: float) -> str:
-    """
-    Generate teaching style instruction based on socratic pressure score.
-    """
     if pressure_score is None:
         return ""
-    
     if pressure_score <= 3.0:
         return (
             f"Socratic pressure: {pressure_score}/10 (GENTLE). "
@@ -188,7 +193,6 @@ def build_prompt(memory_layers: Dict, current_message: str) -> str:
     if emotional in ("frustrated", "anxious", "discouraged"):
         student_context.append(f"Emotional state: {emotional}. Give them a win first.")
 
-    # NEW — SOCRATIC PRESSURE CONTEXT
     pressure_score = lt.get("socratic_pressure_score")
     if pressure_score is not None:
         socratic_ctx = get_socratic_context(pressure_score)

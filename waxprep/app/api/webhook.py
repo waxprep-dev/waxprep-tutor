@@ -86,10 +86,17 @@ async def _handle_message(msg: whatsapp.WhatsAppMessage) -> None:
         conv_id = await conversation_manager.ensure_active(student_id, "whatsapp")
         await conversation_manager.save_message(conv_id, student_id, "inbound", content)
 
-        response = await brain.think(student_id, content)
-
-        await whatsapp.send_text(msg.user_id, response)
-        await conversation_manager.save_message(conv_id, student_id, "outbound", response)
+        # NEW — CHECK IF THIS IS A THEORY ANSWER
+        theory_result = await _check_theory_answer(student_id, conv_id, content)
+        if theory_result:
+            # This was a theory answer, send evaluation
+            await whatsapp.send_text(msg.user_id, theory_result)
+            await conversation_manager.save_message(conv_id, student_id, "outbound", theory_result)
+        else:
+            # Normal flow
+            response = await brain.think(student_id, content)
+            await whatsapp.send_text(msg.user_id, response)
+            await conversation_manager.save_message(conv_id, student_id, "outbound", response)
 
         db = get_db()
         db.table("students").update({
@@ -104,6 +111,89 @@ async def _handle_message(msg: whatsapp.WhatsAppMessage) -> None:
         except Exception:
             pass
 
+async def _check_theory_answer(student_id: str, conv_id: str, content: str) -> Optional[str]:
+    """
+    Check if the last WaxPrep message was a theory question.
+    If yes, evaluate this answer and return feedback.
+    If no, return None (normal flow continues).
+    """
+    try:
+        db = get_db()
+        
+        # Get last 2 messages to see if WaxPrep asked a theory question
+        msgs = (
+            db.table("messages")
+            .select("direction, content")
+            .eq("conversation_id", conv_id)
+            .order("timestamp", desc=True)
+            .limit(2)
+            .execute()
+        )
+        
+        if not msgs.data or len(msgs.data) < 2:
+            return None
+        
+        # Last message is student (just saved), second-to-last is WaxPrep
+        last_waxprep_msg = None
+        for m in msgs.data:
+            if m["direction"] == "outbound":
+                last_waxprep_msg = m["content"]
+                break
+        
+        if not last_waxprep_msg:
+            return None
+        
+        # Check if WaxPrep's last message contained a theory question
+        if "Theory Question" not in last_waxprep_msg or "Question ID:" not in last_waxprep_msg:
+            return None
+        
+        # Extract question ID from WaxPrep's message
+        import re
+        qid_match = re.search(r"Question ID: ([a-f0-9-]+)", last_waxprep_msg)
+        if not qid_match:
+            return None
+        
+        question_id = qid_match.group(1)
+        
+        # Get question and marking scheme
+        q = db.table("waec_theory_questions").select("question_text, marks, marking_scheme, subject, topic").eq("id", question_id).execute()
+        if not q.data:
+            return None
+        
+        question = q.data[0]
+        marking_scheme = question.get("marking_scheme", {})
+        
+        # Evaluate answer
+        from waxprep.app.brain.theory_evaluator import evaluate_theory_answer, generate_theory_feedback
+        score, feedback, breakdown = evaluate_theory_answer(content, marking_scheme)
+        
+        # Save submission
+        db.table("theory_submissions").insert({
+            "student_id": student_id,
+            "question_id": question_id,
+            "answer_text": content,
+            "evaluation_json": breakdown,
+            "score": score,
+            "max_score": question["marks"],
+            "evaluated_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+        }).execute()
+        
+        # Update knowledge map
+        from waxprep.app.brain.memory import memory
+        concept = question.get("topic", "general")
+        subject = question.get("subject", "general")
+        await memory.update_knowledge_map(student_id, concept, subject, score / 100.0)
+        
+        # Build final response
+        final_feedback = generate_theory_feedback(score, concept)
+        full_response = f"{feedback}\n\n{final_feedback}"
+        
+        return full_response
+        
+    except Exception as e:
+        logger.warning(f"Theory answer check failed: {e}")
+        return None
+
 async def _transcribe_voice(media_id: str) -> str:
     audio_bytes = await whatsapp.download_media(media_id)
     if not audio_bytes:
@@ -113,39 +203,39 @@ async def _transcribe_voice(media_id: str) -> str:
         with tempfile.NamedTemporaryFile(suffix=".ogg", delete=False) as tmp:
             tmp.write(audio_bytes)
             tmp_path = tmp.name
-        try:
-            import groq
-            groq_key = os.environ.get("GROQ_API_KEY", "")
-            if not groq_key:
-                return ""
-            client = groq.Groq(api_key=groq_key)
-
-            def _do_transcribe():
-                with open(tmp_path, "rb") as f:
-                    r = client.audio.transcriptions.create(
-                        file=("audio.ogg", f, "audio/ogg"),
-                        model="whisper-large-v3-turbo",
-                        response_format="text",
-                        language="en",
-                    )
-                return r
-
-            result = await asyncio.to_thread(_do_transcribe)
-            if not result:
-                return ""
-
-            corrected = result.lower()
-            for wrong, right in KNOWN_CORRECTIONS.items():
-                if wrong in corrected:
-                    corrected = corrected.replace(wrong, right)
-            if result[0].isupper():
-                corrected = corrected[0].upper() + corrected[1:]
-            return corrected.strip()
-        finally:
             try:
-                os.unlink(tmp_path)
-            except Exception:
-                pass
+                import groq
+                groq_key = os.environ.get("GROQ_API_KEY", "")
+                if not groq_key:
+                    return ""
+                client = groq.Groq(api_key=groq_key)
+
+                def _do_transcribe():
+                    with open(tmp_path, "rb") as f:
+                        r = client.audio.transcriptions.create(
+                            file=("audio.ogg", f, "audio/ogg"),
+                            model="whisper-large-v3-turbo",
+                            response_format="text",
+                            language="en",
+                        )
+                    return r
+
+                result = await asyncio.to_thread(_do_transcribe)
+                if not result:
+                    return ""
+
+                corrected = result.lower()
+                for wrong, right in KNOWN_CORRECTIONS.items():
+                    if wrong in corrected:
+                        corrected = corrected.replace(wrong, right)
+                if result[0].isupper():
+                    corrected = corrected[0].upper() + corrected[1:]
+                return corrected.strip()
+            finally:
+                try:
+                    os.unlink(tmp_path)
+                except Exception:
+                    pass
     except Exception as e:
         logger.warning(f"Voice transcription failed: {e}")
         return ""
