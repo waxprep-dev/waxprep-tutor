@@ -163,6 +163,111 @@ async def _execute(student_id: str, tool: ToolCall) -> Any:
             db.table("student_profiles").update({"parent_phone": phone}).eq("student_id", student_id).execute()
         return None
 
+    # NEW — SOCRATIC & TEACHING INTELLIGENCE
+    if name == "update_socratic_pressure":
+        score_str = p.get("score", "5")
+        reason = p.get("reason", "")
+        try:
+            score = float(score_str)
+            score = max(0.0, min(10.0, score))
+            db.table("student_profiles").update({"socratic_pressure_score": score}).eq("student_id", student_id).execute()
+            await rdel(f"wax:profile:{student_id}")
+            logger.info(f"Socratic pressure updated: {student_id[:8]} -> {score} ({reason})")
+        except Exception as e:
+            logger.warning(f"update_socratic_pressure failed: {e}")
+        return None
+
+    if name == "update_teaching_concept":
+        concept = p.get("concept", "")
+        if concept:
+            try:
+                conv = db.table("conversations").select("id").eq("student_id", student_id).eq("is_active", True).order("started_at", desc=True).limit(1).execute()
+                if conv.data:
+                    conv_id = conv.data[0]["id"]
+                    db.table("conversations").update({"last_teaching_concept": concept}).eq("id", conv_id).execute()
+            except Exception as e:
+                logger.warning(f"update_teaching_concept failed: {e}")
+        return None
+
+    if name == "mark_teaching_moment":
+        concept = p.get("concept", "")
+        depth = p.get("depth", "general")
+        if concept:
+            await memory.save_episodic_memory(
+                student_id=student_id,
+                memory_type="teaching_moment",
+                description=f"Taught {concept} with depth: {depth}",
+                subject=p.get("subject", ""),
+                emotion="neutral",
+            )
+        return None
+
+    # NEW — WAEC THEORY SYSTEM
+    if name == "get_theory_question":
+        subject = p.get("subject", "")
+        topic = p.get("topic", "")
+        try:
+            query = db.table("waec_theory_questions").select("id, question_text, marks, marking_scheme").eq("subject", subject)
+            if topic:
+                query = query.eq("topic", topic)
+            question = query.order("difficulty", desc=False).limit(1).execute()
+            if not question.data:
+                return f"No theory questions found for {subject} {topic}."
+            q = question.data[0]
+            marks = q["marks"]
+            return f"Theory Question ({marks} marks): {q['question_text']}\n\n[Submit your answer when ready. Question ID: {q['id']}]"
+        except Exception as e:
+            return f"Could not fetch theory question: {e}"
+
+    if name == "submit_theory_answer":
+        question_id = p.get("question_id", "")
+        answer = p.get("answer", "")
+        if question_id and answer:
+            try:
+                q = db.table("waec_theory_questions").select("marks, marking_scheme").eq("id", question_id).execute()
+                if not q.data:
+                    return "Question not found."
+                max_score = q.data[0]["marks"]
+                db.table("theory_submissions").insert({
+                    "student_id": student_id,
+                    "question_id": question_id,
+                    "answer_text": answer,
+                    "max_score": max_score,
+                }).execute()
+                return f"Answer submitted ({max_score} marks possible). Evaluation coming..."
+            except Exception as e:
+                return f"Submit failed: {e}"
+        return None
+
+    # NEW — GHOST TEACHER MODE
+    if name == "start_study_session":
+        topic = p.get("topic", "")
+        duration = p.get("duration", "20")
+        try:
+            result = db.table("study_sessions").insert({
+                "student_id": student_id,
+                "material_topic": topic,
+                "status": "active",
+            }).execute()
+            session_id = result.data[0]["id"] if result.data else "unknown"
+            return f"Study session started. ID: {session_id}. Study for {duration} minutes. I'll ask questions when you're done."
+        except Exception as e:
+            return f"Could not start study session: {e}"
+
+    if name == "end_study_session":
+        session_id = p.get("session_id", "")
+        status = p.get("status", "completed")
+        if session_id:
+            try:
+                db.table("study_sessions").update({
+                    "status": status,
+                    "ended_at": datetime.now(timezone.utc).isoformat(),
+                }).eq("id", session_id).eq("student_id", student_id).execute()
+                return f"Study session ended. Status: {status}. Preparing evaluation questions..."
+            except Exception as e:
+                return f"Could not end study session: {e}"
+        return None
+
     if name == "get_performance":
         subject = p.get("subject", "")
         days = int(p.get("days", "7"))
