@@ -9,6 +9,7 @@ class WaxPrepBrain:
         self._groq = None
         self._consecutive_failures = 0
         self._init_done = False
+        self.health_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash"
 
     def _init_clients(self):
         if self._init_done:
