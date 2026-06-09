@@ -1,5 +1,6 @@
 import asyncio
 import random
+from typing import Optional
 from fastapi import APIRouter, Request, HTTPException, BackgroundTasks
 from fastapi.responses import PlainTextResponse
 from loguru import logger
@@ -83,10 +84,9 @@ async def _handle_message(msg: whatsapp.WhatsAppMessage) -> None:
             await whatsapp.send_text(msg.user_id, "I'm having a moment — try again in a few seconds.")
             return
 
-        # NEW — CHECK IF STUDENT WANTS TO START GHOST TEACHER MODE
+        # CHECK IF STUDENT WANTS TO START GHOST TEACHER MODE
         ghost_intent = await _check_ghost_teacher_intent(student_id, msg.user_id, content)
         if ghost_intent:
-            # Ghost teacher mode started, don't process as normal message
             return
 
         conv_id = await conversation_manager.ensure_active(student_id, "whatsapp")
@@ -116,12 +116,7 @@ async def _handle_message(msg: whatsapp.WhatsAppMessage) -> None:
         except Exception:
             pass
 
-# NEW — GHOST TEACHER INTENT CHECK
 async def _check_ghost_teacher_intent(student_id: str, phone: str, content: str) -> bool:
-    """
-    Check if student wants to start independent study (Ghost Teacher Mode).
-    If yes, create study session and send observation message.
-    """
     try:
         from waxprep.app.brain.ghost_teacher import parse_study_intent, generate_observation_message
         
@@ -133,7 +128,6 @@ async def _check_ghost_teacher_intent(student_id: str, phone: str, content: str)
         
         db = get_db()
         
-        # Create study session
         result = db.table("study_sessions").insert({
             "student_id": student_id,
             "material_topic": topic,
@@ -147,7 +141,6 @@ async def _check_ghost_teacher_intent(student_id: str, phone: str, content: str)
         
         session_id = result.data[0]["id"]
         
-        # Send observation message
         obs_message = generate_observation_message(topic, duration)
         await whatsapp.send_text(phone, obs_message)
         
