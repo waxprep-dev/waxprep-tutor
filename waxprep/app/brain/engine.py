@@ -1,170 +1,167 @@
 import asyncio
 import time
-import httpx
-from typing import Dict, Any, Optional
+from typing import Dict, Any, List, Optional
 from loguru import logger
-import os
-
-from waxprep.app.brain.memory import memory
-from waxprep.app.brain.prompt import build_prompt, build_tool_result_prompt
-from waxprep.app.brain.tools import parse_tools, needs_second_pass
-from waxprep.app.brain.tool_executor import execute_all
-
-FALLBACK_RESPONSES = [
-    "I'm having a quick technical moment — send that again and I'll get it.",
-    "Something on my end — try that one more time.",
-    "Quick technical issue — resend and we continue.",
-]
-
-_fallback_index = 0
 
 class WaxPrepBrain:
     def __init__(self):
-        self.model_url = os.environ.get("WAXPREP_MODEL_URL", "https://wazawax-waxprepmodel.hf.space/generate")
-        self.health_url = os.environ.get("WAXPREP_MODEL_HEALTH_URL", "https://wazawax-waxprepmodel.hf.space/health")
-        self.timeout = float(os.environ.get("WAXPREP_MODEL_TIMEOUT", "300"))
+        self._gemini = None
+        self._groq = None
         self._consecutive_failures = 0
-        self._circuit_open_until = 0.0
+        self._init_done = False
 
-    def _circuit_open(self) -> bool:
-        if self._consecutive_failures >= 5 and time.time() < self._circuit_open_until:
-            return True
-        if time.time() >= self._circuit_open_until:
-            self._consecutive_failures = 0
-        return False
+    def _init_clients(self):
+        if self._init_done:
+            return
+        import os
 
-    def _on_failure(self):
-        self._consecutive_failures += 1
-        if self._consecutive_failures >= 5:
-            self._circuit_open_until = time.time() + 120
-            logger.warning("Brain circuit breaker open — 2 minute cooldown")
+        gemini_key = os.environ.get("GEMINI_API_KEY", "")
+        if gemini_key:
+            try:
+                import google.generativeai as genai
+                genai.configure(api_key=gemini_key)
+                self._gemini = genai.GenerativeModel("gemini-1.5-flash")
+                logger.info("Gemini 1.5 Flash ready")
+            except Exception as e:
+                logger.warning(f"Gemini init failed: {e}")
 
-    def _on_success(self):
-        self._consecutive_failures = 0
+        groq_key = os.environ.get("GROQ_API_KEY", "")
+        if groq_key:
+            try:
+                from groq import Groq
+                self._groq = Groq(api_key=groq_key)
+                logger.info("Groq Llama 70B ready as fallback")
+            except Exception as e:
+                logger.warning(f"Groq init failed: {e}")
 
-    async def _call_model(self, prompt: str) -> Optional[str]:
-        if self._circuit_open():
-            return None
-        try:
-            async with httpx.AsyncClient(timeout=self.timeout) as client:
-                r = await client.post(
-                    self.model_url,
-                    json={"question": prompt},
-                    headers={"Content-Type": "application/json"},
-                )
-                if r.status_code == 200:
-                    data = r.json()
-                    answer = data.get("answer", "").strip()
-                    if answer:
-                        self._on_success()
-                        return answer
-                    return None
-                elif r.status_code in (502, 503, 504):
-                    self._on_failure()
-                    return None
-                else:
-                    logger.error(f"Model returned {r.status_code}: {r.text[:200]}")
-                    self._on_failure()
-                    return None
-        except httpx.TimeoutException:
-            logger.warning(f"Model timed out after {self.timeout}s")
-            self._on_failure()
-            return None
-        except Exception as e:
-            logger.error(f"Model call failed: {e}")
-            self._on_failure()
-            return None
+        self._init_done = True
 
     async def think(self, student_id: str, student_message: str) -> str:
-        global _fallback_index
+        self._init_clients()
         start = time.time()
+
+        from waxprep.app.brain.memory import memory
+        from waxprep.app.brain.prompt import build_prompt
+        from waxprep.app.brain.tools import parse_tools
+        from waxprep.app.brain.tool_executor import execute_all
 
         memory_layers = await memory.load_all(student_id)
         prompt = build_prompt(memory_layers, student_message)
 
-        raw_response = await self._call_model(prompt)
-        if not raw_response:
-            resp = FALLBACK_RESPONSES[_fallback_index % len(FALLBACK_RESPONSES)]
-            _fallback_index += 1
-            return resp
+        response = None
 
-        clean_response, tool_calls = parse_tools(raw_response)
+        if self._gemini:
+            response = await self._call_gemini(prompt)
 
-        tool_results = {}
+        if not response and self._groq:
+            response = await self._call_groq(prompt)
+
+        if not response:
+            return "I'm having a quick technical moment — send that again and I'll get it."
+
+        clean, tool_calls = parse_tools(response)
+
         if tool_calls:
-            tool_results = await execute_all(student_id, tool_calls)
+            await execute_all(student_id, tool_calls)
 
-        if needs_second_pass(tool_calls) and tool_results:
-            followup_prompt = build_tool_result_prompt(prompt, tool_results)
-            second_response = await self._call_model(followup_prompt)
-            if second_response:
-                clean_response, remaining_tools = parse_tools(second_response)
-                if remaining_tools:
-                    await execute_all(student_id, remaining_tools)
-
-        if not clean_response:
-            clean_response = FALLBACK_RESPONSES[_fallback_index % len(FALLBACK_RESPONSES)]
-            _fallback_index += 1
+        if not clean or not clean.strip():
+            return "Let me think about that differently — ask me again."
 
         elapsed = int((time.time() - start) * 1000)
-        logger.info(f"Brain: {student_id[:8]} | {elapsed}ms | {len(tool_calls)} tools")
+        logger.info(f"Brain responded: {student_id[:8]} | {elapsed}ms")
 
         asyncio.create_task(
-            self._background_memory_update(
-                student_id=student_id,
-                student_message=student_message,
-                ai_response=clean_response,
-                memory_layers=memory_layers,
-            )
+            self._update_memory_background(student_id, student_message, clean)
         )
 
-        return clean_response
+        return clean
 
-    async def _background_memory_update(
-        self,
-        student_id: str,
-        student_message: str,
-        ai_response: str,
-        memory_layers: Dict,
-    ) -> None:
+    async def _call_gemini(self, prompt: str) -> Optional[str]:
         try:
-            await memory.update_session_cache(student_id, {"role": "user", "content": student_message})
-            await memory.update_session_cache(student_id, {"role": "assistant", "content": ai_response})
+            def _sync_call():
+                response = self._gemini.generate_content(
+                    prompt,
+                    generation_config={
+                        "temperature": 0.7,
+                        "max_output_tokens": 600,
+                        "top_p": 0.9,
+                    },
+                )
+                return response.text
 
-            msg_lower = student_message.lower()
-            engagement_words = ["i get it", "i understand now", "ohhh", "makes sense", "clear now", "so that means"]
-            confusion_words = ["don't get it", "still confused", "not understanding", "explain again"]
-            frustration_words = ["give up", "forget it", "too hard", "hopeless", "abeg forget", "leave it"]
-            pidgin_words = ["abeg", "omo", "na", "wetin", "dey", "make i", "sha", "sef", "how far"]
+            result = await asyncio.to_thread(_sync_call)
+            if result and result.strip():
+                return result.strip()
+            return None
+        except Exception as e:
+            err = str(e).lower()
+            if "rate" in err or "quota" in err:
+                logger.warning(f"Gemini rate limit hit, trying fallback")
+            else:
+                logger.error(f"Gemini error: {e}")
+            return None
 
-            dna_updates = {}
+    async def _call_groq(self, prompt: str) -> Optional[str]:
+        try:
+            import os
+
+            def _sync_call():
+                completion = self._groq.chat.completions.create(
+                    model="llama-3.3-70b-versatile",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.7,
+                    max_tokens=600,
+                )
+                return completion.choices[0].message.content
+
+            result = await asyncio.to_thread(_sync_call)
+            if result and result.strip():
+                return result.strip()
+            return None
+        except Exception as e:
+            err = str(e).lower()
+            if "rate" in err or "429" in err:
+                logger.warning("Groq rate limit hit")
+            else:
+                logger.error(f"Groq error: {e}")
+            return None
+
+    async def _call_model(self, prompt: str) -> Optional[str]:
+        self._init_clients()
+        result = await self._call_gemini(prompt)
+        if not result:
+            result = await self._call_groq(prompt)
+        return result
+
+    async def _update_memory_background(self, student_id: str, message: str, response: str) -> None:
+        try:
+            from waxprep.app.brain.memory import memory
+            await memory.update_session_cache(student_id, {"role": "user", "content": message})
+            await memory.update_session_cache(student_id, {"role": "assistant", "content": response})
+
+            msg_lower = message.lower()
+            pidgin_words = ["abeg", "omo", "na ", "wetin", "dey ", "make i", "sha ", "sef ", "how far"]
             pidgin_score = sum(1 for w in pidgin_words if w in msg_lower)
+
+            db_updates = {}
             if pidgin_score >= 3:
-                dna_updates["pidgin_preference"] = "heavy"
+                db_updates["pidgin_preference"] = "heavy"
             elif pidgin_score >= 1:
-                dna_updates["pidgin_preference"] = "adaptive"
+                db_updates["pidgin_preference"] = "adaptive"
 
+            frustration_words = ["give up", "forget it", "too hard", "hopeless", "abeg forget", "i don't understand"]
             if any(w in msg_lower for w in frustration_words):
-                db = memory.db
-                profile = db.table("student_profiles").select("frustration_threshold").eq("student_id", student_id).execute()
-                if profile.data:
-                    current = profile.data[0].get("frustration_threshold", 3) or 3
-                    dna_updates["frustration_threshold"] = max(1, int(current) - 1)
+                db_updates["emotional_state_current"] = "frustrated"
 
-            if any(w in msg_lower for w in engagement_words):
-                if len(ai_response) < 400:
-                    dna_updates["response_length_pref"] = "short"
-
-            if dna_updates:
-                await memory.update_dna(student_id, dna_updates)
-
-            from datetime import datetime, timezone
             import pytz
+            from datetime import datetime, timezone
             now = datetime.now(timezone.utc).astimezone(pytz.timezone("Africa/Lagos"))
-            db = memory.db
-            db.table("student_profiles").update({"study_peak_hour": now.hour}).eq("student_id", student_id).execute()
+            db_updates["study_peak_hour"] = now.hour
+
+            if db_updates:
+                await memory.update_dna(student_id, db_updates)
 
         except Exception as e:
-            logger.debug(f"Background memory update failed: {e}")
+            logger.debug(f"Background memory update: {e}")
 
 brain = WaxPrepBrain()
