@@ -44,7 +44,7 @@ class WaxPrepBrain:
         from waxprep.app.brain.memory import memory
         from waxprep.app.brain.prompt import build_prompt
         from waxprep.app.brain.tools import parse_tools
-        from waxprep.app.tool_executor import execute_all
+        from waxprep.app.brain.tool_executor import execute_all
 
         memory_layers = await memory.load_all(student_id)
         prompt = build_prompt(memory_layers, student_message)
