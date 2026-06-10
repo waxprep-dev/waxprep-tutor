@@ -9,7 +9,7 @@ class WaxPrepBrain:
         self._groq = None
         self._consecutive_failures = 0
         self._init_done = False
-        self.health_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash"
+        self.health_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash"
         self._init_clients()
 
     def _init_clients(self):
@@ -22,7 +22,7 @@ class WaxPrepBrain:
             try:
                 import google.generativeai as genai
                 genai.configure(api_key=gemini_key)
-                self._gemini = genai.GenerativeModel("gemini-1.5-flash")
+                self._gemini = genai.GenerativeModel("gemini-2.5-flash")
                 logger.info("Gemini 1.5 Flash ready")
             except Exception as e:
                 logger.warning(f"Gemini init failed: {e}")

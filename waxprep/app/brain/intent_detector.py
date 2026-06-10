@@ -8,14 +8,14 @@ genai.configure(api_key=os.environ.get("GEMINI_API_KEY", ""))
 
 def get_embedding(text: str) -> list:
     """
-    Convert any text to 768-number embedding using Gemini text-embedding-004.
+    Convert any text to 768-number embedding using Gemini gemini-embedding-001.
     This is the SECOND Gemini (embeddings) — separate from the main Gemini 1.5 Flash.
     """
     if not text or not text.strip():
         return [0.0] * 768
     
     try:
-        model = "models/text-embedding-004"
+        model = "models/gemini-embedding-001"
         result = genai.embed_content(
             model=model,
             content=text.strip(),
