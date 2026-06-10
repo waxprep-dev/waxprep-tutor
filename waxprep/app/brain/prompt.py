@@ -5,54 +5,11 @@ from datetime import datetime, timezone
 
 NIGERIA_TZ = pytz.timezone("Africa/Lagos")
 
-# NEW — CONVERSATION STATE SYSTEM
-def get_conversation_state(messages: List[Dict]) -> str:
-    """
-    Determine conversation state based on message history.
-    Returns: 'intro', 'teaching', 'checking', 'confused', 'instruction'
-    """
-    if not messages or len(messages) < 2:
-        return "intro"
-    
-    last_student_msg = ""
-    for msg in reversed(messages):
-        if msg.get("role") == "user":
-            last_student_msg = msg.get("content", "").lower()
-            break
-    
-    # Check for explicit instructions (HIGHEST PRIORITY)
-    instruction_words = [
-        "start from", "teach me", "explain", "begin", "show me", 
-        "i don't understand", "break it down", "grassroots", "foundation",
-        "basics", "from scratch", "fundamentals"
-    ]
-    if any(w in last_student_msg for w in instruction_words):
-        return "instruction"
-    
-    # Check for frustration/confusion
-    confusion_words = ["confused", "don't get it", "lost", "frustrated", "too many questions", "unnecessary"]
-    if any(w in last_student_msg for w in confusion_words):
-        return "confused"
-    
-    # Check if we just taught something (last WaxPrep message was explanation)
-    last_waxprep_msg = ""
-    for msg in reversed(messages):
-        if msg.get("role") == "assistant":
-            last_waxprep_msg = msg.get("content", "").lower()
-            break
-    
-    teaching_indicators = ["is a", "means", "works by", "happens when", "example", "think of it like"]
-    if any(w in last_waxprep_msg for w in teaching_indicators):
-        return "checking"
-    
-    # Default: if we've been asking too many questions, switch to teaching
-    recent_questions = sum(1 for msg in messages[-4:] if "?" in msg.get("content", ""))
-    if recent_questions >= 3:
-        return "teaching"
-    
-    return "teaching"
+# === NEW TINY IDENTITY: 2 sentences max ===
+WAXPREP_IDENTITY = """You are WaxPrep — a Nigerian teacher for WAEC, NECO, JAMB students. Warm, direct, patient. Never make students feel stupid."""
 
-WAXPREP_IDENTITY = """You are WaxPrep — a Nigerian AI teacher built specifically for Nigerian secondary school and university students preparing for WAEC, NECO, JAMB, and BECE. You are not a generic AI assistant. You are a teacher.
+# === LEGACY: Keep old identity for fallback when intent confidence is low ===
+WAXPREP_IDENTITY_LEGACY = """You are WaxPrep — a Nigerian AI teacher built specifically for Nigerian secondary school and university students preparing for WAEC, NECO, JAMB, and BECE. You are not a generic AI assistant. You are a teacher.
 
 YOUR PERSONALITY:
 You are the brilliant older sibling who got through school and genuinely wants every student to make it. Warm, direct, patient, occasionally funny. You speak natural Nigerian English. You switch to Pidgin when the student uses it or when they are confused. You connect every concept to Nigerian everyday life.
@@ -73,7 +30,7 @@ Never repeat the same explanation twice.
 - "Start from basics" → START TEACHING IMMEDIATELY, no questions
 - "My foundation is weak" → ACKNOWLEDGE + START FROM FUNDAMENTALS
 - "Teach me" → BEGIN LESSON RIGHT AWAY
-- "You ask too many questions" → APOLOGIZE + STOP ASKING + START TEACHING
+-- "You ask too many "You ask too many questions" → APOLOGIZE + STOP ASKING + START TEACHING
 - RULE: When student gives instruction, DO NOT ask a question back. EXECUTE.
 
 ## STATE: TEACHING (explaining a concept)
@@ -122,7 +79,8 @@ TOOLS YOU CAN USE (embed silently in your response, student never sees them):
 Use tools whenever you detect relevant information or need data. Embed them anywhere in your response. They are stripped before the student sees the message.
 """
 
-WAXPREP_IDENTITY += TOOLS_REFERENCE
+WAXPREP_IDENTITY_LEGACY += TOOLS_REFERENCE
+
 
 def get_time_context() -> str:
     now = datetime.now(timezone.utc).astimezone(NIGERIA_TZ)
@@ -138,6 +96,7 @@ def get_time_context() -> str:
     elif hour >= 21:
         return f"{time_str} WAT {day} — night."
     return f"{time_str} WAT {day}."
+
 
 def get_gap_context(last_active: str) -> str:
     if not last_active:
@@ -159,6 +118,7 @@ def get_gap_context(last_active: str) -> str:
     except Exception:
         return ""
 
+
 def get_exam_context(exam_date: str) -> str:
     if not exam_date:
         return ""
@@ -175,6 +135,7 @@ def get_exam_context(exam_date: str) -> str:
         return ""
     except Exception:
         return ""
+
 
 def build_dna_context(dna: Dict) -> str:
     parts = []
@@ -195,6 +156,7 @@ def build_dna_context(dna: Dict) -> str:
     elif isinstance(rate, float) and rate < 0.3:
         parts.append("Student struggles — always build from fundamentals.")
     return " ".join(parts)
+
 
 def get_socratic_context(pressure_score: float) -> str:
     if pressure_score is None:
@@ -219,28 +181,18 @@ def get_socratic_context(pressure_score: float) -> str:
             "Minimal hints. Let them discover. Only give direct answers if stuck for 3+ messages."
         )
 
-def build_prompt(memory_layers: Dict, current_message: str) -> str:
+
+# === LEGACY: Old build_prompt for fallback ===
+def build_prompt_legacy(memory_layers: Dict, current_message: str) -> str:
+    """Keep old giant prompt for when intent confidence is low."""
     lt = memory_layers.get("long_term", {})
     st = memory_layers.get("short_term", {})
     ep = memory_layers.get("episodic", {})
     sem = memory_layers.get("semantic", {})
-    sections = [WAXPREP_IDENTITY]
+    sections = [WAXPREP_IDENTITY_LEGACY]
 
-    # NEW — DETERMINE CONVERSATION STATE
-    messages = st.get("messages", [])
-    conversation_state = get_conversation_state(messages)
-    
     # Add state instruction to prompt
-    state_instructions = {
-        "intro": "STATE: INTRO — Ask ONE question, then teach.",
-        "instruction": "STATE: INSTRUCTION — Student gave command. TEACH IMMEDIATELY. NO QUESTIONS. EXECUTE.",
-        "teaching": "STATE: TEACHING — Explain concept clearly. After explanation, ask ONE check question.",
-        "checking": "STATE: CHECKING — Ask ONE question about what you just taught. Wait for answer.",
-        "confused": "STATE: CONFUSED — Student is frustrated. STOP asking questions. Apologize. Start from simplest foundation. Give a win. NO QUESTIONS until they show understanding.",
-        "review": "STATE: REVIEW — Short questions only. No long explanations.",
-    }
-    
-    state_instruction = state_instructions.get(conversation_state, "STATE: TEACHING")
+    state_instruction = "STATE: TEACHING — Explain concept clearly. After explanation, ask ONE check question."
     sections.append(state_instruction)
 
     student_context = []
@@ -334,7 +286,7 @@ def build_prompt(memory_layers: Dict, current_message: str) -> str:
                 memory_parts.append(f"- {mem.get('memory_type', '')}: {mem.get('description', '')}")
         sections.append("\n".join(memory_parts))
 
-    if messages:
+    if messages := st.get("messages", []):
         history_lines = ["RECENT CONVERSATION:"]
         for msg in messages[-10:]:
             role = "Student" if msg["role"] == "user" else "WaxPrep"
@@ -354,6 +306,22 @@ def build_prompt(memory_layers: Dict, current_message: str) -> str:
     sections.append("\nRespond as WaxPrep. Be warm, natural, Nigerian. Embed tools silently.")
 
     return "\n\n".join(sections)
+
+
+# === NEW: Tiny build_prompt for intent-based system ===
+def build_prompt(memory_layers: Dict, current_message: str) -> str:
+    """
+    This is now a WRAPPER that decides which prompt to use.
+    
+    If intent system is active (called from engine.py with intent),
+    it uses the focused prompt from context_builder.
+    
+    If intent system is not active (called directly), it uses legacy.
+    """
+    # This function is called by engine.py when intent confidence is low
+    # The focused prompt is built in context_builder.py
+    return build_prompt_legacy(memory_layers, current_message)
+
 
 def build_tool_result_prompt(original_prompt: str, tool_results: Dict) -> str:
     result_lines = ["TOOL RESULTS (use this information in your response):"]
