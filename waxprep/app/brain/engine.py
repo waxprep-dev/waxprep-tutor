@@ -45,9 +45,27 @@ class WaxPrepBrain:
         from waxprep.app.brain.prompt import build_prompt
         from waxprep.app.brain.tools import parse_tools
         from waxprep.app.brain.tool_executor import execute_all
+        
+        # === NEW: INTENT DETECTION (Step 0) ===
+        from waxprep.app.brain.intent_detector import detect_intent
+        from waxprep.app.brain.context_builder import build_focused_prompt, get_fallback_response
+        from waxprep.app.brain.guardrail import check_response, get_stricter_instruction, safe_fallback
 
+        # Load all memory layers (same as before)
         memory_layers = await memory.load_all(student_id)
-        prompt = build_prompt(memory_layers, student_message)
+
+        # Detect intent from message + full context
+        intent = detect_intent(student_message, memory_layers)
+        logger.info(f"Intent: {intent.get('primary')}" + (f"+{intent.get('secondary')}" if intent.get('secondary') else ""))
+
+        # Build focused prompt using intent (NEW — replaces giant prompt)
+        prompt = build_focused_prompt(intent, memory_layers, student_message)
+        
+        # Keep old prompt as fallback for complex cases
+        # If intent confidence is low, use old system
+        if intent.get("confidence", 0) < 0.5:
+            logger.info("Intent confidence low, using legacy prompt")
+            prompt = build_prompt(memory_layers, student_message)
 
         response = None
 
@@ -58,7 +76,31 @@ class WaxPrepBrain:
             response = await self._call_groq(prompt)
 
         if not response:
-            return "I'm having a quick technical moment — send that again and I'll get it."
+            return get_fallback_response(intent)
+
+        # === NEW: GUARDRAIL CHECK ===
+        passed, reason = check_response(response, intent)
+        
+        if not passed:
+            logger.warning(f"Guardrail failed: {reason}. Regenerating with stricter instruction...")
+            
+            # Regenerate with stricter instruction
+            stricter = get_stricter_instruction(intent, reason)
+            stricter_prompt = f"{stricter}\n\nStudent: {student_message}\n\nRespond:"
+            
+            if self._gemini:
+                response = await self._call_gemini(stricter_prompt)
+            
+            if not response and self._groq:
+                response = await self._call_groq(stricter_prompt)
+            
+            if response:
+                passed, reason = check_response(response, intent)
+                if not passed:
+                    logger.error(f"Guardrail failed again: {reason}. Using safe fallback.")
+                    response = safe_fallback(intent)
+            else:
+                response = safe_fallback(intent)
 
         clean, tool_calls = parse_tools(response)
 
@@ -66,43 +108,60 @@ class WaxPrepBrain:
             await execute_all(student_id, tool_calls)
 
         if not clean or not clean.strip():
-            return "Let me think about that differently — ask me again."
+            return get_fallback_response(intent)
 
         elapsed = int((time.time() - start) * 1000)
         logger.info(f"Brain responded: {student_id[:8]} | {elapsed}ms")
 
-        # Check if we should ask why-question next
+        # === MODIFIED: Elaborative interrogation — SKIP if frustrated or confused ===
         why_question = None
-        try:
-            from waxprep.app.brain.elaborative_interrogation import detect_teaching_moment, generate_why_question, should_ask_why
-            from waxprep.app.database.client import get_db
-            
-            concept = detect_teaching_moment(clean)
-            if concept:
-                db = get_db()
-                conv = db.table("conversations").select("id, last_teaching_concept").eq("student_id", student_id).eq("is_active", True).order("started_at", desc=True).limit(1).execute()
-                if conv.data:
-                    conv_id = conv.data[0]["id"]
-                    db.table("conversations").update({"last_teaching_concept": concept}).eq("id", conv_id).execute()
-                    
-                    if should_ask_why({
-                        "messages": memory_layers.get("short_term", {}).get("messages", []),
-                        "emotional_state": memory_layers.get("long_term", {}).get("emotional_state", "neutral"),
-                        "socratic_pressure_score": memory_layers.get("long_term", {}).get("socratic_pressure_score", 5.0),
-                    }):
-                        subject = memory_layers.get("long_term", {}).get("current_subject", "")
-                        why_question = generate_why_question(concept, subject)
-                        logger.info(f"Why-question generated: {concept} -> {why_question[:50]}...")
-        except Exception as e:
-            logger.debug(f"Elaborative interrogation check: {e}")
+        primary_intent = intent.get("primary", "CHAT")
+        secondary_intent = intent.get("secondary")
+        
+        # Only ask why-questions if:
+        # 1. Intent is TEACH or QUESTION
+        # 2. NOT frustrated
+        # 3. NOT confused
+        # 4. Socratic pressure is moderate or high
+        if primary_intent in ["TEACH", "QUESTION"] and secondary_intent != "FRUSTRATED":
+            if intent.get("socratic_pressure", 5.0) >= 4.0:
+                try:
+                    from waxprep.app.brain.elaborative_interrogation import detect_teaching_moment, generate_why_question, should_ask_why
+                    from waxprep.app.database.client import get_db
+
+                    concept = detect_teaching_moment(clean)
+                    if concept:
+                        db = get_db()
+                        conv = db.table("conversations").select("id, last_teaching_concept").eq("student_id", student_id).eq("is_active", True).order("started_at", desc=True).limit(1).execute()
+                        if conv.data:
+                            conv_id = conv.data[0]["id"]
+                            db.table("conversations").update({"last_teaching_concept": concept}).eq("id", conv_id).execute()
+
+                        if should_ask_why({
+                            "messages": memory_layers.get("short_term", {}).get("messages", []),
+                            "emotional_state": memory_layers.get("long_term", {}).get("emotional_state", "neutral"),
+                            "socratic_pressure_score": memory_layers.get("long_term", {}).get("socratic_pressure_score", 5.0),
+                        }):
+                            subject = memory_layers.get("long_term", {}).get("current_subject", "")
+                            why_question = generate_why_question(concept, subject)
+                            logger.info(f"Why-question generated: {concept} -> {why_question[:50]}...")
+                except Exception as e:
+                    logger.debug(f"Elaborative interrogation check: {e}")
 
         asyncio.create_task(
             self._update_memory_background(student_id, student_message, clean)
         )
 
         if why_question:
-            return f"{clean}\n\n{why_question}"
-        
+            # Guardrail: check if adding why-question is safe
+            combined = f"{clean}\n\n{why_question}"
+            passed, reason = check_response(combined, intent)
+            if passed:
+                return combined
+            else:
+                logger.warning(f"Why-question blocked by guardrail: {reason}")
+                return clean
+
         return clean
 
     async def _call_gemini(self, prompt: str) -> Optional[str]:
@@ -177,12 +236,12 @@ class WaxPrepBrain:
             elif pidgin_score >= 1:
                 db_updates["pidgin_preference"] = "adaptive"
 
-            # EMOTIONAL STATE: IMMEDIATE (reactive, last message only)
+            # EMOTIONAL STATE: Use intent detection result if available
+            # This is more accurate than keyword matching
             frustration_words = ["give up", "forget it", "too hard", "hopeless", "abeg forget", "i don't understand"]
             if any(w in msg_lower for w in frustration_words):
                 db_updates["emotional_state_current"] = "frustrated"
             else:
-                # If student seems okay, clear frustration
                 positive_words = ["yes", "got it", "understand", "sharp", "correct", "thanks"]
                 if any(w in msg_lower for w in positive_words):
                     db_updates["emotional_state_current"] = "neutral"
@@ -195,7 +254,7 @@ class WaxPrepBrain:
             if db_updates:
                 await memory.update_dna(student_id, db_updates)
 
-            # SOCRATIC PRESSURE: TREND-BASED (cumulative, last 10 interactions)
+            # SOCRATIC PRESSURE: Update based on intent (more accurate)
             try:
                 from waxprep.app.brain.socratic_pressure import analyze_interaction, calculate_pressure
                 from waxprep.app.database.client import get_db
@@ -209,7 +268,6 @@ class WaxPrepBrain:
 
                 new_score, reason = calculate_pressure(current_score, signals)
 
-                # Only update if change is meaningful (>= 0.5) to avoid jitter
                 if abs(new_score - current_score) >= 0.5:
                     db.table("student_profiles").update({"socratic_pressure_score": new_score}).eq("student_id", student_id).execute()
                     await memory.update_dna(student_id, {"socratic_pressure_score": new_score})
@@ -221,7 +279,7 @@ class WaxPrepBrain:
             try:
                 from waxprep.app.brain.elaborative_interrogation import evaluate_why_answer
                 from waxprep.app.database.client import get_db
-                
+
                 db = get_db()
                 conv = db.table("conversations").select("last_teaching_concept").eq("student_id", student_id).eq("is_active", True).order("started_at", desc=True).limit(1).execute()
                 if conv.data and conv.data[0].get("last_teaching_concept"):
