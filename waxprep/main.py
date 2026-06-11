@@ -1,3 +1,8 @@
+"""
+WaxPrep Brain v3.0 - Holographic Memory Architecture
+AI-commanded Nigerian educational platform
+"""
+
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
@@ -15,22 +20,22 @@ logger.add(sys.stdout, format="{time:HH:mm:ss} | {level} | {message}", level="IN
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("WaxPrep Brain starting")
-    
+    logger.info("WaxPrep Brain v3.0 starting - Holographic Memory Architecture")
+
     try:
         db = get_db()
         db.table("students").select("id").limit(1).execute()
         logger.info("Database ready")
     except Exception as e:
         logger.error(f"Database failed: {e}")
-    
+
     try:
         r = await get_redis()
         if r:
             logger.info("Cache ready")
     except Exception as e:
         logger.warning(f"Cache unavailable: {e}")
-    
+
     try:
         import httpx
         async with httpx.AsyncClient(timeout=10.0) as client:
@@ -41,18 +46,18 @@ async def lifespan(app: FastAPI):
                 logger.warning(f"Model health check returned {resp.status_code}")
     except Exception as e:
         logger.warning(f"Model health check failed: {e}")
-    
+
     start_scheduler()
-    logger.info("WaxPrep Brain ready")
-    
+    logger.info("WaxPrep Brain v3.0 ready - The tutor that actually knows you.")
+
     yield
-    
+
     stop_scheduler()
     logger.info("WaxPrep Brain stopped")
 
 app = FastAPI(
-    title="WaxPrep Brain",
-    description="AI-commanded Nigerian educational platform",
+    title="WaxPrep Brain v3.0",
+    description="Holographic Memory Architecture - AI-commanded Nigerian educational platform",
     version="3.0.0",
     lifespan=lifespan,
     docs_url=None,
@@ -69,7 +74,7 @@ app.include_router(admin.router, prefix="/api/v1")
 
 @app.get("/health")
 async def health():
-    return {"status": "alive", "version": "3.0.0", "architecture": "brain-commanded"}
+    return {"status": "alive", "version": "3.0.0", "architecture": "holographic-memory"}
 
 @app.head("/health")
 async def health_head():
