@@ -1071,7 +1071,7 @@ class HolographicMemoryEngine:
                 narrative_summary=await self._generate_narrative(student_id, s, p, mastered, struggling),
             )
 
-            cm.risk_flags = self._detect_risk_flags(cm, p)
+            cm.risk_flags = self._detect_risk_flags(cm, p, pm)
 
             await rset_json(key, cm.to_dict(), TTL_CM)
             return cm
@@ -1125,7 +1125,7 @@ class HolographicMemoryEngine:
 
         return "".join(parts)
 
-    def _detect_risk_flags(self, cm: ConsolidatedMemory, profile: Dict) -> List[str]:
+    def _detect_risk_flags(self, cm: ConsolidatedMemory, profile: Dict, pm: ProceduralMemory = None) -> List[str]:
         flags = []
         if cm.days_until_exam > 0 and cm.days_until_exam <= 14 and cm.total_concepts_struggling > 5:
             flags.append("exam_pressure_high")
@@ -1133,7 +1133,7 @@ class HolographicMemoryEngine:
             flags.append("slow_progress")
         if profile.get("emotional_state_current") in ("frustrated", "discouraged"):
             flags.append("at_risk_of_dropping")
-        if cm.streak_days > 14:
+        if pm and pm.streak_days > 14:
             flags.append("potential_burnout")
         return flags
 
