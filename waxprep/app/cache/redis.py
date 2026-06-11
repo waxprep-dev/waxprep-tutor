@@ -66,3 +66,12 @@ async def rexists(key: str) -> bool:
         return bool(await r.exists(key))
     except Exception:
         return False
+
+# NEW: Functions expected by memory.py v3.0
+async def rget_json(key: str) -> Optional[Any]:
+    """Get and parse JSON from Redis."""
+    return await rget(key)
+
+async def rset_json(key: str, value: Any, ttl: int = 300) -> bool:
+    """Store JSON in Redis."""
+    return await rset(key, value, ttl)
