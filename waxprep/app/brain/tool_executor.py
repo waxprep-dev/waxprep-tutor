@@ -1,3 +1,10 @@
+"""
+================================================================================
+TOOL EXECUTOR v4.0 - CONNECTED TO MEMORY SYSTEM
+================================================================================
+Now properly connected with memory write-back for all state changes.
+================================================================================
+"""
 import asyncio
 from typing import Dict, Any, List
 from datetime import datetime, timezone, timedelta
@@ -31,41 +38,44 @@ async def _execute(student_id: str, tool: ToolCall) -> Any:
         level = p.get("level", "").upper()
         if level:
             db.table("students").update({"inferred_class_level": level}).eq("id", student_id).execute()
-            await rdel(f"wax:profile:{student_id}")
+            await rdel(f"wax:pm:{student_id}")
+            await rdel(f"wax:cm:{student_id}")
         return None
 
     if name == "update_subject":
         subject = p.get("subject", "").lower().replace(" ", "_")
         if subject:
             db.table("student_profiles").update({"current_subject": subject}).eq("student_id", student_id).execute()
-            await rdel(f"wax:profile:{student_id}")
+            await rdel(f"wax:pm:{student_id}")
+            await rdel(f"wax:cm:{student_id}")
         return None
 
     if name == "update_topic":
         topic = p.get("topic", "").lower().replace("_", " ")
         if topic:
             db.table("student_profiles").update({"current_topic": topic}).eq("student_id", student_id).execute()
-            await rdel(f"wax:profile:{student_id}")
+            await rdel(f"wax:pm:{student_id}")
         return None
 
     if name == "update_exam_target":
         exam = p.get("exam", "").upper()
         if exam:
             db.table("students").update({"primary_exam_target": exam}).eq("id", student_id).execute()
-            await rdel(f"wax:profile:{student_id}")
+            await rdel(f"wax:cm:{student_id}")
         return None
 
     if name == "update_name":
         student_name = p.get("name", "")
         if student_name:
             db.table("student_profiles").update({"student_name": student_name}).eq("student_id", student_id).execute()
-            await rdel(f"wax:profile:{student_id}")
+            await rdel(f"wax:pm:{student_id}")
+            await rdel(f"wax:cm:{student_id}")
         return None
 
     if name == "update_emotional_state":
         state = p.get("state", "neutral")
         db.table("student_profiles").update({"emotional_state_current": state}).eq("student_id", student_id).execute()
-        await rdel(f"wax:profile:{student_id}")
+        await rdel(f"wax:pm:{student_id}")
         return None
 
     if name == "save_mastery":
@@ -145,7 +155,8 @@ async def _execute(student_id: str, tool: ToolCall) -> Any:
                 try:
                     typed_value = int(value) if field == "frustration_threshold" else value
                     db.table("student_profiles").update({db_field: typed_value}).eq("student_id", student_id).execute()
-                    await rdel(f"wax:profile:{student_id}")
+                    await rdel(f"wax:pm:{student_id}")
+                    await rdel(f"wax:cm:{student_id}")
                 except Exception as e:
                     logger.warning(f"DNA update failed: {e}")
         return None
@@ -154,7 +165,7 @@ async def _execute(student_id: str, tool: ToolCall) -> Any:
         date_str = p.get("date", "")
         if date_str:
             db.table("students").update({"exam_date": date_str}).eq("id", student_id).execute()
-            await rdel(f"wax:profile:{student_id}")
+            await rdel(f"wax:cm:{student_id}")
         return None
 
     if name == "set_parent_phone":
@@ -163,7 +174,6 @@ async def _execute(student_id: str, tool: ToolCall) -> Any:
             db.table("student_profiles").update({"parent_phone": phone}).eq("student_id", student_id).execute()
         return None
 
-    # NEW — SOCRATIC & TEACHING INTELLIGENCE
     if name == "update_socratic_pressure":
         score_str = p.get("score", "5")
         reason = p.get("reason", "")
@@ -171,7 +181,7 @@ async def _execute(student_id: str, tool: ToolCall) -> Any:
             score = float(score_str)
             score = max(0.0, min(10.0, score))
             db.table("student_profiles").update({"socratic_pressure_score": score}).eq("student_id", student_id).execute()
-            await rdel(f"wax:profile:{student_id}")
+            await rdel(f"wax:pm:{student_id}")
             logger.info(f"Socratic pressure updated: {student_id[:8]} -> {score} ({reason})")
         except Exception as e:
             logger.warning(f"update_socratic_pressure failed: {e}")
@@ -202,7 +212,6 @@ async def _execute(student_id: str, tool: ToolCall) -> Any:
             )
         return None
 
-    # NEW — WAEC THEORY SYSTEM
     if name == "get_theory_question":
         subject = p.get("subject", "")
         topic = p.get("topic", "")
@@ -239,7 +248,6 @@ async def _execute(student_id: str, tool: ToolCall) -> Any:
                 return f"Submit failed: {e}"
         return None
 
-    # NEW — GHOST TEACHER MODE
     if name == "start_study_session":
         topic = p.get("topic", "")
         duration = p.get("duration", "20")
@@ -250,7 +258,7 @@ async def _execute(student_id: str, tool: ToolCall) -> Any:
                 "status": "active",
             }).execute()
             session_id = result.data[0]["id"] if result.data else "unknown"
-            return f"Study session started. ID: {session_id}. Study for {duration} minutes. I'll ask questions when you're done."
+            return f"Study session started. ID: {session_id}. Study for {duration} minutes."
         except Exception as e:
             return f"Could not start study session: {e}"
 
@@ -263,7 +271,7 @@ async def _execute(student_id: str, tool: ToolCall) -> Any:
                     "status": status,
                     "ended_at": datetime.now(timezone.utc).isoformat(),
                 }).eq("id", session_id).eq("student_id", student_id).execute()
-                return f"Study session ended. Status: {status}. Preparing evaluation questions..."
+                return f"Study session ended. Status: {status}."
             except Exception as e:
                 return f"Could not end study session: {e}"
         return None

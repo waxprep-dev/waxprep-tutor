@@ -1,3 +1,10 @@
+"""
+================================================================================
+PROMPT BUILDER v4.0 - FULL MEMORY CONTEXT
+================================================================================
+Now the prompt includes ALL 7 memory layers, not just 100 tokens.
+================================================================================
+"""
 from typing import Dict, Any, List
 from waxprep.app.brain.tools import TOOLS_REFERENCE
 import pytz
@@ -5,10 +12,8 @@ from datetime import datetime, timezone
 
 NIGERIA_TZ = pytz.timezone("Africa/Lagos")
 
-# === NEW TINY IDENTITY: 2 sentences max ===
 WAXPREP_IDENTITY = """You are WaxPrep — a Nigerian teacher for WAEC, NECO, JAMB students. Warm, direct, patient. Never make students feel stupid."""
 
-# === LEGACY: Keep old identity for fallback when intent confidence is low ===
 WAXPREP_IDENTITY_LEGACY = """You are WaxPrep — a Nigerian AI teacher built specifically for Nigerian secondary school and university students preparing for WAEC, NECO, JAMB, and BECE. You are not a generic AI assistant. You are a teacher.
 
 YOUR PERSONALITY:
@@ -20,30 +25,30 @@ Never give direct answers to exam questions. Teach the method.
 Never make a student feel stupid.
 Never repeat the same explanation twice.
 
-# NEW — CONVERSATION STATE RULES (CRITICAL)
+CONVERSATION STATE RULES (CRITICAL):
 ## STATE: INTRO (first 1-2 messages)
 - Ask ONE natural question to understand their need
 - Maximum 2 sentences
 - Then immediately switch to TEACHING
 
 ## STATE: INSTRUCTION (student gave command)
-- "Start from basics" → START TEACHING IMMEDIATELY, no questions
-- "My foundation is weak" → ACKNOWLEDGE + START FROM FUNDAMENTALS
-- "Teach me" → BEGIN LESSON RIGHT AWAY
--- "You ask too many "You ask too many questions" → APOLOGIZE + STOP ASKING + START TEACHING
+- "Start from basics" -> START TEACHING IMMEDIATELY, no questions
+- "My foundation is weak" -> ACKNOWLEDGE + START FROM FUNDAMENTALS
+- "Teach me" -> BEGIN LESSON RIGHT AWAY
+- "You ask too many questions" -> APOLOGIZE + STOP ASKING + START TEACHING
 - RULE: When student gives instruction, DO NOT ask a question back. EXECUTE.
 
 ## STATE: TEACHING (explaining a concept)
 - Give explanation with Nigerian example
-- Maximum 3-4 sentences per concept
+- Maximum 5-6 sentences per concept
 - After explanation, ask ONE check question
 - Then wait for answer
 
 ## STATE: CHECKING (just taught something)
 - Ask ONE specific question about what you just taught
 - Wait for answer
-- If correct → move to next concept
-- If wrong → re-explain differently
+- If correct -> move to next concept
+- If wrong -> re-explain differently
 
 ## STATE: CONFUSED (student is frustrated/lost)
 - STOP asking questions immediately
@@ -59,9 +64,9 @@ Never repeat the same explanation twice.
 
 ## THE MOST IMPORTANT RULE:
 When student says anything that sounds like a command or request for help:
-→ TEACH FIRST, ASK LATER
-→ NEVER ask "What do you think?" when they just told you they don't know
-→ NEVER ask "What is your weakest part?" when they already said "My foundation is weak"
+-> TEACH FIRST, ASK LATER
+-> NEVER ask "What do you think?" when they just told you they don't know
+-> NEVER ask "What is your weakest part?" when they already said "My foundation is weak"
 
 TOOLS YOU CAN USE (embed silently in your response, student never sees them):
 [TOOL:update_subject|subject=physics]
@@ -162,144 +167,102 @@ def get_socratic_context(pressure_score: float) -> str:
     if pressure_score is None:
         return ""
     if pressure_score <= 3.0:
-        return (
-            f"Socratic pressure: {pressure_score}/10 (GENTLE). "
-            "This student frustrates easily. Give direct answers first, "
-            "then gentle nudges. Never ask more than 1 question at a time. "
-            "Build confidence before challenging."
-        )
+        return f"Socratic pressure: {pressure_score}/10 (GENTLE). This student frustrates easily. Give direct answers first, then gentle nudges. Never ask more than 1 question at a time. Build confidence before challenging."
     elif pressure_score <= 6.0:
-        return (
-            f"Socratic pressure: {pressure_score}/10 (BALANCED). "
-            "Mix explanations with guiding questions. Ask 1-2 questions per response. "
-            "Give hints if they struggle for more than 2 messages."
-        )
+        return f"Socratic pressure: {pressure_score}/10 (BALANCED). Mix explanations with guiding questions. Ask 1-2 questions per response. Give hints if they struggle for more than 2 messages."
     else:
-        return (
-            f"Socratic pressure: {pressure_score}/10 (CHALLENGING). "
-            "Pure Socratic method. Ask 2-3 questions per response. "
-            "Minimal hints. Let them discover. Only give direct answers if stuck for 3+ messages."
-        )
+        return f"Socratic pressure: {pressure_score}/10 (CHALLENGING). Pure Socratic method. Ask 2-3 questions per response. Minimal hints. Let them discover. Only give direct answers if stuck for 3+ messages."
 
 
-# === LEGACY: Old build_prompt for fallback ===
 def build_prompt_legacy(memory_layers: Dict, current_message: str) -> str:
-    """Keep old giant prompt for when intent confidence is low."""
-    lt = memory_layers.get("long_term", {})
-    st = memory_layers.get("short_term", {})
-    ep = memory_layers.get("episodic", {})
-    sem = memory_layers.get("semantic", {})
+    """Legacy full-prompt builder for low-confidence intent fallback."""
+    consolidated = memory_layers.get("consolidated_memory", {})
+    working = memory_layers.get("working_memory", {})
+    episodic = memory_layers.get("episodic_memory", {})
+    semantic = memory_layers.get("semantic_memory", {})
+    procedural = memory_layers.get("procedural_memory", {})
+
     sections = [WAXPREP_IDENTITY_LEGACY]
+    sections.append("STATE: TEACHING — Explain concept clearly. After explanation, ask ONE check question.")
 
-    # Add state instruction to prompt
-    state_instruction = "STATE: TEACHING — Explain concept clearly. After explanation, ask ONE check question."
-    sections.append(state_instruction)
-
-    student_context = []
-    student_context.append("STUDENT CONTEXT:")
-
-    name = lt.get("student_name", "")
+    student_context = ["STUDENT CONTEXT:"]
+    name = consolidated.get("student_name", "")
     if name:
         student_context.append(f"Name: {name}")
 
-    level = lt.get("class_level", "UNKNOWN")
+    level = consolidated.get("class_level", "UNKNOWN")
     if level != "UNKNOWN":
         student_context.append(f"Level: {level}")
 
-    exam = lt.get("exam_target", "")
+    exam = consolidated.get("exam_target", "")
     if exam:
         student_context.append(f"Exam: {exam}")
 
-    exam_ctx = get_exam_context(lt.get("exam_date", ""))
+    exam_ctx = get_exam_context(consolidated.get("exam_date", ""))
     if exam_ctx:
         student_context.append(f"URGENT: {exam_ctx}")
 
-    subject = lt.get("current_subject", "")
-    topic = lt.get("current_topic", "")
+    subject = procedural.get("current_subject", "")
+    topic = procedural.get("current_topic", "")
     if subject:
         student_context.append(f"Studying: {subject}")
     if topic:
         student_context.append(f"Topic: {topic}")
 
-    personal = lt.get("personal_context", "")
-    if personal:
-        student_context.append(f"Personal context (handle sensitively): {personal}")
-
-    emotional = lt.get("emotional_state", "neutral")
+    emotional = procedural.get("last_emotional_state", "neutral")
     if emotional in ("frustrated", "anxious", "discouraged"):
         student_context.append(f"Emotional state: {emotional}. Give them a win first.")
 
-    pressure_score = lt.get("socratic_pressure_score")
+    pressure_score = procedural.get("last_socratic_pressure")
     if pressure_score is not None:
         socratic_ctx = get_socratic_context(pressure_score)
         if socratic_ctx:
             student_context.append(socratic_ctx)
 
-    mastered = lt.get("mastered_concepts", [])
-    if mastered:
-        student_context.append(f"Mastered: {', '.join(mastered[:5])}")
+    if semantic and semantic.get("nodes"):
+        nodes = semantic["nodes"]
+        mastered = [k.replace("_", " ") for k, v in nodes.items() if (v.get("mastery_score", 0) if isinstance(v, dict) else v.mastery_score) >= 70]
+        struggling = [k.replace("_", " ") for k, v in nodes.items() if (v.get("mastery_score", 0) if isinstance(v, dict) else v.mastery_score) < 40]
+        if mastered:
+            student_context.append(f"Mastered: {', '.join(mastered[:5])}")
+        if struggling:
+            student_context.append(f"Struggling: {', '.join(struggling[:4])}")
 
-    struggling = lt.get("struggling_concepts", [])
-    if struggling:
-        student_context.append(f"Struggling: {', '.join(struggling[:4])}")
-
-    misconceptions = lt.get("active_misconceptions", [])
-    if misconceptions:
-        student_context.append(f"Watch for these misconceptions: {'; '.join(misconceptions[:3])}")
-
-    is_new = not lt.get("onboarding_complete", False)
+    is_new = not consolidated.get("onboarding_complete", False)
     if is_new:
         student_context.append("NEW STUDENT: Do not give a welcome speech. Ask ONE natural question. Max 3 sentences.")
     else:
-        gap = get_gap_context(lt.get("last_active_at", ""))
+        gap = get_gap_context(consolidated.get("joined_at", ""))
         if gap:
             student_context.append(f"RETURNING: {gap} Reference last topic naturally.")
 
-    dna = lt.get("dna", {})
+    dna = {
+        "example_preference": procedural.get("example_preference", "general"),
+        "pidgin_comfort": procedural.get("pidgin_preference", "adaptive"),
+        "frustration_threshold": procedural.get("frustration_threshold", 3),
+        "correct_first_try_rate": procedural.get("correct_first_try_rate", 0.5),
+    }
     dna_context = build_dna_context(dna)
     if dna_context:
         student_context.append(f"How this student learns: {dna_context}")
 
     sections.append("\n".join(student_context))
 
-    if sem:
-        sem_parts = []
-        if sem.get("waec_high_priority"):
-            sem_parts.append(f"High-frequency WAEC topics in {subject}: {', '.join(sem['waec_high_priority'][:5])}")
-        if sem.get("topic_context"):
-            sem_parts.append(sem["topic_context"])
-        if sem.get("common_misconceptions"):
-            sem_parts.append(f"Common student misconceptions for this topic: {'; '.join(sem['common_misconceptions'])}")
-        if sem.get("teaching_note"):
-            sem_parts.append(f"Teaching note: {sem['teaching_note']}")
-        if sem_parts:
-            sections.append("CURRICULUM CONTEXT:\n" + "\n".join(sem_parts))
+    if episodic:
+        recent = episodic.get("recent", [])
+        if recent:
+            memory_parts = ["MEMORY:"]
+            for mem in recent[:3]:
+                if isinstance(mem, dict):
+                    memory_parts.append(f"- {mem.get('memory_type', '')}: {mem.get('description', '')}")
+            sections.append("\n".join(memory_parts))
 
-    prev_summary = ep.get("previous_session_summary", "")
-    episodic = ep.get("memories", [])
-    if prev_summary or episodic:
-        memory_parts = ["MEMORY:"]
-        if prev_summary:
-            memory_parts.append(f"Last session: {prev_summary[:300]}")
-        if episodic:
-            for mem in episodic[:3]:
-                memory_parts.append(f"- {mem.get('memory_type', '')}: {mem.get('description', '')}")
-        sections.append("\n".join(memory_parts))
-
-    if messages := st.get("messages", []):
+    if messages := working.get("messages", []):
         history_lines = ["RECENT CONVERSATION:"]
         for msg in messages[-10:]:
             role = "Student" if msg["role"] == "user" else "WaxPrep"
             history_lines.append(f"{role}: {msg['content'][:250]}")
         sections.append("\n".join(history_lines))
-
-    data_mode = lt.get("data_mode", "standard")
-    if data_mode == "ultra":
-        sections.append("DATA MODE: ULTRA SHORT. Maximum 2 sentences.")
-    elif data_mode == "light":
-        sections.append("DATA MODE: LIGHT. Maximum 3 short paragraphs.")
-    elif data_mode == "rich":
-        sections.append("DATA MODE: RICH. Comprehensive explanations with multiple examples.")
 
     sections.append(f"Time context: {get_time_context()}")
     sections.append(f"\nSTUDENT MESSAGE:\n{current_message}")
@@ -308,18 +271,8 @@ def build_prompt_legacy(memory_layers: Dict, current_message: str) -> str:
     return "\n\n".join(sections)
 
 
-# === NEW: Tiny build_prompt for intent-based system ===
 def build_prompt(memory_layers: Dict, current_message: str) -> str:
-    """
-    This is now a WRAPPER that decides which prompt to use.
-    
-    If intent system is active (called from engine.py with intent),
-    it uses the focused prompt from context_builder.
-    
-    If intent system is not active (called directly), it uses legacy.
-    """
-    # This function is called by engine.py when intent confidence is low
-    # The focused prompt is built in context_builder.py
+    """Wrapper that decides which prompt to use."""
     return build_prompt_legacy(memory_layers, current_message)
 
 

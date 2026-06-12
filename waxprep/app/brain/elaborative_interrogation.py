@@ -1,3 +1,10 @@
+"""
+================================================================================
+ELABORATIVE INTERROGATION v4.0 - DEEPER WHY QUESTIONS
+================================================================================
+Improved with better concept detection and subject-aware questions.
+================================================================================
+"""
 from typing import Optional, Dict, Tuple
 from loguru import logger
 
@@ -52,6 +59,14 @@ def generate_why_question(concept: str, subject: str = "") -> str:
             f"Why would a country struggle without understanding {concept}?",
             f"Why does {concept} matter to everyday Nigerians?",
         ],
+        "english": [
+            f"Why does {concept} matter in communication?",
+            f"Why would a writer use {concept}?",
+        ],
+        "government": [
+            f"Why does {concept} matter in governance?",
+            f"Why would a democracy fail without {concept}?",
+        ],
         "default": [
             f"Why does {concept} work the way it does?",
             f"Why is understanding {concept} important?",
@@ -62,8 +77,7 @@ def generate_why_question(concept: str, subject: str = "") -> str:
     subject_templates = templates.get(subject_lower, templates["default"])
     if len(concept.split()) <= 2:
         return subject_templates[1]
-    else:
-        return subject_templates[0]
+    return subject_templates[0]
 
 def evaluate_why_answer(student_answer: str, concept: str) -> Tuple[str, float]:
     answer_lower = student_answer.lower()

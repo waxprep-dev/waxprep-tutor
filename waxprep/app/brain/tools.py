@@ -1,3 +1,10 @@
+"""
+================================================================================
+TOOLS v4.0 - AI-EXECUTED ACTIONS
+================================================================================
+Unchanged from v3.0 - comprehensive tool definitions.
+================================================================================
+"""
 from dataclasses import dataclass, field
 from typing import Dict, Any
 import re
@@ -32,18 +39,18 @@ STATE UPDATE TOOLS (silent — execute and continue):
 [TOOL:set_exam_date|date=2025-05-15] — when student mentions exam date
 [TOOL:set_parent_phone|phone=2348012345678] — when student gives parent number
 
-NEW — SOCRATIC & TEACHING INTELLIGENCE:
-[TOOL:update_socratic_pressure|score=7|reason=student_solved_without_hint] — adjust how much Socratic pressure this student can handle (0-10)
-[TOOL:update_teaching_concept|concept=photosynthesis] — mark what concept was just taught so next why-question stays on topic
-[TOOL:mark_teaching_moment|concept=photosynthesis|depth=why_question_asked] — record that a teaching moment happened
+SOCRATIC & TEACHING INTELLIGENCE:
+[TOOL:update_socratic_pressure|score=7|reason=student_solved_without_hint] — adjust Socratic pressure (0-10)
+[TOOL:update_teaching_concept|concept=photosynthesis] — mark what concept was just taught
+[TOOL:mark_teaching_moment|concept=photosynthesis|depth=why_question_asked] — record teaching moment
 
-NEW — WAEC THEORY SYSTEM:
-[TOOL:get_theory_question|subject=biology|topic=photosynthesis] — fetch a WAEC theory question for the student to answer
-[TOOL:submit_theory_answer|question_id=xyz|answer=student_text] — submit student's written answer for evaluation
+WAEC THEORY SYSTEM:
+[TOOL:get_theory_question|subject=biology|topic=photosynthesis] — fetch WAEC theory question
+[TOOL:submit_theory_answer|question_id=xyz|answer=student_text] — submit student's written answer
 
-NEW — GHOST TEACHER MODE:
+GHOST TEACHER MODE:
 [TOOL:start_study_session|topic=photosynthesis|duration=20] — begin observing student studying independently
-[TOOL:end_study_session|session_id=xyz|status=completed] — end observation and trigger evaluation questions
+[TOOL:end_study_session|session_id=xyz|status=completed] — end observation and trigger evaluation
 
 DATA FETCH TOOLS (brain waits for result, then continues response):
 [TOOL:get_performance|subject=mathematics|days=7] — get past assessment scores
@@ -84,12 +91,8 @@ def parse_tools(raw_response: str):
     return clean, tools
 
 DATA_FETCH_TOOLS = {
-    "get_performance",
-    "get_weak_topics",
-    "get_knowledge_map",
-    "check_prerequisites",
-    "get_past_questions",
-    "get_session_history",
+    "get_performance", "get_weak_topics", "get_knowledge_map",
+    "check_prerequisites", "get_past_questions", "get_session_history",
     "get_theory_question",
 }
 

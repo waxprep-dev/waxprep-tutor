@@ -1,3 +1,10 @@
+"""
+================================================================================
+WEBHOOK HANDLER v4.0 - WHATSAPP MESSAGE PROCESSING
+================================================================================
+FIXED: Better error handling, voice note support, structured onboarding.
+================================================================================
+"""
 import asyncio
 import random
 from typing import Optional
@@ -104,9 +111,11 @@ async def _handle_message(msg: whatsapp.WhatsAppMessage) -> None:
             await conversation_manager.save_message(conv_id, student_id, "outbound", response)
 
         db = get_db()
+        current = db.table("students").select("total_messages_received").eq("id", student_id).execute()
+        current_count = current.data[0].get("total_messages_received", 0) if current.data else 0
         db.table("students").update({
-            "total_messages_received": db.table("students").select("total_messages_received").eq("id", student_id).execute().data[0].get("total_messages_received", 0) + 1,
-            "last_active_at": __import__("datetime").datetime.utcnow().isoformat(),
+            "total_messages_received": current_count + 1,
+            "last_active_at": datetime.now(timezone.utc).isoformat(),
         }).eq("id", student_id).execute()
 
     except Exception as e:
@@ -119,35 +128,25 @@ async def _handle_message(msg: whatsapp.WhatsAppMessage) -> None:
 async def _check_ghost_teacher_intent(student_id: str, phone: str, content: str) -> bool:
     try:
         from waxprep.app.brain.ghost_teacher import parse_study_intent, generate_observation_message
-        
         intent = parse_study_intent(content)
         if not intent:
             return False
-        
         topic, duration = intent
-        
         db = get_db()
-        
         result = db.table("study_sessions").insert({
             "student_id": student_id,
             "material_topic": topic,
             "material_type": "general",
             "status": "active",
-            "started_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+            "started_at": datetime.now(timezone.utc).isoformat(),
         }).execute()
-        
         if not result.data:
             return False
-        
         session_id = result.data[0]["id"]
-        
         obs_message = generate_observation_message(topic, duration)
         await whatsapp.send_text(phone, obs_message)
-        
         logger.info(f"Ghost teacher started: {student_id[:8]} | {topic} | {duration}min | session={session_id[:8]}")
-        
         return True
-        
     except Exception as e:
         logger.warning(f"Ghost teacher intent check failed: {e}")
         return False
@@ -155,48 +154,28 @@ async def _check_ghost_teacher_intent(student_id: str, phone: str, content: str)
 async def _check_theory_answer(student_id: str, conv_id: str, content: str) -> Optional[str]:
     try:
         db = get_db()
-        
-        msgs = (
-            db.table("messages")
-            .select("direction, content")
-            .eq("conversation_id", conv_id)
-            .order("timestamp", desc=True)
-            .limit(2)
-            .execute()
-        )
-        
+        msgs = db.table("messages").select("direction, content").eq("conversation_id", conv_id).order("timestamp", desc=True).limit(2).execute()
         if not msgs.data or len(msgs.data) < 2:
             return None
-        
         last_waxprep_msg = None
         for m in msgs.data:
             if m["direction"] == "outbound":
                 last_waxprep_msg = m["content"]
                 break
-        
-        if not last_waxprep_msg:
+        if not last_waxprep_msg or "Theory Question" not in last_waxprep_msg or "Question ID:" not in last_waxprep_msg:
             return None
-        
-        if "Theory Question" not in last_waxprep_msg or "Question ID:" not in last_waxprep_msg:
-            return None
-        
         import re
         qid_match = re.search(r"Question ID: ([a-f0-9-]+)", last_waxprep_msg)
         if not qid_match:
             return None
-        
         question_id = qid_match.group(1)
-        
         q = db.table("waec_theory_questions").select("question_text, marks, marking_scheme, subject, topic").eq("id", question_id).execute()
         if not q.data:
             return None
-        
         question = q.data[0]
         marking_scheme = question.get("marking_scheme", {})
-        
         from waxprep.app.brain.theory_evaluator import evaluate_theory_answer, generate_theory_feedback
         score, feedback, breakdown = evaluate_theory_answer(content, marking_scheme)
-        
         db.table("theory_submissions").insert({
             "student_id": student_id,
             "question_id": question_id,
@@ -204,19 +183,14 @@ async def _check_theory_answer(student_id: str, conv_id: str, content: str) -> O
             "evaluation_json": breakdown,
             "score": score,
             "max_score": question["marks"],
-            "evaluated_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+            "evaluated_at": datetime.now(timezone.utc).isoformat(),
         }).execute()
-        
         from waxprep.app.brain.memory import memory
         concept = question.get("topic", "general")
         subject = question.get("subject", "general")
         await memory.update_knowledge_map(student_id, concept, subject, score / 100.0)
-        
         final_feedback = generate_theory_feedback(score, concept)
-        full_response = f"{feedback}\n\n{final_feedback}"
-        
-        return full_response
-        
+        return f"{feedback}\n\n{final_feedback}"
     except Exception as e:
         logger.warning(f"Theory answer check failed: {e}")
         return None
@@ -236,7 +210,6 @@ async def _transcribe_voice(media_id: str) -> str:
                 if not groq_key:
                     return ""
                 client = groq.Groq(api_key=groq_key)
-
                 def _do_transcribe():
                     with open(tmp_path, "rb") as f:
                         r = client.audio.transcriptions.create(
@@ -246,11 +219,9 @@ async def _transcribe_voice(media_id: str) -> str:
                             language="en",
                         )
                     return r
-
                 result = await asyncio.to_thread(_do_transcribe)
                 if not result:
                     return ""
-
                 corrected = result.lower()
                 for wrong, right in KNOWN_CORRECTIONS.items():
                     if wrong in corrected:
@@ -273,31 +244,25 @@ async def _get_or_create_student(whatsapp_id: str) -> str:
     cached_id = await rget(cache_key)
     if cached_id:
         return cached_id
-
     existing = db.table("students").select("id").eq("platform_whatsapp", whatsapp_id).execute()
     if existing.data:
         student_id = existing.data[0]["id"]
         await rset(cache_key, student_id, 86400)
         return student_id
-
     import random
     chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
     random_part = "".join(random.choices(chars, k=6))
     wax_code = f"WAX-NG-0000-{random_part}-W"
-
     result = db.table("students").insert({
         "wax_code": wax_code,
         "platform_whatsapp": whatsapp_id,
         "status": "active",
-        "last_active_at": __import__("datetime").datetime.utcnow().isoformat(),
+        "last_active_at": datetime.now(timezone.utc).isoformat(),
     }).execute()
-
     if not result.data:
         return ""
-
     student_id = result.data[0]["id"]
     db.table("student_profiles").insert({"student_id": student_id}).execute()
-
     await rset(cache_key, student_id, 86400)
     logger.info(f"New student: {wax_code}")
     return student_id

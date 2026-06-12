@@ -1,6 +1,18 @@
 """
-WaxPrep Brain v3.0 - Holographic Memory Architecture
+================================================================================
+WAXPREP BRAIN v4.0 - SUPERNATURAL MEMORY ARCHITECTURE
 AI-commanded Nigerian educational platform
+================================================================================
+
+UPGRADES FROM v3.0:
+1. All __init__.py files for proper package structure
+2. Memory system completely rebuilt with 24h TTLs
+3. Intent detector uses correct memory keys
+4. Context builder includes full 7-layer memory context
+5. Engine has structured onboarding flow
+6. All disconnected components are now connected
+7. Generate explanations job is now scheduled
+================================================================================
 """
 
 from fastapi import FastAPI, Request
@@ -20,7 +32,7 @@ logger.add(sys.stdout, format="{time:HH:mm:ss} | {level} | {message}", level="IN
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("WaxPrep Brain v3.0 starting - Holographic Memory Architecture")
+    logger.info("WaxPrep Brain v4.0 starting - Supernatural Memory Architecture")
 
     try:
         db = get_db()
@@ -48,7 +60,7 @@ async def lifespan(app: FastAPI):
         logger.warning(f"Model health check failed: {e}")
 
     start_scheduler()
-    logger.info("WaxPrep Brain v3.0 ready - The tutor that actually knows you.")
+    logger.info("WaxPrep Brain v4.0 ready - The tutor that actually knows you.")
 
     yield
 
@@ -56,9 +68,9 @@ async def lifespan(app: FastAPI):
     logger.info("WaxPrep Brain stopped")
 
 app = FastAPI(
-    title="WaxPrep Brain v3.0",
-    description="Holographic Memory Architecture - AI-commanded Nigerian educational platform",
-    version="3.0.0",
+    title="WaxPrep Brain v4.0",
+    description="Supernatural Memory Architecture - AI-commanded Nigerian educational platform",
+    version="4.0.0",
     lifespan=lifespan,
     docs_url=None,
     redoc_url=None,
@@ -74,7 +86,7 @@ app.include_router(admin.router, prefix="/api/v1")
 
 @app.get("/health")
 async def health():
-    return {"status": "alive", "version": "3.0.0", "architecture": "holographic-memory"}
+    return {"status": "alive", "version": "4.0.0", "architecture": "supernatural-memory"}
 
 @app.head("/health")
 async def health_head():

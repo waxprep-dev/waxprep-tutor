@@ -12,6 +12,7 @@ def start_scheduler():
     from waxprep.app.jobs.re_engagement import run_re_engagement
     from waxprep.app.jobs.dedup_cleanup import run_dedup_cleanup
     from waxprep.app.jobs.ghost_evaluator import run_ghost_evaluator
+    from waxprep.app.jobs.generate_explanations import run_generate_explanations
 
     _scheduler.add_job(run_session_closer, trigger=IntervalTrigger(minutes=5), id="session_closer", replace_existing=True)
     _scheduler.add_job(run_spaced_repetition, trigger=CronTrigger(hour=8, minute=0), id="spaced_rep", replace_existing=True)
@@ -28,6 +29,9 @@ def start_scheduler():
 
     # Ghost Teacher evaluator every 10 minutes
     _scheduler.add_job(run_ghost_evaluator, trigger=IntervalTrigger(minutes=10), id="ghost_evaluator", replace_existing=True)
+
+    # Generate wrong-answer explanations every 6 hours
+    _scheduler.add_job(run_generate_explanations, trigger=IntervalTrigger(hours=6), id="generate_explanations", replace_existing=True)
 
     _scheduler.start()
     logger.info("All background jobs running")
