@@ -243,7 +243,12 @@ async def _get_or_create_student(whatsapp_id: str) -> str:
     cache_key = f"wax:student_id:{whatsapp_id}"
     cached_id = await rget(cache_key)
     if cached_id:
-        return cached_id
+        # Verify student still exists in database (might have been deleted)
+        verify = db.table("students").select("id").eq("id", cached_id).execute()
+        if verify.data:
+            return cached_id
+        # Student was deleted, clear cache and continue
+        await rdel(cache_key)
     existing = db.table("students").select("id").eq("platform_whatsapp", whatsapp_id).execute()
     if existing.data:
         student_id = existing.data[0]["id"]
