@@ -101,10 +101,10 @@ class WaxPrepBrain:
         response = None
 
         if self._gemini:
-            response = await self._call_gemini(prompt)
+            response = await self._call_groq(prompt)
 
         if not response and self._groq:
-            response = await self._call_groq(prompt)
+            response = await self._call_gemini(prompt)
 
         if not response:
             return get_fallback_response(intent)
@@ -117,9 +117,9 @@ class WaxPrepBrain:
             stricter_prompt = f"{stricter}\n\nStudent: {student_message}\n\nRespond:"
 
             if self._gemini:
-                response = await self._call_gemini(stricter_prompt)
-            if not response and self._groq:
                 response = await self._call_groq(stricter_prompt)
+            if not response and self._groq:
+                response = await self._call_gemini(stricter_prompt)
 
             if response:
                 passed, reason = check_response(response, intent)
@@ -139,9 +139,9 @@ class WaxPrepBrain:
                 second_prompt = build_tool_result_prompt(prompt, tool_results)
                 second_response = None
                 if self._gemini:
-                    second_response = await self._call_gemini(second_prompt)
-                if not second_response and self._groq:
                     second_response = await self._call_groq(second_prompt)
+                if not second_response and self._groq:
+                    second_response = await self._call_gemini(second_prompt)
                 if second_response:
                     clean, _ = parse_tools(second_response)
 
@@ -299,9 +299,9 @@ class WaxPrepBrain:
             return None
 
     async def _call_model(self, prompt: str) -> Optional[str]:
-        result = await self._call_gemini(prompt)
+        result = await self._call_groq(prompt)
         if not result:
-            result = await self._call_groq(prompt)
+            result = await self._call_gemini(prompt)
         return result
 
     async def _update_memory_sequential(
