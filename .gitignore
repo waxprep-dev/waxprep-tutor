@@ -1,5 +1,5 @@
-__pycache__/
-*.pyc
-*.pyo
+node_modules/
+dist/
 .env
-test_*.py
+*.log
+.DS_Store
