@@ -1,0 +1,31 @@
+{
+  "name": "waxprep-tutor",
+  "version": "0.1.0",
+  "description": "WaxPrep AI tutor for Nigerian students on WhatsApp",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "db:migrate": "psql $DATABASE_URL -f src/db/schema.sql",
+    "worker:consolidate": "ts-node src/workers/consolidation.ts",
+    "worker:reviews": "ts-node src/workers/reviews.ts"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "crypto": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/pg": "^8.11.6",
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5",
+    "ts-node": "^10.9.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
