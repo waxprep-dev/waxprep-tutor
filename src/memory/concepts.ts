@@ -17,10 +17,6 @@ export interface Concept {
   related_ids: string[];
 }
 
-/**
- * Get or create a concept for a student. If they encounter "Quadratic Equations"
- * for the first time, this creates the record at mastery 0.0.
- */
 export async function getOrCreateConcept(
   phone: string,
   name: string,
@@ -41,9 +37,6 @@ export async function getOrCreateConcept(
   return created!;
 }
 
-/**
- * Update mastery based on student performance. Called by AI via tool.
- */
 export async function updateMastery(
   conceptId: string,
   newScore: number,
@@ -80,22 +73,39 @@ export async function recordExample(conceptId: string, example: string): Promise
 }
 
 /**
- * Get concepts relevant to a topic. Used for context assembly.
+ * Get concepts relevant to a set of keywords pulled straight from the
+ * student's message. No subject whitelist — this matches against
+ * whatever subject/name the AI itself saved when it called
+ * get_or_create_concept, so it works for Yoruba, Further Maths, Agric
+ * Science, or anything else, automatically.
  */
 export async function getRelevantConcepts(
   phone: string,
-  topic: string,
+  keywords: string[],
   limit: number = 5
 ): Promise<Concept[]> {
-  // Simple approach: get all concepts for student, filter by name match
-  // For v1 this is fine. For scale, use embeddings or full-text search.
+  if (keywords.length === 0) {
+    return query<Concept>(
+      `SELECT * FROM concepts
+       WHERE student_phone = $1
+       ORDER BY mastery_score ASC, last_reviewed ASC NULLS FIRST
+       LIMIT $2`,
+      [phone, limit]
+    );
+  }
+
+  const patterns = keywords.map((k) => `%${k}%`);
   return query<Concept>(
     `SELECT * FROM concepts
      WHERE student_phone = $1
-       AND (LOWER(name) LIKE LOWER($2) OR LOWER(description) LIKE LOWER($2))
+       AND (
+         LOWER(name) LIKE ANY($2)
+         OR LOWER(COALESCE(description, '')) LIKE ANY($2)
+         OR LOWER(subject) LIKE ANY($2)
+       )
      ORDER BY last_reviewed DESC NULLS LAST
      LIMIT $3`,
-    [phone, `%${topic}%`, limit]
+    [phone, patterns, limit]
   );
 }
 
@@ -103,9 +113,6 @@ export async function getConcept(conceptId: string): Promise<Concept | null> {
   return queryOne<Concept>(`SELECT * FROM concepts WHERE concept_id = $1`, [conceptId]);
 }
 
-/**
- * Schedule a spaced-repetition review.
- */
 export async function scheduleReview(conceptId: string, phone: string, daysFromNow: number): Promise<void> {
   await query(
     `INSERT INTO review_queue (concept_id, student_phone, scheduled_for)
