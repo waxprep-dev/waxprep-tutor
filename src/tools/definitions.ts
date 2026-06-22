@@ -191,7 +191,7 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "change_student_phone",
-      description: "When a student tells you they changed their phone number, call this to update it. The WAX ID stays the same — all their memory carries over. Verify the student owns the new number somehow (e.g., asking them to send a code from the new number, or by checking they've messaged from both numbers).",
+      description: "When a student tells you they changed their phone number, call this to update it. The WAX ID stays the same — all their memory carries over.",
       parameters: {
         type: "object",
         properties: {
@@ -208,7 +208,7 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "record_consent",
-      description: "Record that the student has given consent for data retention, cross-platform sync, and (if they're a minor) parental consent. Use this after you've explained the data policy and they've agreed. The student must clearly agree in the conversation.",
+      description: "Record that the student has given consent for data retention, cross-platform sync, and parental consent.",
       parameters: {
         type: "object",
         properties: {
@@ -216,9 +216,109 @@ export const TOOLS: ToolDefinition[] = [
           data_retention_consent: { type: "boolean" },
           cross_platform_sync_consent: { type: "boolean" },
           parental_consent_for_minor: { type: "boolean" },
-          consent_method: { type: "string", description: "How consent was given — e.g., 'in_app_yes_no', 'web_form'" },
+          consent_method: { type: "string", description: "How consent was given" },
         },
         required: ["wax_id", "data_retention_consent", "cross_platform_sync_consent", "consent_method"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "send_difficulty_check",
+      description: "After teaching a concept, send three tappable buttons so the student can signal how it landed: Got it / Bit confused / Lost. Their tap auto-updates their mastery. ALWAYS call this after teaching a concept — don't skip it.",
+      parameters: {
+        type: "object",
+        properties: {
+          concept_id: { type: "string" },
+          concept_name: { type: "string" },
+          follow_up_message: { type: "string", description: "Optional message above the buttons" },
+        },
+        required: ["concept_id", "concept_name"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "send_quiz_question",
+      description: "Send a multiple-choice quiz with tappable options (2-10 options). Student taps their answer, you get told if they got it right. Use this for practice problems instead of just asking in text.",
+      parameters: {
+        type: "object",
+        properties: {
+          question: { type: "string" },
+          options: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 10 },
+          correct_index: { type: "number", minimum: 0, maximum: 9 },
+          concept_id: { type: "string" },
+          context: { type: "string", description: "Optional intro text above the question" },
+        },
+        required: ["question", "options", "correct_index", "concept_id"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "send_topic_picker",
+      description: "Show the student a tappable menu of subjects or topics to choose from. Use this whenever you would otherwise ask 'what do you want to study?' in text. Much better UX.",
+      parameters: {
+        type: "object",
+        properties: {
+          prompt: { type: "string", description: "Question text" },
+          sections: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                title: { type: "string" },
+                topics: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      id: { type: "string" },
+                      title: { type: "string" },
+                      description: { type: "string" },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        required: ["prompt", "sections"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "send_concept_card",
+      description: "Introduce a brand-new concept with a rich card: name, description, and tappable options (Teach me / Quiz me / Skip). Use this the first time a student encounters a concept.",
+      parameters: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          subject: { type: "string" },
+          description: { type: "string", description: "Brief, engaging description (1-2 sentences)" },
+          concept_id: { type: "string" },
+        },
+        required: ["name", "subject", "description", "concept_id"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "generate_concept_image",
+      description: "Generate a visual image for a concept (geometry diagrams, chemistry structures, history timelines, etc.). Note: this is a v2 feature — requires image generation API setup.",
+      parameters: {
+        type: "object",
+        properties: {
+          prompt: { type: "string", description: "Detailed description of the image to generate" },
+          concept_id: { type: "string" },
+        },
+        required: ["prompt", "concept_id"],
       },
     },
   },
