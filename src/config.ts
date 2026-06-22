@@ -24,22 +24,30 @@ export const config = {
     appSecret: required("WHATSAPP_APP_SECRET"),
   },
 
+  groq: {
+    apiKey: required("GROQ_API_KEY"),
+    baseUrl: optional("GROQ_BASE_URL", "https://api.groq.com/openai/v1"),
+    model: optional("GROQ_MODEL", "llama-3.3-70b-versatile"),
+  },
+
   kimi: {
-    apiKey: required("KIMI_API_KEY"),
+    apiKey: optional("KIMI_API_KEY", ""),
     baseUrl: optional("KIMI_BASE_URL", "https://api.moonshot.cn/v1"),
     model: optional("KIMI_MODEL", "moonshot-v1-8k"),
   },
 
   anthropic: {
-    apiKey: required("ANTHROPIC_API_KEY"),
+    apiKey: optional("ANTHROPIC_API_KEY", ""),
     model: optional("CLAUDE_MODEL", "claude-3-5-sonnet-20241022"),
   },
 
   openai: {
-    apiKey: required("OPENAI_API_KEY"),
+    apiKey: optional("OPENAI_API_KEY", ""),
     model: optional("OPENAI_MODEL", "gpt-4o"),
     embeddingModel: optional("EMBEDDING_MODEL", "text-embedding-3-small"),
   },
+
+  embeddingProvider: optional("EMBEDDING_PROVIDER", "local") as "local" | "openai",
 
   tutor: {
     defaultName: optional("DEFAULT_TUTOR_NAME", "Wax"),
