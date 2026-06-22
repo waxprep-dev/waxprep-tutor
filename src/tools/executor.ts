@@ -37,6 +37,10 @@ export async function executeTool(
 
       case "search_past_conversations": {
         const queryEmbedding = await embed(args.query);
+        if (!queryEmbedding) {
+          result = { success: false, message: "Semantic search is temporarily unavailable." };
+          break;
+        }
         const results = await episodes.searchEpisodes(
           args.phone,
           queryEmbedding,
@@ -95,12 +99,14 @@ export async function executeTool(
       case "end_episode": {
         await episodes.endEpisode(args.episode_id, args.summary, args.key_moments || []);
         const embedding = await embed(args.summary);
-        await episodes.storeEpisodeEmbedding(
-          args.episode_id,
-          context.phone,
-          embedding,
-          args.summary
-        );
+        if (embedding) {
+          await episodes.storeEpisodeEmbedding(
+            args.episode_id,
+            context.phone,
+            embedding,
+            args.summary
+          );
+        }
         result = { success: true };
         break;
       }
@@ -174,6 +180,15 @@ export async function executeTool(
           { id: `concept:skip:${args.concept_id}`, title: "Skip for now" },
         ], { header: args.subject, footer: "Tap to get started" });
         result = { success: true };
+        break;
+      }
+
+      case "send_quick_replies": {
+        const buttons = args.options.map((o: any) => ({ id: `quick:${o.id}`, title: o.title }));
+        const sendResult = await sendButtonMessage(context.phone, args.body, buttons, {
+          footer: args.footer,
+        });
+        result = { success: true, message_id: sendResult.message_id };
         break;
       }
 
