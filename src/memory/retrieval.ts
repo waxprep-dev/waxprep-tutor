@@ -6,13 +6,8 @@ import { getRecentNotes, searchNotes, RelationalNote } from "./relational";
 import { embed } from "./embeddings";
 import { estimateTokens } from "../llm/tokenCounter";
 
-/**
- * This is the heart of memory: given a new message from a student,
- * assemble the right context bundle. NOT everything — just what's relevant.
- * This is how you scale.
- */
-
 export interface ContextBundle {
+  wax_id?: string;
   profile: StudentProfile;
   recentEpisodes: Episode[];
   relevantEpisodes: Array<{ summary_text: string; similarity: number; summary: string; key_moments: any[]; ended_at: string }>;
@@ -24,31 +19,25 @@ export interface ContextBundle {
 
 export async function assembleContext(
   phone: string,
-  currentMessage: string
+  currentMessage: string,
+  waxId?: string
 ): Promise<ContextBundle> {
-  // 1. Profile — always full
   const profile = await getProfile(phone);
 
-  // 2. Recent episodes — last 3
   const recentEpisodes = await getRecentEpisodes(phone, 3);
 
-  // 3. Semantic search — embed the current message, find similar past episodes
   const queryEmbedding = await embed(currentMessage);
   const relevantEpisodes = await searchEpisodes(phone, queryEmbedding, 5);
 
-  // 4. Relevant concepts — extract likely topic from message and look up
   const topicGuess = extractTopic(currentMessage);
   const relevantConcepts = await getRelevantConcepts(phone, topicGuess, 5);
 
-  // 5. Procedural rules — all top rules
   const relevantRules = await getRules(phone, 10);
 
-  // 6. Relational notes — search by query text for relevant ones, plus recent
   const searchedNotes = await searchNotes(phone, currentMessage.split(" ").slice(0, 3).join(" "), 3);
   const recentNotes = await getRecentNotes(phone, 5);
   const relevantNotes = mergeUnique(searchedNotes, recentNotes, (n) => n.note_id).slice(0, 5);
 
-  // Estimate token usage
   const tokenEstimate =
     estimateTokens(JSON.stringify(profile)) +
     recentEpisodes.reduce((sum, e) => sum + estimateTokens(e.summary || ""), 0) +
@@ -58,6 +47,7 @@ export async function assembleContext(
     relevantNotes.reduce((sum, n) => sum + estimateTokens(n.note_text), 0);
 
   return {
+    wax_id: waxId,
     profile,
     recentEpisodes,
     relevantEpisodes,
