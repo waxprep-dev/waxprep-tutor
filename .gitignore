@@ -3,3 +3,9 @@ dist/
 .env
 *.log
 .DS_Store
+
+# Old Python project files
+waxprep/
+waxprep-backup-20260611-1730/
+*.py
+__pycache__/
