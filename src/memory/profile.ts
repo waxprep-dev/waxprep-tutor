@@ -1,7 +1,9 @@
 import { query, queryOne } from "../db/client";
+import { createWaxIdentity } from "../identity/waxId";
 
 export interface StudentProfile {
   phone: string;
+  wax_id?: string;
   full_name?: string;
   preferred_name?: string;
   age?: number;
@@ -44,10 +46,6 @@ const DEFAULT_PROFILE: Partial<StudentProfile> = {
   timezone: "Africa/Lagos",
 };
 
-/**
- * Get a student's profile. Returns a default profile if student doesn't exist.
- * Note: students are auto-created on first message — see createIfMissing.
- */
 export async function getProfile(phone: string): Promise<StudentProfile> {
   const row = await queryOne<{ phone: string; profile: any; last_active_at: string }>(
     `SELECT phone, profile, last_active_at FROM students WHERE phone = $1`,
@@ -66,29 +64,29 @@ export async function getProfile(phone: string): Promise<StudentProfile> {
   };
 }
 
-/**
- * Create student record if it doesn't exist. Idempotent.
- */
-export async function createIfMissing(phone: string): Promise<void> {
+export async function createIfMissing(phone: string): Promise<string> {
   await query(
     `INSERT INTO students (phone, profile) VALUES ($1, $2)
      ON CONFLICT (phone) DO NOTHING`,
     [phone, JSON.stringify(DEFAULT_PROFILE)]
   );
+
+  const identity = await createWaxIdentity(phone);
+
+  await query(
+    `UPDATE students SET wax_id = $1 WHERE phone = $2 AND wax_id IS NULL`,
+    [identity.wax_id, phone]
+  );
+
+  return identity.wax_id;
 }
 
-/**
- * Update one or more fields in the student's profile.
- * The AI calls this via the update_profile tool.
- */
 export async function updateProfile(
   phone: string,
   updates: Partial<StudentProfile>
 ): Promise<void> {
-  // Build a JSON merge: get current, merge, save
   const current = await getProfile(phone);
   const merged = { ...current, ...updates };
-  // Remove fields that don't belong in profile jsonb
   delete (merged as any).phone;
   delete (merged as any).last_active_at;
 
@@ -98,10 +96,6 @@ export async function updateProfile(
   );
 }
 
-/**
- * Touch the student — increment message count, update last_active.
- * Called on every inbound message.
- */
 export async function touchStudent(phone: string): Promise<void> {
   await query(
     `UPDATE students
