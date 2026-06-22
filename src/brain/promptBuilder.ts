@@ -1,6 +1,7 @@
 import { ChatMessage } from "../llm/types";
 import { buildStaticPromptParts } from "./systemPrompt";
 import { ContextBundle } from "../memory/retrieval";
+import { StudentProfile } from "../memory/profile";
 
 export function buildPrompt(
   context: ContextBundle,
@@ -124,5 +125,5 @@ ${context.relevantNotes.map((n) => `- [${n.category}] ${n.note_text}`).join("\n"
 
 function formatGoals(goals: StudentProfile["goals"]): string {
   if (!goals || goals.length === 0) return "(not yet known — ask what they're studying for)";
-  return goals.map((g) => `${g.subject} for ${g.target}${g.exam_date ? ` (exam: ${g.exam_date})` : ""}`).join(", ");
+  return goals.map((g: any) => `${g.subject} for ${g.target}${g.exam_date ? ` (exam: ${g.exam_date})` : ""}`).join(", ");
 }

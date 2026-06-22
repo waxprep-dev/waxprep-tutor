@@ -28,7 +28,8 @@ export async function downloadMedia(mediaId: string, destPath: string): Promise<
   return new Promise((resolve, reject) => {
     writer.on("finish", () => {
       const stats = fs.statSync(destPath);
-      resolve({ size: stats.size, mime_type: response.headers["content-type"] });
+      const mimeType: string = response.headers["content-type"] as string || "audio/ogg";
+      resolve({ size: stats.size, mime_type: mimeType });
     });
     writer.on("error", reject);
   });
