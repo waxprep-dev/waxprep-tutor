@@ -59,6 +59,11 @@ Preferred name: ${p.preferred_name || "ask what they want to be called"}
 Goals: ${formatGoals(p.goals)}
 Tutor name: ${p.tutor_persona?.tutor_name || "you don't have a name yet — they can give you one"}`);
 
+  sections.push(`### Engagement signal (informational — use your judgment)
+${context.engagement.label === "unknown"
+  ? "No recent message history yet."
+  : `Last few replies: ${context.engagement.label === "low_effort" ? "short / low-effort" : "normal length"} (streak: ${context.engagement.shortReplyStreak}). If this is low_effort, consider send_quick_replies instead of an open question — reduce typing friction, give them something to tap.`}`);
+
   if (context.recentEpisodes.length > 0) {
     sections.push(`### Recent conversations (most recent first)
 ${context.recentEpisodes
