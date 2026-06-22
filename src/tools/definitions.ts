@@ -19,28 +19,27 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "update_profile",
-      description: "Update fields in the student's profile when you learn something new about them — name, age, school, level, goals, learning preferences, language, etc. Only update fields you actually have new information for.",
+      description: "Update fields in the student's profile when you learn something new about them.",
       parameters: {
         type: "object",
         properties: {
           phone: { type: "string" },
           updates: {
             type: "object",
-            description: "Object with profile fields to update",
             properties: {
               full_name: { type: "string" },
               preferred_name: { type: "string" },
               age: { type: "number" },
               city: { type: "string" },
               state: { type: "string" },
-              current_level: { type: "string", description: "e.g., JSS2, SSS3, Undergraduate Year 2" },
+              current_level: { type: "string" },
               school_type: { type: "string" },
               preferred_language: { type: "string" },
               formality: { type: "string", enum: ["casual", "neutral", "formal"] },
               uses_code_switching: { type: "boolean" },
               pace: { type: "string", enum: ["slow", "medium", "fast"] },
               confidence_baseline: { type: "string", enum: ["low", "medium", "high"] },
-              tutor_name: { type: "string", description: "The name the student has given you" },
+              tutor_name: { type: "string" },
             },
           },
         },
@@ -52,13 +51,13 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "search_past_conversations",
-      description: "Search past conversations with this student by topic or meaning. Use this when you want to recall what you've discussed before.",
+      description: "Search past conversations with this student by topic or meaning.",
       parameters: {
         type: "object",
         properties: {
           phone: { type: "string" },
-          query: { type: "string", description: "What you're looking for" },
-          top_k: { type: "number", description: "How many results to return (default 5)" },
+          query: { type: "string" },
+          top_k: { type: "number" },
         },
         required: ["phone", "query"],
       },
@@ -68,13 +67,13 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "get_or_create_concept",
-      description: "Get mastery info for a concept, or create a new concept record if the student is encountering it for the first time.",
+      description: "Get mastery info for a concept, or create a new concept record.",
       parameters: {
         type: "object",
         properties: {
           phone: { type: "string" },
-          name: { type: "string", description: "Concept name, e.g., 'Quadratic Equations'" },
-          subject: { type: "string", description: "e.g., 'Mathematics'" },
+          name: { type: "string" },
+          subject: { type: "string" },
           description: { type: "string" },
         },
         required: ["phone", "name", "subject"],
@@ -85,13 +84,13 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "update_concept_mastery",
-      description: "Update how well the student has mastered a concept. Score is 0.0 to 1.0. Provide evidence — what the student said or did that led to this score.",
+      description: "Update how well the student has mastered a concept. Score is 0.0 to 1.0.",
       parameters: {
         type: "object",
         properties: {
           concept_id: { type: "string" },
           new_score: { type: "number", minimum: 0, maximum: 1 },
-          evidence: { type: "string", description: "What the student did/said to justify this score" },
+          evidence: { type: "string" },
         },
         required: ["concept_id", "new_score", "evidence"],
       },
@@ -101,7 +100,7 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "record_misconception",
-      description: "Record a specific misconception the student has shown about a concept. Useful for next time.",
+      description: "Record a specific misconception the student has shown about a concept.",
       parameters: {
         type: "object",
         properties: {
@@ -116,14 +115,14 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "add_procedural_rule",
-      description: "Add a learning pattern you've noticed about this student. Example: 'When stuck on word problems, use Naira examples — works better than sports examples for this student.'",
+      description: "Add a learning pattern you've noticed about this student.",
       parameters: {
         type: "object",
         properties: {
           phone: { type: "string" },
           rule_text: { type: "string" },
-          trigger_condition: { type: "string", description: "When does this rule apply?" },
-          evidence: { type: "string", description: "What made you notice this pattern?" },
+          trigger_condition: { type: "string" },
+          evidence: { type: "string" },
           confidence: { type: "number", minimum: 0, maximum: 1 },
         },
         required: ["phone", "rule_text", "trigger_condition", "evidence"],
@@ -134,7 +133,7 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "add_relational_note",
-      description: "Save a personal detail about the student — family, friends, goals, hobbies, significant events, etc. This is what makes conversation feel human.",
+      description: "Save a personal detail about the student.",
       parameters: {
         type: "object",
         properties: {
@@ -151,7 +150,7 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "end_episode",
-      description: "End the current conversation episode. Provide a 2-5 sentence summary of what happened and list any key moments (breakthroughs, struggles, things to remember).",
+      description: "End the current conversation episode with a summary.",
       parameters: {
         type: "object",
         properties: {
@@ -176,7 +175,7 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "schedule_review",
-      description: "Schedule a spaced-repetition review for a concept. Use when the student is at medium mastery and would benefit from revisiting in a few days.",
+      description: "Schedule a spaced-repetition review for a concept.",
       parameters: {
         type: "object",
         properties: {
@@ -191,14 +190,14 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "change_student_phone",
-      description: "When a student tells you they changed their phone number, call this to update it. The WAX ID stays the same — all their memory carries over.",
+      description: "Update a student's phone number while keeping their WAX ID and memory.",
       parameters: {
         type: "object",
         properties: {
           old_phone: { type: "string" },
           new_phone: { type: "string" },
           wax_id: { type: "string" },
-          verification_notes: { type: "string", description: "How you verified the student owns the new number" },
+          verification_notes: { type: "string" },
         },
         required: ["old_phone", "new_phone", "wax_id"],
       },
@@ -208,7 +207,7 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "record_consent",
-      description: "Record that the student has given consent for data retention, cross-platform sync, and parental consent.",
+      description: "Record student consent for data retention and cross-platform sync.",
       parameters: {
         type: "object",
         properties: {
@@ -216,7 +215,7 @@ export const TOOLS: ToolDefinition[] = [
           data_retention_consent: { type: "boolean" },
           cross_platform_sync_consent: { type: "boolean" },
           parental_consent_for_minor: { type: "boolean" },
-          consent_method: { type: "string", description: "How consent was given" },
+          consent_method: { type: "string" },
         },
         required: ["wax_id", "data_retention_consent", "cross_platform_sync_consent", "consent_method"],
       },
@@ -226,13 +225,13 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "send_difficulty_check",
-      description: "After teaching a concept, send three tappable buttons so the student can signal how it landed: Got it / Bit confused / Lost. Their tap auto-updates their mastery. ALWAYS call this after teaching a concept — don't skip it.",
+      description: "After teaching a concept, send three tappable buttons: Got it / Bit confused / Lost. ALWAYS call this after teaching.",
       parameters: {
         type: "object",
         properties: {
           concept_id: { type: "string" },
           concept_name: { type: "string" },
-          follow_up_message: { type: "string", description: "Optional message above the buttons" },
+          follow_up_message: { type: "string" },
         },
         required: ["concept_id", "concept_name"],
       },
@@ -241,8 +240,36 @@ export const TOOLS: ToolDefinition[] = [
   {
     type: "function",
     function: {
+      name: "send_quick_replies",
+      description: "Offer the student 2-3 tappable quick-reply buttons for ANY open-ended moment — not just topics or quizzes. Use for check-ins, 'what next' moments, energy/motivation nudges, or yes/no/maybe decisions. Especially valuable when the student's recent replies have been short or slow — give them something to tap instead of an open question, so you don't lose them to typing fatigue. Check the engagement signal in your context for this.",
+      parameters: {
+        type: "object",
+        properties: {
+          body: { type: "string", description: "The check-in text shown above the buttons" },
+          options: {
+            type: "array",
+            minItems: 2,
+            maxItems: 3,
+            items: {
+              type: "object",
+              properties: {
+                id: { type: "string", description: "Short machine id, e.g. 'continue', 'break', 'switch'" },
+                title: { type: "string", description: "Button label, max 20 characters" },
+              },
+              required: ["id", "title"],
+            },
+          },
+          footer: { type: "string", description: "Optional small footer text" },
+        },
+        required: ["body", "options"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
       name: "send_quiz_question",
-      description: "Send a multiple-choice quiz with tappable options (2-10 options). Student taps their answer, you get told if they got it right. Use this for practice problems instead of just asking in text.",
+      description: "Send a multiple-choice quiz with tappable options (2-10 options).",
       parameters: {
         type: "object",
         properties: {
@@ -250,7 +277,7 @@ export const TOOLS: ToolDefinition[] = [
           options: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 10 },
           correct_index: { type: "number", minimum: 0, maximum: 9 },
           concept_id: { type: "string" },
-          context: { type: "string", description: "Optional intro text above the question" },
+          context: { type: "string" },
         },
         required: ["question", "options", "correct_index", "concept_id"],
       },
@@ -260,11 +287,11 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "send_topic_picker",
-      description: "Show the student a tappable menu of subjects or topics to choose from. Use this whenever you would otherwise ask 'what do you want to study?' in text. Much better UX.",
+      description: "Show the student a tappable menu of subjects or topics to choose from.",
       parameters: {
         type: "object",
         properties: {
-          prompt: { type: "string", description: "Question text" },
+          prompt: { type: "string" },
           sections: {
             type: "array",
             items: {
@@ -294,13 +321,13 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "send_concept_card",
-      description: "Introduce a brand-new concept with a rich card: name, description, and tappable options (Teach me / Quiz me / Skip). Use this the first time a student encounters a concept.",
+      description: "Introduce a brand-new concept with a rich card and tappable options.",
       parameters: {
         type: "object",
         properties: {
           name: { type: "string" },
           subject: { type: "string" },
-          description: { type: "string", description: "Brief, engaging description (1-2 sentences)" },
+          description: { type: "string" },
           concept_id: { type: "string" },
         },
         required: ["name", "subject", "description", "concept_id"],
@@ -311,11 +338,11 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "generate_concept_image",
-      description: "Generate a visual image for a concept (geometry diagrams, chemistry structures, history timelines, etc.). Note: this is a v2 feature — requires image generation API setup.",
+      description: "Generate a visual image for a concept. v2 feature.",
       parameters: {
         type: "object",
         properties: {
-          prompt: { type: "string", description: "Detailed description of the image to generate" },
+          prompt: { type: "string" },
           concept_id: { type: "string" },
         },
         required: ["prompt", "concept_id"],
