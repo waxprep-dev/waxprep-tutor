@@ -18,6 +18,9 @@ export function buildPrompt(
     "## CAPABILITIES",
     staticParts.capabilities,
     "",
+    "## CONVERSATIONAL DISCIPLINE",
+    staticParts.conversational,
+    "",
     "## BEHAVIORAL RULES",
     staticParts.rules,
   ].join("\n");
