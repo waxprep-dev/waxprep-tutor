@@ -1,11 +1,5 @@
 import { ToolDefinition } from "../llm/types";
 
-/**
- * Every tool the AI can call. Each one is a function the AI invokes.
- * The AI does NOT execute these — it just says "call this with these args."
- * The back-end executes and returns the result.
- */
-
 export const TOOLS: ToolDefinition[] = [
   {
     type: "function",
@@ -190,6 +184,41 @@ export const TOOLS: ToolDefinition[] = [
           days_from_now: { type: "number" },
         },
         required: ["concept_id", "days_from_now"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "change_student_phone",
+      description: "When a student tells you they changed their phone number, call this to update it. The WAX ID stays the same — all their memory carries over. Verify the student owns the new number somehow (e.g., asking them to send a code from the new number, or by checking they've messaged from both numbers).",
+      parameters: {
+        type: "object",
+        properties: {
+          old_phone: { type: "string" },
+          new_phone: { type: "string" },
+          wax_id: { type: "string" },
+          verification_notes: { type: "string", description: "How you verified the student owns the new number" },
+        },
+        required: ["old_phone", "new_phone", "wax_id"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "record_consent",
+      description: "Record that the student has given consent for data retention, cross-platform sync, and (if they're a minor) parental consent. Use this after you've explained the data policy and they've agreed. The student must clearly agree in the conversation.",
+      parameters: {
+        type: "object",
+        properties: {
+          wax_id: { type: "string" },
+          data_retention_consent: { type: "boolean" },
+          cross_platform_sync_consent: { type: "boolean" },
+          parental_consent_for_minor: { type: "boolean" },
+          consent_method: { type: "string", description: "How consent was given — e.g., 'in_app_yes_no', 'web_form'" },
+        },
+        required: ["wax_id", "data_retention_consent", "cross_platform_sync_consent", "consent_method"],
       },
     },
   },
