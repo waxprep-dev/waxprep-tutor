@@ -1,20 +1,22 @@
 import { LLMRequest, LLMResponse } from "./types";
+import { callGroq } from "./groq";
 import { callKimi } from "./kimi";
 import { logger } from "../utils/logger";
 
 /**
  * The LLM client is the abstraction layer.
- * To add Claude or GPT, you write a sibling to kimi.ts (callClaude, callGpt)
- * and add cases here. The brain doesn't care which provider is used.
+ * To add another provider, write a sibling to groq.ts (callClaude, callGpt)
+ * and add a case here. The brain doesn't care which provider is used.
  */
 
 export async function callLLM(request: LLMRequest): Promise<LLMResponse> {
-  // Default routing: Kimi for everything
-  // Future: route based on request.model or message complexity
-  const provider = request.model || "kimi";
+  // Default routing: Groq for everything
+  const provider = request.model || "groq";
 
   try {
     switch (provider) {
+      case "groq":
+        return await callGroq(request);
       case "kimi":
         return await callKimi(request);
       // case "claude":
@@ -22,7 +24,7 @@ export async function callLLM(request: LLMRequest): Promise<LLMResponse> {
       // case "gpt":
       //   return await callGpt(request);
       default:
-        return await callKimi(request);
+        return await callGroq(request);
     }
   } catch (err: any) {
     logger.error("LLM call failed", {

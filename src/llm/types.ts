@@ -38,7 +38,7 @@ export interface LLMRequest {
   tool_choice?: "auto" | "none" | "required";
   temperature?: number;
   max_tokens?: number;
-  model?: "kimi" | "claude" | "gpt"; // route to provider
+  model?: "groq" | "kimi" | "claude" | "gpt"; // route to provider
 }
 
 export interface LLMResponse {
