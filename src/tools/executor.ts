@@ -6,12 +6,8 @@ import * as concepts from "../memory/concepts";
 import * as procedural from "../memory/procedural";
 import * as relational from "../memory/relational";
 import { embed } from "../memory/embeddings";
-
-/**
- * Executes a tool call the AI has requested.
- * Each tool has its own function here. The AI never executes these directly —
- * it returns tool_calls, and we run them and feed results back.
- */
+import { changePhoneNumber } from "../identity/waxId";
+import { recordConsent } from "../identity/consent";
 
 export async function executeTool(
   toolCall: ToolCall,
@@ -94,7 +90,6 @@ export async function executeTool(
 
       case "end_episode": {
         await episodes.endEpisode(args.episode_id, args.summary, args.key_moments || []);
-        // Also embed the summary for future semantic search
         const embedding = await embed(args.summary);
         await episodes.storeEpisodeEmbedding(
           args.episode_id,
@@ -109,6 +104,23 @@ export async function executeTool(
       case "schedule_review": {
         await concepts.scheduleReview(args.concept_id, context.phone, args.days_from_now);
         result = { success: true, scheduled_for_days: args.days_from_now };
+        break;
+      }
+
+      case "change_student_phone": {
+        await changePhoneNumber(args.wax_id, args.old_phone, args.new_phone);
+        result = { success: true, message: "Phone number updated. Student's memory is preserved." };
+        break;
+      }
+
+      case "record_consent": {
+        await recordConsent(args.wax_id, {
+          data_retention_consent: args.data_retention_consent,
+          cross_platform_sync_consent: args.cross_platform_sync_consent,
+          parental_consent_for_minor: args.parental_consent_for_minor || false,
+          consent_method: args.consent_method,
+        });
+        result = { success: true };
         break;
       }
 
