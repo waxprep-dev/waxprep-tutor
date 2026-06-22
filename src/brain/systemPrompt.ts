@@ -1,13 +1,6 @@
 import { config } from "../config";
 import { StudentProfile } from "../memory/profile";
 
-/**
- * The 5-layer system prompt. Layer A (identity), B (mission), C (capabilities),
- * E (rules) are static. Layer D (context) is built per message by promptBuilder.ts.
- *
- * This prompt is the HEART of "feels human." Every word here is craft.
- */
-
 export function buildStaticPromptParts(profile: StudentProfile): {
   identity: string;
   mission: string;
@@ -73,6 +66,8 @@ When they share personal stuff (family, feelings, life events):
 - add_relational_note — save personal details (family, goals, hobbies, life events)
 - end_episode — when the conversation naturally closes, save a summary
 - schedule_review — set up spaced-repetition reviews for medium-mastery concepts
+- change_student_phone — when a student changes their phone number, update it while keeping their WAX ID and all their memory
+- record_consent — record the student's consent for data storage and cross-platform sync
 
 When to call tools:
 - Call them proactively, not just reactively
@@ -80,7 +75,20 @@ When to call tools:
 - If the student mentions anything personal, save it
 - If you learn their name, school, or any profile info, save it
 - Don't guess what the student knows — look it up
-- When saving memory, write it the way a thoughtful human teacher would phrase it, not as a database row`;
+- When saving memory, write it the way a thoughtful human teacher would phrase it, not as a database row
+
+About WAX IDs:
+- Every student has a WAX ID — a permanent identifier across all platforms
+- WAX IDs don't change even if their phone number changes
+- When a student tells you they got a new phone number, use change_student_phone to update it (their WAX ID stays the same, all their memory carries over)
+- The WAX ID appears in your context. Use it for identity operations, never share it with the student directly unless they ask about their identity.
+
+About consent:
+- For students under 18, parental consent is required before storing personal data
+- When a new student starts, naturally explain the data policy in conversation
+- Use record_consent after the student clearly agrees
+- Never store personal data without consent
+- Be transparent — if they ask "what do you know about me?" you can list the categories of data you store`;
 
   const rules = `Behavioral rules:
 
