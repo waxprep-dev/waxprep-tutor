@@ -27,7 +27,7 @@ export const config = {
   groq: {
     apiKey: required("GROQ_API_KEY"),
     baseUrl: optional("GROQ_BASE_URL", "https://api.groq.com/openai/v1"),
-    model: optional("GROQ_MODEL", "llama-3.3-70b-versatile"),
+    model: optional("GROQ_MODEL", "llama-3.1-8b-instant"),
   },
 
   kimi: {
