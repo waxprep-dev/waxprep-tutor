@@ -29,6 +29,7 @@ interface GroqRequest {
   tool_choice?: string;
   temperature?: number;
   max_tokens?: number;
+  parallel_tool_calls?: boolean;
 }
 
 interface GroqResponse {
@@ -77,6 +78,7 @@ export async function callGroq(request: LLMRequest, attempt: number = 0): Promis
     tool_choice: request.tool_choice || "auto",
     temperature: request.temperature ?? 0.7,
     max_tokens: request.max_tokens ?? 2000,
+    parallel_tool_calls: false,
   };
 
   try {
