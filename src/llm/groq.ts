@@ -99,6 +99,16 @@ export async function callGroq(request: LLMRequest, attempt: number = 0): Promis
       function: { name: tc.function.name, arguments: tc.function.arguments },
     }));
 
+    const cachedTokens = (response.data.usage as any).prompt_tokens_details?.cached_tokens || 0;
+    logger.info("Groq usage", {
+      prompt_tokens: response.data.usage.prompt_tokens,
+      cached_tokens: cachedTokens,
+      cache_hit_rate: response.data.usage.prompt_tokens
+        ? `${((cachedTokens / response.data.usage.prompt_tokens) * 100).toFixed(1)}%`
+        : "0%",
+      total_tokens: response.data.usage.total_tokens,
+    });
+
     return {
       content: choice.message.content,
       tool_calls: toolCalls,
