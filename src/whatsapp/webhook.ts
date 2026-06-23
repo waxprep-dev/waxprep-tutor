@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
-import { config } from "../config";
-import { logger } from "../utils/logger";
 import { verifyWebhookSignature, verifyChallenge } from "./verify";
 import { query } from "../db/client";
-import { createIfMissing, touchStudent, incrementOutboundCount, getProfile } from "../memory/profile";
-import { getOrCreateCurrentEpisode, incrementEpisodeMessageCount } from "../memory/episodes";
+import { createIfMissing, touchStudent, incrementOutboundCount } from "../memory/profile";
+import { getOrCreateCurrentEpisode, incrementEpisodeMessageCount, getRecentHistory } from "../memory/episodes";
 import { assembleContext } from "../memory/retrieval";
 import { buildPrompt } from "../brain/promptBuilder";
 import { runAgentLoop } from "../brain/agentLoop";
@@ -13,6 +11,10 @@ import { processVoiceMessage } from "./voice";
 import { recordStudyToday, maybeSendStreakMilestone } from "../interactive/streaks";
 import { processDifficultySignal } from "../interactive/difficulty";
 import { gradeQuiz, buildQuizFeedbackContext } from "../interactive/quiz";
+import { logger } from "../utils/logger";
+
+const FALLBACK_MESSAGE =
+  "Give me a few seconds, I'm a bit overloaded right now — send that again in a moment? 🙏";
 
 export async function handleWebhookGet(req: Request, res: Response): Promise<void> {
   const mode = req.query["hub.mode"] as string | undefined;
@@ -45,6 +47,22 @@ export async function handleWebhookPost(req: Request, res: Response): Promise<vo
   });
 }
 
+async function runAgentLoopSafely(
+  messages: any[],
+  ctx: { phone: string; episodeId: string }
+): Promise<{ finalResponse: string; totalTokens?: number; allToolCalls: any[]; modelUsed?: string } | null> {
+  try {
+    return await runAgentLoop(messages, ctx);
+  } catch (err: any) {
+    logger.error("Agent loop failed — sending fallback instead of silence", {
+      phone: ctx.phone,
+      error: err.response?.data || err.message,
+    });
+    await sendTextMessage(ctx.phone, FALLBACK_MESSAGE);
+    return null;
+  }
+}
+
 async function processWebhookAsync(body: any): Promise<void> {
   try {
     const entry = body.entry?.[0];
@@ -66,6 +84,7 @@ async function processWebhookAsync(body: any): Promise<void> {
 
     let messageText: string;
     let messageType: "text" | "interactive" | "audio" | "unsupported" = "unsupported";
+    let interactiveId: string | undefined;
 
     if (message.type === "text") {
       messageText = message.text.body;
@@ -74,9 +93,11 @@ async function processWebhookAsync(body: any): Promise<void> {
       messageType = "interactive";
       const interactive = message.interactive;
       if (interactive.type === "button_reply") {
-        messageText = `[BUTTON_TAP] id="${interactive.button_reply.id}" title="${interactive.button_reply.title}"`;
+        interactiveId = interactive.button_reply.id;
+        messageText = interactive.button_reply.title;
       } else if (interactive.type === "list_reply") {
-        messageText = `[LIST_SELECT] id="${interactive.list_reply.id}" title="${interactive.list_reply.title}" description="${interactive.list_reply.description || ""}"`;
+        interactiveId = interactive.list_reply.id;
+        messageText = interactive.list_reply.title;
       } else {
         messageText = `[INTERACTIVE] ${JSON.stringify(interactive)}`;
       }
@@ -91,10 +112,7 @@ async function processWebhookAsync(body: any): Promise<void> {
         return;
       }
     } else {
-      await sendTextMessage(
-        fromPhone,
-        "I can read text and voice notes best for now. Send me one of those!"
-      );
+      await sendTextMessage(fromPhone, "I can read text and voice notes best for now. Send me one of those!");
       return;
     }
 
@@ -116,7 +134,13 @@ async function processWebhookAsync(body: any): Promise<void> {
     const episode = await getOrCreateCurrentEpisode(fromPhone);
     await incrementEpisodeMessageCount(episode.episode_id);
 
-    const directHandled = await maybeHandleInteractiveResponse(fromPhone, messageText, messageId);
+    const directHandled = await maybeHandleInteractiveResponse(
+      fromPhone,
+      interactiveId,
+      messageText,
+      messageId,
+      episode.episode_id
+    );
     if (directHandled) return;
 
     await query(
@@ -126,15 +150,18 @@ async function processWebhookAsync(body: any): Promise<void> {
       [messageId, fromPhone, messageText, timestamp, episode.episode_id]
     );
 
+    const history = await getRecentHistory(fromPhone, episode.episode_id, messageId);
     const context = await assembleContext(fromPhone, messageText);
-    const messages = buildPrompt(context, messageText);
+    const messages = buildPrompt(context, messageText, history);
 
     const startTime = Date.now();
-    const result = await runAgentLoop(messages, {
+    const result = await runAgentLoopSafely(messages, {
       phone: fromPhone,
       episodeId: episode.episode_id,
     });
     const latency = Date.now() - startTime;
+
+    if (!result) return;
 
     await query(
       `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_tool_calls, ai_response, timestamp, episode_id, latency_ms, model_used)
@@ -159,11 +186,11 @@ async function processWebhookAsync(body: any): Promise<void> {
 
 async function maybeHandleInteractiveResponse(
   phone: string,
+  buttonId: string | undefined,
   messageText: string,
-  messageId: string
+  messageId: string,
+  episodeId: string
 ): Promise<boolean> {
-  const buttonMatch = messageText.match(/id="([^"]+)"/);
-  const buttonId = buttonMatch?.[1];
   if (!buttonId) return false;
 
   const diffMatch = buttonId.match(/^diff:(got_it|confused|lost):(.+)$/);
@@ -172,9 +199,9 @@ async function maybeHandleInteractiveResponse(
     const result = await processDifficultySignal(phone, conceptId, signal as any);
 
     await query(
-      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp)
-       VALUES ($1, $2, 'inbound', $3, NOW())`,
-      [messageId, phone, messageText]
+      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
+       VALUES ($1, $2, 'inbound', $3, NOW(), $4)`,
+      [messageId, phone, messageText, episodeId]
     );
 
     let responseText: string;
@@ -199,19 +226,17 @@ async function maybeHandleInteractiveResponse(
     const result = await gradeQuiz(quizId, selectedIndex);
 
     await query(
-      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp)
-       VALUES ($1, $2, 'inbound', $3, NOW())`,
-      [messageId, phone, messageText]
+      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
+       VALUES ($1, $2, 'inbound', $3, NOW(), $4)`,
+      [messageId, phone, messageText, episodeId]
     );
 
     const feedbackContext = buildQuizFeedbackContext(result);
-
-    const episode = await getOrCreateCurrentEpisode(phone);
+    const history = await getRecentHistory(phone, episodeId, messageId);
     const context = await assembleContext(phone, feedbackContext);
-    const messages = buildPrompt(context, feedbackContext);
-    const aiResult = await runAgentLoop(messages, { phone, episodeId: episode.episode_id });
-
-    await sendTextMessage(phone, aiResult.finalResponse);
+    const messages = buildPrompt(context, feedbackContext, history);
+    const aiResult = await runAgentLoopSafely(messages, { phone, episodeId });
+    if (aiResult) await sendTextMessage(phone, aiResult.finalResponse);
     return true;
   }
 
@@ -220,18 +245,17 @@ async function maybeHandleInteractiveResponse(
     const topicId = topicMatch[1];
 
     await query(
-      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp)
-       VALUES ($1, $2, 'inbound', $3, NOW())`,
-      [messageId, phone, messageText]
+      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
+       VALUES ($1, $2, 'inbound', $3, NOW(), $4)`,
+      [messageId, phone, messageText, episodeId]
     );
 
     const syntheticMessage = `I want to study ${topicId}`;
-    const episode = await getOrCreateCurrentEpisode(phone);
+    const history = await getRecentHistory(phone, episodeId, messageId);
     const context = await assembleContext(phone, syntheticMessage);
-    const messages = buildPrompt(context, syntheticMessage);
-    const result = await runAgentLoop(messages, { phone, episodeId: episode.episode_id });
-
-    await sendTextMessage(phone, result.finalResponse);
+    const messages = buildPrompt(context, syntheticMessage, history);
+    const result = await runAgentLoopSafely(messages, { phone, episodeId });
+    if (result) await sendTextMessage(phone, result.finalResponse);
     return true;
   }
 
@@ -239,9 +263,9 @@ async function maybeHandleInteractiveResponse(
     const action = buttonId.split(":")[1];
 
     await query(
-      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp)
-       VALUES ($1, $2, 'inbound', $3, NOW())`,
-      [messageId, phone, messageText]
+      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
+       VALUES ($1, $2, 'inbound', $3, NOW(), $4)`,
+      [messageId, phone, messageText, episodeId]
     );
 
     let syntheticMessage: string;
@@ -251,12 +275,11 @@ async function maybeHandleInteractiveResponse(
     else if (action === "share") syntheticMessage = "Tell me my progress";
     else syntheticMessage = "Continue";
 
-    const episode = await getOrCreateCurrentEpisode(phone);
+    const history = await getRecentHistory(phone, episodeId, messageId);
     const context = await assembleContext(phone, syntheticMessage);
-    const messages = buildPrompt(context, syntheticMessage);
-    const result = await runAgentLoop(messages, { phone, episodeId: episode.episode_id });
-
-    await sendTextMessage(phone, result.finalResponse);
+    const messages = buildPrompt(context, syntheticMessage, history);
+    const result = await runAgentLoopSafely(messages, { phone, episodeId });
+    if (result) await sendTextMessage(phone, result.finalResponse);
     return true;
   }
 
