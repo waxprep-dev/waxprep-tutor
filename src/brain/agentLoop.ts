@@ -3,17 +3,6 @@ import { ChatMessage, LLMResponse } from "../llm/types";
 import { TOOLS } from "../tools/definitions";
 import { executeTool } from "../tools/executor";
 import { logger } from "../utils/logger";
-import { config } from "../config";
-
-/**
- * The agentic loop. This is the AI Brain in action.
- * 
- * Flow:
- * 1. Send messages + tools to LLM
- * 2. If LLM returns tool_calls: execute them, append results, loop
- * 3. If LLM returns final text: that's the response
- * 4. Cap loops at MAX_LOOPS to prevent infinite loops
- */
 
 const MAX_LOOPS = 8;
 
@@ -44,6 +33,7 @@ export async function runAgentLoop(
       tools: TOOLS,
       tool_choice: "auto",
       temperature: 0.7,
+      max_tokens: 700,
     });
 
     modelUsed = response.model_used;
@@ -57,20 +47,17 @@ export async function runAgentLoop(
       tokens: response.usage.total_tokens,
     });
 
-    // If no tool calls, this is the final response
     if (response.tool_calls.length === 0) {
       finalResponse = response.content || "";
       break;
     }
 
-    // Append the assistant message with tool calls
     messages.push({
       role: "assistant",
       content: response.content,
       tool_calls: response.tool_calls,
     });
 
-    // Execute each tool call
     for (const toolCall of response.tool_calls) {
       const args = JSON.parse(toolCall.function.arguments);
       logger.info("Executing tool", { tool: toolCall.function.name, args });
@@ -78,7 +65,6 @@ export async function runAgentLoop(
       const { result } = await executeTool(toolCall, context);
       allToolCalls.push({ name: toolCall.function.name, args, result });
 
-      // Append tool result to messages
       messages.push({
         role: "tool",
         tool_call_id: toolCall.id,
@@ -86,14 +72,13 @@ export async function runAgentLoop(
       });
     }
 
-    // If the model signaled stop after tool calls, we're done
     if (response.finish_reason === "stop") {
-      // One more call to get the natural language response
       const finalCall = await callLLM({
         messages,
         tools: TOOLS,
         tool_choice: "auto",
         temperature: 0.7,
+        max_tokens: 700,
       });
       finalResponse = finalCall.content || "";
       totalTokens += finalCall.usage.total_tokens;
