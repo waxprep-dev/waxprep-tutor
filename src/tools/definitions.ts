@@ -241,7 +241,7 @@ export const TOOLS: ToolDefinition[] = [
     type: "function",
     function: {
       name: "send_quick_replies",
-      description: "Offer the student 2-3 tappable quick-reply buttons for ANY open-ended moment — not just topics or quizzes. Use for check-ins, 'what next' moments, energy/motivation nudges, or yes/no/maybe decisions. Especially valuable when the student's recent replies have been short or slow — give them something to tap instead of an open question, so you don't lose them to typing fatigue. Check the engagement signal in your context for this.",
+      description: "Offer the student EXACTLY 2 or 3 tappable quick-reply buttons — never more, WhatsApp hard-caps this at 3. If you have 4+ options, pick the 3 most likely and mention the rest in your body text (e.g. 'or something else?'). Use for check-ins, 'what next' moments, energy/motivation nudges, or yes/no/maybe decisions.",
       parameters: {
         type: "object",
         properties: {
