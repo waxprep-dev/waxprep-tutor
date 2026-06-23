@@ -6,6 +6,21 @@ import { logger } from "../utils/logger";
 
 const MAX_LOOPS = 8;
 
+async function callLLMWithRetry(request: any, alreadyRetried = false): Promise<LLMResponse> {
+  try {
+    return await callLLM(request);
+  } catch (err: any) {
+    const code = err.response?.data?.error?.code;
+    if (code === "tool_use_failed" && !alreadyRetried) {
+      logger.warn("Model produced a malformed tool call — retrying once", {
+        error: err.response?.data?.error?.message,
+      });
+      return callLLMWithRetry(request, true);
+    }
+    throw err;
+  }
+}
+
 export interface AgentLoopResult {
   finalResponse: string;
   allToolCalls: Array<{ name: string; args: any; result: any }>;
@@ -28,7 +43,7 @@ export async function runAgentLoop(
   while (loopCount < MAX_LOOPS) {
     loopCount++;
 
-    const response: LLMResponse = await callLLM({
+    const response: LLMResponse = await callLLMWithRetry({
       messages,
       tools: TOOLS,
       tool_choice: "auto",
@@ -73,7 +88,7 @@ export async function runAgentLoop(
     }
 
     if (response.finish_reason === "stop") {
-      const finalCall = await callLLM({
+      const finalCall = await callLLMWithRetry({
         messages,
         tools: TOOLS,
         tool_choice: "auto",
