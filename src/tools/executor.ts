@@ -184,7 +184,8 @@ export async function executeTool(
       }
 
       case "send_quick_replies": {
-        const buttons = args.options.map((o: any) => ({ id: `quick:${o.id}`, title: o.title }));
+        const clampedOptions = args.options.slice(0, 3);
+        const buttons = clampedOptions.map((o: any) => ({ id: `quick:${o.id}`, title: o.title }));
         const sendResult = await sendButtonMessage(context.phone, args.body, buttons, {
           footer: args.footer || "Or just type your own answer",
         });
