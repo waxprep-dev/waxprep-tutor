@@ -186,7 +186,7 @@ export async function executeTool(
       case "send_quick_replies": {
         const buttons = args.options.map((o: any) => ({ id: `quick:${o.id}`, title: o.title }));
         const sendResult = await sendButtonMessage(context.phone, args.body, buttons, {
-          footer: args.footer,
+          footer: args.footer || "Or just type your own answer",
         });
         result = { success: true, message_id: sendResult.message_id };
         break;
