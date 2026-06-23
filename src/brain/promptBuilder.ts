@@ -30,15 +30,12 @@ export function buildPrompt(
 
   const messages: ChatMessage[] = [
     { role: "system", content: systemContent },
+    ...history,
     {
       role: "user",
       content: `${contextBlock}\n\n## INCOMING MESSAGE\n${currentMessage}`,
     },
   ];
-
-  for (const h of history) {
-    messages.push(h);
-  }
 
   return messages;
 }
@@ -59,13 +56,8 @@ Preferred name: ${p.preferred_name || "ask what they want to be called"}
 Goals: ${formatGoals(p.goals)}
 Tutor name: ${p.tutor_persona?.tutor_name || "you don't have a name yet — they can give you one"}`);
 
-  sections.push(`### Engagement signal (informational — use your judgment)
-${context.engagement.label === "unknown"
-  ? "No recent message history yet."
-  : `Last few replies: ${context.engagement.label === "low_effort" ? "short / low-effort" : "normal length"} (streak: ${context.engagement.shortReplyStreak}). If this is low_effort, consider send_quick_replies instead of an open question — reduce typing friction, give them something to tap.`}`);
-
   if (context.recentEpisodes.length > 0) {
-    sections.push(`### Recent conversations (most recent first)
+    sections.push(`### Past closed conversations (most recent first)
 ${context.recentEpisodes
   .map(
     (e) =>
@@ -77,8 +69,8 @@ ${context.recentEpisodes
   )
   .join("\n")}`);
   } else {
-    sections.push(`### Recent conversations
-This is your first or one of your first conversations. No prior history.`);
+    sections.push(`### Past closed conversations
+None yet — but check the actual message history in this prompt below before assuming this is a first contact. A student can be mid-conversation with no closed episodes yet.`);
   }
 
   if (context.relevantEpisodes.length > 0) {
@@ -124,6 +116,11 @@ ${context.relevantRules
     sections.push(`### Personal context (relational memory)
 ${context.relevantNotes.map((n) => `- [${n.category}] ${n.note_text}`).join("\n")}`);
   }
+
+  sections.push(`### Engagement signal (informational — use your judgment)
+${context.engagement.label === "unknown"
+  ? "No recent message history yet."
+  : `Last few replies: ${context.engagement.label === "low_effort" ? "short / low-effort" : "normal length"} (streak: ${context.engagement.shortReplyStreak}).`}`);
 
   return sections.join("\n\n");
 }
