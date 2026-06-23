@@ -1,4 +1,5 @@
 import { query, queryOne } from "../db/client";
+import { ChatMessage } from "../llm/types";
 
 export interface Episode {
   episode_id: string;
@@ -14,11 +15,6 @@ export interface Episode {
   compression_level: number;
 }
 
-/**
- * Get the student's currently-open episode (the one they're in right now),
- * or start a new one. An "episode" is one continuous conversation —
- * a gap of more than 30 minutes counts as a new episode.
- */
 export async function getOrCreateCurrentEpisode(phone: string): Promise<Episode> {
   const open = await queryOne<Episode>(
     `SELECT * FROM episodes
@@ -36,9 +32,6 @@ export async function getOrCreateCurrentEpisode(phone: string): Promise<Episode>
   return created!;
 }
 
-/**
- * Get the most recent N ended episodes for a student (for context).
- */
 export async function getRecentEpisodes(phone: string, n: number = 3): Promise<Episode[]> {
   return query<Episode>(
     `SELECT * FROM episodes
@@ -48,10 +41,34 @@ export async function getRecentEpisodes(phone: string, n: number = 3): Promise<E
   );
 }
 
-/**
- * Update an episode with a summary and key moments. Called by the AI
- * via the save_episode tool.
- */
+export async function getRecentHistory(
+  phone: string,
+  episodeId: string,
+  excludeMessageId: string,
+  limit: number = 16
+): Promise<ChatMessage[]> {
+  const rows = await query<{
+    direction: string;
+    raw_text: string;
+    ai_response: string | null;
+  }>(
+    `SELECT direction, raw_text, ai_response FROM (
+       SELECT direction, raw_text, ai_response, timestamp, message_id
+       FROM message_log
+       WHERE student_phone = $1 AND episode_id = $2 AND message_id != $3
+       ORDER BY timestamp DESC
+       LIMIT $4
+     ) recent
+     ORDER BY timestamp ASC`,
+    [phone, episodeId, excludeMessageId, limit]
+  );
+
+  return rows.map((r) => ({
+    role: r.direction === "inbound" ? "user" : "assistant",
+    content: r.direction === "inbound" ? r.raw_text : r.ai_response || r.raw_text,
+  })) as ChatMessage[];
+}
+
 export async function endEpisode(
   episodeId: string,
   summary: string,
@@ -75,9 +92,6 @@ export async function incrementEpisodeMessageCount(episodeId: string): Promise<v
   );
 }
 
-/**
- * Store the embedding of an episode's summary for semantic search.
- */
 export async function storeEpisodeEmbedding(
   episodeId: string,
   phone: string,
@@ -92,10 +106,6 @@ export async function storeEpisodeEmbedding(
   );
 }
 
-/**
- * Semantic search: find past episodes that are most similar to a query.
- * This is the heart of "the tutor remembers."
- */
 export async function searchEpisodes(
   phone: string,
   queryEmbedding: number[],
