@@ -47,7 +47,7 @@ export async function runAgentLoop(
       messages,
       tools: TOOLS,
       tool_choice: "auto",
-      temperature: 0.7,
+      temperature: 0.4,
       max_tokens: 700,
     });
 
@@ -92,7 +92,7 @@ export async function runAgentLoop(
         messages,
         tools: TOOLS,
         tool_choice: "auto",
-        temperature: 0.7,
+        temperature: 0.4,
         max_tokens: 700,
       });
       finalResponse = finalCall.content || "";
