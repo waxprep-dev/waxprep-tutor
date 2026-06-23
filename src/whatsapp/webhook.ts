@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { verifyWebhookSignature, verifyChallenge } from "./verify";
 import { query } from "../db/client";
-import { createIfMissing, touchStudent, incrementOutboundCount } from "../memory/profile";
+import { createIfMissing, touchStudent, incrementOutboundCount, getLastInteractiveMessageId } from "../memory/profile";
 import { getOrCreateCurrentEpisode, incrementEpisodeMessageCount, getRecentHistory } from "../memory/episodes";
 import { assembleContext } from "../memory/retrieval";
 import { buildPrompt } from "../brain/promptBuilder";
@@ -133,6 +133,20 @@ async function processWebhookAsync(body: any): Promise<void> {
 
     const episode = await getOrCreateCurrentEpisode(fromPhone);
     await incrementEpisodeMessageCount(episode.episode_id);
+
+    if (messageType === "interactive") {
+      const repliedToId = message.context?.id;
+      const lastSentId = await getLastInteractiveMessageId(fromPhone);
+
+      if (repliedToId && lastSentId && repliedToId !== lastSentId) {
+        logger.info("Stale button tap ignored", { phone: fromPhone, tapped: repliedToId, current: lastSentId });
+        await sendTextMessage(
+          fromPhone,
+          "That option's expired — what would you like to do now?"
+        );
+        return;
+      }
+    }
 
     const directHandled = await maybeHandleInteractiveResponse(
       fromPhone,
