@@ -1,5 +1,6 @@
 import axios from "axios";
 import { config } from "../config";
+import { logger } from "../utils/logger";
 import {
   ChatMessage,
   LLMRequest,
@@ -8,26 +9,15 @@ import {
   ToolDefinition,
 } from "./types";
 
-// Groq is OpenAI-compatible, so the call shape is identical to Kimi's.
-// Docs: https://console.groq.com/docs/api-reference
-
 interface GroqTool {
   type: "function";
-  function: {
-    name: string;
-    description: string;
-    parameters: any;
-  };
+  function: { name: string; description: string; parameters: any };
 }
 
 interface GroqMessage {
   role: string;
   content: string | null;
-  tool_calls?: Array<{
-    id: string;
-    type: "function";
-    function: { name: string; arguments: string };
-  }>;
+  tool_calls?: Array<{ id: string; type: "function"; function: { name: string; arguments: string } }>;
   tool_call_id?: string;
   name?: string;
 }
@@ -48,39 +38,24 @@ interface GroqResponse {
     message: {
       role: string;
       content: string | null;
-      tool_calls?: Array<{
-        id: string;
-        type: "function";
-        function: { name: string; arguments: string };
-      }>;
+      tool_calls?: Array<{ id: string; type: "function"; function: { name: string; arguments: string } }>;
     };
     finish_reason: string;
   }>;
-  usage: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
-  };
+  usage: { prompt_tokens: number; completion_tokens: number; total_tokens: number };
 }
 
 function convertTools(tools: ToolDefinition[] | undefined): GroqTool[] | undefined {
   if (!tools) return undefined;
   return tools.map((t) => ({
     type: "function",
-    function: {
-      name: t.function.name,
-      description: t.function.description,
-      parameters: t.function.parameters,
-    },
+    function: { name: t.function.name, description: t.function.description, parameters: t.function.parameters },
   }));
 }
 
 function convertMessages(messages: ChatMessage[]): GroqMessage[] {
   return messages.map((m) => {
-    const out: GroqMessage = {
-      role: m.role,
-      content: m.content,
-    };
+    const out: GroqMessage = { role: m.role, content: m.content };
     if (m.tool_calls) out.tool_calls = m.tool_calls;
     if (m.tool_call_id) out.tool_call_id = m.tool_call_id;
     if (m.name) out.name = m.name;
@@ -88,7 +63,13 @@ function convertMessages(messages: ChatMessage[]): GroqMessage[] {
   });
 }
 
-export async function callGroq(request: LLMRequest): Promise<LLMResponse> {
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const MAX_RETRIES = 2;
+
+export async function callGroq(request: LLMRequest, attempt: number = 0): Promise<LLMResponse> {
   const body: GroqRequest = {
     model: config.groq.model,
     messages: convertMessages(request.messages),
@@ -98,30 +79,52 @@ export async function callGroq(request: LLMRequest): Promise<LLMResponse> {
     max_tokens: request.max_tokens ?? 2000,
   };
 
-  const response = await axios.post<GroqResponse>(
-    `${config.groq.baseUrl}/chat/completions`,
-    body,
-    {
-      headers: {
-        Authorization: `Bearer ${config.groq.apiKey}`,
-        "Content-Type": "application/json",
-      },
-      timeout: 60000,
+  try {
+    const response = await axios.post<GroqResponse>(
+      `${config.groq.baseUrl}/chat/completions`,
+      body,
+      {
+        headers: {
+          Authorization: `Bearer ${config.groq.apiKey}`,
+          "Content-Type": "application/json",
+        },
+        timeout: 60000,
+      }
+    );
+
+    const choice = response.data.choices[0];
+    const toolCalls: ToolCall[] = (choice.message.tool_calls || []).map((tc) => ({
+      id: tc.id,
+      type: "function",
+      function: { name: tc.function.name, arguments: tc.function.arguments },
+    }));
+
+    return {
+      content: choice.message.content,
+      tool_calls: toolCalls,
+      model_used: config.groq.model,
+      usage: response.data.usage,
+      finish_reason: choice.finish_reason,
+    };
+  } catch (err: any) {
+    const status = err.response?.status;
+
+    if (status === 429 && attempt < MAX_RETRIES) {
+      const retryAfterHeader = err.response?.headers?.["retry-after"];
+      const waitMs = retryAfterHeader
+        ? Math.ceil(parseFloat(retryAfterHeader) * 1000) + 250
+        : 2000 * (attempt + 1);
+
+      logger.warn("Groq rate limited — retrying", {
+        attempt: attempt + 1,
+        waitMs,
+        message: err.response?.data?.error?.message,
+      });
+
+      await sleep(waitMs);
+      return callGroq(request, attempt + 1);
     }
-  );
 
-  const choice = response.data.choices[0];
-  const toolCalls: ToolCall[] = (choice.message.tool_calls || []).map((tc) => ({
-    id: tc.id,
-    type: "function",
-    function: { name: tc.function.name, arguments: tc.function.arguments },
-  }));
-
-  return {
-    content: choice.message.content,
-    tool_calls: toolCalls,
-    model_used: config.groq.model,
-    usage: response.data.usage,
-    finish_reason: choice.finish_reason,
-  };
+    throw err;
+  }
 }
