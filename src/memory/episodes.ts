@@ -45,7 +45,7 @@ export async function getRecentHistory(
   phone: string,
   episodeId: string,
   excludeMessageId: string,
-  limit: number = 16
+  limit: number = 10
 ): Promise<ChatMessage[]> {
   const rows = await query<{
     direction: string;
