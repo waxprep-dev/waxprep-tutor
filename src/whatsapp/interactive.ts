@@ -1,16 +1,7 @@
 import axios from "axios";
 import { config } from "../config";
 import { logger } from "../utils/logger";
-
-/**
- * Interactive messages are WhatsApp's killer feature for non-text interactions.
- * Reply buttons: up to 3 tappable buttons per message.
- * List messages: a button that opens a multi-section picker (great for menus).
- * CTA buttons: link out to URLs.
- * 
- * Button IDs encode meaning: we use them to route actions in the webhook.
- * Convention: "category:action:context" — e.g., "diff:got_it:concept_uuid"
- */
+import { recordInteractiveSent } from "../memory/profile";
 
 const WA_API_URL = `https://graph.facebook.com/v18.0/${config.whatsapp.phoneNumberId}/messages`;
 
@@ -24,10 +15,6 @@ interface ListSection {
   rows: Array<{ id: string; title: string; description?: string }>;
 }
 
-/**
- * Send a message with up to 3 reply buttons.
- * Best for: yes/no/maybe, got it/confused/lost, easy/medium/hard
- */
 export async function sendButtonMessage(
   toPhone: string,
   body: string,
@@ -72,6 +59,7 @@ export async function sendButtonMessage(
 
     const messageId = response.data.messages?.[0]?.id;
     logger.info("Button message sent", { to: toPhone, buttons: buttons.length });
+    await recordInteractiveSent(toPhone, messageId);
     return { message_id: messageId };
   } catch (err: any) {
     logger.error("Button message failed", { error: err.response?.data || err.message });
@@ -79,10 +67,6 @@ export async function sendButtonMessage(
   }
 }
 
-/**
- * Send a list picker message.
- * Best for: subject selection, topic menus, multi-option choices (4+ items).
- */
 export async function sendListMessage(
   toPhone: string,
   body: string,
@@ -133,6 +117,7 @@ export async function sendListMessage(
 
     const messageId = response.data.messages?.[0]?.id;
     logger.info("List message sent", { to: toPhone, sections: sections.length });
+    await recordInteractiveSent(toPhone, messageId);
     return { message_id: messageId };
   } catch (err: any) {
     logger.error("List message failed", { error: err.response?.data || err.message });
@@ -140,10 +125,6 @@ export async function sendListMessage(
   }
 }
 
-/**
- * Send a CTA URL button (links out to a URL).
- * Best for: "View your progress dashboard", "Join community"
- */
 export async function sendCtaButton(
   toPhone: string,
   body: string,
@@ -191,10 +172,6 @@ export async function sendCtaButton(
   }
 }
 
-/**
- * Send a reaction (emoji) to a message. NEW WhatsApp feature.
- * Best for: celebrating wins ("🎉" when they master something)
- */
 export async function sendReaction(
   toPhone: string,
   messageId: string,
