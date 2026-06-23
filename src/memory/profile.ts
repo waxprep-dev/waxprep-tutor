@@ -106,6 +106,21 @@ export async function touchStudent(phone: string): Promise<void> {
   );
 }
 
+export async function recordInteractiveSent(phone: string, messageId: string): Promise<void> {
+  await query(
+    `UPDATE students SET last_interactive_message_id = $1, last_interactive_sent_at = NOW() WHERE phone = $2`,
+    [messageId, phone]
+  );
+}
+
+export async function getLastInteractiveMessageId(phone: string): Promise<string | null> {
+  const row = await queryOne<{ last_interactive_message_id: string | null }>(
+    `SELECT last_interactive_message_id FROM students WHERE phone = $1`,
+    [phone]
+  );
+  return row?.last_interactive_message_id || null;
+}
+
 export async function incrementOutboundCount(phone: string): Promise<void> {
   await query(
     `UPDATE students SET message_count_out = message_count_out + 1 WHERE phone = $1`,
