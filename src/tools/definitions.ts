@@ -8,10 +8,8 @@ export const TOOLS: ToolDefinition[] = [
       description: "Get the student's full profile. Use this when you need to recall what you know about them — name, level, goals, learning style.",
       parameters: {
         type: "object",
-        properties: {
-          phone: { type: "string", description: "The student's phone number (with country code)" },
-        },
-        required: ["phone"],
+        properties: {},
+        required: [],
       },
     },
   },
@@ -23,7 +21,6 @@ export const TOOLS: ToolDefinition[] = [
       parameters: {
         type: "object",
         properties: {
-          phone: { type: "string" },
           updates: {
             type: "object",
             properties: {
@@ -43,7 +40,7 @@ export const TOOLS: ToolDefinition[] = [
             },
           },
         },
-        required: ["phone", "updates"],
+        required: ["updates"],
       },
     },
   },
@@ -55,11 +52,10 @@ export const TOOLS: ToolDefinition[] = [
       parameters: {
         type: "object",
         properties: {
-          phone: { type: "string" },
           query: { type: "string" },
           top_k: { type: "number" },
         },
-        required: ["phone", "query"],
+        required: ["query"],
       },
     },
   },
@@ -71,12 +67,11 @@ export const TOOLS: ToolDefinition[] = [
       parameters: {
         type: "object",
         properties: {
-          phone: { type: "string" },
           name: { type: "string" },
           subject: { type: "string" },
           description: { type: "string" },
         },
-        required: ["phone", "name", "subject"],
+        required: ["name", "subject"],
       },
     },
   },
@@ -119,13 +114,12 @@ export const TOOLS: ToolDefinition[] = [
       parameters: {
         type: "object",
         properties: {
-          phone: { type: "string" },
           rule_text: { type: "string" },
           trigger_condition: { type: "string" },
           evidence: { type: "string" },
           confidence: { type: "number", minimum: 0, maximum: 1 },
         },
-        required: ["phone", "rule_text", "trigger_condition", "evidence"],
+        required: ["rule_text", "trigger_condition", "evidence"],
       },
     },
   },
@@ -137,12 +131,11 @@ export const TOOLS: ToolDefinition[] = [
       parameters: {
         type: "object",
         properties: {
-          phone: { type: "string" },
           category: { type: "string", enum: ["family", "friends", "aspirations", "hobbies", "emotional", "health", "significant_events", "introduction", "other"] },
           note_text: { type: "string" },
           emotional_sensitivity: { type: "string", enum: ["low", "medium", "high"] },
         },
-        required: ["phone", "category", "note_text"],
+        required: ["category", "note_text"],
       },
     },
   },

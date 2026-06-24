@@ -24,13 +24,13 @@ export async function executeTool(
 
     switch (toolCall.function.name) {
       case "get_student_profile": {
-        const p = await profile.getProfile(args.phone);
+        const p = await profile.getProfile(context.phone);
         result = p;
         break;
       }
 
       case "update_profile": {
-        await profile.updateProfile(args.phone, args.updates);
+        await profile.updateProfile(context.phone, args.updates);
         result = { success: true, updated_fields: Object.keys(args.updates) };
         break;
       }
@@ -42,7 +42,7 @@ export async function executeTool(
           break;
         }
         const results = await episodes.searchEpisodes(
-          args.phone,
+          context.phone,
           queryEmbedding,
           args.top_k || 5
         );
@@ -52,7 +52,7 @@ export async function executeTool(
 
       case "get_or_create_concept": {
         const c = await concepts.getOrCreateConcept(
-          args.phone,
+          context.phone,
           args.name,
           args.subject,
           args.description
@@ -75,7 +75,7 @@ export async function executeTool(
 
       case "add_procedural_rule": {
         await procedural.addRule(
-          args.phone,
+          context.phone,
           args.rule_text,
           args.trigger_condition,
           args.evidence,
@@ -87,7 +87,7 @@ export async function executeTool(
 
       case "add_relational_note": {
         await relational.addNote(
-          args.phone,
+          context.phone,
           args.category,
           args.note_text,
           args.emotional_sensitivity || "low"
