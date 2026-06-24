@@ -126,6 +126,6 @@ ${context.engagement.label === "unknown"
 }
 
 function formatGoals(goals: StudentProfile["goals"]): string {
-  if (!goals || goals.length === 0) return "(not yet known — ask what they're studying for)";
+  if (!goals || !Array.isArray(goals) || goals.length === 0) return "(not yet known — ask what they're studying for)";
   return goals.map((g: any) => `${g.subject} for ${g.target}${g.exam_date ? ` (exam: ${g.exam_date})` : ""}`).join(", ");
 }
