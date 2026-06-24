@@ -160,7 +160,6 @@ export async function executeTool(
         result = { success: true, quiz_id: quizResult.quiz_id, message_id: quizResult.message_id };
         break;
       }
-      }
 
       case "send_topic_picker": {
         const sections = args.sections.map((s: any) => ({
