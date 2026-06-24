@@ -4,7 +4,33 @@ import { TOOLS } from "../tools/definitions";
 import { executeTool } from "../tools/executor";
 import { logger } from "../utils/logger";
 
-const MAX_LOOPS = 8;
+const MAX_LOOPS = 5;
+
+function trimToolResult(toolName: string, result: any): any {
+  if (toolName === "get_or_create_concept" && result && typeof result === "object") {
+    return {
+      concept_id: result.concept_id,
+      name: result.name,
+      subject: result.subject,
+      mastery_score: result.mastery_score,
+      common_misconceptions: result.common_misconceptions,
+    };
+  }
+  if (toolName === "get_student_profile" && result && typeof result === "object") {
+    return {
+      preferred_name: result.preferred_name,
+      current_level: result.current_level,
+      learning_style: result.learning_style,
+      pace: result.pace,
+      confidence_baseline: result.confidence_baseline,
+      goals: result.goals,
+    };
+  }
+  if (toolName === "search_past_conversations" && Array.isArray(result)) {
+    return result.slice(0, 3).map((e: any) => ({ summary: e.summary_text, similarity: e.similarity }));
+  }
+  return result;
+}
 
 async function callLLMWithRetry(request: any, alreadyRetried = false): Promise<LLMResponse> {
   try {
@@ -78,12 +104,13 @@ export async function runAgentLoop(
       logger.info("Executing tool", { tool: toolCall.function.name, args });
 
       const { result } = await executeTool(toolCall, context);
-      allToolCalls.push({ name: toolCall.function.name, args, result });
+      const trimmedResult = trimToolResult(toolCall.function.name, JSON.parse(result));
+      allToolCalls.push({ name: toolCall.function.name, args, result: trimmedResult });
 
       messages.push({
         role: "tool",
         tool_call_id: toolCall.id,
-        content: result,
+        content: JSON.stringify(trimmedResult),
       });
     }
 
