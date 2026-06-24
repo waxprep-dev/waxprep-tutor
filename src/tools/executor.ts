@@ -147,20 +147,19 @@ export async function executeTool(
       }
 
       case "send_quiz_question": {
-        const options = args.options.map((label: string, i: number) => ({
-          id: `opt_${i}`,
-          label,
-        }));
+        const concept = await concepts.getOrCreateConcept(context.phone, args.concept_name, args.subject);
+        const options = args.options.map((label: string, i: number) => ({ id: `opt_${i}`, label }));
         const quizResult = await quiz.sendQuiz(
           context.phone,
           args.question,
           options,
           args.correct_index,
-          args.concept_id,
+          concept.concept_id,
           args.context
         );
         result = { success: true, quiz_id: quizResult.quiz_id, message_id: quizResult.message_id };
         break;
+      }
       }
 
       case "send_topic_picker": {

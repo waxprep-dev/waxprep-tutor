@@ -83,7 +83,8 @@ export const TOOLS: ToolDefinition[] = [
       parameters: {
         type: "object",
         properties: {
-          concept_id: { type: "string" },
+          concept_name: { type: "string", description: "The concept this quiz tests, e.g. 'Projectile Motion'" },
+          subject: { type: "string", description: "e.g. 'Physics'" },
           new_score: { type: "number", minimum: 0, maximum: 1 },
           evidence: { type: "string" },
         },
@@ -99,7 +100,8 @@ export const TOOLS: ToolDefinition[] = [
       parameters: {
         type: "object",
         properties: {
-          concept_id: { type: "string" },
+          concept_name: { type: "string", description: "The concept this quiz tests, e.g. 'Projectile Motion'" },
+          subject: { type: "string", description: "e.g. 'Physics'" },
           misconception: { type: "string" },
         },
         required: ["concept_id", "misconception"],
@@ -172,7 +174,8 @@ export const TOOLS: ToolDefinition[] = [
       parameters: {
         type: "object",
         properties: {
-          concept_id: { type: "string" },
+          concept_name: { type: "string", description: "The concept this quiz tests, e.g. 'Projectile Motion'" },
+          subject: { type: "string", description: "e.g. 'Physics'" },
           days_from_now: { type: "number" },
         },
         required: ["concept_id", "days_from_now"],
@@ -222,7 +225,8 @@ export const TOOLS: ToolDefinition[] = [
       parameters: {
         type: "object",
         properties: {
-          concept_id: { type: "string" },
+          concept_name: { type: "string", description: "The concept this quiz tests, e.g. 'Projectile Motion'" },
+          subject: { type: "string", description: "e.g. 'Physics'" },
           concept_name: { type: "string" },
           follow_up_message: { type: "string" },
         },
@@ -269,10 +273,11 @@ export const TOOLS: ToolDefinition[] = [
           question: { type: "string" },
           options: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 10 },
           correct_index: { type: "number", minimum: 0, maximum: 9 },
-          concept_id: { type: "string" },
+          concept_name: { type: "string", description: "The concept this quiz tests, e.g. 'Projectile Motion'" },
+          subject: { type: "string", description: "e.g. 'Physics'" },
           context: { type: "string" },
         },
-        required: ["question", "options", "correct_index", "concept_id"],
+        required: ["question", "options", "correct_index", "concept_name", "subject"],
       },
     },
   },
@@ -321,7 +326,8 @@ export const TOOLS: ToolDefinition[] = [
           name: { type: "string" },
           subject: { type: "string" },
           description: { type: "string" },
-          concept_id: { type: "string" },
+          concept_name: { type: "string", description: "The concept this quiz tests, e.g. 'Projectile Motion'" },
+          subject: { type: "string", description: "e.g. 'Physics'" },
         },
         required: ["name", "subject", "description", "concept_id"],
       },
@@ -336,7 +342,8 @@ export const TOOLS: ToolDefinition[] = [
         type: "object",
         properties: {
           prompt: { type: "string" },
-          concept_id: { type: "string" },
+          concept_name: { type: "string", description: "The concept this quiz tests, e.g. 'Projectile Motion'" },
+          subject: { type: "string", description: "e.g. 'Physics'" },
         },
         required: ["prompt", "concept_id"],
       },
