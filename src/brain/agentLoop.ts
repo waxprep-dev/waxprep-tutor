@@ -6,6 +6,14 @@ import { logger } from "../utils/logger";
 
 const MAX_LOOPS = 5;
 
+function sanitizeResponse(text: string): string {
+  if (!text) return text;
+  return text
+    .replace(/<function=[^>]*>[\s\S]*?<\/function>/g, "")
+    .replace(/<function=[\s\S]*$/g, "")
+    .trim();
+}
+
 function trimToolResult(toolName: string, result: any): any {
   if (toolName === "get_or_create_concept" && result && typeof result === "object") {
     return {
@@ -89,7 +97,7 @@ export async function runAgentLoop(
     });
 
     if (response.tool_calls.length === 0) {
-      finalResponse = response.content || "";
+      finalResponse = sanitizeResponse(response.content || "");
       break;
     }
 
@@ -122,7 +130,7 @@ export async function runAgentLoop(
         temperature: 0.4,
         max_tokens: 700,
       });
-      finalResponse = finalCall.content || "";
+      finalResponse = sanitizeResponse(finalCall.content || "");
       totalTokens += finalCall.usage.total_tokens;
       modelUsed = finalCall.model_used;
       break;
