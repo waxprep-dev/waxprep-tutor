@@ -59,6 +59,11 @@ async function runAgentLoopSafely(
       error: err.response?.data || err.message,
     });
     await sendTextMessage(ctx.phone, FALLBACK_MESSAGE);
+    await query(
+      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_response, timestamp, episode_id)
+       VALUES ($1, $2, 'outbound', $3, $3, NOW(), $4)`,
+      [`fallback_${Date.now()}`, ctx.phone, FALLBACK_MESSAGE, ctx.episodeId]
+    );
     return null;
   }
 }
