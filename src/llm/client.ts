@@ -6,24 +6,26 @@ import { config } from "../config";
 import { logger } from "../utils/logger";
 
 export async function callLLM(request: LLMRequest): Promise<LLMResponse> {
-  const provider = request.model || "groq";
+  const provider = request.model || "cerebras";
 
   try {
     switch (provider) {
-      case "groq":
+      case "cerebras":
         try {
-          return await callGroq(request);
+          return await callCerebras(request);
         } catch (err: any) {
-          if (err.response?.status === 429 && config.cerebras.apiKey) {
-            logger.warn("Groq exhausted — falling back to Cerebras for this request");
-            return await callCerebras(request);
+          if (err.response?.status === 429 && config.groq.apiKey) {
+            logger.warn("Cerebras exhausted — falling back to Groq for this request");
+            return await callGroq(request);
           }
           throw err;
         }
+      case "groq":
+        return await callGroq(request);
       case "kimi":
         return await callKimi(request);
       default:
-        return await callGroq(request);
+        return await callCerebras(request);
     }
   } catch (err: any) {
     logger.error("LLM call failed", {
