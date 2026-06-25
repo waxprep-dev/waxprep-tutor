@@ -14,7 +14,7 @@ import { gradeQuiz, buildQuizFeedbackContext } from "../interactive/quiz";
 import { logger } from "../utils/logger";
 
 const FALLBACK_MESSAGE =
-  "Give me a few seconds, I'm a bit overloaded right now — send that again in a moment? 🙏";
+  "Gimme one sec, gathering my thoughts on that 🧠 — try sending it again in a moment.";
 
 export async function handleWebhookGet(req: Request, res: Response): Promise<void> {
   const mode = req.query["hub.mode"] as string | undefined;
@@ -121,6 +121,7 @@ async function processWebhookAsync(body: any): Promise<void> {
       return;
     }
 
+    sendTypingIndicator(messageId); // fire-and-forget
     logger.info("Inbound message", {
       from: fromPhone,
       type: messageType,

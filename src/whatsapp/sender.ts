@@ -2,10 +2,6 @@ import axios from "axios";
 import { config } from "../config";
 import { logger } from "../utils/logger";
 
-/**
- * Send a text message to a WhatsApp user via Meta's Cloud API.
- */
-
 export async function sendTextMessage(
   toPhone: string,
   text: string
@@ -40,29 +36,23 @@ export async function sendTextMessage(
   }
 }
 
-/**
- * Send a "typing" indicator (the three dots). Optional but feels more human.
- */
-export async function sendTypingIndicator(toPhone: string): Promise<void> {
+export async function sendTypingIndicator(messageId: string): Promise<void> {
   try {
     await axios.post(
       `https://graph.facebook.com/v18.0/${config.whatsapp.phoneNumberId}/messages`,
       {
         messaging_product: "whatsapp",
-        to: toPhone,
-        type: "text",
-        text: { body: "\u200B" }, // zero-width space as a no-op marker
+        status: "read",
+        message_id: messageId,
       },
       {
         headers: {
           Authorization: `Bearer ${config.whatsapp.accessToken}`,
-          "Content-Type": "application/json",
         },
-        timeout: 10000,
+        timeout: 5000,
       }
     );
-  } catch (err) {
-    // Typing indicator failures are non-critical
-    logger.warn("Typing indicator failed (non-critical)", { to: toPhone });
+  } catch (err: any) {
+    logger.warn("Typing indicator failed (non-critical)", { error: err.response?.data || err.message });
   }
 }
