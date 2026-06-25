@@ -6,7 +6,7 @@ import { getOrCreateCurrentEpisode, incrementEpisodeMessageCount, getRecentHisto
 import { assembleContext } from "../memory/retrieval";
 import { buildPrompt } from "../brain/promptBuilder";
 import { runAgentLoop } from "../brain/agentLoop";
-import { sendTextMessage } from "./sender";
+import { sendTextMessage, sendTypingIndicator } from "./sender";
 import { processVoiceMessage } from "./voice";
 import { recordStudyToday, maybeSendStreakMilestone } from "../interactive/streaks";
 import { processDifficultySignal } from "../interactive/difficulty";
