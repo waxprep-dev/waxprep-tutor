@@ -120,7 +120,16 @@ export async function callGroq(request: LLMRequest, attempt: number = 0): Promis
     };
   } catch (err: any) {
     const status = err.response?.status;
+    const errorMessage = err.response?.data?.error?.message || "";
 
+    // If it's a daily limit (TPD), throw immediately so client.ts can fall back to Cerebras.
+    // No point retrying — we're locked out for hours.
+    if (status === 429 && errorMessage.includes("per day")) {
+      logger.warn("Groq daily limit reached — throwing to fallback provider");
+      throw err;
+    }
+
+    // Per-minute limit (TPM) — retry with backoff
     if (status === 429 && attempt < MAX_RETRIES) {
       const retryAfterHeader = err.response?.headers?.["retry-after"];
       const waitMs = retryAfterHeader
@@ -130,7 +139,7 @@ export async function callGroq(request: LLMRequest, attempt: number = 0): Promis
       logger.warn("Groq rate limited — retrying", {
         attempt: attempt + 1,
         waitMs,
-        message: err.response?.data?.error?.message,
+        message: errorMessage,
       });
 
       await sleep(waitMs);
