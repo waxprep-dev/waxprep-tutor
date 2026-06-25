@@ -90,7 +90,7 @@ export async function runAgentLoop(
       tools: TOOLS,
       tool_choice: "auto",
       temperature: 0.4,
-      max_tokens: 700,
+      max_tokens: 1100,
     });
 
     modelUsed = response.model_used;
@@ -142,7 +142,7 @@ export async function runAgentLoop(
         tools: TOOLS,
         tool_choice: "auto",
         temperature: 0.4,
-        max_tokens: 700,
+        max_tokens: 1100,
       });
       finalResponse = sanitizeResponse(finalCall.content || "");
       totalTokens += finalCall.usage.total_tokens;
