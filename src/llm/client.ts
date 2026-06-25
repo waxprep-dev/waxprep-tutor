@@ -1,28 +1,27 @@
 import { LLMRequest, LLMResponse } from "./types";
 import { callGroq } from "./groq";
 import { callKimi } from "./kimi";
+import { callCerebras } from "./cerebras";
+import { config } from "../config";
 import { logger } from "../utils/logger";
 
-/**
- * The LLM client is the abstraction layer.
- * To add another provider, write a sibling to groq.ts (callClaude, callGpt)
- * and add a case here. The brain doesn't care which provider is used.
- */
-
 export async function callLLM(request: LLMRequest): Promise<LLMResponse> {
-  // Default routing: Groq for everything
   const provider = request.model || "groq";
 
   try {
     switch (provider) {
       case "groq":
-        return await callGroq(request);
+        try {
+          return await callGroq(request);
+        } catch (err: any) {
+          if (err.response?.status === 429 && config.cerebras.apiKey) {
+            logger.warn("Groq exhausted — falling back to Cerebras for this request");
+            return await callCerebras(request);
+          }
+          throw err;
+        }
       case "kimi":
         return await callKimi(request);
-      // case "claude":
-      //   return await callClaude(request);
-      // case "gpt":
-      //   return await callGpt(request);
       default:
         return await callGroq(request);
     }

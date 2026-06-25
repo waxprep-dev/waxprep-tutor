@@ -46,6 +46,12 @@ export const config = {
     model: optional("OPENAI_MODEL", "gpt-4o"),
     embeddingModel: optional("EMBEDDING_MODEL", "text-embedding-3-small"),
   },
+  cerebras: {
+    apiKey: optional("CEREBRAS_API_KEY", ""),
+    baseUrl: optional("CEREBRAS_BASE_URL", "https://api.cerebras.ai/v1"),
+    model: optional("CEREBRAS_MODEL", "llama-3.3-70b"),
+  },
+
 
   embeddingProvider: optional("EMBEDDING_PROVIDER", "local") as "local" | "openai",
 
