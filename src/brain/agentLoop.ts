@@ -17,6 +17,8 @@ const INTERACTIVE_TOOLS = new Set([
 function sanitizeResponse(text: string): string {
   if (!text) return text;
   return text
+    .replace(/\[[a-z_]+\]\s*$/gi, "")
+    .trim()
     .replace(/<function=[^>]*>[\s\S]*?<\/function>/g, "")
     .replace(/<function=[\s\S]*$/g, "")
     .trim();
