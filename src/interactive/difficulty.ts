@@ -21,18 +21,21 @@ export async function sendDifficultyCheck(
   toPhone: string,
   conceptId: string,
   conceptName: string,
-  followUpMessage: string = ""
+  followUpMessage: string = "",
+  labels?: { got_it: string; confused: string; lost: string }
 ): Promise<{ message_id: string }> {
+  const finalLabels = labels || DIFFICULTY_LABELS;
   return sendButtonMessage(
     toPhone,
     followUpMessage || `How did "${conceptName}" land?`,
     [
-      { id: `diff:got_it:${conceptId}`, title: DIFFICULTY_LABELS.got_it },
-      { id: `diff:confused:${conceptId}`, title: DIFFICULTY_LABELS.confused },
-      { id: `diff:lost:${conceptId}`, title: DIFFICULTY_LABELS.lost },
+      { id: `diff:got_it:${conceptId}`, title: finalLabels.got_it },
+      { id: `diff:confused:${conceptId}`, title: finalLabels.confused },
+      { id: `diff:lost:${conceptId}`, title: finalLabels.lost },
     ],
     { footer: "Tap to update your mastery" }
   );
+}
 }
 
 export async function processDifficultySignal(

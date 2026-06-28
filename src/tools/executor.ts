@@ -140,8 +140,12 @@ export async function executeTool(
           context.phone,
           conceptId,
           args.concept_name,
-          args.follow_up_message || ""
+          args.follow_up_message || "",
+          args.labels
         );
+        result = { success: true, message_id: sendResult.message_id };
+        break;
+      }
         result = { success: true, message_id: sendResult.message_id };
         break;
       }
