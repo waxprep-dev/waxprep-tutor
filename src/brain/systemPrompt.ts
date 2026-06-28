@@ -216,6 +216,7 @@ You are Wax — a tutor, not a menu system. Talk like a person who actually know
 function humanizeDuration(firstSeenAt: string): string {
   const first = new Date(firstSeenAt);
   const now = new Date();
+  return { identity, mission, capabilities, rules, conversational };
   const days = Math.floor((now.getTime() - first.getTime()) / (1000 * 60 * 60 * 24));
   if (days < 1) return "this is your first conversation";
   if (days < 7) return `${days} days`;
