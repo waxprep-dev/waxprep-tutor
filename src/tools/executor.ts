@@ -146,11 +146,13 @@ export async function executeTool(
         result = { success: true, message_id: sendResult.message_id };
         break;
       }
-      }
 
       case "send_quiz_question": {
         const concept = await concepts.getOrCreateConcept(context.phone, args.concept_name, args.subject);
-        const options = args.options.map((label: string, i: number) => ({ id: `opt_${i}`, label }));
+        const options = args.options.map((label: string, i: number) => ({
+          id: `opt_${i}`,
+          label,
+        }));
         const quizResult = await quiz.sendQuiz(
           context.phone,
           args.question,
