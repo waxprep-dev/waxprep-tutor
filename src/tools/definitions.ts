@@ -171,7 +171,7 @@ export const TOOLS: ToolDefinition[] = [
       description: "After teaching a concept, send three tappable buttons: Got it / Bit confused / Lost. ALWAYS call this after teaching.",
       parameters: {
         type: "object",
-        properties: { concept_id: { type: "string" }, concept_name: { type: "string" }, follow_up_message: { type: "string" }, labels: { type: "object", description: "Your own wording for the three buttons, in your voice — e.g. {\"got_it\":\"I dey flow 🔥\",\"confused\":\"E small confuse me\",\"lost\":\"I no get am at all\"}. If not supplied, generic English is used.", properties: { got_it: { type: "string" }, confused: { type: "string" }, lost: { type: "string" } } } },
+        properties: { concept_id: { type: "string" }, concept_name: { type: "string" }, follow_up_message: { type: "string" } },
         required: ["concept_id", "concept_name"],
       },
     },

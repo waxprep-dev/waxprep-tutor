@@ -146,8 +146,6 @@ export async function executeTool(
         result = { success: true, message_id: sendResult.message_id };
         break;
       }
-        result = { success: true, message_id: sendResult.message_id };
-        break;
       }
 
       case "send_quiz_question": {

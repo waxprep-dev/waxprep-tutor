@@ -36,7 +36,6 @@ export async function sendDifficultyCheck(
     { footer: "Tap to update your mastery" }
   );
 }
-}
 
 export async function processDifficultySignal(
   phone: string,
