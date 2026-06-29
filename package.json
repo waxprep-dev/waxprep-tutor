@@ -10,7 +10,6 @@
     "db:migrate": "psql $DATABASE_URL -f src/db/schema.sql",
     "worker:consolidate": "ts-node src/workers/consolidation.ts",
     "worker:reviews": "ts-node src/workers/reviews.ts",
-    "worker:checkin": "ts-node src/workers/dailyCheckIn.ts"
   },
   "dependencies": {
     "express": "^4.19.2",

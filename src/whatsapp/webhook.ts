@@ -7,7 +7,6 @@ import { assembleContext } from "../memory/retrieval";
 import { buildPrompt } from "../brain/promptBuilder";
 import { runAgentLoop } from "../brain/agentLoop";
 import { sendTextMessage } from "./sender";
-import { recordStudyToday, maybeSendStreakMilestone } from "../interactive/streaks";
 import { logger } from "../utils/logger";
 
 const FALLBACK_MESSAGE = "Gimme one sec, gathering my thoughts on that 🧠 — try sending it again in a moment.";
@@ -112,14 +111,6 @@ async function processWebhookAsync(body: any): Promise<void> {
 
     await createIfMissing(fromPhone);
     await touchStudent(fromPhone);
-
-    const streakResult = await recordStudyToday(fromPhone);
-    if (streakResult.streak_extended) {
-      await maybeSendStreakMilestone(fromPhone, streakResult.current_streak);
-    }
-
-    const episode = await getOrCreateCurrentEpisode(fromPhone);
-    await incrementEpisodeMessageCount(episode.episode_id);
 
     await query(
       `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
