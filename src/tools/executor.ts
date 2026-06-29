@@ -8,10 +8,6 @@ import * as relational from "../memory/relational";
 import { embed } from "../memory/embeddings";
 import { changePhoneNumber } from "../identity/waxId";
 import { recordConsent } from "../identity/consent";
-import * as difficulty from "../interactive/difficulty";
-import * as quiz from "../interactive/quiz";
-import * as topicPicker from "../interactive/topicPicker";
-import { sendButtonMessage } from "../whatsapp/interactive";
 
 export async function executeTool(
   toolCall: ToolCall,
@@ -134,71 +130,6 @@ export async function executeTool(
         break;
       }
 
-      case "send_difficulty_check": {
-        const conceptId = args.concept_id;
-        const sendResult = await difficulty.sendDifficultyCheck(
-          context.phone,
-          conceptId,
-          args.concept_name,
-          args.follow_up_message || "",
-          args.labels
-        );
-        result = { success: true, message_id: sendResult.message_id };
-        break;
-      }
-
-      case "send_quiz_question": {
-        const concept = await concepts.getOrCreateConcept(context.phone, args.concept_name, args.subject);
-        const options = args.options.map((label: string, i: number) => ({
-          id: `opt_${i}`,
-          label,
-        }));
-        const quizResult = await quiz.sendQuiz(
-          context.phone,
-          args.question,
-          options,
-          args.correct_index,
-          concept.concept_id,
-          args.context
-        );
-        result = { success: true, quiz_id: quizResult.quiz_id, message_id: quizResult.message_id };
-        break;
-      }
-
-      case "send_topic_picker": {
-        const sections = args.sections.map((s: any) => ({
-          title: s.title,
-          topics: s.topics,
-        }));
-        const pickerResult = await topicPicker.sendTopicPicker(context.phone, args.prompt, sections);
-        result = { success: true, message_id: pickerResult.message_id };
-        break;
-      }
-
-      case "send_concept_card": {
-        await sendButtonMessage(context.phone, `📘 *${args.name}*\n\n${args.description}`, [
-          { id: `concept:teach:${args.concept_id}`, title: "Teach me" },
-          { id: `concept:quiz:${args.concept_id}`, title: "Quiz me" },
-          { id: `concept:skip:${args.concept_id}`, title: "Skip for now" },
-        ], { header: args.subject, footer: "Tap to get started" });
-        result = { success: true };
-        break;
-      }
-
-      case "send_quick_replies": {
-        const clampedOptions = args.options.slice(0, 3);
-        const buttons = clampedOptions.map((o: any) => ({ id: `quick:${o.id}`, title: o.title }));
-        const sendResult = await sendButtonMessage(context.phone, args.body, buttons, {
-          footer: args.footer || "Or just type your own answer",
-        });
-        result = { success: true, message_id: sendResult.message_id };
-        break;
-      }
-
-      case "generate_concept_image": {
-        result = { success: false, message: "Image generation is a v2 feature. Not yet available." };
-        break;
-      }
 
       default:
         result = { error: `Unknown tool: ${toolCall.function.name}` };

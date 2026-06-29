@@ -6,13 +6,6 @@ import { logger } from "../utils/logger";
 
 const MAX_LOOPS = 5;
 
-const INTERACTIVE_TOOLS = new Set([
-  "send_topic_picker",
-  "send_quick_replies",
-  "send_difficulty_check",
-  "send_quiz_question",
-  "send_concept_card",
-]);
 
 function sanitizeResponse(text: string): string {
   if (!text) return text;
@@ -132,11 +125,6 @@ export async function runAgentLoop(
       });
     }
 
-    const sentInteractive = response.tool_calls.some((tc) => INTERACTIVE_TOOLS.has(tc.function.name));
-    if (sentInteractive) {
-      finalResponse = "";
-      break;
-    }
 
     if (response.finish_reason === "stop") {
       const finalCall = await callLLMWithRetry({

@@ -1,20 +1,16 @@
 import { Request, Response } from "express";
 import { verifyWebhookSignature, verifyChallenge } from "./verify";
 import { query } from "../db/client";
-import { createIfMissing, touchStudent, incrementOutboundCount, getLastInteractiveMessageId } from "../memory/profile";
+import { createIfMissing, touchStudent, incrementOutboundCount } from "../memory/profile";
 import { getOrCreateCurrentEpisode, incrementEpisodeMessageCount, getRecentHistory } from "../memory/episodes";
 import { assembleContext } from "../memory/retrieval";
 import { buildPrompt } from "../brain/promptBuilder";
 import { runAgentLoop } from "../brain/agentLoop";
-import { sendTextMessage, sendTypingIndicator } from "./sender";
-import { processVoiceMessage } from "./voice";
+import { sendTextMessage } from "./sender";
 import { recordStudyToday, maybeSendStreakMilestone } from "../interactive/streaks";
-import { processDifficultySignal } from "../interactive/difficulty";
-import { gradeQuiz, buildQuizFeedbackContext } from "../interactive/quiz";
 import { logger } from "../utils/logger";
 
-const FALLBACK_MESSAGE =
-  "Gimme one sec, gathering my thoughts on that 🧠 — try sending it again in a moment.";
+const FALLBACK_MESSAGE = "Gimme one sec, gathering my thoughts on that 🧠 — try sending it again in a moment.";
 
 export async function handleWebhookGet(req: Request, res: Response): Promise<void> {
   const mode = req.query["hub.mode"] as string | undefined;
@@ -87,44 +83,29 @@ async function processWebhookAsync(body: any): Promise<void> {
       return;
     }
 
-    let messageText: string;
-    let messageType: "text" | "interactive" | "audio" | "unsupported" = "unsupported";
-    let interactiveId: string | undefined;
+    let messageText = "";
 
     if (message.type === "text") {
       messageText = message.text.body;
-      messageType = "text";
     } else if (message.type === "interactive") {
-      messageType = "interactive";
       const interactive = message.interactive;
       if (interactive.type === "button_reply") {
-        interactiveId = interactive.button_reply.id;
         messageText = interactive.button_reply.title;
       } else if (interactive.type === "list_reply") {
-        interactiveId = interactive.list_reply.id;
         messageText = interactive.list_reply.title;
       } else {
-        messageText = `[INTERACTIVE] ${JSON.stringify(interactive)}`;
+        messageText = JSON.stringify(interactive);
       }
     } else if (message.type === "audio") {
-      messageType = "audio";
-      try {
-        const transcript = await processVoiceMessage(message.audio.id, fromPhone);
-        messageText = `[VOICE_TRANSCRIPT] ${transcript}`;
-      } catch (err: any) {
-        logger.error("Voice transcription failed", { error: err.message });
-        await sendTextMessage(fromPhone, "I couldn't catch what you said there. Can you type it out?");
-        return;
-      }
+      messageText = "[Voice message received]";
     } else {
-      await sendTextMessage(fromPhone, "I can read text and voice notes best for now. Send me one of those!");
+      await sendTextMessage(fromPhone, "I can read text best right now. Send me a message!");
       return;
     }
 
-    sendTypingIndicator(messageId); // fire-and-forget
     logger.info("Inbound message", {
       from: fromPhone,
-      type: messageType,
+      type: message.type,
       message_id: messageId,
       length: messageText.length,
     });
@@ -139,29 +120,6 @@ async function processWebhookAsync(body: any): Promise<void> {
 
     const episode = await getOrCreateCurrentEpisode(fromPhone);
     await incrementEpisodeMessageCount(episode.episode_id);
-
-    if (messageType === "interactive") {
-      const repliedToId = message.context?.id;
-      const lastSentId = await getLastInteractiveMessageId(fromPhone);
-
-      if (repliedToId && lastSentId && repliedToId !== lastSentId) {
-        logger.info("Stale button tap ignored", { phone: fromPhone, tapped: repliedToId, current: lastSentId });
-        await sendTextMessage(
-          fromPhone,
-          "That option's expired — what would you like to do now?"
-        );
-        return;
-      }
-    }
-
-    const directHandled = await maybeHandleInteractiveResponse(
-      fromPhone,
-      interactiveId,
-      messageText,
-      messageId,
-      episode.episode_id
-    );
-    if (directHandled) return;
 
     await query(
       `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
@@ -183,7 +141,7 @@ async function processWebhookAsync(body: any): Promise<void> {
 
     if (!result) return;
 
-    const outboundText = result.finalResponse || "[interactive prompt sent]";
+    const outboundText = result.finalResponse || "[response sent]";
 
     await query(
       `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_tool_calls, ai_response, timestamp, episode_id, latency_ms, model_used)
@@ -198,7 +156,7 @@ async function processWebhookAsync(body: any): Promise<void> {
 
     logger.info("Message processed", {
       phone: fromPhone,
-      type: messageType,
+      type: message.type,
       latency_ms: latency,
       tokens: result.totalTokens,
       tool_calls: result.allToolCalls.length,
@@ -206,106 +164,4 @@ async function processWebhookAsync(body: any): Promise<void> {
   } catch (err: any) {
     logger.error("Webhook processing error", { error: err.message, stack: err.stack });
   }
-}
-
-async function maybeHandleInteractiveResponse(
-  phone: string,
-  buttonId: string | undefined,
-  messageText: string,
-  messageId: string,
-  episodeId: string
-): Promise<boolean> {
-  if (!buttonId) return false;
-
-  const diffMatch = buttonId.match(/^diff:(got_it|confused|lost):(.+)$/);
-  if (diffMatch) {
-    const [, signal, conceptId] = diffMatch;
-    const result = await processDifficultySignal(phone, conceptId, signal as any);
-
-    await query(
-      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
-       VALUES ($1, $2, 'inbound', $3, NOW(), $4)`,
-      [messageId, phone, messageText, episodeId]
-    );
-
-    let responseText: string;
-    if (signal === "got_it") {
-      responseText = result.newMastery >= 0.9
-        ? `Locked in. Mastery at ${(result.newMastery * 100).toFixed(0)}%. You've got this one solid.`
-        : `Nice. ${(result.newMastery * 100).toFixed(0)}% on this. Want to keep going or take a break?`;
-    } else if (signal === "confused") {
-      responseText = `Aight, let me try a different angle. Imagine this instead: [I'll switch up the explanation].`;
-    } else {
-      responseText = `No worries, this one trips up a lot of people. Let's slow down and start from what you DO know.`;
-    }
-
-    await sendTextMessage(phone, responseText);
-    return true;
-  }
-
-  const quizMatch = buttonId.match(/^quiz:([^:]+):(\d+)$/);
-  if (quizMatch) {
-    const [, quizId, indexStr] = quizMatch;
-    const selectedIndex = parseInt(indexStr, 10);
-    const result = await gradeQuiz(quizId, selectedIndex);
-
-    await query(
-      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
-       VALUES ($1, $2, 'inbound', $3, NOW(), $4)`,
-      [messageId, phone, messageText, episodeId]
-    );
-
-    const feedbackContext = buildQuizFeedbackContext(result);
-    const history = await getRecentHistory(phone, episodeId, messageId);
-    const context = await assembleContext(phone, feedbackContext);
-    const messages = buildPrompt(context, feedbackContext, history);
-    const aiResult = await runAgentLoopSafely(messages, { phone, episodeId });
-    if (aiResult) await sendTextMessage(phone, aiResult.finalResponse);
-    return true;
-  }
-
-  const topicMatch = buttonId.match(/^topic:(.+)$/);
-  if (topicMatch) {
-    const topicId = topicMatch[1];
-
-    await query(
-      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
-       VALUES ($1, $2, 'inbound', $3, NOW(), $4)`,
-      [messageId, phone, messageText, episodeId]
-    );
-
-    const syntheticMessage = `I want to study ${topicId}`;
-    const history = await getRecentHistory(phone, episodeId, messageId);
-    const context = await assembleContext(phone, syntheticMessage);
-    const messages = buildPrompt(context, syntheticMessage, history);
-    const result = await runAgentLoopSafely(messages, { phone, episodeId });
-    if (result) await sendTextMessage(phone, result.finalResponse);
-    return true;
-  }
-
-  if (buttonId.startsWith("checkin:") || buttonId.startsWith("milestone:")) {
-    const action = buttonId.split(":")[1];
-
-    await query(
-      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
-       VALUES ($1, $2, 'inbound', $3, NOW(), $4)`,
-      [messageId, phone, messageText, episodeId]
-    );
-
-    let syntheticMessage: string;
-    if (action === "continue") syntheticMessage = "Let's continue where I left off";
-    else if (action === "new") syntheticMessage = "I want to start something new";
-    else if (action === "review") syntheticMessage = "Quick review please";
-    else if (action === "share") syntheticMessage = "Tell me my progress";
-    else syntheticMessage = "Continue";
-
-    const history = await getRecentHistory(phone, episodeId, messageId);
-    const context = await assembleContext(phone, syntheticMessage);
-    const messages = buildPrompt(context, syntheticMessage, history);
-    const result = await runAgentLoopSafely(messages, { phone, episodeId });
-    if (result) await sendTextMessage(phone, result.finalResponse);
-    return true;
-  }
-
-  return false;
 }
