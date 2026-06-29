@@ -1,156 +1,233 @@
 import { callLLM } from "../llm/client";
-import { ChatMessage, LLMResponse } from "../llm/types";
-import { TOOLS } from "../tools/definitions";
-import { executeTool } from "../tools/executor";
-import { logger } from "../utils/logger";
+import { executeTool } from "./executor";
+import { Message } from "../types";
+import { config } from "../config";
+import { logMessage } from "../memory/messageLog";
 
 const MAX_LOOPS = 5;
+const RETRY_ATTEMPTS = 3;
 
-
-function sanitizeResponse(text: string): string {
-  if (!text) return text;
-  return text
-    .replace(/\[[a-z_]+\]\s*$/gi, "")
-    .trim()
-    .replace(/<function=[^>]*>[\s\S]*?<\/function>/g, "")
-    .replace(/<function=[\s\S]*$/g, "")
-    .trim();
-}
-
-function trimToolResult(toolName: string, result: any): any {
-  if (toolName === "get_or_create_concept" && result && typeof result === "object") {
-    return {
-      concept_id: result.concept_id,
-      name: result.name,
-      subject: result.subject,
-      mastery_score: result.mastery_score,
-      common_misconceptions: result.common_misconceptions,
-    };
-  }
-  if (toolName === "get_student_profile" && result && typeof result === "object") {
-    return {
-      preferred_name: result.preferred_name,
-      current_level: result.current_level,
-      learning_style: result.learning_style,
-      pace: result.pace,
-      confidence_baseline: result.confidence_baseline,
-      goals: result.goals,
-    };
-  }
-  if (toolName === "search_past_conversations" && Array.isArray(result)) {
-    return result.slice(0, 3).map((e: any) => ({ summary: e.summary_text, similarity: e.similarity }));
-  }
-  return result;
-}
-
-async function callLLMWithRetry(request: any, alreadyRetried = false): Promise<LLMResponse> {
-  try {
-    return await callLLM(request);
-  } catch (err: any) {
-    const code = err.response?.data?.error?.code;
-    if (code === "tool_use_failed" && !alreadyRetried) {
-      logger.warn("Model produced a malformed tool call — retrying once", {
-        error: err.response?.data?.error?.message,
-      });
-      return callLLMWithRetry(request, true);
-    }
-    throw err;
-  }
-}
-
-export interface AgentLoopResult {
-  finalResponse: string;
-  allToolCalls: Array<{ name: string; args: any; result: any }>;
-  modelUsed: string;
-  totalTokens: number;
+export interface AgentResult {
+  response: string;
+  toolsCalled: string[];
   loopCount: number;
+  error?: string;
 }
 
+/**
+ * Run the agent loop with the new adaptive prompt.
+ * The AI decides everything: when to teach, when to ask, when to use tools.
+ * No state machine. No hardcoded flows. Just the AI, the context, and the student.
+ */
 export async function runAgentLoop(
-  initialMessages: ChatMessage[],
-  context: { phone: string; episodeId: string }
-): Promise<AgentLoopResult> {
-  const messages: ChatMessage[] = [...initialMessages];
-  const allToolCalls: Array<{ name: string; args: any; result: any }> = [];
-  let totalTokens = 0;
+  studentId: string,
+  messages: Message[],
+  contextBundle: any,
+  systemPrompt: string
+): Promise<AgentResult> {
+  let currentMessages = [...messages];
+  let toolsCalled: string[] = [];
   let loopCount = 0;
-  let finalResponse = "";
-  let modelUsed = "";
 
   while (loopCount < MAX_LOOPS) {
     loopCount++;
 
-    const response: LLMResponse = await callLLMWithRetry({
-      messages,
-      tools: TOOLS,
-      tool_choice: "auto",
-      temperature: 0.4,
-      max_tokens: 1100,
-    });
+    try {
+      // Call LLM with retry logic
+      const llmResponse = await callLLMWithRetry(
+        systemPrompt,
+        currentMessages,
+        contextBundle.availableTools
+      );
 
-    modelUsed = response.model_used;
-    totalTokens += response.usage.total_tokens;
+      if (!llmResponse) {
+        throw new Error("LLM returned empty response");
+      }
 
-    logger.info("LLM response", {
-      loop: loopCount,
-      finish_reason: response.finish_reason,
-      tool_calls: response.tool_calls.length,
-      content_length: response.content?.length || 0,
-      tokens: response.usage.total_tokens,
-    });
+      // Strip thinking tags (internal reasoning should never reach student)
+      const cleanedResponse = stripThinkingTags(llmResponse.content);
 
-    if (response.tool_calls.length === 0) {
-      finalResponse = sanitizeResponse(response.content || "");
-      break;
-    }
+      // Check for tool calls
+      if (llmResponse.toolCalls && llmResponse.toolCalls.length > 0) {
+        // Execute tools silently
+        const toolResults = await Promise.all(
+          llmResponse.toolCalls.map(async (toolCall: any) => {
+            toolsCalled.push(toolCall.name);
 
-    messages.push({
-      role: "assistant",
-      content: response.content,
-      tool_calls: response.tool_calls,
-    });
+            try {
+              const result = await executeTool(toolCall.name, toolCall.arguments, studentId);
+              return {
+                role: "tool" as const,
+                tool_call_id: toolCall.id,
+                content: JSON.stringify(result),
+              };
+            } catch (toolError: any) {
+              // Tool failed — log it but don't break the conversation
+              console.error(`Tool ${toolCall.name} failed:`, toolError);
+              return {
+                role: "tool" as const,
+                tool_call_id: toolCall.id,
+                content: JSON.stringify({ error: "Tool temporarily unavailable" }),
+              };
+            }
+          })
+        );
 
-    for (const toolCall of response.tool_calls) {
-      const args = JSON.parse(toolCall.function.arguments);
-      logger.info("Executing tool", { tool: toolCall.function.name, args });
+        // Add tool results to conversation
+        currentMessages = [
+          ...currentMessages,
+          { role: "assistant", content: cleanedResponse },
+          ...toolResults,
+        ];
 
-      const { result } = await executeTool(toolCall, context);
-      const trimmedResult = trimToolResult(toolCall.function.name, JSON.parse(result));
-      allToolCalls.push({ name: toolCall.function.name, args, result: trimmedResult });
+        // Continue loop — let AI see tool results and respond
+        continue;
+      }
 
-      messages.push({
-        role: "tool",
-        tool_call_id: toolCall.id,
-        content: JSON.stringify(trimmedResult),
+      // No tool calls — this is the final response
+      // Sanitize and return
+      const finalResponse = sanitizeResponse(cleanedResponse);
+
+      // Log the interaction
+      await logMessage(studentId, "assistant", finalResponse, {
+        toolsCalled,
+        loopCount,
       });
-    }
 
+      return {
+        response: finalResponse,
+        toolsCalled,
+        loopCount,
+      };
 
-    if (response.finish_reason === "stop") {
-      const finalCall = await callLLMWithRetry({
-        messages,
-        tools: TOOLS,
-        tool_choice: "auto",
-        temperature: 0.4,
-        max_tokens: 1100,
-      });
-      finalResponse = sanitizeResponse(finalCall.content || "");
-      totalTokens += finalCall.usage.total_tokens;
-      modelUsed = finalCall.model_used;
-      break;
+    } catch (error: any) {
+      console.error(`Agent loop error (loop ${loopCount}):`, error);
+
+      // If we've used all loops, return fallback
+      if (loopCount >= MAX_LOOPS) {
+        return {
+          response: generateFallbackResponse(),
+          toolsCalled,
+          loopCount,
+          error: error.message,
+        };
+      }
+
+      // Otherwise retry silently
+      continue;
     }
   }
 
-  if (!finalResponse && loopCount >= MAX_LOOPS) {
-    logger.warn("Agent loop hit max iterations", { phone: context.phone });
-    finalResponse = "Give me a sec, I'm thinking about this properly…";
-  }
-
+  // Should never reach here, but just in case
   return {
-    finalResponse,
-    allToolCalls,
-    modelUsed,
-    totalTokens,
+    response: generateFallbackResponse(),
+    toolsCalled,
     loopCount,
   };
+}
+
+/**
+ * Call LLM with silent retry logic.
+ * The student never sees failures.
+ */
+async function callLLMWithRetry(
+  systemPrompt: string,
+  messages: Message[],
+  tools: any[],
+  attempt: number = 1
+): Promise<any> {
+  try {
+    return await callLLM(systemPrompt, messages, tools);
+  } catch (error: any) {
+    if (attempt < RETRY_ATTEMPTS) {
+      // Exponential backoff: 1s, 2s, 4s
+      const delay = Math.pow(2, attempt - 1) * 1000;
+      await sleep(delay);
+      return callLLMWithRetry(systemPrompt, messages, tools, attempt + 1);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Strip <thinking> tags and their contents.
+ * Internal reasoning must NEVER reach the student.
+ */
+function stripThinkingTags(text: string): string {
+  // Remove <thinking>...</thinking> blocks
+  let cleaned = text.replace(/<thinking>[\s\S]*?<\/thinking>/gi, "");
+  // Remove any stray <thinking> or </thinking> tags
+  cleaned = cleaned.replace(/<\/?thinking>/gi, "");
+  // Clean up extra whitespace
+  cleaned = cleaned.replace(/\n{3,}/g, "\n\n").trim();
+  return cleaned;
+}
+
+/**
+ * Sanitize response for WhatsApp.
+ * Remove any markdown that might leak through.
+ */
+function sanitizeResponse(text: string): string {
+  let cleaned = text;
+
+  // Remove markdown headers
+  cleaned = cleaned.replace(/^#{1,6}\s+/gm, "");
+
+  // Replace double asterisks with single
+  cleaned = cleaned.replace(/\*\*/g, "*");
+
+  // Remove backticks
+  cleaned = cleaned.replace(/`/g, "");
+
+  // Remove code blocks
+  cleaned = cleaned.replace(/```[\s\S]*?```/g, "");
+
+  // Remove LaTeX
+  cleaned = cleaned.replace(/\$\$?[\s\S]*?\$\$?/g, "");
+
+  // Clean up extra whitespace
+  cleaned = cleaned.replace(/\n{3,}/g, "\n\n").trim();
+
+  return cleaned;
+}
+
+/**
+ * Generate fallback response that preserves Wax's personality.
+ * This is the LAST resort — only after all retries fail.
+ */
+function generateFallbackResponse(): string {
+  const fallbacks = [
+    "Omo, network wahala — send that again when you can.",
+    "My brain hiccuped. Say that one more time?",
+    "Wait, that message got lost in the matrix. What did you say?",
+    "You know what, let me think about that properly. Give me a minute.",
+    "Ah, my phone is acting up. Send that again?",
+  ];
+
+  // Pick randomly so it doesn't feel scripted
+  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Safe wrapper that catches ALL errors and returns a human response.
+ * The webhook calls this, not runAgentLoop directly.
+ */
+export async function runAgentLoopSafely(
+  studentId: string,
+  messages: Message[],
+  contextBundle: any,
+  systemPrompt: string
+): Promise<string> {
+  try {
+    const result = await runAgentLoop(studentId, messages, contextBundle, systemPrompt);
+    return result.response;
+  } catch (error: any) {
+    console.error("Agent loop completely failed:", error);
+    // Even total failure gets a human response
+    return generateFallbackResponse();
+  }
 }
