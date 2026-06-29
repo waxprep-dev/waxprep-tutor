@@ -111,6 +111,8 @@ async function processWebhookAsync(body: any): Promise<void> {
 
     await createIfMissing(fromPhone);
     await touchStudent(fromPhone);
+    const episode = await getOrCreateCurrentEpisode(fromPhone);
+    await incrementEpisodeMessageCount(episode.episode_id);
 
     await query(
       `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
