@@ -15,15 +15,24 @@ export interface AgentLoopResult {
   loopCount: number;
 }
 
-function sanitizeResponse(text: string): string {
+function stripOmegaThinking(text: string): string {
   if (!text) return text;
   return text
-    .replace(/<thinking>[\s\S]*?<\/thinking>/gi, "")
-    .replace(/<\/?thinking>/gi, "")
-    .replace(/<function=[^>]*>[\s\S]*?<\/function>/g, "")
-    .replace(/\[[a-z_]+\]\s*$/gi, "")
+    .replace(/<omega_thinking>[\s\S]*?<\/omega_thinking>/gi, "")
+    .replace(/<\/?omega_thinking>/gi, "")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
+}
+
+function sanitizeResponse(text: string): string {
+  if (!text) return text;
+  let cleaned = text;
+  cleaned = cleaned.replace(/<function=[^>]*>[\s\S]*?<\/function>/g, "");
+  cleaned = cleaned.replace(/\[[a-z_]+\]\s*$/gi, "");
+  cleaned = cleaned.replace(/^#{1,6}\s+/gm, "");
+  cleaned = cleaned.replace(/\*\*/g, "*");
+  cleaned = cleaned.replace(/\n{3,}/g, "\n\n").trim();
+  return cleaned;
 }
 
 function sleep(ms: number): Promise<void> {
@@ -42,6 +51,17 @@ async function callLLMWithRetry(request: any, attempt: number = 1): Promise<LLMR
     }
     throw error;
   }
+}
+
+function generateFallbackResponse(): string {
+  const fallbacks = [
+    "Omo, network wahala — send that again when you can.",
+    "My brain hiccuped. Say that one more time?",
+    "Wait, that message got lost in the matrix. What did you say?",
+    "You know what, let me think about that properly. Give me a minute.",
+    "Ah, my phone is acting up. Send that again?",
+  ];
+  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
 }
 
 export async function runAgentLoop(
@@ -78,7 +98,7 @@ export async function runAgentLoop(
     });
 
     if (response.tool_calls.length === 0) {
-      finalResponse = sanitizeResponse(response.content || "");
+      finalResponse = sanitizeResponse(stripOmegaThinking(response.content || ""));
       break;
     }
 
@@ -119,7 +139,7 @@ export async function runAgentLoop(
         temperature: 0.4,
         max_tokens: 1100,
       });
-      finalResponse = sanitizeResponse(finalCall.content || "");
+      finalResponse = sanitizeResponse(stripOmegaThinking(finalCall.content || ""));
       totalTokens += finalCall.usage.total_tokens;
       modelUsed = finalCall.model_used;
       break;
@@ -128,12 +148,7 @@ export async function runAgentLoop(
 
   if (!finalResponse && loopCount >= MAX_LOOPS) {
     logger.warn("Agent loop hit max iterations", { phone: context.phone });
-    const fallbacks = [
-      "Omo, network wahala — send that again when you can.",
-      "My brain hiccuped. Say that one more time?",
-      "Ah, my phone is acting up. Send that again?",
-    ];
-    finalResponse = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+    finalResponse = generateFallbackResponse();
   }
 
   return {
