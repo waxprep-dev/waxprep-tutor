@@ -6,11 +6,11 @@ import { getOrCreateCurrentEpisode, incrementEpisodeMessageCount, getRecentHisto
 import { assembleContext } from "../memory/retrieval";
 import { buildPrompt } from "../brain/promptBuilder";
 import { runAgentLoop } from "../brain/agentLoop";
-import { TheVoid } from "../consciousness/TheVoid";
 import { sendTextMessage } from "./sender";
+import { TheVoid } from "../consciousness/TheVoid";
 import { logger } from "../utils/logger";
 
-const FALLBACK_MESSAGE = "Gimme one sec, gathering my thoughts on that 🧠 — try sending it again in a moment.";
+const FALLBACK_MESSAGE = "Omo, network wahala — send that again when you can.";
 
 export async function handleWebhookGet(req: Request, res: Response): Promise<void> {
   const mode = req.query["hub.mode"] as string | undefined;
@@ -112,6 +112,7 @@ async function processWebhookAsync(body: any): Promise<void> {
 
     await createIfMissing(fromPhone);
     await touchStudent(fromPhone);
+
     const episode = await getOrCreateCurrentEpisode(fromPhone);
     await incrementEpisodeMessageCount(episode.episode_id);
 
@@ -126,51 +127,61 @@ async function processWebhookAsync(body: any): Promise<void> {
     const context = await assembleContext(fromPhone, messageText);
 
     const startTime = Date.now();
-    let result: any;
+    let finalResponse = "";
+    let allToolCalls: any[] = [];
+    let totalTokens = 0;
+    let modelUsed = "cerebras";
 
     try {
       const voidResult = await TheVoid.processMessage(
         fromPhone,
         messageText,
-        history.map(m => m.content || ""),
+        history.map((m: any) => m.content || ""),
         context.profile,
         context
       );
-      result = { finalResponse: voidResult.finalResponse, allToolCalls: voidResult.toolCalls || [], totalTokens: voidResult.totalTokens || 0, modelUsed: voidResult.modelUsed || "cerebras", loopCount: voidResult.loopCount || 1 };
+      finalResponse = voidResult.finalResponse || "";
+      allToolCalls = voidResult.toolCalls || [];
+      totalTokens = voidResult.totalTokens || 0;
+      modelUsed = voidResult.modelUsed || "cerebras";
     } catch (voidError: any) {
       logger.warn("TheVoid failed, falling back to agentLoop", { error: voidError.message });
       const messages = buildPrompt(context, messageText, history);
-      result = await runAgentLoopSafely(messages, {
+      const result = await runAgentLoopSafely(messages, {
         phone: fromPhone,
         episodeId: episode.episode_id,
       });
+      if (result) {
+        finalResponse = result.finalResponse || "";
+        allToolCalls = result.allToolCalls || [];
+        totalTokens = result.totalTokens || 0;
+        modelUsed = result.modelUsed || "cerebras";
+      }
     }
 
     const latency = Date.now() - startTime;
 
-    if (!result) return;
+    if (!finalResponse) return;
 
-    const outboundText = result.finalResponse || "[response sent]";
+    const outboundText = finalResponse || "[response sent]";
 
     await query(
       `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_tool_calls, ai_response, timestamp, episode_id, latency_ms, model_used)
        VALUES ($1, $2, 'outbound', $3, $4, $5, NOW(), $6, $7, $8)`,
-      [`ai_${messageId}`, fromPhone, outboundText, JSON.stringify(result.allToolCalls), outboundText, episode.episode_id, latency, result.modelUsed]
-    );
-      [`ai_${messageId}`, fromPhone, outboundText, JSON.stringify(result.allToolCalls), outboundText, episode.episode_id, latency, result.modelUsed]
+      [`ai_${messageId}`, fromPhone, outboundText, JSON.stringify(allToolCalls), outboundText, episode.episode_id, latency, modelUsed]
     );
 
     await incrementOutboundCount(fromPhone);
-    if (result.finalResponse) {
-      await sendTextMessage(fromPhone, result.finalResponse);
+    if (finalResponse) {
+      await sendTextMessage(fromPhone, finalResponse);
     }
 
     logger.info("Message processed", {
       phone: fromPhone,
       type: message.type,
       latency_ms: latency,
-      tokens: result.totalTokens,
-      tool_calls: result.allToolCalls.length,
+      tokens: totalTokens,
+      tool_calls: allToolCalls.length,
     });
   } catch (err: any) {
     logger.error("Webhook processing error", { error: err.message, stack: err.stack });
