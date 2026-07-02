@@ -141,10 +141,7 @@ async function processWebhookAsync(body: any): Promise<void> {
         context.profile,
         context
       );
-      finalResponse = voidResult.finalResponse || "";
-      allToolCalls = voidResult.toolCalls || [];
-      totalTokens = voidResult.totalTokens || 0;
-      modelUsed = voidResult.modelUsed || "cerebras";
+      result = { finalResponse: voidResult.response, allToolCalls: voidResult.toolsCalled || [], totalTokens: 0, modelUsed: "cerebras", loopCount: 1 };
     } catch (voidError: any) {
       logger.warn("TheVoid failed, falling back to agentLoop", { error: voidError.message });
       const messages = buildPrompt(context, messageText, history);
