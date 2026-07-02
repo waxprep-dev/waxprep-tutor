@@ -125,8 +125,6 @@ async function processWebhookAsync(body: any): Promise<void> {
     );
 
     const history = await getRecentHistory(fromPhone, episode.episode_id, messageId);
-    const context = await assembleContext(fromPhone, messageText);
-
     const startTime = Date.now();
     let finalResponse = "";
     let allToolCalls: any[] = [];
@@ -141,23 +139,28 @@ async function processWebhookAsync(body: any): Promise<void> {
         context.profile,
         context
       );
-      result = { finalResponse: voidResult.response, allToolCalls: voidResult.toolsCalled || [], totalTokens: 0, modelUsed: "cerebras", loopCount: 1 };
+      finalResponse = voidResult.response || "";
+      allToolCalls = voidResult.toolsCalled || [];
     } catch (voidError: any) {
       logger.warn("TheVoid failed, falling back to agentLoop", { error: voidError.message });
       const messages = buildPrompt(context, messageText, history);
-      const result = await runAgentLoopSafely(messages, {
+      const fallbackResult = await runAgentLoopSafely(messages, {
         phone: fromPhone,
         episodeId: episode.episode_id,
       });
-      if (result) {
-        finalResponse = result.finalResponse || "";
-        allToolCalls = result.allToolCalls || [];
-        totalTokens = result.totalTokens || 0;
-        modelUsed = result.modelUsed || "cerebras";
+      if (fallbackResult) {
+        finalResponse = fallbackResult.finalResponse || "";
+        allToolCalls = fallbackResult.allToolCalls || [];
+        totalTokens = fallbackResult.totalTokens || 0;
+        modelUsed = fallbackResult.modelUsed || "cerebras";
       }
     }
 
     const latency = Date.now() - startTime;
+
+    if (!finalResponse) return;
+
+    const outboundText = finalResponse || "[response sent]";
 
     if (!finalResponse) return;
 
