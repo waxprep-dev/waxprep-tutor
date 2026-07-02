@@ -7,7 +7,8 @@ import { assembleContext } from "../memory/retrieval";
 import { buildPrompt } from "../brain/promptBuilder";
 import { runAgentLoop } from "../brain/agentLoop";
 import { sendTextMessage } from "./sender";
-import { TheVoid } from "../consciousness/TheVoid";
+import TheVoid from "../consciousness/TheVoid";
+const theVoid = new TheVoid();
 import { logger } from "../utils/logger";
 
 const FALLBACK_MESSAGE = "Omo, network wahala — send that again when you can.";
@@ -133,7 +134,7 @@ async function processWebhookAsync(body: any): Promise<void> {
     let modelUsed = "cerebras";
 
     try {
-      const voidResult = await TheVoid.processMessage(
+      const voidResult = await theVoid.processMessage(
         fromPhone,
         messageText,
         history.map((m: any) => m.content || ""),
