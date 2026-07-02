@@ -75,7 +75,7 @@ export async function callGroq(request: LLMRequest, attempt: number = 0): Promis
     model: config.groq.model,
     messages: convertMessages(request.messages),
     tools: convertTools(request.tools),
-    tool_choice: request.tool_choice || "auto",
+    tool_choice: request.tools && request.tools.length > 0 ? (request.tool_choice || "auto") : undefined,
     temperature: request.temperature ?? 0.7,
     max_tokens: request.max_tokens ?? 2000,
     parallel_tool_calls: false,

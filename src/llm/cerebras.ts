@@ -75,7 +75,7 @@ export async function callCerebras(request: LLMRequest, attempt: number = 0): Pr
     model: config.cerebras.model,
     messages: convertMessages(request.messages),
     tools: convertTools(request.tools),
-    tool_choice: request.tool_choice || "auto",
+    tool_choice: request.tools tool_choice: request.tool_choice || "auto",tool_choice: request.tool_choice || "auto", request.tools.length > 0 ? (request.tool_choice || "auto") : undefined,
     temperature: request.temperature ?? 0.7,
     max_tokens: request.max_tokens ?? 2000,
     parallel_tool_calls: false,
