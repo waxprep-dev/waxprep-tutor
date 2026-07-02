@@ -30,7 +30,7 @@ export class River {
   private async callWithRetry(messages: any[]): Promise<string> {
     for (let i = 0; i < this.config.retryAttempts; i++) {
       try {
-        return await callLLM(messages, this.config.modelTier);
+        const res = await callLLM({ messages, tools: [], tool_choice: "auto", temperature: 0.3, max_tokens: 500 }); return res.content || "";
       } catch (e) {
         if (i === this.config.retryAttempts - 1) throw e;
         await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
