@@ -151,8 +151,12 @@ async function processWebhookAsync(body: any): Promise<void> {
     if (!result) return;
 
     const outboundText = result.finalResponse || "[response sent]";
+
+    await query(
       `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_tool_calls, ai_response, timestamp, episode_id, latency_ms, model_used)
        VALUES ($1, $2, 'outbound', $3, $4, $5, NOW(), $6, $7, $8)`,
+      [`ai_${messageId}`, fromPhone, outboundText, JSON.stringify(result.allToolCalls), outboundText, episode.episode_id, latency, result.modelUsed]
+    );
       [`ai_${messageId}`, fromPhone, outboundText, JSON.stringify(result.allToolCalls), outboundText, episode.episode_id, latency, result.modelUsed]
     );
 
