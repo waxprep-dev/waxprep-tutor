@@ -45,7 +45,7 @@ ${conversationHistory.join("\n")}\n\nStudent message: "${studentMessage}"\n\nExt
     try {
       // Strip markdown code blocks if present
       const cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-      return JSON.parse(cleaned);
+      const parsed = JSON.parse(cleaned); if (!parsed || typeof parsed !== "object") return this.getDefaultPerception(); return parsed;
     } catch (e) {
       console.error("Mirror parse error:", e);
       // Return default perception on parse failure
