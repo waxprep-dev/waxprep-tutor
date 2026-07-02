@@ -6,6 +6,7 @@ import { getOrCreateCurrentEpisode, incrementEpisodeMessageCount, getRecentHisto
 import { assembleContext } from "../memory/retrieval";
 import { buildPrompt } from "../brain/promptBuilder";
 import { runAgentLoop } from "../brain/agentLoop";
+import { TheVoid } from "../consciousness/TheVoid";
 import { sendTextMessage } from "./sender";
 import { logger } from "../utils/logger";
 
@@ -123,20 +124,33 @@ async function processWebhookAsync(body: any): Promise<void> {
 
     const history = await getRecentHistory(fromPhone, episode.episode_id, messageId);
     const context = await assembleContext(fromPhone, messageText);
-    const messages = buildPrompt(context, messageText, history);
 
     const startTime = Date.now();
-    const result = await runAgentLoopSafely(messages, {
-      phone: fromPhone,
-      episodeId: episode.episode_id,
-    });
+    let result: any;
+
+    try {
+      const voidResult = await TheVoid.processMessage(
+        fromPhone,
+        messageText,
+        history.map(m => m.content || ""),
+        context.profile,
+        context
+      );
+      result = { finalResponse: voidResult.finalResponse, allToolCalls: voidResult.toolCalls || [], totalTokens: voidResult.totalTokens || 0, modelUsed: voidResult.modelUsed || "cerebras", loopCount: voidResult.loopCount || 1 };
+    } catch (voidError: any) {
+      logger.warn("TheVoid failed, falling back to agentLoop", { error: voidError.message });
+      const messages = buildPrompt(context, messageText, history);
+      result = await runAgentLoopSafely(messages, {
+        phone: fromPhone,
+        episodeId: episode.episode_id,
+      });
+    }
+
     const latency = Date.now() - startTime;
 
     if (!result) return;
 
     const outboundText = result.finalResponse || "[response sent]";
-
-    await query(
       `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_tool_calls, ai_response, timestamp, episode_id, latency_ms, model_used)
        VALUES ($1, $2, 'outbound', $3, $4, $5, NOW(), $6, $7, $8)`,
       [`ai_${messageId}`, fromPhone, outboundText, JSON.stringify(result.allToolCalls), outboundText, episode.episode_id, latency, result.modelUsed]
