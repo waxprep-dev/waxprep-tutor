@@ -7,11 +7,11 @@ import { assembleContext } from "../memory/retrieval";
 import { buildPrompt } from "../brain/promptBuilder";
 import { runAgentLoop } from "../brain/agentLoop";
 import { sendTextMessage } from "./sender";
-import TheVoid from "../consciousness/TheVoid";
-const theVoid = new TheVoid();
 import { logger } from "../utils/logger";
+import TheVoid from "../consciousness/TheVoid";
 
-const FALLBACK_MESSAGE = "Omo, network wahala — send that again when you can.";
+const theVoid = new TheVoid();
+const FALLBACK_MESSAGE = "Gimme one sec, gathering my thoughts on that 🧠 — try sending it again in a moment.";
 
 export async function handleWebhookGet(req: Request, res: Response): Promise<void> {
   const mode = req.query["hub.mode"] as string | undefined;
@@ -125,6 +125,8 @@ async function processWebhookAsync(body: any): Promise<void> {
     );
 
     const history = await getRecentHistory(fromPhone, episode.episode_id, messageId);
+    const context = await assembleContext(fromPhone, messageText);
+
     const startTime = Date.now();
     let finalResponse = "";
     let allToolCalls: any[] = [];
@@ -162,10 +164,6 @@ async function processWebhookAsync(body: any): Promise<void> {
 
     const outboundText = finalResponse || "[response sent]";
 
-    if (!finalResponse) return;
-
-    const outboundText = finalResponse || "[response sent]";
-
     await query(
       `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_tool_calls, ai_response, timestamp, episode_id, latency_ms, model_used)
        VALUES ($1, $2, 'outbound', $3, $4, $5, NOW(), $6, $7, $8)`,
@@ -173,9 +171,7 @@ async function processWebhookAsync(body: any): Promise<void> {
     );
 
     await incrementOutboundCount(fromPhone);
-    if (finalResponse) {
-      await sendTextMessage(fromPhone, finalResponse);
-    }
+    await sendTextMessage(fromPhone, finalResponse);
 
     logger.info("Message processed", {
       phone: fromPhone,
