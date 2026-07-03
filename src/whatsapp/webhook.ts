@@ -9,6 +9,7 @@ import { runAgentLoop } from "../brain/agentLoop";
 import { sendTextMessage } from "./sender";
 import { logger } from "../utils/logger";
 import TheVoid from "../consciousness/TheVoid";
+import { mindPalace } from "../memory/mindPalace";
 
 const theVoid = new TheVoid();
 const FALLBACK_MESSAGE = "Gimme one sec, gathering my thoughts on that 🧠 — try sending it again in a moment.";
@@ -132,9 +133,11 @@ async function processWebhookAsync(body: any): Promise<void> {
     let allToolCalls: any[] = [];
     let totalTokens = 0;
     let modelUsed = "cerebras";
+    let voidResult: any = null;
 
+    // Try TheVoid first (now with Oracle + Seer + Mind Palace)
     try {
-      const voidResult = await theVoid.processMessage(
+      voidResult = await theVoid.processMessage(
         fromPhone,
         messageText,
         history.map((m: any) => m.content || ""),
@@ -143,13 +146,38 @@ async function processWebhookAsync(body: any): Promise<void> {
       );
       finalResponse = voidResult.response || "";
       allToolCalls = voidResult.toolsCalled || [];
+
+      // Log predictions and plan for analytics
+      if (voidResult.predictions) {
+        logger.info("Seer predictions", {
+          phone: fromPhone,
+          burnoutRisk: voidResult.predictions.burnoutRisk,
+          nextStruggle: voidResult.predictions.nextStruggle,
+          optimalModality: voidResult.predictions.optimalModality
+        });
+      }
+
+      if (voidResult.plan) {
+        logger.info("Oracle plan", {
+          phone: fromPhone,
+          agents: voidResult.plan.orchestration?.agents,
+          skip: voidResult.plan.orchestration?.skip,
+          tools: voidResult.plan.tools
+        });
+      }
+
     } catch (voidError: any) {
-      logger.warn("TheVoid failed, falling back to agentLoop", { error: voidError.message });
+      logger.warn("TheVoid failed, falling back to agentLoop", { 
+        error: voidError.message,
+        phone: fromPhone 
+      });
+      
       const messages = buildPrompt(context, messageText, history);
       const fallbackResult = await runAgentLoopSafely(messages, {
         phone: fromPhone,
         episodeId: episode.episode_id,
       });
+      
       if (fallbackResult) {
         finalResponse = fallbackResult.finalResponse || "";
         allToolCalls = fallbackResult.allToolCalls || [];
@@ -179,7 +207,38 @@ async function processWebhookAsync(body: any): Promise<void> {
       latency_ms: latency,
       tokens: totalTokens,
       tool_calls: allToolCalls.length,
+      usedVoid: !!voidResult
     });
+
+    // ============================================================
+    // BACKGROUND EVOLUTION — Trigger evolve() after response
+    // ============================================================
+    setTimeout(async () => {
+      try {
+        if (voidResult && voidResult.perception) {
+          logger.info(`Starting background evolution for ${fromPhone}`);
+          
+          await theVoid.evolve(
+            fromPhone,
+            messageText,
+            voidResult.perception,
+            voidResult.contextBundle || {},
+            finalResponse,
+            null, // studentNextMessage (will be filled in next interaction)
+            context.profile,
+            context
+          );
+          
+          logger.info(`Background evolution complete for ${fromPhone}`);
+        }
+      } catch (evolveError) {
+        logger.error("Background evolution failed", { 
+          error: evolveError.message,
+          phone: fromPhone 
+        });
+      }
+    }, 100);
+
   } catch (err: any) {
     logger.error("Webhook processing error", { error: err.message, stack: err.stack });
   }
