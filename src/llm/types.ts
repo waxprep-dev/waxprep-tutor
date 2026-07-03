@@ -1,6 +1,22 @@
-// Types shared across all LLM providers and the brain
+export interface LLMRequest {
+  messages: Array<{ role: string; content: string }>;
+  model?: string;
+  temperature?: number;
+  max_tokens?: number;
+  tools?: any[];
+  tool_choice?: string;
+  agent?: string;  // ADDED: for agent-specific model selection
+}
 
-export type Role = "system" | "user" | "assistant" | "tool";
+export interface LLMResponse {
+  content: string;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+  model?: string;
+}
 
 export interface ToolDefinition {
   type: "function";
@@ -8,47 +24,9 @@ export interface ToolDefinition {
     name: string;
     description: string;
     parameters: {
-      type: "object";
+      type: string;
       properties: Record<string, any>;
-      required?: string[];
+      required: string[];
     };
   };
-}
-
-export interface ChatMessage {
-  role: Role;
-  content: string | null;
-  tool_calls?: ToolCall[];
-  tool_call_id?: string;
-  name?: string;
-}
-
-export interface ToolCall {
-  id: string;
-  type: "function";
-  function: {
-    name: string;
-    arguments: string; // JSON string
-  };
-}
-
-export interface LLMRequest {
-  messages: ChatMessage[];
-  tools?: ToolDefinition[];
-  tool_choice?: "auto" | "none" | "required";
-  temperature?: number;
-  max_tokens?: number;
-  model?: "groq" | "kimi" | "claude" | "gpt"; // route to provider
-}
-
-export interface LLMResponse {
-  content: string | null;
-  tool_calls: ToolCall[];
-  model_used: string;
-  usage: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
-  };
-  finish_reason: string;
 }

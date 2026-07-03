@@ -1,5 +1,4 @@
 // FILE: src/consciousness/TheVoid.ts — THE ORCHESTRATOR (v2)
-// ============================================================
 
 import { Mirror } from "./agents/Mirror";
 import { River } from "./agents/River";
@@ -297,13 +296,17 @@ export class TheVoid {
       );
 
       for (const update of evolution.memory_updates || []) {
+        const metadata = typeof update.metadata === 'object' && update.metadata !== null
+          ? update.metadata
+          : {};
+
         if (update.memory_type === "procedural") {
           await mindPalace.addProceduralMemory(
             studentId,
             update.content,
             update.trigger,
             update.confidence || 0.7,
-            (update.metadata as Record<string, any>) || {}
+            metadata
           );
         } else if (update.memory_type === "semantic") {
           await mindPalace.addSemanticMemory(

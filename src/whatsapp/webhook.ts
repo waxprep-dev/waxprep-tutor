@@ -135,7 +135,6 @@ async function processWebhookAsync(body: any): Promise<void> {
     let modelUsed = "cerebras";
     let voidResult: any = null;
 
-    // Try TheVoid first (now with Oracle + Seer + Mind Palace)
     try {
       voidResult = await theVoid.processMessage(
         fromPhone,
@@ -147,7 +146,6 @@ async function processWebhookAsync(body: any): Promise<void> {
       finalResponse = voidResult.response || "";
       allToolCalls = voidResult.toolsCalled || [];
 
-      // Log predictions and plan for analytics
       if (voidResult.predictions) {
         logger.info("Seer predictions", {
           phone: fromPhone,
@@ -210,9 +208,7 @@ async function processWebhookAsync(body: any): Promise<void> {
       usedVoid: !!voidResult
     });
 
-    // ============================================================
-    // BACKGROUND EVOLUTION — Trigger evolve() after response
-    // ============================================================
+    // BACKGROUND EVOLUTION
     setTimeout(async () => {
       try {
         if (voidResult && voidResult.perception) {
@@ -224,16 +220,17 @@ async function processWebhookAsync(body: any): Promise<void> {
             voidResult.perception,
             voidResult.contextBundle || {},
             finalResponse,
-            null, // studentNextMessage (will be filled in next interaction)
+            null,
             context.profile,
             context
           );
           
           logger.info(`Background evolution complete for ${fromPhone}`);
         }
-      } catch (evolveError) {
+      } catch (evolveError: unknown) {
+        const errMsg = evolveError instanceof Error ? evolveError.message : String(evolveError);
         logger.error("Background evolution failed", { 
-          error: evolveError.message,
+          error: errMsg,
           phone: fromPhone 
         });
       }
