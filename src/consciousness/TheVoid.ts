@@ -296,10 +296,18 @@ export class TheVoid {
       );
 
       for (const update of evolution.memory_updates || []) {
-        // SAFE FIX: Always ensure metadata is a proper Record<string, any>
-        let metadata: Record<string, any> = {};
-        if (update.metadata && typeof update.metadata === 'object' && !Array.isArray(update.metadata)) {
-          metadata = update.metadata as Record<string, any>;
+        // Ensure metadata is always a Record<string, any>
+        let metadataObj: Record<string, any> = {};
+        if (update.metadata) {
+          if (typeof update.metadata === 'string') {
+            try {
+              metadataObj = JSON.parse(update.metadata);
+            } catch (e) {
+              metadataObj = { raw: update.metadata };
+            }
+          } else if (typeof update.metadata === 'object' && !Array.isArray(update.metadata)) {
+            metadataObj = update.metadata as Record<string, any>;
+          }
         }
 
         if (update.memory_type === "procedural") {
@@ -308,7 +316,7 @@ export class TheVoid {
             update.content,
             update.trigger || "general",
             update.confidence || 0.7,
-            metadata  // Now always a Record<string, any>
+            metadataObj
           );
         } else if (update.memory_type === "semantic") {
           await mindPalace.addSemanticMemory(
