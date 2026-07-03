@@ -59,18 +59,23 @@ export async function getRecentHistory(
   episodeId: string,
   excludeMessageId?: string
 ): Promise<any[]> {
+  // FIX: Use raw_text instead of content
   let queryText = `
-    SELECT content, timestamp, direction
+    SELECT raw_text as content, timestamp, direction
     FROM message_log
     WHERE student_phone = $1 AND episode_id = $2
   `;
 
+  const params: any[] = [phone, episodeId];
+
   if (excludeMessageId) {
     queryText += ` AND message_id != $3`;
-    return query(queryText, [phone, episodeId, excludeMessageId]);
+    params.push(excludeMessageId);
   }
 
-  return query(queryText, [phone, episodeId]);
+  queryText += ` ORDER BY timestamp DESC LIMIT 20`;
+
+  return query(queryText, params);
 }
 
 export async function storeEpisodeEmbedding(
