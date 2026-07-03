@@ -296,8 +296,9 @@ export class TheVoid {
       );
 
       for (const update of evolution.memory_updates || []) {
-        // Ensure metadata is always a Record<string, any>
+        // Ensure metadata is ALWAYS a Record<string, any>
         let metadataObj: Record<string, any> = {};
+        
         if (update.metadata) {
           if (typeof update.metadata === 'string') {
             try {
@@ -313,7 +314,7 @@ export class TheVoid {
         if (update.memory_type === "procedural") {
           await mindPalace.addProceduralMemory(
             studentId,
-            update.content,
+            update.content || "",
             update.trigger || "general",
             update.confidence || 0.7,
             metadataObj
@@ -321,7 +322,7 @@ export class TheVoid {
         } else if (update.memory_type === "semantic") {
           await mindPalace.addSemanticMemory(
             studentId,
-            update.content,
+            update.content || "",
             update.concept || "general",
             update.mastery || 0,
             update.importance || 0.6
@@ -329,7 +330,7 @@ export class TheVoid {
         } else if (update.memory_type === "relational") {
           await mindPalace.addEpisodicMemory(
             studentId,
-            `Personal note: ${update.content}`,
+            `Personal note: ${update.content || ''}`,
             update.importance || 0.7,
             undefined,
             { type: "relational", category: update.category || "other" }

@@ -25,15 +25,15 @@ export async function runDream(): Promise<void> {
     const errMsg = error instanceof Error ? error.message : String(error);
     const errStack = error instanceof Error ? error.stack : undefined;
     
-    // FIX: Create proper object
-    const logPayload: Record<string, any> = {
+    // FIX: Ensure proper object for logging
+    const logData: Record<string, any> = {
       error: errMsg,
       durationMs: Date.now() - startTime
     };
     if (errStack) {
-      logPayload.stack = errStack;
+      logData.stack = errStack;
     }
-    logger.error("❌ Dream cron failed", logPayload);
+    logger.error("❌ Dream cron failed", logData);
     throw error;
   }
 }
