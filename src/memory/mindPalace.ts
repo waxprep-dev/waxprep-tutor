@@ -1,17 +1,11 @@
 // FILE: src/memory/mindPalace.ts
 // ============================================================
 // THE MIND PALACE — Hierarchical Memory System
-// 5 Layers: Working → Episodic → Semantic → Procedural → Meta
-// With ACT-R inspired base-level activation, decay, and consolidation
 // ============================================================
 
 import { query, queryOne } from "../db/client";
-import { embed, embedBatch } from "./embeddings";
+import { embed } from "./embeddings";
 import { logger } from "../utils/logger";
-
-// ============================================================
-// TYPES
-// ============================================================
 
 export interface MemoryChunk {
   chunkId: string;
@@ -36,14 +30,9 @@ export interface ConsolidationResult {
   pruned: number;
 }
 
-// ============================================================
-// THE MIND PALACE CLASS
-// ============================================================
-
 export class MindPalace {
   // ============================================================
-  // LAYER 1: WORKING MEMORY — Last 10 messages
-  // Fast, short-term. Deleted after 24 hours.
+  // LAYER 1: WORKING MEMORY
   // ============================================================
 
   async getWorkingMemory(studentPhone: string): Promise<MemoryChunk[]> {
@@ -58,8 +47,8 @@ export class MindPalace {
   }
 
   async addWorkingMemory(
-    studentPhone: string, 
-    content: string, 
+    studentPhone: string,
+    content: string,
     episodeId?: string
   ): Promise<void> {
     const embedding = await embed(content);
@@ -72,23 +61,13 @@ export class MindPalace {
     );
   }
 
-  async clearWorkingMemory(studentPhone: string): Promise<void> {
-    await query(
-      `UPDATE memory_chunks SET consolidation_status = 'pruned'
-       WHERE student_phone = $1 AND memory_type = 'working'
-       AND created_at < NOW() - INTERVAL '24 hours'`,
-      [studentPhone]
-    );
-  }
-
   // ============================================================
-  // LAYER 2: EPISODIC MEMORY — Conversation summaries
-  // Medium-term. Used for semantic search.
+  // LAYER 2: EPISODIC MEMORY
   // ============================================================
 
   async getEpisodicMemory(
-    studentPhone: string, 
-    queryText?: string, 
+    studentPhone: string,
+    queryText?: string,
     topK: number = 5
   ): Promise<MemoryChunk[]> {
     if (queryText) {
@@ -129,10 +108,10 @@ export class MindPalace {
         importance_score, base_activation, episode_id, metadata
       ) VALUES ($1, 'episodic', $2, $3, $4, $4, $5, $6)`,
       [
-        studentPhone, 
-        content, 
-        embedding ? JSON.stringify(embedding) : null, 
-        importance, 
+        studentPhone,
+        content,
+        embedding ? JSON.stringify(embedding) : null,
+        importance,
         episodeId,
         JSON.stringify(metadata || { source: "conversation" })
       ]
@@ -140,8 +119,7 @@ export class MindPalace {
   }
 
   // ============================================================
-  // LAYER 3: SEMANTIC MEMORY — Concepts and mastery
-  // Long-term. What the student knows.
+  // LAYER 3: SEMANTIC MEMORY
   // ============================================================
 
   async getSemanticMemory(
@@ -195,49 +173,8 @@ export class MindPalace {
     );
   }
 
-  async updateConceptMastery(
-    studentPhone: string,
-    conceptName: string,
-    newMastery: number,
-    evidence: string
-  ): Promise<void> {
-    const chunk = await queryOne(
-      `SELECT chunk_id, metadata FROM memory_chunks
-       WHERE student_phone = $1 AND memory_type = 'semantic'
-       AND metadata->>'concept' = $2
-       AND consolidation_status != 'pruned'
-       LIMIT 1`,
-      [studentPhone, conceptName]
-    );
-
-    if (chunk) {
-      const metadata = chunk.metadata || {};
-      metadata.mastery = newMastery;
-      metadata.evidence = evidence;
-      metadata.updated_at = new Date().toISOString();
-
-      await query(
-        `UPDATE memory_chunks 
-         SET metadata = $1, 
-             base_activation = base_activation * 1.1,
-             importance_score = (importance_score + 0.8) / 2
-         WHERE chunk_id = $2`,
-        [JSON.stringify(metadata), chunk.chunk_id]
-      );
-    } else {
-      await this.addSemanticMemory(
-        studentPhone,
-        `Concept: ${conceptName}. Mastery: ${newMastery}. Evidence: ${evidence}`,
-        conceptName,
-        newMastery,
-        0.8
-      );
-    }
-  }
-
   // ============================================================
-  // LAYER 4: PROCEDURAL MEMORY — Teaching rules
-  // Long-term. What works for this student.
+  // LAYER 4: PROCEDURAL MEMORY — FIXED SIGNATURE
   // ============================================================
 
   async getProceduralMemory(
@@ -268,14 +205,34 @@ export class MindPalace {
     );
   }
 
+  // FIX: Changed metadata parameter to accept string or Record
   async addProceduralMemory(
     studentPhone: string,
     ruleText: string,
     triggerCondition: string,
     confidence: number = 0.7,
-    metadata?: any
+    metadata: string | Record<string, any> = {}
   ): Promise<void> {
     const embedding = await embed(ruleText);
+    
+    // Ensure metadata is a proper object
+    let metadataObj: Record<string, any> = {};
+    if (typeof metadata === 'string') {
+      try {
+        metadataObj = JSON.parse(metadata);
+      } catch (e) {
+        metadataObj = { raw: metadata };
+      }
+    } else if (metadata && typeof metadata === 'object') {
+      metadataObj = metadata as Record<string, any>;
+    }
+
+    // Ensure required fields
+    metadataObj.trigger = metadataObj.trigger || triggerCondition;
+    metadataObj.confidence = metadataObj.confidence || confidence;
+    metadataObj.source = metadataObj.source || "witness";
+    metadataObj.modality = metadataObj.modality || "unknown";
+
     await query(
       `INSERT INTO memory_chunks (
         student_phone, memory_type, content, embedding, 
@@ -286,19 +243,13 @@ export class MindPalace {
         ruleText,
         embedding ? JSON.stringify(embedding) : null,
         confidence,
-        JSON.stringify({
-          trigger: triggerCondition,
-          confidence,
-          source: metadata?.source || "witness",
-          modality: metadata?.modality || "unknown"
-        })
+        JSON.stringify(metadataObj)
       ]
     );
   }
 
   // ============================================================
-  // LAYER 5: META MEMORY — Cross-student patterns
-  // System-wide. What works for similar students.
+  // LAYER 5: META MEMORY
   // ============================================================
 
   async getMetaMemory(patternType?: string): Promise<any[]> {
@@ -319,34 +270,8 @@ export class MindPalace {
     );
   }
 
-  async addMetaPattern(
-    patternData: any,
-    archetypeSignature: any,
-    patternType: string
-  ): Promise<void> {
-    const patternHash = this.hashPattern(JSON.stringify(patternData));
-    const existing = await queryOne(
-      `SELECT pattern_id FROM teaching_patterns WHERE pattern_hash = $1`,
-      [patternHash]
-    );
-
-    if (!existing) {
-      await query(
-        `INSERT INTO teaching_patterns (
-          pattern_hash, archetype_signature, pattern_type, pattern_data
-        ) VALUES ($1, $2, $3, $4)`,
-        [
-          patternHash,
-          JSON.stringify(archetypeSignature),
-          patternType,
-          JSON.stringify(patternData)
-        ]
-      );
-    }
-  }
-
   // ============================================================
-  // ACT-R INSPIRED: Activation and Decay
+  // ACTIVATION AND DECAY
   // ============================================================
 
   async accessMemory(chunkId: string): Promise<void> {
@@ -361,7 +286,6 @@ export class MindPalace {
   }
 
   async applyDecay(): Promise<{ decayed: number; pruned: number }> {
-    // Decay: B_new = B_old * exp(-decay_rate * days_since_access)
     const decayed = await query(
       `UPDATE memory_chunks 
        SET base_activation = base_activation * EXP(
@@ -378,7 +302,6 @@ export class MindPalace {
        RETURNING chunk_id`
     );
 
-    // Prune: Remove working memories older than 24 hours, decayed older than 90 days
     const pruned = await query(
       `UPDATE memory_chunks 
        SET consolidation_status = 'pruned'
@@ -394,11 +317,10 @@ export class MindPalace {
   }
 
   // ============================================================
-  // CONSOLIDATION — Merge similar episodes into semantic memories
+  // CONSOLIDATION
   // ============================================================
 
   async consolidateEpisodes(studentPhone: string): Promise<ConsolidationResult> {
-    // Find fresh episodic memories that haven't been consolidated
     const episodes = await query(
       `SELECT chunk_id, content, embedding, created_at, metadata
        FROM memory_chunks
@@ -420,7 +342,6 @@ export class MindPalace {
     for (let i = 0; i < episodes.length; i++) {
       if (processed.has(episodes[i].chunk_id)) continue;
 
-      // Find similar episodes (similarity > 0.8)
       const similar = await query(
         `SELECT chunk_id, content, 1 - (embedding <=> $2::vector) as similarity
          FROM memory_chunks
@@ -434,16 +355,14 @@ export class MindPalace {
       );
 
       if (similar.length >= 2) {
-        // Extract concepts from episodes
-        const concepts = this.extractConcepts(
-          [episodes[i], ...similar].map(e => e.content)
-        );
-
-        // Create consolidated semantic memory
         const combinedContent = `Theme: ${episodes[i].content.substring(0, 100)}
-Related: ${similar.map(s => s.content.substring(0, 80)).join('\n')}`;
+Related: ${similar.map((s: any) => s.content.substring(0, 80)).join('\n')}`;
 
         const importance = 0.5 + (similar.length * 0.1);
+
+        const concepts = this.extractConcepts(
+          [episodes[i], ...similar].map((e: any) => e.content)
+        );
 
         for (const concept of concepts.slice(0, 3)) {
           await this.addSemanticMemory(
@@ -455,8 +374,7 @@ Related: ${similar.map(s => s.content.substring(0, 80)).join('\n')}`;
           );
         }
 
-        // Mark episodes as consolidated
-        const idsToMark = [episodes[i].chunk_id, ...similar.map(s => s.chunk_id)];
+        const idsToMark = [episodes[i].chunk_id, ...similar.map((s: any) => s.chunk_id)];
         await query(
           `UPDATE memory_chunks SET consolidation_status = 'consolidated' 
            WHERE chunk_id = ANY($1)`,
@@ -464,7 +382,7 @@ Related: ${similar.map(s => s.content.substring(0, 80)).join('\n')}`;
         );
 
         processed.add(episodes[i].chunk_id);
-        similar.forEach(s => processed.add(s.chunk_id));
+        similar.forEach((s: any) => processed.add(s.chunk_id));
         merged += similar.length;
         created++;
       }
@@ -496,16 +414,6 @@ Related: ${similar.map(s => s.content.substring(0, 80)).join('\n')}`;
       }
     }
     return found;
-  }
-
-  private hashPattern(content: string): string {
-    let hash = 0;
-    for (let i = 0; i < content.length; i++) {
-      const char = content.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
-    }
-    return hash.toString(16);
   }
 }
 
