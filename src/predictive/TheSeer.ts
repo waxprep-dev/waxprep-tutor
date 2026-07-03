@@ -1,7 +1,5 @@
 // FILE: src/predictive/TheSeer.ts
-// ============================================================
 // THE SEER — Predictive Engine
-// ============================================================
 
 import { query, queryOne } from "../db/client";
 import { logger } from "../utils/logger";

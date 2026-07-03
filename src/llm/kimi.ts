@@ -1,127 +1,71 @@
 import axios from "axios";
+import { LLMRequest, LLMResponse, ChatMessage, ToolCall } from "./types";
 import { config } from "../config";
-import {
-  ChatMessage,
-  LLMRequest,
-  LLMResponse,
-  ToolCall,
-  ToolDefinition,
-} from "./types";
-
-// Kimi uses an OpenAI-compatible API, so the call format is familiar.
-// Docs: https://platform.moonshot.cn/docs/api-reference
-
-interface KimiTool {
-  type: "function";
-  function: {
-    name: string;
-    description: string;
-    parameters: any;
-  };
-}
-
-interface KimiMessage {
-  role: string;
-  content: string | null;
-  tool_calls?: Array<{
-    id: string;
-    type: "function";
-    function: { name: string; arguments: string };
-  }>;
-  tool_call_id?: string;
-  name?: string;
-}
-
-interface KimiRequest {
-  model: string;
-  messages: KimiMessage[];
-  tools?: KimiTool[];
-  tool_choice?: string;
-  temperature?: number;
-  max_tokens?: number;
-}
-
-interface KimiResponse {
-  id: string;
-  choices: Array<{
-    index: number;
-    message: {
-      role: string;
-      content: string | null;
-      tool_calls?: Array<{
-        id: string;
-        type: "function";
-        function: { name: string; arguments: string };
-      }>;
-    };
-    finish_reason: string;
-  }>;
-  usage: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
-  };
-}
-
-function convertTools(tools: ToolDefinition[] | undefined): KimiTool[] | undefined {
-  if (!tools) return undefined;
-  return tools.map((t) => ({
-    type: "function",
-    function: {
-      name: t.function.name,
-      description: t.function.description,
-      parameters: t.function.parameters,
-    },
-  }));
-}
-
-function convertMessages(messages: ChatMessage[]): KimiMessage[] {
-  return messages.map((m) => {
-    const out: KimiMessage = {
-      role: m.role,
-      content: m.content,
-    };
-    if (m.tool_calls) out.tool_calls = m.tool_calls;
-    if (m.tool_call_id) out.tool_call_id = m.tool_call_id;
-    if (m.name) out.name = m.name;
-    return out;
-  });
-}
+import { logger } from "../utils/logger";
 
 export async function callKimi(request: LLMRequest): Promise<LLMResponse> {
-  const body: KimiRequest = {
-    model: config.kimi.model,
-    messages: convertMessages(request.messages),
-    tools: convertTools(request.tools),
-    tool_choice: request.tool_choice || "auto",
+  const url = "https://api.moonshot.cn/v1/chat/completions";
+  const apiKey = config.kimi?.apiKey;
+
+  if (!apiKey) {
+    throw new Error("Kimi API key not configured");
+  }
+
+  const headers = {
+    "Authorization": `Bearer ${apiKey}`,
+    "Content-Type": "application/json",
+  };
+
+  const body: any = {
+    model: request.model || "moonshot-v1-8k",
+    messages: request.messages.map((msg: ChatMessage) => ({
+      role: msg.role,
+      content: msg.content,
+      ...(msg.tool_calls ? { tool_calls: msg.tool_calls } : {}),
+      ...(msg.tool_call_id ? { tool_call_id: msg.tool_call_id } : {}),
+      ...(msg.name ? { name: msg.name } : {}),
+    })),
     temperature: request.temperature ?? 0.7,
-    max_tokens: request.max_tokens ?? 2000,
+    max_tokens: request.max_tokens ?? 1100,
   };
 
-  const response = await axios.post<KimiResponse>(
-    `${config.kimi.baseUrl}/chat/completions`,
-    body,
-    {
-      headers: {
-        Authorization: `Bearer ${config.kimi.apiKey}`,
-        "Content-Type": "application/json",
-      },
-      timeout: 60000,
+  if (request.tools && request.tools.length > 0) {
+    body.tools = request.tools;
+    if (request.tool_choice) {
+      body.tool_choice = request.tool_choice;
     }
-  );
+  }
 
-  const choice = response.data.choices[0];
-  const toolCalls: ToolCall[] = (choice.message.tool_calls || []).map((tc) => ({
-    id: tc.id,
-    type: "function",
-    function: { name: tc.function.name, arguments: tc.function.arguments },
-  }));
+  try {
+    const response = await axios.post(url, body, { headers, timeout: 30000 });
+    const data = response.data;
 
-  return {
-    content: choice.message.content,
-    tool_calls: toolCalls,
-    model_used: config.kimi.model,
-    usage: response.data.usage,
-    finish_reason: choice.finish_reason,
-  };
+    const toolCalls: ToolCall[] | undefined = data.choices[0]?.message?.tool_calls?.map((tc: any) => ({
+      id: tc.id || `call_${Date.now()}`,
+      type: "function",
+      function: {
+        name: tc.function?.name || "",
+        arguments: tc.function?.arguments || "{}",
+      },
+    }));
+
+    return {
+      content: data.choices[0]?.message?.content || "",
+      tool_calls: toolCalls,
+      finish_reason: data.choices[0]?.finish_reason,
+      model_used: data.model,
+      usage: {
+        prompt_tokens: data.usage?.prompt_tokens || 0,
+        completion_tokens: data.usage?.completion_tokens || 0,
+        total_tokens: data.usage?.total_tokens || 0,
+      },
+    };
+  } catch (error: any) {
+    logger.error("Kimi API error", {
+      error: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
+    throw error;
+  }
 }

@@ -306,7 +306,7 @@ export class TheVoid {
             update.content,
             update.trigger,
             update.confidence || 0.7,
-            metadata
+            metadata as Record<string, any>
           );
         } else if (update.memory_type === "semantic") {
           await mindPalace.addSemanticMemory(

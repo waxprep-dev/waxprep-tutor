@@ -1,7 +1,5 @@
 // FILE: src/workers/dreamCron.ts
-// ============================================================
 // DREAM CRON — Scheduled entry point for the Dream Worker
-// ============================================================
 
 import dreamWorker from "./dreamWorker";
 import { logger } from "../utils/logger";
@@ -26,11 +24,14 @@ export async function runDream(): Promise<void> {
   } catch (error: unknown) {
     const errMsg = error instanceof Error ? error.message : String(error);
     const errStack = error instanceof Error ? error.stack : undefined;
-    logger.error("❌ Dream cron failed", {
+    const errorObj: Record<string, any> = {
       error: errMsg,
-      stack: errStack,
       durationMs: Date.now() - startTime
-    });
+    };
+    if (errStack) {
+      errorObj.stack = errStack;
+    }
+    logger.error("❌ Dream cron failed", errorObj);
     throw error;
   }
 }

@@ -1,21 +1,18 @@
-export interface LLMRequest {
-  messages: Array<{ role: string; content: string }>;
-  model?: string;
-  temperature?: number;
-  max_tokens?: number;
-  tools?: any[];
-  tool_choice?: string;
-  agent?: string;  // ADDED: for agent-specific model selection
+export interface ChatMessage {
+  role: "system" | "user" | "assistant" | "tool";
+  content: string;
+  name?: string;
+  tool_call_id?: string;
+  tool_calls?: ToolCall[];
 }
 
-export interface LLMResponse {
-  content: string;
-  usage?: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
+export interface ToolCall {
+  id: string;
+  type: "function";
+  function: {
+    name: string;
+    arguments: string;
   };
-  model?: string;
 }
 
 export interface ToolDefinition {
@@ -28,5 +25,27 @@ export interface ToolDefinition {
       properties: Record<string, any>;
       required: string[];
     };
+  };
+}
+
+export interface LLMRequest {
+  messages: ChatMessage[];
+  model?: string;
+  temperature?: number;
+  max_tokens?: number;
+  tools?: ToolDefinition[];
+  tool_choice?: string | { type: string; function: { name: string } };
+  agent?: string;
+}
+
+export interface LLMResponse {
+  content: string;
+  tool_calls?: ToolCall[];
+  finish_reason?: string;
+  model_used?: string;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
   };
 }
