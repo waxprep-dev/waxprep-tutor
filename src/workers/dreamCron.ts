@@ -25,7 +25,7 @@ export async function runDream(): Promise<void> {
     const errMsg = error instanceof Error ? error.message : String(error);
     const errStack = error instanceof Error ? error.stack : undefined;
     
-    // FIX: Ensure proper object for logging
+    // FIX: Always pass object for metadata
     const logData: Record<string, any> = {
       error: errMsg,
       durationMs: Date.now() - startTime
@@ -46,7 +46,8 @@ if (require.main === module) {
     })
     .catch((err: unknown) => {
       const errMsg = err instanceof Error ? err.message : String(err);
-      logger.error("Dream failed with error:", errMsg);
+      // FIX: Pass error as object, not string
+      logger.error("Dream failed with error:", { error: errMsg });
       process.exit(1);
     });
 }

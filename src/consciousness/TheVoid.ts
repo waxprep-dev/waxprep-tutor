@@ -76,7 +76,7 @@ export class TheVoid {
       toolsCalled.push("oracle");
 
       if (plan.emergency_flags.length > 0) {
-        logger.warn(`[Void] Emergency flags triggered for ${studentId}`, plan.emergency_flags);
+        logger.warn(`[Void] Emergency flags triggered for ${studentId}`, { flags: plan.emergency_flags });
         return {
           response: this.getEmergencyResponse(studentProfile),
           perception: this.getDefaultPerception(),
@@ -97,7 +97,7 @@ export class TheVoid {
       }
 
       if (predictions.burnoutRisk > 0.8) {
-        logger.info(`[Void] Critical burnout detected for ${studentId}, switching to support mode`);
+        logger.info(`[Void] Critical burnout detected for ${studentId}`, { burnoutRisk: predictions.burnoutRisk });
         return {
           response: this.generateBurnoutResponse(studentProfile),
           perception: this.getDefaultPerception(),
@@ -135,7 +135,7 @@ export class TheVoid {
         if (perception?.risk_flags?.suicidal_ideation ||
           perception?.risk_flags?.self_harm ||
           perception?.risk_flags?.extreme_distress) {
-          logger.warn(`[Void] Critical risk detected for ${studentId}`);
+          logger.warn(`[Void] Critical risk detected for ${studentId}`, { risk_flags: perception.risk_flags });
           return {
             response: this.getEmergencyResponse(studentProfile),
             perception,
@@ -246,7 +246,8 @@ export class TheVoid {
 
     } catch (error: unknown) {
       const errMsg = error instanceof Error ? error.message : String(error);
-      logger.error(`[Void] Orchestration failed for student ${studentId}:`, errMsg);
+      // FIX: Pass error as object, not string
+      logger.error(`[Void] Orchestration failed for student ${studentId}`, { error: errMsg });
 
       return {
         response: this.getFallbackResponse(),
@@ -296,7 +297,6 @@ export class TheVoid {
       );
 
       for (const update of evolution.memory_updates || []) {
-        // Ensure metadata is ALWAYS a Record<string, any>
         let metadataObj: Record<string, any> = {};
         
         if (update.metadata) {
@@ -346,7 +346,8 @@ export class TheVoid {
 
     } catch (error: unknown) {
       const errMsg = error instanceof Error ? error.message : String(error);
-      logger.error(`[Void] Evolution failed for student ${studentId}:`, errMsg);
+      // FIX: Pass error as object, not string
+      logger.error(`[Void] Evolution failed for student ${studentId}`, { error: errMsg });
     }
   }
 
