@@ -21,13 +21,22 @@ export async function getRecentEpisodes(phone: string, limit: number = 3): Promi
 }
 
 export async function searchEpisodes(phone: string, embedding: number[], limit: number = 5): Promise<any[]> {
-  return query(
-    `SELECT episode_id, summary, summary_embedding <=> $2::vector as distance
-     FROM episodes
-     WHERE student_phone = $1 AND summary_embedding IS NOT NULL
-     ORDER BY distance ASC LIMIT $3`,
-    [phone, JSON.stringify(embedding), limit]
-  );
+  try {
+    return query(
+      `SELECT episode_id, summary, summary_embedding <=> $2::vector as distance
+       FROM episodes
+       WHERE student_phone = $1 AND summary_embedding IS NOT NULL
+       ORDER BY distance ASC LIMIT $3`,
+      [phone, JSON.stringify(embedding), limit]
+    );
+  } catch (error: any) {
+    // Column doesn't exist yet — return empty
+    if (error.message?.includes("column \"summary_embedding\" does not exist")) {
+      logger.warn("summary_embedding column not found, returning empty results");
+      return [];
+    }
+    throw error;
+  }
 }
 
 export async function getOrCreateCurrentEpisode(phone: string): Promise<{ episode_id: string }> {
@@ -59,9 +68,9 @@ export async function getRecentHistory(
   episodeId: string,
   excludeMessageId?: string
 ): Promise<any[]> {
-  // FIX: Use raw_text instead of content
+  // FIX: Use raw_text, not content
   let queryText = `
-    SELECT raw_text as content, timestamp, direction
+    SELECT raw_text, timestamp, direction
     FROM message_log
     WHERE student_phone = $1 AND episode_id = $2
   `;
@@ -75,7 +84,14 @@ export async function getRecentHistory(
 
   queryText += ` ORDER BY timestamp DESC LIMIT 20`;
 
-  return query(queryText, params);
+  const results = await query(queryText, params);
+  
+  // Map raw_text to content for compatibility
+  return results.map((row: any) => ({
+    content: row.raw_text,
+    timestamp: row.timestamp,
+    direction: row.direction
+  }));
 }
 
 export async function storeEpisodeEmbedding(

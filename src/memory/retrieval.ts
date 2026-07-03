@@ -6,6 +6,7 @@ import { getRecentNotes, searchNotes, RelationalNote } from "./relational";
 import { embed } from "./embeddings";
 import { estimateTokens } from "../llm/tokenCounter";
 import { query } from "../db/client";
+import { logger } from "../utils/logger";
 
 export interface EngagementSignal {
   avgRecentMessageLength: number | null;
@@ -35,9 +36,20 @@ export async function assembleContext(
   const recentEpisodes = await getRecentEpisodes(phone, 3);
 
   const queryEmbedding = await embed(currentMessage);
-  const relevantEpisodes = queryEmbedding
-    ? await searchEpisodes(phone, queryEmbedding, 5)
-    : [];
+  let relevantEpisodes: any[] = [];
+  
+  try {
+    relevantEpisodes = queryEmbedding
+      ? await searchEpisodes(phone, queryEmbedding, 5)
+      : [];
+  } catch (error: any) {
+    // If search fails (missing column), continue with empty results
+    logger.warn("Episode search failed, continuing without relevant episodes", {
+      error: error.message,
+      phone
+    });
+    relevantEpisodes = [];
+  }
 
   const keywords = extractKeywords(currentMessage);
   const relevantConcepts = await getRelevantConcepts(phone, keywords, 5);
