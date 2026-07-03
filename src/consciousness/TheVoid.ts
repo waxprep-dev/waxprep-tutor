@@ -1,7 +1,5 @@
 // FILE: src/consciousness/TheVoid.ts — THE ORCHESTRATOR (v2)
 // ============================================================
-// INTEGRATES: The Oracle → The Seer → Mind Palace → Agents
-// ============================================================
 
 import { Mirror } from "./agents/Mirror";
 import { River } from "./agents/River";
@@ -9,7 +7,7 @@ import { Fire } from "./agents/Fire";
 import { Guardian } from "./agents/Guardian";
 import { Witness } from "./agents/Witness";
 import { Archivist } from "./agents/Archivist";
-import { Perception, ContextBundle, GuardianDecision, Reflection, ArchivistOutput } from "./types";
+import { Perception, ContextBundle, GuardianDecision } from "./types";
 import { TheOracle, OraclePlan, OracleContext } from "./TheOracle";
 import { TheSeer, PredictionResult } from "../predictive/TheSeer";
 import { mindPalace } from "../memory/mindPalace";
@@ -48,10 +46,6 @@ export class TheVoid {
     this.seer = new TheSeer();
   }
 
-  /**
-   * Main orchestration flow.
-   * Now includes: Seer → Oracle → Mind Palace → Agents
-   */
   async processMessage(
     studentId: string,
     studentMessage: string,
@@ -63,16 +57,12 @@ export class TheVoid {
     const toolsCalled: string[] = [];
 
     try {
-      // ============================================================
-      // PHASE 0: THE SEER — Predict before acting
-      // ============================================================
+      // THE SEER
       logger.info(`[Void] Running Seer for student ${studentId}`);
       const predictions = await this.seer.generatePredictions(studentId);
       toolsCalled.push("seer");
 
-      // ============================================================
-      // PHASE 1: THE ORACLE — Generate plan
-      // ============================================================
+      // THE ORACLE
       logger.info(`[Void] Running Oracle for student ${studentId}`);
       const oracleCtx: OracleContext = {
         studentPhone: studentId,
@@ -86,11 +76,10 @@ export class TheVoid {
       const plan = await this.oracle.generatePlan(oracleCtx);
       toolsCalled.push("oracle");
 
-      // Handle emergency flags from Oracle
       if (plan.emergency_flags.length > 0) {
         logger.warn(`[Void] Emergency flags triggered for ${studentId}`, plan.emergency_flags);
         return {
-          response: this.getEmergencyResponse(plan, studentProfile),
+          response: this.getEmergencyResponse(studentProfile),
           perception: this.getDefaultPerception(),
           contextBundle: this.getDefaultContextBundle(),
           guardianDecision: {
@@ -108,11 +97,10 @@ export class TheVoid {
         };
       }
 
-      // Handle critical burnout
       if (predictions.burnoutRisk > 0.8) {
         logger.info(`[Void] Critical burnout detected for ${studentId}, switching to support mode`);
         return {
-          response: await this.generateBurnoutResponse(studentProfile, studentMessage),
+          response: this.generateBurnoutResponse(studentProfile),
           perception: this.getDefaultPerception(),
           contextBundle: this.getDefaultContextBundle(),
           guardianDecision: {
@@ -130,15 +118,11 @@ export class TheVoid {
         };
       }
 
-      // ============================================================
-      // PHASE 2: MIND PALACE — Get working memory
-      // ============================================================
+      // MIND PALACE — Working memory
       const workingMemory = await mindPalace.getWorkingMemory(studentId);
-      const workingContext = workingMemory.map(m => m.content).join("\n");
+      const workingContext = workingMemory.map((m: any) => m.content).join("\n");
 
-      // ============================================================
-      // PHASE 3: THE MIRROR — Perceive (if in plan)
-      // ============================================================
+      // THE MIRROR
       let perception = this.getDefaultPerception();
       if (plan.orchestration.agents.includes("mirror")) {
         logger.info(`[Void] Running Mirror for student ${studentId}`);
@@ -149,13 +133,12 @@ export class TheVoid {
         );
         toolsCalled.push("mirror");
 
-        // Check for critical risk
         if (perception?.risk_flags?.suicidal_ideation ||
-            perception?.risk_flags?.self_harm ||
-            perception?.risk_flags?.extreme_distress) {
+          perception?.risk_flags?.self_harm ||
+          perception?.risk_flags?.extreme_distress) {
           logger.warn(`[Void] Critical risk detected for ${studentId}`);
           return {
-            response: this.getEmergencyResponse(plan, studentProfile),
+            response: this.getEmergencyResponse(studentProfile),
             perception,
             contextBundle: this.getDefaultContextBundle(),
             guardianDecision: {
@@ -174,9 +157,7 @@ export class TheVoid {
         }
       }
 
-      // ============================================================
-      // PHASE 4: THE RIVER — Build Context (if in plan)
-      // ============================================================
+      // THE RIVER
       let contextBundle = this.getDefaultContextBundle();
       if (plan.orchestration.agents.includes("river")) {
         logger.info(`[Void] Running River for student ${studentId}`);
@@ -188,30 +169,24 @@ export class TheVoid {
         );
         toolsCalled.push("river");
 
-        // Execute recommended tool calls
         for (const action of contextBundle.retrieval_actions?.tools_to_call || []) {
           toolsCalled.push(action.tool);
         }
       }
 
-      // ============================================================
-      // PHASE 5: THE FIRE — Generate Response (if in plan)
-      // ============================================================
+      // THE FIRE
       let fireResponse = "";
       if (plan.orchestration.agents.includes("fire")) {
         logger.info(`[Void] Running Fire for student ${studentId}`);
         fireResponse = await this.fire.generateResponse(
           contextBundle,
-          plan.prompts.fire || "",
-          conversationHistory
+          plan.prompts.fire || ""
         );
         toolsCalled.push("fire");
       }
 
-      // ============================================================
-      // PHASE 6: THE GUARDIAN — Review (MANDATORY)
-      // ============================================================
-      let guardianDecision = {
+      // THE GUARDIAN
+      let guardianDecision: GuardianDecision = {
         decision: "approve",
         reason: "Default approve",
         modified_response: null,
@@ -230,9 +205,6 @@ export class TheVoid {
         toolsCalled.push("guardian");
       }
 
-      // ============================================================
-      // PHASE 7: FINALIZE RESPONSE
-      // ============================================================
       let finalResponse: string;
       switch (guardianDecision.decision) {
         case "approve":
@@ -245,15 +217,12 @@ export class TheVoid {
           finalResponse = this.getBlockedResponse();
           break;
         case "escalate":
-          finalResponse = this.getEmergencyResponse(plan, studentProfile);
+          finalResponse = this.getEmergencyResponse(studentProfile);
           break;
         default:
           finalResponse = fireResponse;
       }
 
-      // ============================================================
-      // PHASE 8: SAVE TO MEMORY
-      // ============================================================
       await this.saveToMemory(studentId, studentMessage, finalResponse, perception);
       await this.saveResponseSignature(studentId, finalResponse);
 
@@ -276,8 +245,9 @@ export class TheVoid {
         predictions
       };
 
-    } catch (error) {
-      logger.error(`[Void] Orchestration failed for student ${studentId}:`, error);
+    } catch (error: unknown) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      logger.error(`[Void] Orchestration failed for student ${studentId}:`, errMsg);
 
       return {
         response: this.getFallbackResponse(),
@@ -297,10 +267,6 @@ export class TheVoid {
     }
   }
 
-  /**
-   * Background evolution flow.
-   * Called AFTER the student replies.
-   */
   async evolve(
     studentId: string,
     studentMessage: string,
@@ -314,25 +280,22 @@ export class TheVoid {
     try {
       logger.info(`[Void] Starting evolution for student ${studentId}`);
 
-      // THE WITNESS — Reflect
       const reflection = await this.witness.reflect(
         studentMessage,
         perception,
         contextBundle,
         fireResponse,
         studentNextMessage,
-        "" // Dynamic prompt coming soon
+        ""
       );
 
-      // THE ARCHIVIST — Evolve
       const evolution = await this.archivist.evolve(
         reflection,
         currentSignature,
         currentMemory,
-        "" // Dynamic prompt coming soon
+        ""
       );
 
-      // Apply to Mind Palace
       for (const update of evolution.memory_updates || []) {
         if (update.memory_type === "procedural") {
           await mindPalace.addProceduralMemory(
@@ -340,7 +303,7 @@ export class TheVoid {
             update.content,
             update.trigger,
             update.confidence || 0.7,
-            update.metadata
+            (update.metadata as Record<string, any>) || {}
           );
         } else if (update.memory_type === "semantic") {
           await mindPalace.addSemanticMemory(
@@ -351,7 +314,6 @@ export class TheVoid {
             update.importance || 0.6
           );
         } else if (update.memory_type === "relational") {
-          // Store as episodic with relational metadata
           await mindPalace.addEpisodicMemory(
             studentId,
             `Personal note: ${update.content}`,
@@ -362,21 +324,17 @@ export class TheVoid {
         }
       }
 
-      // Update prediction accuracy
       if (studentNextMessage) {
         await this.updatePredictionAccuracy(studentId, studentNextMessage);
       }
 
       logger.info(`[Void] Evolution complete for student ${studentId}`);
 
-    } catch (error) {
-      logger.error(`[Void] Evolution failed for student ${studentId}:`, error);
+    } catch (error: unknown) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      logger.error(`[Void] Evolution failed for student ${studentId}:`, errMsg);
     }
   }
-
-  // ============================================================
-  // HELPERS
-  // ============================================================
 
   private async saveToMemory(
     studentId: string,
@@ -384,13 +342,11 @@ export class TheVoid {
     response: string,
     perception: Perception
   ): Promise<void> {
-    // Working memory
     await mindPalace.addWorkingMemory(
       studentId,
       `Student: ${message}\nWax: ${response}`
     );
 
-    // Episodic memory (periodically)
     const content = `Student: ${message}\nWax: ${response}\nEmotion: ${perception?.emotional_state?.primary_emotion || "neutral"}`;
     await mindPalace.addEpisodicMemory(studentId, content, 0.6);
   }
@@ -406,7 +362,6 @@ export class TheVoid {
   }
 
   private async updatePredictionAccuracy(studentId: string, nextMessage: string): Promise<void> {
-    // Simple heuristic: if they replied, burnout prediction was wrong
     await query(
       `UPDATE predictions SET was_accurate = false, resolved_at = NOW()
        WHERE student_phone = $1 AND prediction_type = 'burnout_risk'
@@ -425,16 +380,12 @@ export class TheVoid {
     return hash.toString(16);
   }
 
-  // ============================================================
-  // RESPONSE GENERATORS
-  // ============================================================
-
-  private async generateBurnoutResponse(profile: any, message: string): Promise<string> {
+  private generateBurnoutResponse(profile: any): string {
     const name = profile?.preferred_name || profile?.full_name || "Student";
     return `Hey ${name}. I can see you're going through it. We don't have to do school today. How's your head? What's one good thing that happened this week?`;
   }
 
-  private getEmergencyResponse(plan: OraclePlan, profile: any): string {
+  private getEmergencyResponse(profile: any): string {
     const name = profile?.preferred_name || profile?.full_name || "Student";
     return `${name}, I need you to listen to me. You are not alone. You matter. Please call this number right now: 0800-123-4567. Or text me your location. I'm staying with you.`;
   }
@@ -453,10 +404,6 @@ export class TheVoid {
     ];
     return fallbacks[Math.floor(Math.random() * fallbacks.length)];
   }
-
-  // ============================================================
-  // DEFAULTS
-  // ============================================================
 
   private getDefaultPerception(): Perception {
     return {

@@ -1,25 +1,11 @@
 // FILE: src/consciousness/TheOracle.ts
 // ============================================================
 // THE ORACLE — Meta-Agent Supervisor
-// Watches the conversation. Decides which agents run.
-// Generates dynamic prompts. Predicts student needs.
-// Has meta-memory of what works for which archetypes.
-//
-// FEATURES:
-// - Fast path for short messages (no LLM call)
-// - Adaptive timeout based on engagement
-// - Temperature variation based on confidence
-// - All values adaptive — no hardcoded thresholds
 // ============================================================
 
 import { callLLM } from "../llm/client";
 import { query, queryOne } from "../db/client";
-import { embed } from "../memory/embeddings";
 import { logger } from "../utils/logger";
-
-// ============================================================
-// TYPES
-// ============================================================
 
 export interface OraclePlan {
   orchestration: {
@@ -48,70 +34,49 @@ export interface OracleContext {
   recentPredictions: any[];
 }
 
-// ============================================================
-// THE ORACLE CLASS
-// ============================================================
-
 export class TheOracle {
   private maxRetries = 2;
 
-  /**
-   * Main entry point: generate a plan for this student message.
-   * Includes fast path, timeout fallback, and adaptive temperature.
-   */
   async generatePlan(ctx: OracleContext): Promise<OraclePlan> {
     const startTime = Date.now();
 
-    // FAST PATH: Skip LLM call for short messages
     if (this.shouldUseFastPath(ctx)) {
-      logger.info("Oracle using fast path", { 
-        student: ctx.studentPhone, 
-        messageLength: ctx.message.length 
+      logger.info("Oracle using fast path", {
+        student: ctx.studentPhone,
+        messageLength: ctx.message.length
       });
       return this.getFastPathPlan(ctx);
     }
 
-    // Calculate adaptive timeout
     const timeoutMs = this.calculateTimeout(ctx);
 
     try {
-      // Race between Oracle LLM call and timeout
       const result = await Promise.race([
         this.generatePlanWithRetry(ctx, startTime),
         this.timeoutPlan(ctx, timeoutMs)
       ]);
       return result;
-    } catch (error) {
-      logger.warn("Oracle plan generation failed", { 
-        error: error.message,
-        student: ctx.studentPhone 
+    } catch (error: unknown) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      logger.warn("Oracle plan generation failed", {
+        error: errMsg,
+        student: ctx.studentPhone
       });
       return this.getDefaultPlan();
     }
   }
 
-  // ============================================================
-  // FAST PATH — Skip LLM for short messages
-  // ============================================================
-
-  /**
-   * Check if we should use fast path (skip Oracle LLM call)
-   * Adaptive: based on student's typical message length, not hardcoded
-   */
   private shouldUseFastPath(ctx: OracleContext): boolean {
-    // If no engagement data, use conservative check
     if (!ctx.engagement || ctx.engagement.avgRecentMessageLength === null) {
       return ctx.message.length < 5;
     }
 
-    // Calculate what "short" means for this student (30% of average)
     const avgLength = ctx.engagement.avgRecentMessageLength;
     const threshold = Math.max(avgLength * 0.3, 3);
 
-    // Check if this is clearly a greeting or acknowledgment
-    const quickResponses = ['hi', 'hey', 'hello', 'ok', 'okay', 'yes', 'no', 
-                            'thanks', 'thank you', 'cool', 'fine', 'good', 
-                            'hmm', 'aha', 'alright', 'sure', 'yeah', 'na'];
+    const quickResponses = ['hi', 'hey', 'hello', 'ok', 'okay', 'yes', 'no',
+      'thanks', 'thank you', 'cool', 'fine', 'good',
+      'hmm', 'aha', 'alright', 'sure', 'yeah', 'na'];
     const isQuickResponse = quickResponses.some(
       g => ctx.message.toLowerCase().trim() === g
     );
@@ -119,9 +84,6 @@ export class TheOracle {
     return ctx.message.length < threshold || isQuickResponse;
   }
 
-  /**
-   * Generate a fast path plan (no LLM call for Oracle)
-   */
   private getFastPathPlan(ctx: OracleContext): OraclePlan {
     return {
       orchestration: {
@@ -144,27 +106,17 @@ export class TheOracle {
     };
   }
 
-  // ============================================================
-  // ADAPTIVE TIMEOUT
-  // ============================================================
-
-  /**
-   * Calculate adaptive timeout based on student engagement
-   * No hardcoded values — adapts to each student
-   */
   private calculateTimeout(ctx: OracleContext): number {
     let timeoutMs = 3000;
 
-    // Adjust based on engagement label
     if (ctx.engagement?.label === "low_effort") {
-      timeoutMs = 2000; // Shorter timeout for low-effort students
+      timeoutMs = 2000;
     } else if (ctx.engagement?.label === "normal") {
-      timeoutMs = 3000; // Normal timeout
+      timeoutMs = 3000;
     } else {
-      timeoutMs = 2500; // Unknown engagement
+      timeoutMs = 2500;
     }
 
-    // Longer messages = more important = wait longer
     if (ctx.message.length > 100) {
       timeoutMs += 1000;
     }
@@ -172,17 +124,13 @@ export class TheOracle {
       timeoutMs += 1000;
     }
 
-    // Adjust based on student confidence (struggling students get more time)
     if (ctx.profile?.confidence_baseline === "low") {
       timeoutMs += 1000;
     }
 
-    return Math.min(timeoutMs, 5000); // Max 5 seconds
+    return Math.min(timeoutMs, 5000);
   }
 
-  /**
-   * Timeout plan — returns default plan if Oracle takes too long
-   */
   private timeoutPlan(ctx: OracleContext, timeoutMs: number): Promise<OraclePlan> {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -210,18 +158,9 @@ export class TheOracle {
     });
   }
 
-  // ============================================================
-  // ADAPTIVE TEMPERATURE
-  // ============================================================
-
-  /**
-   * Calculate adaptive temperature based on student confidence
-   * High confidence = more creative, Low confidence = more consistent
-   */
   private calculateTemperature(ctx: OracleContext): number {
     const confidence = ctx.profile?.confidence_baseline || "medium";
 
-    // Adaptive temperature based on confidence
     const temperatureMap: Record<string, number> = {
       "high": 0.7,
       "medium": 0.4,
@@ -231,17 +170,14 @@ export class TheOracle {
 
     let temp = temperatureMap[confidence] || 0.3;
 
-    // More creative to re-engage low-effort students
     if (ctx.engagement?.label === "low_effort") {
       temp = Math.min(temp + 0.2, 0.8);
     }
 
-    // More empathetic when burnout risk is high
-    if (ctx.recentPredictions?.some(p => p.burnout_risk > 0.5)) {
+    if (ctx.recentPredictions?.some((p: any) => p.burnout_risk > 0.5)) {
       temp = Math.min(temp + 0.3, 0.8);
     }
 
-    // Frustration detected? Lower temperature for clarity
     const frustrationWords = ['dont get', 'confus', 'terrible', 'hate', 'fail', 'stupid'];
     if (frustrationWords.some(w => ctx.message.toLowerCase().includes(w))) {
       temp = Math.max(temp - 0.2, 0.1);
@@ -250,17 +186,11 @@ export class TheOracle {
     return Math.min(Math.max(temp, 0.1), 0.8);
   }
 
-  // ============================================================
-  // CORE LOGIC — Generate Plan with Retry
-  // ============================================================
-
   private async generatePlanWithRetry(ctx: OracleContext, startTime: number): Promise<OraclePlan> {
-    // 1. Load archetype and successful patterns for this student
     const archetype = await this.detectArchetype(ctx.profile);
     const successfulPatterns = await this.loadPatternsForArchetype(archetype);
     const recentPlans = await this.loadRecentPlans(ctx.studentPhone);
 
-    // 2. Build the Oracle's own prompt
     const oraclePrompt = await this.buildOraclePrompt(
       ctx,
       archetype,
@@ -268,10 +198,8 @@ export class TheOracle {
       recentPlans
     );
 
-    // 3. Get adaptive temperature
     const temperature = this.calculateTemperature(ctx);
 
-    // 4. Call LLM (using cheaper model)
     const messages = [
       { role: "system", content: oraclePrompt },
       {
@@ -286,22 +214,15 @@ export class TheOracle {
       model: "groq"
     });
 
-    // 5. Parse and generate dynamic prompts
     const plan = this.parsePlan(response);
     plan.prompts = await this.generateDynamicPrompts(plan, ctx, archetype);
 
-    // 6. Log the plan
     await this.logPlan(ctx.studentPhone, ctx.message, plan, Date.now() - startTime);
 
     return plan;
   }
 
-  // ============================================================
-  // ARCHEYTPE DETECTION
-  // ============================================================
-
   private async detectArchetype(profile: any): Promise<any> {
-    // Build feature vector from profile
     const features = {
       learning_style: profile?.learning_style?.primary || "unknown",
       background: profile?.city ? "city" : "village",
@@ -310,7 +231,6 @@ export class TheOracle {
       language: profile?.preferred_language || "english"
     };
 
-    // Find closest archetype in database
     const row = await queryOne(
       `SELECT * FROM student_archetypes 
        ORDER BY feature_vector <-> $1::jsonb 
@@ -320,10 +240,6 @@ export class TheOracle {
 
     return row || { archetype_name: "unknown", archetype_id: null };
   }
-
-  // ============================================================
-  // LOAD PATTERNS FOR ARCHETYPE
-  // ============================================================
 
   private async loadPatternsForArchetype(archetype: any): Promise<any[]> {
     if (!archetype?.archetype_id) return [];
@@ -338,10 +254,6 @@ export class TheOracle {
     );
   }
 
-  // ============================================================
-  // LOAD RECENT PLANS
-  // ============================================================
-
   private async loadRecentPlans(studentPhone: string): Promise<any[]> {
     return query(
       `SELECT plan, predictions, was_successful 
@@ -352,10 +264,6 @@ export class TheOracle {
       [studentPhone]
     );
   }
-
-  // ============================================================
-  // BUILD ORACLE PROMPT
-  // ============================================================
 
   private async buildOraclePrompt(
     ctx: OracleContext,
@@ -375,10 +283,10 @@ Your job: Analyze the student and generate an ORCHESTRATION PLAN.
 - Recent predictions: ${JSON.stringify(ctx.recentPredictions, null, 2)}
 
 ## SUCCESSFUL PATTERNS FOR THIS ARCHETYPE
-${patterns.map(p => `- ${p.pattern_type}: ${JSON.stringify(p.pattern_data)} (success: ${p.success_rate})`).join('\n')}
+${patterns.map((p: any) => `- ${p.pattern_type}: ${JSON.stringify(p.pattern_data)} (success: ${p.success_rate})`).join('\n')}
 
 ## RECENT ORCHESTRATION HISTORY
-${recentPlans.map(p => `- Agents: ${p.plan?.orchestration?.agents?.join(',')}, Success: ${p.was_successful}`).join('\n')}
+${recentPlans.map((p: any) => `- Agents: ${p.plan?.orchestration?.agents?.join(',')}, Success: ${p.was_successful}`).join('\n')}
 
 ## AGENTS AVAILABLE
 - mirror: Perceives emotion, intent, risk, cultural signals
@@ -416,56 +324,49 @@ Return ONLY valid JSON:
 - Witness and archivist are background-only. They never block the response.`;
   }
 
-  // ============================================================
-  // PARSE PLAN
-  // ============================================================
-
   private parsePlan(raw: string): OraclePlan {
     try {
       const cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
       const parsed = JSON.parse(cleaned);
       return {
-        orchestration: parsed.orchestration || { 
-          agents: ["mirror", "river", "fire", "guardian"], 
-          skip: ["witness", "archivist"], 
-          reason: "default" 
+        orchestration: parsed.orchestration || {
+          agents: ["mirror", "river", "fire", "guardian"],
+          skip: ["witness", "archivist"],
+          reason: "default"
         },
         prompts: parsed.prompts || {},
         tools: parsed.tools || [],
-        predictions: parsed.predictions || { 
-          burnout_risk: 0.3, 
-          recommended_action: "continue" 
+        predictions: parsed.predictions || {
+          burnout_risk: 0.3,
+          recommended_action: "continue"
         },
         emergency_flags: parsed.emergency_flags || [],
         meta_directives: parsed.meta_directives || []
       };
-    } catch (e) {
-      logger.error("Oracle parse error", { error: e.message });
+    } catch (e: unknown) {
+      const errMsg = e instanceof Error ? e.message : String(e);
+      logger.error("Oracle parse error", { error: errMsg });
       return this.getDefaultPlan();
     }
   }
 
   private getDefaultPlan(): OraclePlan {
     return {
-      orchestration: { 
-        agents: ["mirror", "river", "fire", "guardian"], 
-        skip: ["witness", "archivist"], 
-        reason: "Oracle failed — defaulting to full pipeline" 
+      orchestration: {
+        agents: ["mirror", "river", "fire", "guardian"],
+        skip: ["witness", "archivist"],
+        reason: "Oracle failed — defaulting to full pipeline"
       },
       prompts: {},
       tools: ["get_student_profile"],
-      predictions: { 
-        burnout_risk: 0.3, 
-        recommended_action: "continue" 
+      predictions: {
+        burnout_risk: 0.3,
+        recommended_action: "continue"
       },
       emergency_flags: [],
       meta_directives: []
     };
   }
-
-  // ============================================================
-  // GENERATE DYNAMIC PROMPTS
-  // ============================================================
 
   private async generateDynamicPrompts(
     plan: OraclePlan,
@@ -482,10 +383,6 @@ Return ONLY valid JSON:
     return prompts;
   }
 
-  // ============================================================
-  // FETCH RELEVANT GENES
-  // ============================================================
-
   private async fetchRelevantGenes(
     ctx: OracleContext,
     archetype: any,
@@ -493,31 +390,22 @@ Return ONLY valid JSON:
   ): Promise<any[]> {
     const conditions: string[] = [];
 
-    // Tone gene based on formality
     if (ctx.profile.formality === "casual") conditions.push("pidgin_casual");
     else if (ctx.profile.formality === "formal") conditions.push("formal_nigerian");
 
-    // Cultural gene based on background
     if (ctx.profile.city?.toLowerCase().includes("lagos")) conditions.push("danfo_context");
     else if (!ctx.profile.city) conditions.push("farm_context");
 
-    // Emotional genes based on predictions
     if (plan.predictions.burnout_risk > 0.5) conditions.push("burnout_detected");
-    if (ctx.message.toLowerCase().includes("foundation") || 
-        ctx.message.toLowerCase().includes("terrible")) {
+    if (ctx.message.toLowerCase().includes("foundation") ||
+      ctx.message.toLowerCase().includes("terrible")) {
       conditions.push("shame_safety");
     }
 
-    // Teaching genes
     conditions.push("socratic_question", "analogy_first");
-
-    // Safety genes
     conditions.push("character_lock", "repetition_guard");
-
-    // Format gene
     conditions.push("whatsapp_short");
 
-    // Meta directives
     if (plan.meta_directives.length > 0) {
       conditions.push("oracle_directive");
     }
@@ -531,17 +419,13 @@ Return ONLY valid JSON:
     );
   }
 
-  // ============================================================
-  // COMPOSE PROMPT FOR AGENT
-  // ============================================================
-
   private async composePromptForAgent(
     agent: string,
     genes: any[],
     ctx: OracleContext,
     plan: OraclePlan
   ): Promise<string> {
-    const agentSpecificGenes = genes.filter(g => {
+    const agentSpecificGenes = genes.filter((g: any) => {
       if (agent === "fire") return !["meta"].includes(g.gene_type);
       if (agent === "mirror") return ["persona", "emotional", "safety"].includes(g.gene_type);
       if (agent === "river") return ["persona", "teaching", "meta"].includes(g.gene_type);
@@ -551,7 +435,7 @@ Return ONLY valid JSON:
 
     let prompt = "";
 
-    const personaGene = agentSpecificGenes.find(g => g.gene_type === "persona");
+    const personaGene = agentSpecificGenes.find((g: any) => g.gene_type === "persona");
     if (personaGene) {
       prompt += this.fillTemplate(personaGene.gene_template, ctx) + "\n\n";
     }
@@ -559,7 +443,7 @@ Return ONLY valid JSON:
     const agentIdentity = this.getAgentIdentity(agent);
     prompt += agentIdentity + "\n\n";
 
-    for (const gene of agentSpecificGenes.filter(g => g.gene_type !== "persona")) {
+    for (const gene of agentSpecificGenes.filter((g: any) => g.gene_type !== "persona")) {
       const filled = this.fillTemplate(gene.gene_template, ctx, plan);
       prompt += filled + "\n\n";
     }
@@ -597,10 +481,6 @@ Return ONLY valid JSON:
     return filled;
   }
 
-  // ============================================================
-  // REPETITION GUARD
-  // ============================================================
-
   private async getRecentResponseHashes(studentPhone: string): Promise<string[]> {
     const rows = await query<{ response_preview: string }>(
       `SELECT response_preview FROM conversation_signatures 
@@ -609,34 +489,27 @@ Return ONLY valid JSON:
        LIMIT 3`,
       [studentPhone]
     );
-    return rows.map(r => r.response_preview);
+    return rows.map((r: any) => r.response_preview);
   }
-
-  // ============================================================
-  // LLM CALL WITH RETRY
-  // ============================================================
 
   private async callWithRetry(messages: any[], opts: any): Promise<string> {
     for (let i = 0; i < this.maxRetries; i++) {
       try {
-        const res = await callLLM({ 
-          messages, 
+        const res = await callLLM({
+          messages,
           temperature: opts.temperature || 0.2,
           max_tokens: opts.max_tokens || 1500,
           model: opts.model || "groq"
         });
         return res.content || "";
-      } catch (e) {
-        if (i === this.maxRetries - 1) throw e;
+      } catch (e: unknown) {
+        const errMsg = e instanceof Error ? e.message : String(e);
+        if (i === this.maxRetries - 1) throw new Error(errMsg);
         await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
       }
     }
     return "";
   }
-
-  // ============================================================
-  // LOG PLAN
-  // ============================================================
 
   private async logPlan(
     studentPhone: string,
@@ -650,10 +523,10 @@ Return ONLY valid JSON:
       [
         studentPhone,
         message.slice(0, 100),
-        JSON.stringify({ 
-          orchestration: plan.orchestration, 
-          tools: plan.tools, 
-          meta_directives: plan.meta_directives 
+        JSON.stringify({
+          orchestration: plan.orchestration,
+          tools: plan.tools,
+          meta_directives: plan.meta_directives
         }),
         JSON.stringify(plan.predictions),
         latencyMs

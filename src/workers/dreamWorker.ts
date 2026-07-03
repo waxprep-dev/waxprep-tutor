@@ -1,8 +1,6 @@
 // FILE: src/workers/dreamWorker.ts
 // ============================================================
 // THE DREAM WORKER — Nightly Memory Consolidation
-// Runs while students sleep. Consolidates memories.
-// Extracts patterns. Evolves prompts. Decays old data.
 // ============================================================
 
 import { mindPalace } from "../memory/mindPalace";
@@ -28,15 +26,9 @@ export class DreamWorker {
     const jobId = await this.startJob();
 
     try {
-      // ============================================================
-      // PHASE 1: Memory Decay
-      // ============================================================
       const decayResult = await mindPalace.applyDecay();
       logger.info("Phase 1: Memory decay complete", decayResult);
 
-      // ============================================================
-      // PHASE 2: Consolidate Episodic → Semantic
-      // ============================================================
       let totalMerged = 0;
       let totalCreated = 0;
       let studentsProcessed = 0;
@@ -60,27 +52,15 @@ export class DreamWorker {
         totalCreated
       });
 
-      // ============================================================
-      // PHASE 3: Extract Cross-Student Patterns
-      // ============================================================
       const patternsExtracted = await this.extractPatterns();
       logger.info("Phase 3: Pattern extraction complete", { patternsExtracted });
 
-      // ============================================================
-      // PHASE 4: Evolve Prompt Genes
-      // ============================================================
       const genesEvolved = await this.evolvePromptGenes();
       logger.info("Phase 4: Prompt evolution complete", { genesEvolved });
 
-      // ============================================================
-      // PHASE 5: Validate Predictions
-      // ============================================================
       const predictionsValidated = await this.validatePredictions();
       logger.info("Phase 5: Prediction validation complete", { predictionsValidated });
 
-      // ============================================================
-      // PHASE 6: Update Archetype Statistics
-      // ============================================================
       await this.updateArchetypeStats();
       logger.info("Phase 6: Archetype stats updated");
 
@@ -105,16 +85,13 @@ export class DreamWorker {
         durationMs
       };
 
-    } catch (error) {
-      logger.error("Dream worker failed", { error: error.message });
-      await this.failJob(jobId, error.message);
+    } catch (error: unknown) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      logger.error("Dream worker failed", { error: errMsg });
+      await this.failJob(jobId, errMsg);
       throw error;
     }
   }
-
-  // ============================================================
-  // JOB TRACKING
-  // ============================================================
 
   private async startJob(): Promise<string> {
     const row = await queryOne(
@@ -146,12 +123,7 @@ export class DreamWorker {
     );
   }
 
-  // ============================================================
-  // PHASE 3: Extract Patterns
-  // ============================================================
-
   private async extractPatterns(): Promise<number> {
-    // Find high-engagement students and their successful procedural memories
     const successfulInteractions = await query(
       `SELECT m.student_phone, m.content, m.metadata, s.profile
        FROM memory_chunks m
@@ -169,13 +141,12 @@ export class DreamWorker {
     let processed = 0;
 
     for (const interaction of successfulInteractions) {
-      if (processed >= 20) break; // Limit per run
+      if (processed >= 20) break;
 
       const profile = interaction.profile || {};
       const archetype = this.inferArchetype(profile);
       const patternHash = this.hashPattern(interaction.content);
 
-      // Check if pattern already exists
       const existing = await queryOne(
         `SELECT pattern_id FROM teaching_patterns WHERE pattern_hash = $1`,
         [patternHash]
@@ -199,7 +170,6 @@ export class DreamWorker {
         );
         extracted++;
       } else {
-        // Update success count
         await query(
           `UPDATE teaching_patterns 
            SET success_count = success_count + 1,
@@ -234,12 +204,7 @@ export class DreamWorker {
     return hash.toString(16);
   }
 
-  // ============================================================
-  // PHASE 4: Evolve Prompt Genes
-  // ============================================================
-
   private async evolvePromptGenes(): Promise<number> {
-    // Find high-performing prompt variants
     const winners = await query(
       `SELECT gene_composition, fitness_score, engagement_lift
        FROM prompt_variants
@@ -254,7 +219,6 @@ export class DreamWorker {
     let evolved = 0;
 
     for (const winner of winners) {
-      // Mutate: create new gene combinations
       const genes = winner.gene_composition;
       const newGenes = await this.mutateGenes(genes);
 
@@ -269,7 +233,6 @@ export class DreamWorker {
       }
     }
 
-    // Retire weak genes
     await query(
       `UPDATE prompt_genes 
        SET success_score = success_score * 0.9
@@ -301,15 +264,12 @@ Rules:
 
       const cleaned = response.content?.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim() || "";
       return JSON.parse(cleaned);
-    } catch (e) {
-      logger.warn("Gene mutation failed", { error: e.message });
+    } catch (e: unknown) {
+      const errMsg = e instanceof Error ? e.message : String(e);
+      logger.warn("Gene mutation failed", { error: errMsg });
       return null;
     }
   }
-
-  // ============================================================
-  // PHASE 5: Validate Predictions
-  // ============================================================
 
   private async validatePredictions(): Promise<number> {
     const unresolved = await query(
@@ -325,7 +285,6 @@ Rules:
       let wasAccurate = false;
 
       if (pred.prediction_type === "burnout_risk") {
-        // Check if they stopped messaging after high risk prediction
         const risk = pred.predicted_value?.risk || 0;
         if (risk > 0.7) {
           const recent = await queryOne(
@@ -334,10 +293,8 @@ Rules:
              AND timestamp > $2`,
             [pred.student_phone, pred.triggered_at]
           );
-          // If they stopped messaging, burnout prediction was accurate
           wasAccurate = recent.msg_count === 0;
         } else {
-          // Low risk prediction → they should still be messaging
           const recent = await queryOne(
             `SELECT COUNT(*) as msg_count FROM message_log
              WHERE student_phone = $1 AND direction = 'inbound'
@@ -347,7 +304,6 @@ Rules:
           wasAccurate = recent.msg_count > 0;
         }
       } else if (pred.prediction_type === "next_struggle") {
-        // Check if they struggled with the predicted concept
         const concept = pred.predicted_value?.concept || "";
         if (concept) {
           const struggled = await queryOne(
@@ -372,10 +328,6 @@ Rules:
 
     return validated;
   }
-
-  // ============================================================
-  // PHASE 6: Update Archetype Statistics
-  // ============================================================
 
   private async updateArchetypeStats(): Promise<void> {
     await query(

@@ -1,16 +1,11 @@
 // FILE: src/workers/dreamCron.ts
 // ============================================================
 // DREAM CRON — Scheduled entry point for the Dream Worker
-// Run this as a Render cron job or scheduled function at 2 AM
 // ============================================================
 
 import dreamWorker from "./dreamWorker";
 import { logger } from "../utils/logger";
 
-/**
- * Main entry point for the cron job.
- * Runs the Dream Worker and logs the result.
- */
 export async function runDream(): Promise<void> {
   const startTime = Date.now();
   logger.info("🕐 Dream cron triggered at", { time: new Date().toISOString() });
@@ -28,19 +23,17 @@ export async function runDream(): Promise<void> {
       predictionsValidated: result.predictionsValidated
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : String(error);
+    const errStack = error instanceof Error ? error.stack : undefined;
     logger.error("❌ Dream cron failed", {
-      error: error.message,
-      stack: error.stack,
+      error: errMsg,
+      stack: errStack,
       durationMs: Date.now() - startTime
     });
     throw error;
   }
 }
-
-// ============================================================
-// STANDALONE EXECUTION (if run directly via node/ts-node)
-// ============================================================
 
 if (require.main === module) {
   runDream()
@@ -48,8 +41,9 @@ if (require.main === module) {
       logger.info("Dream completed successfully — exiting");
       process.exit(0);
     })
-    .catch((err) => {
-      logger.error("Dream failed with error:", err);
+    .catch((err: unknown) => {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      logger.error("Dream failed with error:", errMsg);
       process.exit(1);
     });
 }

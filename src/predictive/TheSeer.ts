@@ -1,17 +1,10 @@
 // FILE: src/predictive/TheSeer.ts
 // ============================================================
 // THE SEER — Predictive Engine
-// Detects burnout before it happens. Predicts next struggles.
-// Forecasts optimal re-engagement times.
-// All values adaptive — no hardcoded thresholds.
 // ============================================================
 
 import { query, queryOne } from "../db/client";
 import { logger } from "../utils/logger";
-
-// ============================================================
-// TYPES
-// ============================================================
 
 export interface PredictionResult {
   nextStruggle?: string;
@@ -38,66 +31,45 @@ export interface BurnoutMetrics {
   engagementScore: number;
 }
 
-// ============================================================
-// THE SEER CLASS
-// ============================================================
-
 export class TheSeer {
   private readonly CONCEPT_DEPENDENCIES: Record<string, string[]> = {
-    // Physics
     "velocity": ["acceleration", "force", "momentum"],
     "force": ["newtons_laws", "friction", "gravity"],
     "newtons_laws": ["equilibrium", "momentum", "energy"],
     "acceleration": ["projectile", "circular_motion", "kinematics"],
     "momentum": ["impulse", "collisions", "conservation"],
-    
-    // Mathematics
     "fractions": ["decimals", "percentages", "ratios"],
     "algebra": ["quadratic", "functions", "inequalities"],
     "quadratic": ["polynomial", "graphing", "roots"],
     "geometry": ["trigonometry", "mensuration", "coordinates"],
     "trigonometry": ["identities", "equations", "applications"],
-    
-    // Biology
     "photosynthesis": ["cellular_respiration", "ecosystem", "energy_flow"],
     "cell": ["tissues", "organs", "systems"],
     "genetics": ["heredity", "variation", "evolution"],
-    
-    // Chemistry
     "mole": ["stoichiometry", "gas_laws", "concentration"],
     "atomic_structure": ["periodic_table", "bonding", "reactions"],
     "equilibrium": ["acids_bases", "solubility", "thermodynamics"],
-    
-    // English
     "tenses": ["active_passive", "direct_indirect", "conditional"],
     "vocabulary": ["comprehension", "essay_writing", "summary"]
   };
-
-  // ============================================================
-  // MAIN PREDICTION METHOD
-  // ============================================================
 
   async generatePredictions(studentPhone: string): Promise<PredictionResult> {
     const startTime = Date.now();
 
     try {
-      // Gather metrics
-      const [burnoutMetrics, nextStruggle, optimalModality, masteryVelocity] = await Promise.all([
+      const [burnoutMetrics, nextStruggleResult, optimalModality, masteryVelocity] = await Promise.all([
         this.getBurnoutMetrics(studentPhone),
         this.predictNextStruggle(studentPhone),
         this.predictOptimalModality(studentPhone),
         this.calculateMasteryVelocity(studentPhone)
       ]);
 
-      // Calculate burnout risk from metrics
       const burnoutRisk = this.calculateBurnoutRisk(burnoutMetrics);
-
-      // Determine emotional shift
       const emotionalShift = this.detectEmotionalShift(studentPhone, burnoutMetrics);
 
       const result: PredictionResult = {
         burnoutRisk,
-        nextStruggle: nextStruggle || undefined,
+        nextStruggle: nextStruggleResult || undefined,
         optimalModality: optimalModality || "analogy_first",
         conceptMasteryVelocity: masteryVelocity,
         emotionalShift: emotionalShift || undefined,
@@ -111,7 +83,6 @@ export class TheSeer {
         }
       };
 
-      // Store predictions
       await this.storePredictions(studentPhone, result);
 
       logger.info("Seer predictions generated", {
@@ -124,18 +95,15 @@ export class TheSeer {
 
       return result;
 
-    } catch (error) {
+    } catch (error: unknown) {
+      const errMsg = error instanceof Error ? error.message : String(error);
       logger.error("Seer prediction failed", {
         student: studentPhone,
-        error: error.message
+        error: errMsg
       });
       return this.getDefaultPrediction();
     }
   }
-
-  // ============================================================
-  // BURNOUT METRICS
-  // ============================================================
 
   private async getBurnoutMetrics(studentPhone: string): Promise<BurnoutMetrics> {
     const row = await queryOne<{
@@ -203,44 +171,29 @@ export class TheSeer {
     };
   }
 
-  // ============================================================
-  // BURNOUT RISK CALCULATION
-  // ============================================================
-
   private calculateBurnoutRisk(metrics: BurnoutMetrics): number {
     let risk = 0.2;
 
-    // Declining message length (if we have data)
     if (metrics.avgLength !== null) {
       if (metrics.avgLength < 10) risk += 0.25;
       else if (metrics.avgLength < 20) risk += 0.15;
     }
 
-    // High short reply ratio (messages under 10 characters)
     if (metrics.shortRatio > 0.6) risk += 0.25;
     else if (metrics.shortRatio > 0.4) risk += 0.15;
 
-    // Repeated struggles
     if (metrics.struggleCount > 5) risk += 0.2;
     else if (metrics.struggleCount > 3) risk += 0.1;
 
-    // Topic switching (frustration signal)
     if (metrics.topicSwitches > 3) risk += 0.1;
 
-    // Low engagement
     if (metrics.engagementScore < 0.3) risk += 0.2;
     else if (metrics.engagementScore < 0.5) risk += 0.1;
 
-    // Cap at 0.95
     return Math.min(Math.max(risk, 0.05), 0.95);
   }
 
-  // ============================================================
-  // NEXT STRUGGLE PREDICTION
-  // ============================================================
-
   private async predictNextStruggle(studentPhone: string): Promise<string | null> {
-    // Get their currently struggling concepts (mastery < 0.4)
     const struggling = await query(
       `SELECT content, metadata FROM memory_chunks
        WHERE student_phone = $1 AND memory_type = 'semantic'
@@ -252,13 +205,9 @@ export class TheSeer {
 
     if (struggling.length === 0) return null;
 
-    // Get current concept from metadata
     const currentConcept = struggling[0]?.metadata?.concept || "unknown";
-
-    // Find dependencies
     let nextConcepts = this.CONCEPT_DEPENDENCIES[currentConcept] || [];
 
-    // If no exact match, try fuzzy match
     if (nextConcepts.length === 0) {
       for (const [key, value] of Object.entries(this.CONCEPT_DEPENDENCIES)) {
         if (currentConcept.includes(key) || key.includes(currentConcept)) {
@@ -270,7 +219,6 @@ export class TheSeer {
 
     if (nextConcepts.length === 0) return null;
 
-    // Pick the one with lowest predicted mastery
     let lowestMastery = 1.0;
     let nextStruggle = nextConcepts[0];
 
@@ -292,12 +240,7 @@ export class TheSeer {
     return nextStruggle;
   }
 
-  // ============================================================
-  // OPTIMAL MODALITY PREDICTION
-  // ============================================================
-
   private async predictOptimalModality(studentPhone: string): Promise<string> {
-    // Check what's worked recently
     const recentSuccess = await queryOne<{ modality: string; count: number }>(
       `SELECT metadata->>'modality' as modality, COUNT(*) as count
        FROM memory_chunks
@@ -313,7 +256,6 @@ export class TheSeer {
       return recentSuccess.modality;
     }
 
-    // Default based on learning style
     const profile = await queryOne<{ profile: any }>(
       `SELECT profile FROM students WHERE phone = $1`,
       [studentPhone]
@@ -328,10 +270,6 @@ export class TheSeer {
 
     return modalityMap[style] || "analogy_first";
   }
-
-  // ============================================================
-  // MASTERY VELOCITY
-  // ============================================================
 
   private async calculateMasteryVelocity(studentPhone: string): Promise<number> {
     const rows = await query<{ mastery: string; created_at: string }>(
@@ -353,15 +291,10 @@ export class TheSeer {
     return (last - first) / days;
   }
 
-  // ============================================================
-  // EMOTIONAL SHIFT DETECTION
-  // ============================================================
-
   private async detectEmotionalShift(
     studentPhone: string,
     metrics: BurnoutMetrics
   ): Promise<string | null> {
-    // Check for emotional patterns in recent messages
     const recentMessages = await query<{ raw_text: string }>(
       `SELECT raw_text FROM message_log
        WHERE student_phone = $1 AND direction = 'inbound'
@@ -372,7 +305,6 @@ export class TheSeer {
 
     if (recentMessages.length < 2) return null;
 
-    // Detect shift from positive to negative
     const positiveWords = ['good', 'great', 'nice', 'understand', 'got', 'yeah', 'yes', 'love'];
     const negativeWords = ['hard', 'confus', 'dont get', 'terrible', 'bad', 'fail', 'hate'];
 
@@ -398,27 +330,16 @@ export class TheSeer {
     return null;
   }
 
-  // ============================================================
-  // CONFIDENCE CALCULATION
-  // ============================================================
-
   private calculateConfidence(metrics: BurnoutMetrics): number {
     let confidence = 0.7;
 
-    // Less confidence if we have little data
     if (metrics.avgLength === null) confidence -= 0.2;
-
-    // More confidence if signals are strong
     if (metrics.struggleCount > 5) confidence += 0.1;
     if (metrics.shortRatio > 0.6) confidence += 0.1;
     if (metrics.topicSwitches > 3) confidence += 0.1;
 
     return Math.min(Math.max(confidence, 0.3), 0.95);
   }
-
-  // ============================================================
-  // STORE PREDICTIONS
-  // ============================================================
 
   private async storePredictions(
     studentPhone: string,
@@ -448,8 +369,8 @@ export class TheSeer {
     ];
 
     for (const pred of predictions) {
-      if (!pred.value.concept && !pred.value.shift && pred.type === "next_struggle") continue;
-      if (!pred.value.shift && pred.type === "emotional_shift") continue;
+      if ((pred.type === "next_struggle" && !pred.value.concept)) continue;
+      if ((pred.type === "emotional_shift" && !pred.value.shift)) continue;
 
       await query(
         `INSERT INTO predictions (student_phone, prediction_type, predicted_value, confidence)
@@ -458,10 +379,6 @@ export class TheSeer {
       );
     }
   }
-
-  // ============================================================
-  // DEFAULT PREDICTION (Fallback)
-  // ============================================================
 
   private getDefaultPrediction(): PredictionResult {
     return {
