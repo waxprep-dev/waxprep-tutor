@@ -296,17 +296,19 @@ export class TheVoid {
       );
 
       for (const update of evolution.memory_updates || []) {
-        const metadata = typeof update.metadata === 'object' && update.metadata !== null
-          ? update.metadata
-          : {};
+        // Fix: Ensure metadata is always an object
+        let metadata: Record<string, any> = {};
+        if (update.metadata && typeof update.metadata === 'object' && !Array.isArray(update.metadata)) {
+          metadata = update.metadata as Record<string, any>;
+        }
 
         if (update.memory_type === "procedural") {
           await mindPalace.addProceduralMemory(
             studentId,
             update.content,
-            update.trigger,
+            update.trigger || "general",
             update.confidence || 0.7,
-            metadata as Record<string, any>
+            metadata
           );
         } else if (update.memory_type === "semantic") {
           await mindPalace.addSemanticMemory(

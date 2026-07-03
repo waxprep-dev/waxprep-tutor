@@ -46,17 +46,17 @@ export async function assembleContext(
 
   const searchedNotes = await searchNotes(phone, currentMessage.split(" ").slice(0, 3).join(" "), 3);
   const recentNotes = await getRecentNotes(phone, 5);
-  const relevantNotes = mergeUnique(searchedNotes, recentNotes, (n) => n.note_id).slice(0, 5);
+  const relevantNotes = mergeUnique(searchedNotes, recentNotes, (n: any) => n.note_id).slice(0, 5);
 
   const engagement = await getEngagementSignal(phone);
 
   const tokenEstimate =
     estimateTokens(JSON.stringify(profile)) +
-    recentEpisodes.reduce((sum, e) => sum + estimateTokens(e.summary || ""), 0) +
-    relevantEpisodes.reduce((sum, e) => sum + estimateTokens(e.summary_text), 0) +
-    relevantConcepts.reduce((sum, c) => sum + estimateTokens(c.name + (c.description || "")), 0) +
-    relevantRules.reduce((sum, r) => sum + estimateTokens(r.rule_text), 0) +
-    relevantNotes.reduce((sum, n) => sum + estimateTokens(n.note_text), 0);
+    recentEpisodes.reduce((sum: number, e: any) => sum + estimateTokens(e.summary || ""), 0) +
+    relevantEpisodes.reduce((sum: number, e: any) => sum + estimateTokens(e.summary_text), 0) +
+    relevantConcepts.reduce((sum: number, c: any) => sum + estimateTokens(c.name + (c.description || "")), 0) +
+    relevantRules.reduce((sum: number, r: any) => sum + estimateTokens(r.rule_text), 0) +
+    relevantNotes.reduce((sum: number, n: any) => sum + estimateTokens(n.note_text), 0);
 
   return {
     wax_id: waxId,
