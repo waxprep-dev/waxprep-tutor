@@ -24,7 +24,7 @@ export async function runDream(): Promise<void> {
   } catch (error: unknown) {
     const errMsg = error instanceof Error ? error.message : String(error);
     const errStack = error instanceof Error ? error.stack : undefined;
-    // Fix: Create a proper object for the error log
+    // FIX: Create proper Record<string, any> for logging
     const logData: Record<string, any> = {
       error: errMsg,
       durationMs: Date.now() - startTime

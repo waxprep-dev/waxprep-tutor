@@ -55,13 +55,14 @@ export class TheSeer {
     const startTime = Date.now();
 
     try {
+      // Fix: Properly await all promises with explicit variable declarations
       const burnoutMetrics = await this.getBurnoutMetrics(studentPhone);
       const nextStruggleResult = await this.predictNextStruggle(studentPhone);
       const optimalModality = await this.predictOptimalModality(studentPhone);
       const masteryVelocity = await this.calculateMasteryVelocity(studentPhone);
 
       const burnoutRisk = this.calculateBurnoutRisk(burnoutMetrics);
-      const emotionalShift = this.detectEmotionalShift(studentPhone, burnoutMetrics);
+      const emotionalShift = await this.detectEmotionalShift(studentPhone, burnoutMetrics);
 
       const result: PredictionResult = {
         burnoutRisk,
@@ -101,12 +102,6 @@ export class TheSeer {
     }
   }
 
-  // ... (keep the rest of the methods the same as before)
-  // The error was at line 73 which was a Promise assignment issue.
-  // I've fixed it by properly awaiting the Promise.
-  // The rest of the methods (getBurnoutMetrics, calculateBurnoutRisk, etc.)
-  // remain unchanged from the previous version.
-  
   private async getBurnoutMetrics(studentPhone: string): Promise<BurnoutMetrics> {
     const row = await queryOne<{
       avg_length: number | null;
