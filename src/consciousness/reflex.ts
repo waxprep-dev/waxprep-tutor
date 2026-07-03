@@ -315,7 +315,10 @@ export class Reflex {
     }
 
     // Save to database (async, don't block)
-    this.saveWeights().catch(err => logger.error("Failed to save Reflex weights:", err));
+    this.saveWeights().catch((err: unknown) => {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      logger.error("Failed to save Reflex weights:", { error: errMsg });
+    });
   }
 
   private async saveWeights(): Promise<void> {
@@ -342,8 +345,9 @@ export class Reflex {
         }
       }
       logger.info("Reflex weights loaded from database");
-    } catch (e) {
-      logger.warn("Could not load reflex weights from DB, using defaults", e);
+    } catch (e: unknown) {
+      const errMsg = e instanceof Error ? e.message : String(e);
+      logger.warn("Could not load reflex weights from DB, using defaults", { error: errMsg });
     }
   }
 }
