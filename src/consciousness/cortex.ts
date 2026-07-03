@@ -131,15 +131,21 @@ Return ONLY valid JSON:
       const allAgents = ["mirror", "river", "fire", "guardian", "witness", "archivist"];
       const skip = allAgents.filter(a => !agents.has(a));
 
+      // FIX: Ensure toolPredictions is string[]
+      let toolPredictions: string[] = [];
+      if (Array.isArray(parsed.toolPredictions)) {
+        toolPredictions = parsed.toolPredictions.filter((t: any) => typeof t === 'string');
+      }
+
       return {
-        agents: Array.from(agents),
-        skip,
-        reasoning: parsed.reasoning || "No reasoning provided",
+        agents: Array.from(agents) as string[],
+        skip: skip,
+        reasoning: typeof parsed.reasoning === 'string' ? parsed.reasoning : "No reasoning provided",
         expectedFreeEnergyReduction: Math.min(Math.max(parsed.expectedFreeEnergyReduction || 0.5, 0), 1),
         confidence: Math.min(Math.max(parsed.confidence || 0.5, 0), 1),
-        toolPredictions: parsed.toolPredictions || [],
-        emotionalDirective: parsed.emotionalDirective,
-        cognitiveDirective: parsed.cognitiveDirective
+        toolPredictions: toolPredictions,
+        emotionalDirective: typeof parsed.emotionalDirective === 'string' ? parsed.emotionalDirective : undefined,
+        cognitiveDirective: typeof parsed.cognitiveDirective === 'string' ? parsed.cognitiveDirective : undefined
       };
     } catch (e: any) {
       logger.error("Cortex parse error", { error: e.message, raw: raw.slice(0, 200) });
