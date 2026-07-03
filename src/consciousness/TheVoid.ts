@@ -1,5 +1,7 @@
-// FILE: src/consciousness/TheVoid.ts — THE ORCHESTRATOR
-// =====================================================
+// FILE: src/consciousness/TheVoid.ts — THE ORCHESTRATOR (v2)
+// ============================================================
+// INTEGRATES: The Oracle → The Seer → Mind Palace → Agents
+// ============================================================
 
 import { Mirror } from "./agents/Mirror";
 import { River } from "./agents/River";
@@ -8,6 +10,11 @@ import { Guardian } from "./agents/Guardian";
 import { Witness } from "./agents/Witness";
 import { Archivist } from "./agents/Archivist";
 import { Perception, ContextBundle, GuardianDecision, Reflection, ArchivistOutput } from "./types";
+import { TheOracle, OraclePlan, OracleContext } from "./TheOracle";
+import { TheSeer, PredictionResult } from "../predictive/TheSeer";
+import { mindPalace } from "../memory/mindPalace";
+import { query } from "../db/client";
+import { logger } from "../utils/logger";
 
 export interface VoidResult {
   response: string;
@@ -16,6 +23,8 @@ export interface VoidResult {
   guardianDecision: GuardianDecision;
   toolsCalled: string[];
   latencyMs: number;
+  plan?: OraclePlan;
+  predictions?: PredictionResult;
 }
 
 export class TheVoid {
@@ -25,14 +34,8 @@ export class TheVoid {
   private guardian: Guardian;
   private witness: Witness;
   private archivist: Archivist;
-
-  // Prompts loaded from files
-  private mirrorPrompt: string;
-  private riverPrompt: string;
-  private firePrompt: string;
-  private guardianPrompt: string;
-  private witnessPrompt: string;
-  private archivistPrompt: string;
+  private oracle: TheOracle;
+  private seer: TheSeer;
 
   constructor() {
     this.mirror = new Mirror();
@@ -41,18 +44,13 @@ export class TheVoid {
     this.guardian = new Guardian();
     this.witness = new Witness();
     this.archivist = new Archivist();
-
-    this.mirrorPrompt = "You are The Mirror. You perceive the student. Read their message and detect intent, emotion, shame signals, risk flags, and cultural signals. Output a structured perception. Never speak to the student.";
-    this.riverPrompt = "You are The River. You retrieve and build context. Based on the perception and student profile, retrieve relevant past conversations, known concepts, procedural rules, relational notes, and recommended examples. Output a context bundle. Never speak to the student.";
-    this.firePrompt = "You are The Fire. You are Wax. Generate responses to the student using the perception and context. Acknowledge emotion. Use examples from their world. Teach naturally. Keep messages short and human. Never mention tools or agents. You are the only agent that speaks to the student.";
-    this.guardianPrompt = "You are The Guardian. Review every response before it reaches the student. Check for harmful content, leaked tool names, markdown formatting, inappropriate tone, cultural insensitivity, and missed distress signals. Output APPROVED or FLAGGED. Never speak to the student.";
-    this.witnessPrompt = "You are The Witness. Observe and reflect on every interaction after the student receives a response. Identify what worked, what failed, missed emotional cues, missed teaching opportunities, and patterns. Output a reflection. Never speak to the student.";
-    this.archivistPrompt = "You are The Archivist. Take the Witness reflection and update memory. Save relational notes, update concepts, generate procedural rules, evolve the Teaching Signature. Output memory actions. Never speak to the student.";
+    this.oracle = new TheOracle();
+    this.seer = new TheSeer();
   }
 
   /**
    * Main orchestration flow.
-   * This is the entry point for every student message.
+   * Now includes: Seer → Oracle → Mind Palace → Agents
    */
   async processMessage(
     studentId: string,
@@ -65,73 +63,176 @@ export class TheVoid {
     const toolsCalled: string[] = [];
 
     try {
-      // STEP 1: THE MIRROR — Perceive
-      console.log(`[Void] Calling Mirror for student ${studentId}`);
-      const perception = await this.mirror.perceive(
-        studentMessage,
-        conversationHistory,
-        this.mirrorPrompt
-      );
-      toolsCalled.push("mirror");
+      // ============================================================
+      // PHASE 0: THE SEER — Predict before acting
+      // ============================================================
+      logger.info(`[Void] Running Seer for student ${studentId}`);
+      const predictions = await this.seer.generatePredictions(studentId);
+      toolsCalled.push("seer");
 
-      // Check for critical risk flags
-      if (perception?.risk_flags?.suicidal_ideation || 
-          perception?.risk_flags?.self_harm || 
-          perception?.risk_flags?.extreme_distress) {
-        console.log(`[Void] CRITICAL RISK detected for student ${studentId}`);
-        // Return emergency response immediately
+      // ============================================================
+      // PHASE 1: THE ORACLE — Generate plan
+      // ============================================================
+      logger.info(`[Void] Running Oracle for student ${studentId}`);
+      const oracleCtx: OracleContext = {
+        studentPhone: studentId,
+        message: studentMessage,
+        history: conversationHistory,
+        profile: studentProfile,
+        engagement: availableMemory?.engagement || {},
+        recentPredictions: [predictions]
+      };
+
+      const plan = await this.oracle.generatePlan(oracleCtx);
+      toolsCalled.push("oracle");
+
+      // Handle emergency flags from Oracle
+      if (plan.emergency_flags.length > 0) {
+        logger.warn(`[Void] Emergency flags triggered for ${studentId}`, plan.emergency_flags);
         return {
-          response: this.getEmergencyResponse(perception),
-          perception,
+          response: this.getEmergencyResponse(plan, studentProfile),
+          perception: this.getDefaultPerception(),
           contextBundle: this.getDefaultContextBundle(),
           guardianDecision: {
             decision: "escalate",
-            reason: "Critical risk detected",
+            reason: `Oracle emergency: ${plan.emergency_flags.join(', ')}`,
             modified_response: null,
             quality_checks: {},
             safety_checks: {},
-            escalation: { needed: true, reason: "Critical risk", human_alert: `Student ${studentId} showing risk flags` },
+            escalation: { needed: true, reason: plan.emergency_flags.join(', '), human_alert: `Student ${studentId} emergency flags` }
           },
           toolsCalled,
           latencyMs: Date.now() - startTime,
+          plan,
+          predictions
         };
       }
 
-      // STEP 2: THE RIVER — Build Context
-      console.log(`[Void] Calling River for student ${studentId}`);
-      const contextBundle = await this.river.buildContext(
-        perception,
-        studentProfile,
-        availableMemory,
-        this.riverPrompt
-      );
-      toolsCalled.push("river");
-
-      // Execute recommended tool calls from River
-      for (const action of contextBundle.retrieval_actions.tools_to_call) {
-        console.log(`[Void] Executing tool: ${action.tool} — ${action.reason}`);
-        // Execute the tool here
-        toolsCalled.push(action.tool);
+      // Handle critical burnout
+      if (predictions.burnoutRisk > 0.8) {
+        logger.info(`[Void] Critical burnout detected for ${studentId}, switching to support mode`);
+        return {
+          response: await this.generateBurnoutResponse(studentProfile, studentMessage),
+          perception: this.getDefaultPerception(),
+          contextBundle: this.getDefaultContextBundle(),
+          guardianDecision: {
+            decision: "approve",
+            reason: "Burnout support mode",
+            modified_response: null,
+            quality_checks: {},
+            safety_checks: {},
+            escalation: { needed: false, reason: "", human_alert: "" }
+          },
+          toolsCalled,
+          latencyMs: Date.now() - startTime,
+          plan,
+          predictions
+        };
       }
 
-      // STEP 3: THE FIRE — Generate Response
-      console.log(`[Void] Calling Fire for student ${studentId}`);
-      const fireResponse = await this.fire.generateResponse(
-        contextBundle,
-        this.firePrompt
-      );
-      toolsCalled.push("fire");
+      // ============================================================
+      // PHASE 2: MIND PALACE — Get working memory
+      // ============================================================
+      const workingMemory = await mindPalace.getWorkingMemory(studentId);
+      const workingContext = workingMemory.map(m => m.content).join("\n");
 
-      // STEP 4: THE GUARDIAN — Review
-      console.log(`[Void] Calling Guardian for student ${studentId}`);
-      const guardianDecision = await this.guardian.review(
-        fireResponse,
-        perception,
-        this.guardianPrompt
-      );
-      toolsCalled.push("guardian");
+      // ============================================================
+      // PHASE 3: THE MIRROR — Perceive (if in plan)
+      // ============================================================
+      let perception = this.getDefaultPerception();
+      if (plan.orchestration.agents.includes("mirror")) {
+        logger.info(`[Void] Running Mirror for student ${studentId}`);
+        perception = await this.mirror.perceive(
+          studentMessage,
+          conversationHistory,
+          plan.prompts.mirror || ""
+        );
+        toolsCalled.push("mirror");
 
-      // Handle Guardian decision
+        // Check for critical risk
+        if (perception?.risk_flags?.suicidal_ideation ||
+            perception?.risk_flags?.self_harm ||
+            perception?.risk_flags?.extreme_distress) {
+          logger.warn(`[Void] Critical risk detected for ${studentId}`);
+          return {
+            response: this.getEmergencyResponse(plan, studentProfile),
+            perception,
+            contextBundle: this.getDefaultContextBundle(),
+            guardianDecision: {
+              decision: "escalate",
+              reason: "Critical risk detected",
+              modified_response: null,
+              quality_checks: {},
+              safety_checks: {},
+              escalation: { needed: true, reason: "Critical risk", human_alert: `Student ${studentId} showing risk flags` }
+            },
+            toolsCalled,
+            latencyMs: Date.now() - startTime,
+            plan,
+            predictions
+          };
+        }
+      }
+
+      // ============================================================
+      // PHASE 4: THE RIVER — Build Context (if in plan)
+      // ============================================================
+      let contextBundle = this.getDefaultContextBundle();
+      if (plan.orchestration.agents.includes("river")) {
+        logger.info(`[Void] Running River for student ${studentId}`);
+        contextBundle = await this.river.buildContext(
+          perception,
+          studentProfile,
+          availableMemory,
+          plan.prompts.river || ""
+        );
+        toolsCalled.push("river");
+
+        // Execute recommended tool calls
+        for (const action of contextBundle.retrieval_actions?.tools_to_call || []) {
+          toolsCalled.push(action.tool);
+        }
+      }
+
+      // ============================================================
+      // PHASE 5: THE FIRE — Generate Response (if in plan)
+      // ============================================================
+      let fireResponse = "";
+      if (plan.orchestration.agents.includes("fire")) {
+        logger.info(`[Void] Running Fire for student ${studentId}`);
+        fireResponse = await this.fire.generateResponse(
+          contextBundle,
+          plan.prompts.fire || "",
+          conversationHistory
+        );
+        toolsCalled.push("fire");
+      }
+
+      // ============================================================
+      // PHASE 6: THE GUARDIAN — Review (MANDATORY)
+      // ============================================================
+      let guardianDecision = {
+        decision: "approve",
+        reason: "Default approve",
+        modified_response: null,
+        quality_checks: {},
+        safety_checks: {},
+        escalation: { needed: false, reason: "", human_alert: "" }
+      };
+
+      if (plan.orchestration.agents.includes("guardian")) {
+        logger.info(`[Void] Running Guardian for student ${studentId}`);
+        guardianDecision = await this.guardian.review(
+          fireResponse,
+          perception,
+          plan.prompts.guardian || ""
+        );
+        toolsCalled.push("guardian");
+      }
+
+      // ============================================================
+      // PHASE 7: FINALIZE RESPONSE
+      // ============================================================
       let finalResponse: string;
       switch (guardianDecision.decision) {
         case "approve":
@@ -144,13 +245,25 @@ export class TheVoid {
           finalResponse = this.getBlockedResponse();
           break;
         case "escalate":
-          finalResponse = this.getEmergencyResponse(perception);
+          finalResponse = this.getEmergencyResponse(plan, studentProfile);
           break;
         default:
           finalResponse = fireResponse;
       }
 
+      // ============================================================
+      // PHASE 8: SAVE TO MEMORY
+      // ============================================================
+      await this.saveToMemory(studentId, studentMessage, finalResponse, perception);
+      await this.saveResponseSignature(studentId, finalResponse);
+
       const latencyMs = Date.now() - startTime;
+
+      logger.info(`[Void] Complete for student ${studentId}`, {
+        latencyMs,
+        toolsCalled: toolsCalled.join(', '),
+        planAgents: plan.orchestration.agents.join(', ')
+      });
 
       return {
         response: finalResponse,
@@ -159,12 +272,13 @@ export class TheVoid {
         guardianDecision,
         toolsCalled,
         latencyMs,
+        plan,
+        predictions
       };
 
     } catch (error) {
-      console.error(`[Void] Orchestration failed for student ${studentId}:`, error);
+      logger.error(`[Void] Orchestration failed for student ${studentId}:`, error);
 
-      // NEVER fail the student. Return fallback.
       return {
         response: this.getFallbackResponse(),
         perception: this.getDefaultPerception(),
@@ -175,18 +289,17 @@ export class TheVoid {
           modified_response: null,
           quality_checks: {},
           safety_checks: {},
-          escalation: { needed: false, reason: "", human_alert: "" },
+          escalation: { needed: false, reason: "", human_alert: "" }
         },
         toolsCalled,
-        latencyMs: Date.now() - startTime,
+        latencyMs: Date.now() - startTime
       };
     }
   }
 
   /**
-   * Async evolution flow.
-   * Called AFTER the student replies to Wax's message.
-   * This runs in the background — the student doesn't wait for it.
+   * Background evolution flow.
+   * Called AFTER the student replies.
    */
   async evolve(
     studentId: string,
@@ -199,65 +312,131 @@ export class TheVoid {
     currentMemory: any
   ): Promise<void> {
     try {
-      console.log(`[Void] Starting evolution for student ${studentId}`);
+      logger.info(`[Void] Starting evolution for student ${studentId}`);
 
-      // STEP 5: THE WITNESS — Reflect
-      console.log(`[Void] Calling Witness for student ${studentId}`);
+      // THE WITNESS — Reflect
       const reflection = await this.witness.reflect(
         studentMessage,
         perception,
         contextBundle,
         fireResponse,
         studentNextMessage,
-        this.witnessPrompt
+        "" // Dynamic prompt coming soon
       );
 
-      // STEP 6: THE ARCHIVIST — Evolve
-      console.log(`[Void] Calling Archivist for student ${studentId}`);
+      // THE ARCHIVIST — Evolve
       const evolution = await this.archivist.evolve(
         reflection,
         currentSignature,
         currentMemory,
-        this.archivistPrompt
+        "" // Dynamic prompt coming soon
       );
 
-      // Apply evolution
-      console.log(`[Void] Applying evolution for student ${studentId}`);
-      await this.applyEvolution(studentId, evolution);
+      // Apply to Mind Palace
+      for (const update of evolution.memory_updates || []) {
+        if (update.memory_type === "procedural") {
+          await mindPalace.addProceduralMemory(
+            studentId,
+            update.content,
+            update.trigger,
+            update.confidence || 0.7,
+            update.metadata
+          );
+        } else if (update.memory_type === "semantic") {
+          await mindPalace.addSemanticMemory(
+            studentId,
+            update.content,
+            update.concept || "general",
+            update.mastery || 0,
+            update.importance || 0.6
+          );
+        } else if (update.memory_type === "relational") {
+          // Store as episodic with relational metadata
+          await mindPalace.addEpisodicMemory(
+            studentId,
+            `Personal note: ${update.content}`,
+            update.importance || 0.7,
+            undefined,
+            { type: "relational", category: update.category || "other" }
+          );
+        }
+      }
 
-      // Log the evolution
-      console.log(`[Void] Evolution complete for student ${studentId}`);
+      // Update prediction accuracy
+      if (studentNextMessage) {
+        await this.updatePredictionAccuracy(studentId, studentNextMessage);
+      }
+
+      logger.info(`[Void] Evolution complete for student ${studentId}`);
 
     } catch (error) {
-      console.error(`[Void] Evolution failed for student ${studentId}:`, error);
-      // Evolution failure is not critical — log and continue
+      logger.error(`[Void] Evolution failed for student ${studentId}:`, error);
     }
   }
 
-  private async applyEvolution(studentId: string, evolution: ArchivistOutput): Promise<void> {
-    // Apply memory updates
-    for (const update of evolution.memory_updates) {
-      console.log(`[Void] Memory update: ${update.action} ${update.table} — ${update.reason}`);
-      // Implement actual database updates here
-    }
+  // ============================================================
+  // HELPERS
+  // ============================================================
 
-    // Apply signature evolution
-    if (evolution.signature_evolution.changes_made.length > 0) {
-      console.log(`[Void] Signature evolved: ${evolution.signature_evolution.changes_made.length} changes`);
-      // Implement signature update here
-    }
+  private async saveToMemory(
+    studentId: string,
+    message: string,
+    response: string,
+    perception: Perception
+  ): Promise<void> {
+    // Working memory
+    await mindPalace.addWorkingMemory(
+      studentId,
+      `Student: ${message}\nWax: ${response}`
+    );
 
-    // Handle alerts
-    for (const alert of evolution.alerts) {
-      if (alert.severity === "critical") {
-        console.error(`[Void] CRITICAL ALERT for student ${studentId}: ${alert.message}`);
-        // Implement critical alert handling (notify human, etc.)
-      }
-    }
+    // Episodic memory (periodically)
+    const content = `Student: ${message}\nWax: ${response}\nEmotion: ${perception?.emotional_state?.primary_emotion || "neutral"}`;
+    await mindPalace.addEpisodicMemory(studentId, content, 0.6);
   }
 
-  private getEmergencyResponse(perception: Perception): string {
-    return "Hey. I need you to listen to me. You are not alone. You matter. Please call this number right now: 0800-123-4567. Or text me your location. I'm staying with you.";
+  private async saveResponseSignature(studentId: string, response: string): Promise<void> {
+    const hash = this.simpleHash(response);
+    const preview = response.slice(0, 100);
+    await query(
+      `INSERT INTO conversation_signatures (student_phone, response_hash, response_preview)
+       VALUES ($1, $2, $3)`,
+      [studentId, hash, preview]
+    );
+  }
+
+  private async updatePredictionAccuracy(studentId: string, nextMessage: string): Promise<void> {
+    // Simple heuristic: if they replied, burnout prediction was wrong
+    await query(
+      `UPDATE predictions SET was_accurate = false, resolved_at = NOW()
+       WHERE student_phone = $1 AND prediction_type = 'burnout_risk'
+       AND resolved_at IS NULL`,
+      [studentId]
+    );
+  }
+
+  private simpleHash(str: string): string {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return hash.toString(16);
+  }
+
+  // ============================================================
+  // RESPONSE GENERATORS
+  // ============================================================
+
+  private async generateBurnoutResponse(profile: any, message: string): Promise<string> {
+    const name = profile?.preferred_name || profile?.full_name || "Student";
+    return `Hey ${name}. I can see you're going through it. We don't have to do school today. How's your head? What's one good thing that happened this week?`;
+  }
+
+  private getEmergencyResponse(plan: OraclePlan, profile: any): string {
+    const name = profile?.preferred_name || profile?.full_name || "Student";
+    return `${name}, I need you to listen to me. You are not alone. You matter. Please call this number right now: 0800-123-4567. Or text me your location. I'm staying with you.`;
   }
 
   private getBlockedResponse(): string {
@@ -270,10 +449,14 @@ export class TheVoid {
       "My brain hiccuped. Say that one more time?",
       "Wait, that message got lost in the matrix. What did you say?",
       "You know what, let me think about that properly. Give me a minute.",
-      "Ah, my phone is acting up. Send that again?",
+      "Ah, my phone is acting up. Send that again?"
     ];
     return fallbacks[Math.floor(Math.random() * fallbacks.length)];
   }
+
+  // ============================================================
+  // DEFAULTS
+  // ============================================================
 
   private getDefaultPerception(): Perception {
     return {
@@ -285,7 +468,7 @@ export class TheVoid {
       urgency: { level: "none", reason: "default" },
       student_needs: { immediate: "unknown", underlying: "unknown", unstated: "unknown" },
       cultural_signals: { language_used: "english", references: [], world_indicators: [] },
-      risk_flags: { suicidal_ideation: false, self_harm: false, abuse_indicators: false, extreme_distress: false, academic_crisis: false },
+      risk_flags: { suicidal_ideation: false, self_harm: false, abuse_indicators: false, extreme_distress: false, academic_crisis: false }
     };
   }
 
@@ -296,7 +479,7 @@ export class TheVoid {
       contextual_examples: { recommended_analogy: "danfo bus", alternative_analogies: [], cultural_bridge: "Nigerian context", previous_successful_approach: "none" },
       teaching_recommendations: { suggested_topic: "introduction", suggested_depth: "surface", suggested_pace: "medium", suggested_tone: "gentle", avoid: [], emphasize: [] },
       conversation_state: { current_flow_state: "connection", recommended_next_state: "discovery", message_count_this_episode: 0, time_since_last_message: "unknown" },
-      retrieval_actions: { tools_to_call: [], data_to_save: [] },
+      retrieval_actions: { tools_to_call: [], data_to_save: [] }
     };
   }
 }
