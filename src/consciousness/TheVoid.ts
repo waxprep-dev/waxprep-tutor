@@ -75,9 +75,9 @@ export class TheVoid {
       toolsCalled.push("mirror");
 
       // Check for critical risk flags
-      if (perception.risk_flags.suicidal_ideation || 
-          perception.risk_flags.self_harm || 
-          perception.risk_flags.extreme_distress) {
+      if (perception?.risk_flags?.suicidal_ideation || 
+          perception?.risk_flags?.self_harm || 
+          perception?.risk_flags?.extreme_distress) {
         console.log(`[Void] CRITICAL RISK detected for student ${studentId}`);
         // Return emergency response immediately
         return {
