@@ -75,6 +75,14 @@ export class TheVoid {
       const plan = await this.oracle.generatePlan(oracleCtx);
       toolsCalled.push("oracle");
 
+      // FIX: Even on burnout, we still need Mirror to perceive the message
+      // If burnout is detected, we'll still run Mirror but skip River/Guardian
+      const isBurnout = predictions.burnoutRisk > 0.8;
+
+      if (isBurnout) {
+        logger.info(`[Void] Burnout detected for ${studentId}, but still running Mirror for perception`, { burnoutRisk: predictions.burnoutRisk });
+      }
+
       if (plan.emergency_flags.length > 0) {
         logger.warn(`[Void] Emergency flags triggered for ${studentId}`, { flags: plan.emergency_flags });
         return {
@@ -96,19 +104,36 @@ export class TheVoid {
         };
       }
 
-      if (predictions.burnoutRisk > 0.8) {
-        logger.info(`[Void] Critical burnout detected for ${studentId}`, { burnoutRisk: predictions.burnoutRisk });
+      // MIND PALACE — Working memory
+      const workingMemory = await mindPalace.getWorkingMemory(studentId);
+      const workingContext = workingMemory.map((m: any) => m.content).join("\n");
+
+      // THE MIRROR — ALWAYS RUN (even on burnout)
+      // FIX: Don't skip Mirror - we need to know what the student actually said
+      let perception = this.getDefaultPerception();
+      logger.info(`[Void] Running Mirror for student ${studentId}`);
+      perception = await this.mirror.perceive(
+        studentMessage,
+        conversationHistory,
+        plan.prompts.mirror || ""
+      );
+      toolsCalled.push("mirror");
+
+      if (perception?.risk_flags?.suicidal_ideation ||
+        perception?.risk_flags?.self_harm ||
+        perception?.risk_flags?.extreme_distress) {
+        logger.warn(`[Void] Critical risk detected for ${studentId}`, { risk_flags: perception.risk_flags });
         return {
-          response: this.generateBurnoutResponse(studentProfile),
-          perception: this.getDefaultPerception(),
+          response: this.getEmergencyResponse(studentProfile),
+          perception,
           contextBundle: this.getDefaultContextBundle(),
           guardianDecision: {
-            decision: "approve",
-            reason: "Burnout support mode",
+            decision: "escalate",
+            reason: "Critical risk detected",
             modified_response: null,
             quality_checks: {},
             safety_checks: {},
-            escalation: { needed: false, reason: "", human_alert: "" }
+            escalation: { needed: true, reason: "Critical risk", human_alert: `Student ${studentId} showing risk flags` }
           },
           toolsCalled,
           latencyMs: Date.now() - startTime,
@@ -117,48 +142,9 @@ export class TheVoid {
         };
       }
 
-      // MIND PALACE — Working memory
-      const workingMemory = await mindPalace.getWorkingMemory(studentId);
-      const workingContext = workingMemory.map((m: any) => m.content).join("\n");
-
-      // THE MIRROR
-      let perception = this.getDefaultPerception();
-      if (plan.orchestration.agents.includes("mirror")) {
-        logger.info(`[Void] Running Mirror for student ${studentId}`);
-        perception = await this.mirror.perceive(
-          studentMessage,
-          conversationHistory,
-          plan.prompts.mirror || ""
-        );
-        toolsCalled.push("mirror");
-
-        if (perception?.risk_flags?.suicidal_ideation ||
-          perception?.risk_flags?.self_harm ||
-          perception?.risk_flags?.extreme_distress) {
-          logger.warn(`[Void] Critical risk detected for ${studentId}`, { risk_flags: perception.risk_flags });
-          return {
-            response: this.getEmergencyResponse(studentProfile),
-            perception,
-            contextBundle: this.getDefaultContextBundle(),
-            guardianDecision: {
-              decision: "escalate",
-              reason: "Critical risk detected",
-              modified_response: null,
-              quality_checks: {},
-              safety_checks: {},
-              escalation: { needed: true, reason: "Critical risk", human_alert: `Student ${studentId} showing risk flags` }
-            },
-            toolsCalled,
-            latencyMs: Date.now() - startTime,
-            plan,
-            predictions
-          };
-        }
-      }
-
-      // THE RIVER
+      // THE RIVER — Skip on burnout to save cost
       let contextBundle = this.getDefaultContextBundle();
-      if (plan.orchestration.agents.includes("river")) {
+      if (!isBurnout && plan.orchestration.agents.includes("river")) {
         logger.info(`[Void] Running River for student ${studentId}`);
         contextBundle = await this.river.buildContext(
           perception,
@@ -171,30 +157,34 @@ export class TheVoid {
         for (const action of contextBundle.retrieval_actions?.tools_to_call || []) {
           toolsCalled.push(action.tool);
         }
+      } else if (isBurnout) {
+        logger.info(`[Void] Skipping River (burnout mode) for student ${studentId}`);
       }
 
-      // THE FIRE
+      // THE FIRE — ALWAYS RUN, ALWAYS GET STUDENT MESSAGE
       let fireResponse = "";
       if (plan.orchestration.agents.includes("fire")) {
         logger.info(`[Void] Running Fire for student ${studentId}`);
+        // FIX: Pass studentMessage to Fire
         fireResponse = await this.fire.generateResponse(
           contextBundle,
-          plan.prompts.fire || ""
+          plan.prompts.fire || "",
+          studentMessage  // ← ADDED: pass the actual student message
         );
         toolsCalled.push("fire");
       }
 
-      // THE GUARDIAN
+      // THE GUARDIAN — Skip on burnout (we already know it's a burnout response)
       let guardianDecision: GuardianDecision = {
         decision: "approve",
-        reason: "Default approve",
+        reason: isBurnout ? "Burnout mode - skipping Guardian" : "Default approve",
         modified_response: null,
         quality_checks: {},
         safety_checks: {},
         escalation: { needed: false, reason: "", human_alert: "" }
       };
 
-      if (plan.orchestration.agents.includes("guardian")) {
+      if (!isBurnout && plan.orchestration.agents.includes("guardian")) {
         logger.info(`[Void] Running Guardian for student ${studentId}`);
         guardianDecision = await this.guardian.review(
           fireResponse,
@@ -202,6 +192,8 @@ export class TheVoid {
           plan.prompts.guardian || ""
         );
         toolsCalled.push("guardian");
+      } else if (isBurnout) {
+        logger.info(`[Void] Skipping Guardian (burnout mode) for student ${studentId}`);
       }
 
       let finalResponse: string;
@@ -230,7 +222,8 @@ export class TheVoid {
       logger.info(`[Void] Complete for student ${studentId}`, {
         latencyMs,
         toolsCalled: toolsCalled.join(', '),
-        planAgents: plan.orchestration.agents.join(', ')
+        planAgents: plan.orchestration.agents.join(', '),
+        isBurnout
       });
 
       return {
@@ -246,7 +239,6 @@ export class TheVoid {
 
     } catch (error: unknown) {
       const errMsg = error instanceof Error ? error.message : String(error);
-      // FIX: Pass error as object, not string
       logger.error(`[Void] Orchestration failed for student ${studentId}`, { error: errMsg });
 
       return {
@@ -346,7 +338,6 @@ export class TheVoid {
 
     } catch (error: unknown) {
       const errMsg = error instanceof Error ? error.message : String(error);
-      // FIX: Pass error as object, not string
       logger.error(`[Void] Evolution failed for student ${studentId}`, { error: errMsg });
     }
   }
@@ -395,9 +386,16 @@ export class TheVoid {
     return hash.toString(16);
   }
 
-  private generateBurnoutResponse(profile: any): string {
+  private generateBurnoutResponse(profile: any, studentMessage: string): string {
     const name = profile?.preferred_name || profile?.full_name || "Student";
-    return `Hey ${name}. I can see you're going through it. We don't have to do school today. How's your head? What's one good thing that happened this week?`;
+    // FIX: Make burnout responses contextual to what the student said
+    const responses = [
+      `Hey ${name}. I hear you saying "${studentMessage}". How are you really doing?`,
+      `I see you reaching out with "${studentMessage}". That's real. What's going on?`,
+      `${name}, I noticed you said "${studentMessage}". I'm here with you. What's on your mind?`,
+      `"${studentMessage}" — I feel you. We don't have to do school. How's your head?`
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
   }
 
   private getEmergencyResponse(profile: any): string {

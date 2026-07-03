@@ -1,7 +1,5 @@
 // FILE: src/consciousness/TheOracle.ts
-// ============================================================
 // THE ORACLE — Meta-Agent Supervisor
-// ============================================================
 
 import { callLLM } from "../llm/client";
 import { query, queryOne } from "../db/client";
@@ -40,7 +38,12 @@ export class TheOracle {
   async generatePlan(ctx: OracleContext): Promise<OraclePlan> {
     const startTime = Date.now();
 
-    if (this.shouldUseFastPath(ctx)) {
+    // FIX: Don't use fast path if burnout risk is high
+    // Check if burnout risk is high from recent predictions
+    const burnoutRisk = ctx.recentPredictions?.[0]?.burnoutRisk || 0;
+    const isHighBurnout = burnoutRisk > 0.7;
+
+    if (this.shouldUseFastPath(ctx) && !isHighBurnout) {
       logger.info("Oracle using fast path", {
         student: ctx.studentPhone,
         messageLength: ctx.message.length
@@ -87,8 +90,9 @@ export class TheOracle {
   private getFastPathPlan(ctx: OracleContext): OraclePlan {
     return {
       orchestration: {
-        agents: ["fire"],
-        skip: ["mirror", "river", "guardian", "witness", "archivist"],
+        // FIX: Always include mirror to perceive the message
+        agents: ["mirror", "fire"],
+        skip: ["river", "guardian", "witness", "archivist"],
         reason: "Fast path: short message or greeting"
       },
       prompts: {},
@@ -174,7 +178,7 @@ export class TheOracle {
       temp = Math.min(temp + 0.2, 0.8);
     }
 
-    if (ctx.recentPredictions?.some((p: any) => p.burnout_risk > 0.5)) {
+    if (ctx.recentPredictions?.some((p: any) => p.burnoutRisk > 0.5)) {
       temp = Math.min(temp + 0.3, 0.8);
     }
 
@@ -289,7 +293,7 @@ ${patterns.map((p: any) => `- ${p.pattern_type}: ${JSON.stringify(p.pattern_data
 ${recentPlans.map((p: any) => `- Agents: ${p.plan?.orchestration?.agents?.join(',')}, Success: ${p.was_successful}`).join('\n')}
 
 ## AGENTS AVAILABLE
-- mirror: Perceives emotion, intent, risk, cultural signals
+- mirror: Perceives emotion, intent, risk, cultural signals (REQUIRED for context)
 - river: Retrieves context, memories, concepts
 - fire: Generates the actual response (ONLY agent that speaks to student)
 - guardian: Reviews output for safety and quality
@@ -316,11 +320,11 @@ Return ONLY valid JSON:
 }
 
 ## RULES
-- If burnout_risk > 0.7, SKIP teaching agents. Only fire with emotional support.
+- If burnout_risk > 0.7, still run Mirror to understand the student's message. Skip River and Guardian for speed.
 - If student said "I don't get it" 3+ times, add directive: "Switch analogy completely"
-- If message is < 3 words, skip mirror deep analysis. Use fast path.
 - If student is new (< 5 messages), ALWAYS include mirror and river.
-- NEVER skip guardian. Guardian is mandatory.
+- NEVER skip mirror completely. It's needed to perceive the student's actual message.
+- NEVER skip guardian unless in burnout mode.
 - Witness and archivist are background-only. They never block the response.`;
   }
 

@@ -27,6 +27,7 @@ export interface BurnoutMetrics {
   struggleCount: number;
   topicSwitches: number;
   engagementScore: number;
+  messageCount: number;
 }
 
 export class TheSeer {
@@ -55,12 +56,12 @@ export class TheSeer {
     const startTime = Date.now();
 
     try {
-      // Fix: Properly await all promises with explicit variable declarations
       const burnoutMetrics = await this.getBurnoutMetrics(studentPhone);
       const nextStruggleResult = await this.predictNextStruggle(studentPhone);
       const optimalModality = await this.predictOptimalModality(studentPhone);
       const masteryVelocity = await this.calculateMasteryVelocity(studentPhone);
 
+      // FIX: Only calculate burnout if we have enough data
       const burnoutRisk = this.calculateBurnoutRisk(burnoutMetrics);
       const emotionalShift = await this.detectEmotionalShift(studentPhone, burnoutMetrics);
 
@@ -85,7 +86,6 @@ export class TheSeer {
       logger.info("Seer predictions generated", {
         student: studentPhone,
         burnoutRisk: result.burnoutRisk,
-        nextStruggle: result.nextStruggle,
         optimalModality: result.optimalModality,
         latencyMs: Date.now() - startTime
       });
@@ -109,6 +109,7 @@ export class TheSeer {
       struggle_count: number;
       topic_switches: number;
       engagement_score: number;
+      message_count: number;
     }>(
       `SELECT 
         AVG(LENGTH(raw_text)) as avg_length,
@@ -141,7 +142,8 @@ export class TheSeer {
             AND timestamp > NOW() - INTERVAL '7 days'
           ),
           0.5
-        ) as engagement_score
+        ) as engagement_score,
+        COUNT(*) as message_count
        FROM message_log
        WHERE student_phone = $1
        AND direction = 'inbound'
@@ -149,13 +151,14 @@ export class TheSeer {
       [studentPhone]
     );
 
-    if (!row) {
+    if (!row || row.message_count === 0) {
       return {
         avgLength: null,
         shortRatio: 0,
         struggleCount: 0,
         topicSwitches: 0,
-        engagementScore: 0.5
+        engagementScore: 0.5,
+        messageCount: 0
       };
     }
 
@@ -164,32 +167,41 @@ export class TheSeer {
       shortRatio: row.short_ratio,
       struggleCount: row.struggle_count,
       topicSwitches: row.topic_switches,
-      engagementScore: row.engagement_score
+      engagementScore: row.engagement_score,
+      messageCount: row.message_count
     };
   }
 
   private calculateBurnoutRisk(metrics: BurnoutMetrics): number {
+    // FIX: New students with few messages should not be flagged as burnout
+    if (metrics.messageCount < 3) {
+      return 0.2; // Default low risk for new students
+    }
+
     let risk = 0.2;
 
-    if (metrics.avgLength !== null) {
+    // Only apply decay if we have enough data
+    if (metrics.avgLength !== null && metrics.messageCount > 5) {
       if (metrics.avgLength < 10) risk += 0.25;
       else if (metrics.avgLength < 20) risk += 0.15;
     }
 
-    if (metrics.shortRatio > 0.6) risk += 0.25;
-    else if (metrics.shortRatio > 0.4) risk += 0.15;
+    if (metrics.shortRatio > 0.6 && metrics.messageCount > 3) risk += 0.25;
+    else if (metrics.shortRatio > 0.4 && metrics.messageCount > 3) risk += 0.15;
 
-    if (metrics.struggleCount > 5) risk += 0.2;
-    else if (metrics.struggleCount > 3) risk += 0.1;
+    if (metrics.struggleCount > 5 && metrics.messageCount > 5) risk += 0.2;
+    else if (metrics.struggleCount > 3 && metrics.messageCount > 3) risk += 0.1;
 
-    if (metrics.topicSwitches > 3) risk += 0.1;
+    if (metrics.topicSwitches > 3 && metrics.messageCount > 5) risk += 0.1;
 
-    if (metrics.engagementScore < 0.3) risk += 0.2;
-    else if (metrics.engagementScore < 0.5) risk += 0.1;
+    if (metrics.engagementScore < 0.3 && metrics.messageCount > 5) risk += 0.2;
+    else if (metrics.engagementScore < 0.5 && metrics.messageCount > 3) risk += 0.1;
 
     return Math.min(Math.max(risk, 0.05), 0.95);
   }
 
+  // ... (keep all other methods the same)
+  
   private async predictNextStruggle(studentPhone: string): Promise<string | null> {
     const struggling = await query(
       `SELECT content, metadata FROM memory_chunks
@@ -320,7 +332,7 @@ export class TheSeer {
     if (positiveCount > negativeCount && positiveCount > 2) {
       return "increasing_confidence";
     }
-    if (metrics.struggleCount > 3 && metrics.shortRatio > 0.4) {
+    if (metrics.struggleCount > 3 && metrics.shortRatio > 0.4 && metrics.messageCount > 5) {
       return "likely_withdrawal";
     }
 
@@ -331,6 +343,7 @@ export class TheSeer {
     let confidence = 0.7;
 
     if (metrics.avgLength === null) confidence -= 0.2;
+    if (metrics.messageCount < 5) confidence -= 0.15;
     if (metrics.struggleCount > 5) confidence += 0.1;
     if (metrics.shortRatio > 0.6) confidence += 0.1;
     if (metrics.topicSwitches > 3) confidence += 0.1;
@@ -379,7 +392,7 @@ export class TheSeer {
 
   private getDefaultPrediction(): PredictionResult {
     return {
-      burnoutRisk: 0.3,
+      burnoutRisk: 0.2,
       optimalModality: "analogy_first",
       conceptMasteryVelocity: 0,
       confidence: 0.4,

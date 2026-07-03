@@ -1,53 +1,33 @@
-// FILE: src/consciousness/agents/Fire.ts
-// =====================================================
-
+import { ContextBundle } from "./types";
 import { callLLM } from "../../llm/client";
-import { TOOLS } from "../../tools/definitions";
-import { ContextBundle, AgentConfig } from "../types";
+import { logger } from "../../utils/logger";
 
 export class Fire {
-  private config: AgentConfig = {
-    modelTier: "best",
-    maxTokens: 1500,
-    temperature: 0.7,
-    retryAttempts: 3,
-  };
-
   async generateResponse(
     contextBundle: ContextBundle,
-    systemPrompt: string
+    systemPrompt: string,
+    studentMessage: string  // ← ADDED
   ): Promise<string> {
-    const messages = [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: `Context Bundle: ${JSON.stringify(contextBundle)}\n\nGenerate the best possible WhatsApp response. Plain text only. No JSON. No markdown headers.` },
-    ];
+    try {
+      const messages = [
+        { role: "system", content: systemPrompt },
+        { 
+          role: "user", 
+          content: `Student just said: "${studentMessage}"\n\nContext Bundle: ${JSON.stringify(contextBundle)}\n\nGenerate the best possible WhatsApp response. Plain text only. No JSON. No markdown headers.` 
+        },
+      ];
 
-    const response = await this.callWithRetry(messages);
-    return this.cleanResponse(response);
-  }
+      const response = await callLLM({
+        messages,
+        agent: "fire",
+        temperature: 0.7,
+        max_tokens: 1100
+      });
 
-  private async callWithRetry(messages: any[]): Promise<string> {
-    for (let i = 0; i < this.config.retryAttempts; i++) {
-      try {
-        const res = await callLLM({ messages, tools: TOOLS, tool_choice: "auto", temperature: 0.7, max_tokens: 1100 }); return res.content || "";
-      } catch (e) {
-        if (i === this.config.retryAttempts - 1) throw e;
-        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
-      }
+      return response.content || "";
+    } catch (error: any) {
+      logger.error("Fire generation failed", { error: error.message });
+      return "Omo, network wahala — send that again when you can.";
     }
-    throw new Error("Fire failed after retries");
-  }
-
-  private cleanResponse(raw: string): string {
-    let cleaned = raw;
-    cleaned = cleaned.replace(/^#{1,6}\s+/gm, "");
-    cleaned = cleaned.replace(/\*\*/g, "*");
-    cleaned = cleaned.replace(/`/g, "");
-    cleaned = cleaned.replace(/```[\s\S]*?```/g, "");
-    cleaned = cleaned.replace(/\$\$?[\s\S]*?\$\$?/g, "");
-    cleaned = cleaned.replace(/\n{3,}/g, "\n\n").trim();
-    return cleaned;
   }
 }
-
-// =====================================================
