@@ -12,7 +12,7 @@ export class Archivist {
       const messages = [
         { role: "system" as const, content: systemPrompt || "You are the Archivist. Update memory based on reflection. Output JSON." },
         {
-          role: "user",
+          role: "user" as const,
           content: `Reflection: ${JSON.stringify(reflection)}`
         }
       ];
@@ -20,7 +20,7 @@ export class Archivist {
       const response = await callLLM({
         messages,
         temperature: 0.1,
-        max_tokens: 800,  // Increased from default
+        max_tokens: 800,
         agent: "archivist"
       });
 

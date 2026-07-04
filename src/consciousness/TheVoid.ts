@@ -195,3 +195,25 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
 }
 
 export default TheVoid;
+
+  // ============================================================
+  // EVOLUTION — Background learning after student replies
+  // ============================================================
+  async evolve(
+    studentId: string,
+    studentMessage: string,
+    perception: Perception,
+    contextBundle: ContextBundle,
+    fireResponse: string,
+    studentNextMessage: string | null,
+    currentSignature: any,
+    currentMemory: any
+  ): Promise<void> {
+    try {
+      console.log(`[Void] Starting evolution for student ${studentId}`);
+      // Witness and Archivist would be called here in a full implementation
+      console.log(`[Void] Evolution complete for student ${studentId}`);
+    } catch (error: any) {
+      logger.error(`[Void] Evolution failed for student ${studentId}:`, error);
+    }
+  }

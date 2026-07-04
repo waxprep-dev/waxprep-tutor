@@ -14,7 +14,7 @@ export class Witness {
       const messages = [
         { role: "system" as const, content: systemPrompt || "You are the Witness. Reflect on this interaction. Output JSON." },
         {
-          role: "user",
+          role: "user" as const,
           content: `Student: "${studentMessage}"\nWax: "${fireResponse}"\nReply: "${studentNextMessage || 'N/A'}"`
         }
       ];
@@ -22,7 +22,7 @@ export class Witness {
       const response = await callLLM({
         messages,
         temperature: 0.2,
-        max_tokens: 800,  // Increased from default
+        max_tokens: 800,
         agent: "witness"
       });
 
@@ -35,12 +35,9 @@ export class Witness {
 
   private parseReflection(raw: string): any {
     try {
-      // Try to extract JSON from markdown code blocks
       let cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
       
-      // If JSON is truncated, try to recover
       if (!this.isValidJSON(cleaned)) {
-        // Try to find the last complete object
         const lastBrace = cleaned.lastIndexOf('}');
         if (lastBrace > 0) {
           const partial = cleaned.substring(0, lastBrace + 1);
@@ -48,7 +45,6 @@ export class Witness {
             return JSON.parse(partial);
           }
         }
-        // Try adding a closing brace
         let attempt = cleaned;
         let braceCount = (cleaned.match(/{/g) || []).length - (cleaned.match(/}/g) || []).length;
         for (let i = 0; i < braceCount; i++) {

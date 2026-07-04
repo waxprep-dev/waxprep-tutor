@@ -3,11 +3,16 @@
 // The Breath — Pacing Oracle of TheVoid
 // "Fire without Breath becomes a wildfire."
 // One hardcoded law: ABSOLUTE_MAX = 900 characters.
-// Everything else is alive: calculated from the student's
-// attention span, relationship stage, intent, and silence.
 // =====================================================
 
-import { Perception, ContextBundle, BreathBudget } from "../types";
+import { Perception, ContextBundle } from "../types";
+
+export interface BreathBudget {
+  targetChars: number;
+  maxChars: number;
+  strategy: "hook" | "bite" | "meal" | "feast";
+  why: string;
+}
 
 export class Breath {
   private static readonly ABSOLUTE_MAX = 900;
@@ -58,7 +63,9 @@ export class Breath {
     }
 
     if (vulnerabilityDetected || shameDetected) {
-      strategy = strategy === "feast" ? "meal" : strategy === "meal" ? "bite" : strategy;
+      // Fix: Only downgrade if currently at feast or meal
+      if (strategy === "feast") strategy = "meal";
+      else if (strategy === "meal") strategy = "bite";
       multiplier *= 0.7;
     }
 
