@@ -41,8 +41,19 @@ export async function handleWebhookPost(req: Request, res: Response): Promise<vo
   const rawBody = (req as any).rawBody as string;
   const signature = req.headers["x-hub-signature-256"] as string | undefined;
 
+  // Debug logging
+  logger.info("Webhook received", { 
+    hasSignature: !!signature,
+    signaturePrefix: signature?.slice(0, 20),
+    bodyLength: rawBody?.length,
+    appSecretConfigured: !!config.whatsapp?.appSecret
+  });
+
   if (!verifyWebhookSignature(rawBody, signature)) {
-    logger.warn("Invalid webhook signature");
+    logger.warn("Invalid webhook signature", { 
+      signature: signature?.slice(0, 20),
+      appSecret: config.whatsapp?.appSecret ? "configured" : "missing"
+    });
     res.status(401).send("Invalid signature");
     return;
   }
@@ -122,12 +133,20 @@ async function processWebhookAsync(body: any): Promise<void> {
     timestamp = new Date();
   }
 
+  // FIRST: Create or get episode
+  await createIfMissing(fromPhone);
+  await touchStudent(fromPhone);
+
+  const episode = await getOrCreateCurrentEpisode(fromPhone);
+  await incrementEpisodeMessageCount(episode.episode_id);
+
+  // NOW: Insert message with valid episode_id
   const duplicateCheck = await query(
     `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
-     VALUES ($1, $2, 'inbound', $3, $4, '00000000-0000-0000-0000-000000000000')
+     VALUES ($1, $2, 'inbound', $3, $4, $5)
      ON CONFLICT (message_id) DO NOTHING
      RETURNING message_id`,
-    [messageId, fromPhone, "[placeholder]", timestamp]
+    [messageId, fromPhone, "[placeholder]", timestamp, episode.episode_id]
   );
 
   if (duplicateCheck.length === 0) {
@@ -164,17 +183,12 @@ async function processWebhookAsync(body: any): Promise<void> {
     length: messageText.length,
   });
 
-  await createIfMissing(fromPhone);
-  await touchStudent(fromPhone);
-
-  const episode = await getOrCreateCurrentEpisode(fromPhone);
-  await incrementEpisodeMessageCount(episode.episode_id);
-
+  // Update the message with real text
   await query(
     `UPDATE message_log 
-     SET raw_text = $1, episode_id = $2
-     WHERE message_id = $3`,
-    [messageText, episode.episode_id, messageId]
+     SET raw_text = $1
+     WHERE message_id = $2`,
+    [messageText, messageId]
   );
 
   const history = await getRecentHistory(fromPhone, episode.episode_id, messageId, 20);
@@ -279,7 +293,7 @@ async function processWebhookAsync(body: any): Promise<void> {
           contextBundleResult,
           finalResponse,
           null,
-          null,  // currentSignature - not needed for now
+          null,
           context
         );
       } catch (evolveError: any) {

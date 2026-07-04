@@ -6,32 +6,63 @@ export function verifyChallenge(
   token: string | undefined,
   challenge: string | undefined
 ): string | false {
-  if (mode === "subscribe" && token === config.whatsapp?.verifyToken) {
+  const verifyToken = config.whatsapp?.verifyToken;
+  if (mode === "subscribe" && token === verifyToken) {
     return challenge || "";
   }
   return false;
 }
 
 export function verifyWebhookSignature(body: string, signature: string | undefined): boolean {
-  if (!signature || !config.whatsapp?.appSecret) {
+  if (!body) {
+    console.warn("Webhook signature verification: Empty body");
     return false;
   }
 
-  const expected = createHmac("sha256", config.whatsapp.appSecret)
-    .update(body, "utf8")
-    .digest("hex");
+  if (!signature) {
+    console.warn("Webhook signature verification: No signature provided");
+    return false;
+  }
 
-  const expectedSig = "sha256=" + expected;
-
-  if (signature.length !== expectedSig.length) {
+  const appSecret = config.whatsapp?.appSecret;
+  if (!appSecret) {
+    console.warn("Webhook signature verification: WHATSAPP_APP_SECRET not configured");
     return false;
   }
 
   try {
-    const sigBuffer = Buffer.from(signature);
-    const expectedBuffer = Buffer.from(expectedSig);
-    return timingSafeEqual(sigBuffer, expectedBuffer);
-  } catch {
+    const expected = createHmac("sha256", appSecret)
+      .update(body, "utf8")
+      .digest("hex");
+
+    const expectedSig = "sha256=" + expected;
+
+    // Debug: Log first few chars
+    console.log("Signature debug:", {
+      expectedPrefix: expectedSig.substring(0, 20),
+      receivedPrefix: signature.substring(0, 20),
+      appSecretPrefix: appSecret.substring(0, 10) + "...",
+    });
+
+    if (signature === expectedSig) {
+      return true;
+    }
+
+    try {
+      const sigBuffer = Buffer.from(signature);
+      const expectedBuffer = Buffer.from(expectedSig);
+      
+      if (sigBuffer.length !== expectedBuffer.length) {
+        return false;
+      }
+      
+      return timingSafeEqual(sigBuffer, expectedBuffer);
+    } catch (e) {
+      return false;
+    }
+
+  } catch (error: any) {
+    console.error("Webhook signature verification error:", error.message);
     return false;
   }
 }
