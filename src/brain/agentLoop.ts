@@ -10,6 +10,7 @@ const MAX_LOOPS = 5;
 const RETRY_ATTEMPTS = 3;
 const TOTAL_TIMEOUT_MS = 45000;
 const MAX_LLM_CONTENT_LENGTH = 10000;
+const HARD_CAP = 900; // Same as webhook
 
 export interface AgentLoopResult {
   finalResponse: string;
@@ -132,7 +133,7 @@ export async function runAgentLoop(
         tools: TOOLS,
         tool_choice: "auto",
         temperature: 0.4,
-        max_tokens: 400,
+        max_tokens: 400, // REDUCED from 1100 to prevent essays
       });
 
       modelUsed = response.model_used || modelUsed;
@@ -188,7 +189,6 @@ export async function runAgentLoop(
         try {
           const toolResult = await executeTool(toolCall, context);
           
-          // Extract result from whatever executeTool returns
           let result = toolResult;
           if (toolResult && typeof toolResult === 'object' && 'result' in toolResult) {
             result = (toolResult as any).result;
@@ -230,7 +230,7 @@ export async function runAgentLoop(
           tools: TOOLS,
           tool_choice: "auto",
           temperature: 0.4,
-          max_tokens: 400,
+          max_tokens: 400, // REDUCED from 1100
         });
         
         finalResponse = sanitizeResponse(stripOmegaThinking(finalCall.content || ""));
@@ -250,11 +250,24 @@ export async function runAgentLoop(
       logger.warn("Agent loop hit max iterations", { phone: context.phone });
       finalResponse = generateFallbackResponse();
     }
-    if (finalResponse.length > 900) {
-      logger.warn("Fallback agentLoop produced oversized response, emergency trim", { length: finalResponse.length });
-      const trimmed = finalResponse.slice(0, 900);
-      const lastBreak = Math.max(trimmed.lastIndexOf(". "), trimmed.lastIndexOf("! "), trimmed.lastIndexOf("? "));
-      finalResponse = lastBreak > 300 ? trimmed.slice(0, lastBreak + 1) : trimmed.slice(0, 400);
+
+    // ============================================================
+    // HARD CAP — Never exceed 900 characters
+    // ============================================================
+    if (finalResponse.length > HARD_CAP) {
+      logger.warn("Fallback agentLoop produced oversized response, emergency trim", { 
+        length: finalResponse.length,
+        phone: context.phone 
+      });
+      const trimmed = finalResponse.slice(0, HARD_CAP);
+      const lastBreak = Math.max(
+        trimmed.lastIndexOf(". "),
+        trimmed.lastIndexOf("! "),
+        trimmed.lastIndexOf("? ")
+      );
+      finalResponse = lastBreak > 300 
+        ? trimmed.slice(0, lastBreak + 1) + " …" 
+        : trimmed.slice(0, 400) + " …";
     }
 
     return {
