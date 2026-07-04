@@ -1,7 +1,7 @@
 // FILE: src/workers/dreamCron.ts
 // DREAM CRON — Scheduled entry point for the Dream Worker
 
-import { dreamWorker } from "./dreamWorker";
+import { dreamWorker, DreamResult } from "./dreamWorker";
 import { logger } from "../utils/logger";
 
 export async function runDream(): Promise<void> {
@@ -9,7 +9,7 @@ export async function runDream(): Promise<void> {
   logger.info("🕐 Dream cron triggered at", { time: new Date().toISOString() });
 
   try {
-    const result = await dreamWorker.run();
+    const result: DreamResult = await dreamWorker.run();
 
     logger.info("✅ Dream cron completed successfully", {
       durationMs: result.durationMs,

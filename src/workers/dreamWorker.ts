@@ -8,8 +8,18 @@ import { query, queryOne } from "../db/client";
 import { logger } from "../utils/logger";
 import { callLLM } from "../llm/client";
 
+export interface DreamResult {
+  chunksProcessed: number;
+  chunksMerged: number;
+  chunksPruned: number;
+  patternsExtracted: number;
+  genesEvolved: number;
+  predictionsValidated: number;
+  durationMs: number;
+}
+
 export class DreamWorker {
-  async run(): Promise<void> {
+  async run(): Promise<DreamResult> {
     const startTime = Date.now();
     logger.info("🌙 Dream Worker v2 starting...");
 
@@ -25,20 +35,22 @@ export class DreamWorker {
         `SELECT DISTINCT student_phone FROM episodic_chunks WHERE consolidation_status = 'fresh'`
       );
       let totalMerged = 0, totalConcepts = 0;
+      let chunksPruned = 0;
       for (const s of students) {
         const result = await hippocampus.consolidateEpisodes(s.student_phone);
         totalMerged += result.merged;
         totalConcepts += result.concepts;
+        chunksPruned += result.pruned || 0;
       }
       logger.info("Episode consolidation complete", { totalMerged, totalConcepts });
 
       // Phase 3: Evolve prompt genes
-      const evolved = await this.evolvePromptGenes();
-      logger.info("Prompt evolution complete", { evolved });
+      const genesEvolved = await this.evolvePromptGenes();
+      logger.info("Prompt evolution complete", { genesEvolved });
 
       // Phase 4: Validate predictions
-      const validated = await this.validatePredictions();
-      logger.info("Prediction validation complete", { validated });
+      const predictionsValidated = await this.validatePredictions();
+      logger.info("Prediction validation complete", { predictionsValidated });
 
       // Phase 5: Update circadian profiles
       await this.updateCircadianProfiles();
@@ -49,15 +61,29 @@ export class DreamWorker {
       logger.info("Systemic healing complete", { healed });
 
       // Phase 7: Extract cross-student patterns
-      const patterns = await this.extractPatterns();
-      logger.info("Pattern extraction complete", { patterns });
+      const patternsExtracted = await this.extractPatterns();
+      logger.info("Pattern extraction complete", { patternsExtracted });
 
-      await this.completeJob(jobId, { totalMerged, totalConcepts, evolved, validated, healed, patterns });
-      logger.info("🌙 Dream complete", { durationMs: Date.now() - startTime });
+      const durationMs = Date.now() - startTime;
+
+      await this.completeJob(jobId, { totalMerged, totalConcepts, patternsExtracted, genesEvolved, predictionsValidated });
+
+      logger.info("🌙 Dream complete", { durationMs });
+
+      return {
+        chunksProcessed: students.length,
+        chunksMerged: totalMerged,
+        chunksPruned: chunksPruned,
+        patternsExtracted,
+        genesEvolved,
+        predictionsValidated,
+        durationMs
+      };
 
     } catch (error: any) {
       logger.error("Dream worker failed", { error: error.message });
       await this.failJob(jobId, error.message);
+      throw error;
     }
   }
 
@@ -253,7 +279,7 @@ Create a variant that:
        SET status = 'completed', completed_at = NOW(), 
            chunks_processed = $2, chunks_merged = $3, patterns_extracted = $4
        WHERE job_id = $1`,
-      [jobId, stats.totalMerged, stats.totalConcepts, stats.patterns]
+      [jobId, stats.totalMerged, stats.totalConcepts, stats.patternsExtracted]
     );
   }
 
