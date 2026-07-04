@@ -30,7 +30,6 @@ export interface TemporalRelation {
 export class Hippocampus {
   // ============================================================
   // STORE FACT — With temporal validity
-  // When a fact changes, invalidate the old one. Never delete.
   // ============================================================
   async storeFact(
     studentPhone: string,
@@ -39,7 +38,7 @@ export class Hippocampus {
     properties: any,
     confidence: number = 1.0
   ): Promise<string> {
-    // First, invalidate any existing fact of same type for this student
+    // Invalidate any existing fact of same type for this student
     await query(
       `UPDATE temporal_nodes 
        SET valid_until = NOW()
@@ -58,6 +57,10 @@ export class Hippocampus {
        RETURNING node_id`,
       [nodeType, label, JSON.stringify({ ...properties, student_phone: studentPhone }), embedding ? JSON.stringify(embedding) : null, confidence, "hippocampus"]
     );
+
+    if (!row) {
+      throw new Error(`Failed to store fact: ${label} for student ${studentPhone}`);
+    }
 
     return row.node_id;
   }
@@ -87,6 +90,10 @@ export class Hippocampus {
        RETURNING edge_id`,
       [fromNodeId, toNodeId, edgeType, weight, JSON.stringify(properties), "hippocampus"]
     );
+
+    if (!row) {
+      throw new Error(`Failed to store relation: ${edgeType} between ${fromNodeId} and ${toNodeId}`);
+    }
 
     return row.edge_id;
   }
@@ -238,7 +245,6 @@ export class Hippocampus {
 
   // ============================================================
   // CONSOLIDATION — Merge similar episodes into semantic memories
-  // Runs during Dream worker
   // ============================================================
   async consolidateEpisodes(studentPhone: string): Promise<{ merged: number; concepts: number }> {
     const freshChunks = await query(
@@ -258,7 +264,6 @@ export class Hippocampus {
     for (const group of groups) {
       if (group.length < 2) continue;
 
-      const summary = await this.generateSummary(group);
       const keyConcepts = await this.extractConcepts(group);
 
       for (const concept of keyConcepts) {
@@ -315,27 +320,6 @@ export class Hippocampus {
     return dot / (Math.sqrt(magA) * Math.sqrt(magB));
   }
 
-  private async generateSummary(chunks: any[]): Promise<string> {
-    // Uses LLM to generate summary
-    try {
-      const { callLLM } = await import("../llm/client");
-      const contents = chunks.map((c: any) => c.content).join("\n");
-      const response = await callLLM({
-        messages: [
-          { role: "system", content: "Summarize this conversation concisely in 1-2 sentences. Focus on what was learned and emotional state." },
-          { role: "user", content: contents }
-        ],
-        temperature: 0.3,
-        max_tokens: 100,
-        agent: "hippocampus"
-      });
-      return response.content || `Conversation about: ${contents.slice(0, 100)}...`;
-    } catch (e) {
-      const contents = chunks.map((c: any) => c.content).join(" ");
-      return `Conversation about: ${contents.slice(0, 100)}...`;
-    }
-  }
-
   private async extractConcepts(chunks: any[]): Promise<string[]> {
     try {
       const { callLLM } = await import("../llm/client");
@@ -350,9 +334,10 @@ export class Hippocampus {
         agent: "hippocampus"
       });
       const parsed = JSON.parse(response.content || "[]");
-      return Array.isArray(parsed) ? parsed : ["physics", "force", "motion"];
+      return Array.isArray(parsed) ? parsed : ["general"];
     } catch (e) {
-      return ["physics", "force", "motion"];
+      logger.warn("Concept extraction failed, using defaults", { error: e instanceof Error ? e.message : String(e) });
+      return ["general"];
     }
   }
 
