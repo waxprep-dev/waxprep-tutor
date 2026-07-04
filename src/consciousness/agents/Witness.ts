@@ -1,65 +1,87 @@
-// FILE: src/consciousness/agents/Witness.ts
-// =====================================================
-
 import { callLLM } from "../../llm/client";
-import { Reflection, Perception, ContextBundle, AgentConfig } from "../types";
+import { logger } from "../../utils/logger";
 
 export class Witness {
-  private config: AgentConfig = {
-    modelTier: "capable",
-    maxTokens: 2500,
-    temperature: 0.2,
-    retryAttempts: 2,
-  };
-
   async reflect(
     studentMessage: string,
-    perception: Perception,
-    contextBundle: ContextBundle,
+    perception: any,
+    contextBundle: any,
     fireResponse: string,
     studentNextMessage: string | null,
     systemPrompt: string
-  ): Promise<Reflection> {
-    const messages = [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: `Student Message: "${studentMessage}"\n\nPerception: ${JSON.stringify(perception)}\n\nContext Bundle: ${JSON.stringify(contextBundle)}\n\nFire Response: "${fireResponse}"\n\nStudent Next Message: "${studentNextMessage || "N/A"}"\n\nGenerate reflection as JSON only.` },
-    ];
-
-    const response = await this.callWithRetry(messages);
-    return this.parseReflection(response);
-  }
-
-  private async callWithRetry(messages: any[]): Promise<string> {
-    for (let i = 0; i < this.config.retryAttempts; i++) {
-      try {
-        const res = await callLLM({ messages, temperature: 0.3, max_tokens: 500 }); return res.content || "";
-      } catch (e) {
-        if (i === this.config.retryAttempts - 1) throw e;
-        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
-      }
-    }
-    throw new Error("Witness failed after retries");
-  }
-
-  private parseReflection(raw: string): Reflection {
+  ): Promise<any> {
     try {
-      const cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-      return JSON.parse(cleaned);
-    } catch (e) {
-      console.error("Witness parse error:", e);
-      return {
-        interaction_quality: { score: 0.5, assessment: "adequate", reason: "parse failed" },
-        what_worked: [],
-        what_failed: [],
-        missed_opportunities: [],
-        emotional_missed: [],
-        cognitive_missed: [],
-        pattern_detected: { pattern_type: "none", description: "parse failed", confidence: 0, recommended_action: "none" },
-        teaching_effectiveness: { concept_understood: false, student_engaged: false, would_student_return: false, risk_of_churn: 0.5 },
-        system_improvements: [],
-      };
+      const messages = [
+        { role: "system", content: systemPrompt || "You are the Witness. Reflect on this interaction. Output JSON." },
+        {
+          role: "user",
+          content: `Student: "${studentMessage}"\nWax: "${fireResponse}"\nReply: "${studentNextMessage || 'N/A'}"`
+        }
+      ];
+
+      const response = await callLLM({
+        messages,
+        temperature: 0.2,
+        max_tokens: 800,  // Increased from default
+        agent: "witness"
+      });
+
+      return this.parseReflection(response.content || "");
+    } catch (error: any) {
+      logger.error("Witness reflection failed", { error: error.message });
+      return this.getDefaultReflection();
     }
+  }
+
+  private parseReflection(raw: string): any {
+    try {
+      // Try to extract JSON from markdown code blocks
+      let cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+      
+      // If JSON is truncated, try to recover
+      if (!this.isValidJSON(cleaned)) {
+        // Try to find the last complete object
+        const lastBrace = cleaned.lastIndexOf('}');
+        if (lastBrace > 0) {
+          const partial = cleaned.substring(0, lastBrace + 1);
+          if (this.isValidJSON(partial)) {
+            return JSON.parse(partial);
+          }
+        }
+        // Try adding a closing brace
+        let attempt = cleaned;
+        let braceCount = (cleaned.match(/{/g) || []).length - (cleaned.match(/}/g) || []).length;
+        for (let i = 0; i < braceCount; i++) {
+          attempt += '}';
+        }
+        if (this.isValidJSON(attempt)) {
+          return JSON.parse(attempt);
+        }
+        throw new Error("Could not parse JSON after recovery attempts");
+      }
+      
+      return JSON.parse(cleaned);
+    } catch (e: any) {
+      logger.error("Witness parse error", { error: e.message, raw: raw.slice(0, 200) });
+      return this.getDefaultReflection();
+    }
+  }
+
+  private isValidJSON(str: string): boolean {
+    try {
+      JSON.parse(str);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  private getDefaultReflection(): any {
+    return {
+      what_worked: [],
+      what_failed: [],
+      missed_opportunities: [],
+      pattern_detected: null
+    };
   }
 }
-
-// =====================================================
