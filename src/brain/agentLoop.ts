@@ -132,7 +132,7 @@ export async function runAgentLoop(
         tools: TOOLS,
         tool_choice: "auto",
         temperature: 0.4,
-        max_tokens: 1100,
+        max_tokens: 400,
       });
 
       modelUsed = response.model_used || modelUsed;
@@ -230,7 +230,7 @@ export async function runAgentLoop(
           tools: TOOLS,
           tool_choice: "auto",
           temperature: 0.4,
-          max_tokens: 1100,
+          max_tokens: 400,
         });
         
         finalResponse = sanitizeResponse(stripOmegaThinking(finalCall.content || ""));
@@ -249,6 +249,12 @@ export async function runAgentLoop(
     if (!finalResponse && loopCount >= MAX_LOOPS) {
       logger.warn("Agent loop hit max iterations", { phone: context.phone });
       finalResponse = generateFallbackResponse();
+    }
+    if (finalResponse.length > 900) {
+      logger.warn("Fallback agentLoop produced oversized response, emergency trim", { length: finalResponse.length });
+      const trimmed = finalResponse.slice(0, 900);
+      const lastBreak = Math.max(trimmed.lastIndexOf(". "), trimmed.lastIndexOf("! "), trimmed.lastIndexOf("? "));
+      finalResponse = lastBreak > 300 ? trimmed.slice(0, lastBreak + 1) : trimmed.slice(0, 400);
     }
 
     return {

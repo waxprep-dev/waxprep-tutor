@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import { config } from "./config";
 import { handleWebhookGet, handleWebhookPost } from "./whatsapp/webhook";
 import { logger } from "./utils/logger";
@@ -7,8 +6,7 @@ import { logger } from "./utils/logger";
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors());
+// Middleware - raw body for webhook verification
 app.use(express.json({ verify: (req: any, res, buf) => { req.rawBody = buf; } }));
 
 // Health check (for keep-alive and monitoring)

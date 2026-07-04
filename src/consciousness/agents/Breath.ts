@@ -1,0 +1,136 @@
+// FILE: src/consciousness/agents/Breath.ts
+// =====================================================
+// The Breath — Pacing Oracle of TheVoid
+// "Fire without Breath becomes a wildfire."
+// One hardcoded law: ABSOLUTE_MAX = 900 characters.
+// Everything else is alive: calculated from the student's
+// attention span, relationship stage, intent, and silence.
+// =====================================================
+
+import { Perception, ContextBundle } from "../types";
+
+export interface BreathBudget {
+  targetChars: number;
+  maxChars: number;
+  strategy: "hook" | "bite" | "meal" | "feast";
+  why: string;
+}
+
+export class Breath {
+  private static readonly ABSOLUTE_MAX = 900;
+  private static readonly MIN_LENGTH = 60;
+
+  calculate(
+    perception: Perception,
+    contextBundle: ContextBundle,
+    historyLength: number,
+    minutesSinceLastStudentMessage: number
+  ): BreathBudget {
+    let strategy: BreathBudget["strategy"] = "bite";
+    let multiplier = 1.0;
+
+    const stage = perception.social_context?.relationship_stage || "stranger";
+    const attention = perception.cognitive_state?.attention_span_estimate || "medium";
+    const intent = perception.intent?.primary || "other";
+    const msgCount = contextBundle.conversation_state?.message_count_this_episode || 0;
+    const vulnerabilityDetected = perception.emotional_state?.vulnerability_detected || false;
+    const shameDetected = perception.emotional_state?.shame_detected || false;
+
+    // Relationship stage: strangers get less air, trusted get more
+    if (stage === "stranger") multiplier *= 0.6;
+    else if (stage === "acquaintance") multiplier *= 0.8;
+    else if (stage === "close") multiplier *= 1.15;
+
+    // Attention span: respect cognitive limits
+    if (attention === "short") multiplier *= 0.5;
+    else if (attention === "long") multiplier *= 1.2;
+
+    // Silence penalty: if student ghosted for 8+ minutes, throw a hook not a rope
+    if (minutesSinceLastStudentMessage > 8) {
+      strategy = "hook";
+      multiplier = 0.35;
+    } else if (minutesSinceLastStudentMessage > 3) {
+      multiplier *= 0.7;
+    }
+
+    // Intent-based strategy selection
+    if (intent === "greeting" || intent === "small_talk" || intent === "casual_chat") {
+      strategy = "hook";
+      multiplier *= 0.5;
+    } else if (intent === "deep_explanation" || intent === "study_plan" || intent === "teaching_request") {
+      strategy = "meal";
+      multiplier *= 1.3;
+    } else if (intent === "emotional_expression") {
+      strategy = "bite";
+      multiplier *= 0.8; // Emotions need space but not lectures
+    } else if (intent === "complaint" || intent === "crisis") {
+      strategy = "bite";
+      multiplier *= 0.7; // Crisis needs clarity, not chapters
+    }
+
+    // Vulnerability and shame: student opened up — be present, not verbose
+    if (vulnerabilityDetected || shameDetected) {
+      strategy = strategy === "feast" ? "meal" : strategy === "meal" ? "bite" : strategy;
+      multiplier *= 0.7;
+    }
+
+    // Early conversation (first 3 messages): do not lecture a stranger
+    if (msgCount < 3) {
+      multiplier *= 0.55;
+      if (strategy === "meal") strategy = "bite";
+      if (strategy === "feast") strategy = "meal";
+    }
+
+    // Risk flags: if student is in danger, short and direct
+    if (perception.risk_flags?.suicidal_ideation ||
+        perception.risk_flags?.self_harm ||
+        perception.risk_flags?.extreme_distress) {
+      strategy = "bite";
+      multiplier *= 0.6;
+    }
+
+    const baseTargets: Record<BreathBudget["strategy"], number> = {
+      hook: 120,
+      bite: 280,
+      meal: 550,
+      feast: 800,
+    };
+
+    let target = Math.floor(baseTargets[strategy] * multiplier);
+    target = Math.min(target, Breath.ABSOLUTE_MAX);
+    target = Math.max(target, Breath.MIN_LENGTH);
+
+    return {
+      maxChars: Breath.ABSOLUTE_MAX,
+      targetChars: target,
+      strategy,
+      why: `stage=${stage}, attention=${attention}, intent=${intent}, msgCount=${msgCount}, silence=${minutesSinceLastStudentMessage}m, vulnerability=${vulnerabilityDetected}, shame=${shameDetected}`,
+    };
+  }
+
+  enforce(response: string, budget: BreathBudget): { text: string; wasTrimmed: boolean; continuation?: string } {
+    if (response.length <= budget.maxChars) {
+      return { text: response, wasTrimmed: false };
+    }
+
+    // Find natural breath point near target
+    let cutIndex = response.lastIndexOf(". ", budget.targetChars);
+    if (cutIndex === -1) cutIndex = response.lastIndexOf("! ", budget.targetChars);
+    if (cutIndex === -1) cutIndex = response.lastIndexOf("? ", budget.targetChars);
+    if (cutIndex === -1) cutIndex = response.lastIndexOf("\n", budget.targetChars);
+    if (cutIndex === -1) cutIndex = budget.targetChars;
+
+    const firstPart = response.slice(0, cutIndex + 1).trim();
+    const rest = response.slice(cutIndex + 1).trim();
+
+    if (rest.length > 80) {
+      return {
+        text: firstPart,
+        wasTrimmed: true,
+        continuation: rest,
+      };
+    }
+
+    return { text: firstPart, wasTrimmed: true };
+  }
+}

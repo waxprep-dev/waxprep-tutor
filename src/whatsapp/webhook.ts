@@ -273,6 +273,12 @@ async function processWebhookAsync(body: any): Promise<void> {
   );
 
   await incrementOutboundCount(fromPhone);
+  if (finalResponse.length > 900) {
+    logger.warn("Emergency trim in webhook", { length: finalResponse.length, phone: fromPhone });
+    const trimmed = finalResponse.slice(0, 900);
+    const lastBreak = Math.max(trimmed.lastIndexOf(". "), trimmed.lastIndexOf("! "), trimmed.lastIndexOf("? "));
+    finalResponse = lastBreak > 300 ? trimmed.slice(0, lastBreak + 1) : trimmed.slice(0, 400);
+  }
   await sendTextMessage(fromPhone, finalResponse);
 
   logger.info("Message processed", {
