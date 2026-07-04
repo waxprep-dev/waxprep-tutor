@@ -36,3 +36,25 @@ export async function queryOne<T = any>(
   const rows = await query<T>(text, params);
   return rows[0] || null;
 }
+
+// ============================================================
+// TRANSACTION WRAPPER
+// ============================================================
+import { PoolClient } from "pg";
+
+export async function withTransaction<T>(
+  fn: (client: PoolClient) => Promise<T>
+): Promise<T> {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const result = await fn(client);
+    await client.query("COMMIT");
+    return result;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+}
