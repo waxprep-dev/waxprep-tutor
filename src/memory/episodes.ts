@@ -116,6 +116,9 @@ export async function incrementEpisodeMessageCount(episodeId: string): Promise<v
   );
 }
 
+// ============================================================
+// FIXED: getRecentHistory — Chronological order with speaker labels
+// ============================================================
 export async function getRecentHistory(
   phone: string,
   episodeId: string,
@@ -125,7 +128,7 @@ export async function getRecentHistory(
   const limit = Math.min(Math.max(maxMessages, 1), 50);
   
   let queryText = `
-    SELECT raw_text as content, timestamp, direction
+    SELECT raw_text as content, timestamp, direction, message_id
     FROM message_log
     WHERE student_phone = $1 AND episode_id = $2
   `;
@@ -134,13 +137,30 @@ export async function getRecentHistory(
 
   if (excludeMessageId) {
     queryText += ` AND message_id != $3`;
-    params.push(excludeMessageId.slice(0, 256));
+    params.push(excludeMessageId);
   }
 
+  // Get newest first, then reverse for chronological order
   queryText += ` ORDER BY timestamp DESC LIMIT $${params.length + 1}`;
   params.push(limit);
 
-  return query(queryText, params);
+  const rows = await query(queryText, params);
+  
+  // Reverse to chronological order (oldest first)
+  // Add speaker labels so the AI knows who said what
+  return rows.reverse().map((r: any) => {
+    const time = new Date(r.timestamp).toLocaleTimeString('en-NG', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+    const speaker = r.direction === 'inbound' ? 'Student' : 'Wax';
+    
+    return {
+      ...r,
+      speaker: speaker,
+      formatted: `${speaker} (${time}): ${r.content || ''}`,
+    };
+  });
 }
 
 export async function storeEpisodeEmbedding(
