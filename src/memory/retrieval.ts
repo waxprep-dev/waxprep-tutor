@@ -6,7 +6,6 @@ import { getRecentNotes, searchNotes, RelationalNote } from "./relational";
 import { embed } from "./embeddings";
 import { estimateTokens } from "../llm/tokenCounter";
 import { query } from "../db/client";
-import { logger } from "../utils/logger";
 
 export interface EngagementSignal {
   avgRecentMessageLength: number | null;
@@ -26,49 +25,93 @@ export interface ContextBundle {
   tokenEstimate: number;
 }
 
+// ============================================================
+// SAFE KEYWORD EXTRACTION (No Regex DoS)
+// ============================================================
+const STOPWORDS = new Set([
+  "the", "a", "an", "is", "are", "was", "were", "be", "been", "being", "to", "of", "in",
+  "on", "at", "for", "and", "or", "but", "with", "this", "that", "these", "those", "i",
+  "you", "he", "she", "it", "we", "they", "me", "my", "your", "his", "her", "its", "our",
+  "their", "what", "when", "where", "why", "how", "do", "does", "did", "can", "could",
+  "will", "would", "should", "please", "just", "like", "want", "know", "help", "explain",
+  "now", "okay", "ok", "yes", "no", "thanks", "abeg", "sha",
+]);
+
+function extractKeywords(message: string): string[] {
+  if (!message || typeof message !== "string") return [];
+  
+  const MAX_LENGTH = 10000;
+  const text = message.length > MAX_LENGTH ? message.slice(0, MAX_LENGTH) : message;
+  
+  const keywords: string[] = [];
+  let currentWord = "";
+  
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i].toLowerCase();
+    const code = text.charCodeAt(i);
+    
+    const isValid = (code >= 97 && code <= 122) ||
+                    (code >= 48 && code <= 57) ||
+                    code === 39 ||
+                    code === 45;
+    
+    if (isValid) {
+      currentWord += char;
+    } else {
+      if (currentWord.length > 2 && !STOPWORDS.has(currentWord)) {
+        keywords.push(currentWord);
+      }
+      currentWord = "";
+    }
+  }
+  
+  if (currentWord.length > 2 && !STOPWORDS.has(currentWord)) {
+    keywords.push(currentWord);
+  }
+  
+  return [...new Set(keywords)];
+}
+
 export async function assembleContext(
   phone: string,
   currentMessage: string,
   waxId?: string
 ): Promise<ContextBundle> {
   const profile = await getProfile(phone);
-
-  const recentEpisodes = await getRecentEpisodes(phone, 3);
-
-  const queryEmbedding = await embed(currentMessage);
-  let relevantEpisodes: any[] = [];
   
-  try {
-    relevantEpisodes = queryEmbedding
-      ? await searchEpisodes(phone, queryEmbedding, 5)
-      : [];
-  } catch (error: any) {
-    // If search fails (missing column), continue with empty results
-    logger.warn("Episode search failed, continuing without relevant episodes", {
-      error: error.message,
-      phone
-    });
-    relevantEpisodes = [];
-  }
+  const recentEpisodes = await getRecentEpisodes(phone, 3);
+  
+  const queryEmbedding = await embed(currentMessage);
+  const relevantEpisodes = queryEmbedding && Array.isArray(queryEmbedding)
+    ? await searchEpisodes(phone, queryEmbedding, 5)
+    : [];
 
   const keywords = extractKeywords(currentMessage);
-  const relevantConcepts = await getRelevantConcepts(phone, keywords, 5);
+  const relevantConcepts = keywords.length > 0 
+    ? await getRelevantConcepts(phone, keywords, 5)
+    : [];
 
   const relevantRules = await getRules(phone, 10);
 
-  const searchedNotes = await searchNotes(phone, currentMessage.split(" ").slice(0, 3).join(" "), 3);
+  const searchQuery = keywords.slice(0, 5).join(" ");
+  const searchedNotes = searchQuery 
+    ? await searchNotes(phone, searchQuery, 3)
+    : [];
+    
   const recentNotes = await getRecentNotes(phone, 5);
-  const relevantNotes = mergeUnique(searchedNotes, recentNotes, (n: any) => n.note_id).slice(0, 5);
+  const relevantNotes = mergeUnique(searchedNotes, recentNotes, (n) => n.note_id).slice(0, 5);
 
   const engagement = await getEngagementSignal(phone);
 
+  const TOKEN_OVERHEAD = 200;
   const tokenEstimate =
+    TOKEN_OVERHEAD +
     estimateTokens(JSON.stringify(profile)) +
-    recentEpisodes.reduce((sum: number, e: any) => sum + estimateTokens(e.summary || ""), 0) +
-    relevantEpisodes.reduce((sum: number, e: any) => sum + estimateTokens(e.summary_text), 0) +
-    relevantConcepts.reduce((sum: number, c: any) => sum + estimateTokens(c.name + (c.description || "")), 0) +
-    relevantRules.reduce((sum: number, r: any) => sum + estimateTokens(r.rule_text), 0) +
-    relevantNotes.reduce((sum: number, n: any) => sum + estimateTokens(n.note_text), 0);
+    recentEpisodes.reduce((sum, e) => sum + estimateTokens(e.summary || ""), 0) +
+    relevantEpisodes.reduce((sum, e) => sum + estimateTokens(e.summary_text || ""), 0) +
+    relevantConcepts.reduce((sum, c) => sum + estimateTokens((c.name || "") + (c.description || "")), 0) +
+    relevantRules.reduce((sum, r) => sum + estimateTokens(r.rule_text || ""), 0) +
+    relevantNotes.reduce((sum, n) => sum + estimateTokens(n.note_text || ""), 0);
 
   return {
     wax_id: waxId,
@@ -81,22 +124,6 @@ export async function assembleContext(
     engagement,
     tokenEstimate,
   };
-}
-
-const STOPWORDS = new Set([
-  "the", "a", "an", "is", "are", "was", "were", "be", "been", "being", "to", "of", "in",
-  "on", "at", "for", "and", "or", "but", "with", "this", "that", "these", "those", "i",
-  "you", "he", "she", "it", "we", "they", "me", "my", "your", "his", "her", "its", "our",
-  "their", "what", "when", "where", "why", "how", "do", "does", "did", "can", "could",
-  "will", "would", "should", "please", "just", "like", "want", "know", "help", "explain",
-  "now", "okay", "ok", "yes", "no", "thanks", "abeg", "sha",
-]);
-
-function extractKeywords(message: string): string[] {
-  return message
-    .toLowerCase()
-    .split(/[^a-z0-9'-]+/)
-    .filter((w) => w.length > 2 && !STOPWORDS.has(w));
 }
 
 async function getEngagementSignal(phone: string): Promise<EngagementSignal> {
@@ -112,12 +139,12 @@ async function getEngagementSignal(phone: string): Promise<EngagementSignal> {
     return { avgRecentMessageLength: null, shortReplyStreak: 0, label: "unknown" };
   }
 
-  const lengths = rows.map((r) => r.raw_text.trim().length);
+  const lengths = rows.map((r) => r.raw_text?.trim().length || 0);
   const avg = lengths.reduce((a, b) => a + b, 0) / lengths.length;
 
   let streak = 0;
   for (const r of rows) {
-    const wordCount = r.raw_text.trim().split(/\s+/).filter(Boolean).length;
+    const wordCount = r.raw_text?.trim().split(/\s+/).filter(Boolean).length || 0;
     if (wordCount <= 3) streak++;
     else break;
   }
@@ -132,6 +159,7 @@ async function getEngagementSignal(phone: string): Promise<EngagementSignal> {
 function mergeUnique<T>(arr1: T[], arr2: T[], keyFn: (item: T) => string): T[] {
   const seen = new Set<string>();
   const result: T[] = [];
+  
   for (const item of [...arr1, ...arr2]) {
     const key = keyFn(item);
     if (!seen.has(key)) {

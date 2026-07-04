@@ -1,5 +1,7 @@
-import { query, queryOne } from "../db/client";
+import { query, queryOne, withTransaction } from "../db/client";
 import { createWaxIdentity } from "../identity/waxId";
+import { safeMerge, sanitizeKeys } from "../utils/security";
+import { logger } from "../utils/logger";
 
 export interface StudentProfile {
   phone: string;
@@ -48,7 +50,7 @@ const DEFAULT_PROFILE: Partial<StudentProfile> = {
 
 export async function getProfile(phone: string): Promise<StudentProfile> {
   const row = await queryOne<{ phone: string; profile: any; last_active_at: string }>(
-    `SELECT phone, profile, last_active_at FROM students WHERE phone = $1`,
+    `SELECT phone, profile, last_active_at FROM students WHERE phone = $1 AND deleted_at IS NULL`,
     [phone]
   );
 
@@ -56,29 +58,36 @@ export async function getProfile(phone: string): Promise<StudentProfile> {
     return { phone, ...DEFAULT_PROFILE } as StudentProfile;
   }
 
+  const safeProfile = sanitizeKeys(row.profile || {});
+
   return {
     phone: row.phone,
     ...DEFAULT_PROFILE,
-    ...row.profile,
+    ...safeProfile,
     last_active_at: row.last_active_at,
-  };
+  } as StudentProfile;
 }
 
-export async function createIfMissing(phone: string): Promise<string> {
-  await query(
-    `INSERT INTO students (phone, profile) VALUES ($1, $2)
-     ON CONFLICT (phone) DO NOTHING`,
-    [phone, JSON.stringify(DEFAULT_PROFILE)]
+export async function createIfMissing(phone: string): Promise<{ wax_id: string; is_new: boolean }> {
+  const existing = await queryOne<{ phone: string; wax_id: string }>(
+    `SELECT phone, wax_id FROM students WHERE phone = $1`,
+    [phone]
   );
+  
+  if (existing) {
+    return { wax_id: existing.wax_id, is_new: false };
+  }
 
   const identity = await createWaxIdentity(phone);
-
+  
   await query(
-    `UPDATE students SET wax_id = $1 WHERE phone = $2 AND wax_id IS NULL`,
-    [identity.wax_id, phone]
+    `INSERT INTO students (phone, profile, wax_id, consent_status, first_seen_at, last_active_at)
+     VALUES ($1, $2, $3, 'pending', NOW(), NOW())
+     ON CONFLICT (phone) DO NOTHING`,
+    [phone, JSON.stringify(DEFAULT_PROFILE), identity.wax_id]
   );
 
-  return identity.wax_id;
+  return { wax_id: identity.wax_id, is_new: true };
 }
 
 export async function updateProfile(
@@ -86,12 +95,17 @@ export async function updateProfile(
   updates: Partial<StudentProfile>
 ): Promise<void> {
   const current = await getProfile(phone);
-  const merged = { ...current, ...updates };
+  const merged = safeMerge(current, updates);
+  
   delete (merged as any).phone;
   delete (merged as any).last_active_at;
+  delete (merged as any).first_seen_at;
+  delete (merged as any).wax_id;
+  delete (merged as any).message_count_in;
+  delete (merged as any).message_count_out;
 
   await query(
-    `UPDATE students SET profile = $1, last_active_at = NOW() WHERE phone = $2`,
+    `UPDATE students SET profile = $1, last_active_at = NOW() WHERE phone = $2 AND deleted_at IS NULL`,
     [JSON.stringify(merged), phone]
   );
 }
@@ -101,7 +115,7 @@ export async function touchStudent(phone: string): Promise<void> {
     `UPDATE students
      SET last_active_at = NOW(),
          message_count_in = message_count_in + 1
-     WHERE phone = $1`,
+     WHERE phone = $1 AND deleted_at IS NULL`,
     [phone]
   );
 }
@@ -109,7 +123,7 @@ export async function touchStudent(phone: string): Promise<void> {
 export async function recordInteractiveSent(phone: string, messageId: string): Promise<void> {
   await query(
     `UPDATE students SET last_interactive_message_id = $1, last_interactive_sent_at = NOW() WHERE phone = $2`,
-    [messageId, phone]
+    [messageId.slice(0, 256), phone]
   );
 }
 
@@ -124,6 +138,16 @@ export async function getLastInteractiveMessageId(phone: string): Promise<string
 export async function incrementOutboundCount(phone: string): Promise<void> {
   await query(
     `UPDATE students SET message_count_out = message_count_out + 1 WHERE phone = $1`,
+    [phone]
+  );
+}
+
+export async function recordCrisisEscalation(phone: string, riskFlags: any): Promise<void> {
+  await query(
+    `UPDATE students 
+     SET emergency_escalation_count = emergency_escalation_count + 1,
+         last_risk_assessment = NOW()
+     WHERE phone = $1`,
     [phone]
   );
 }
