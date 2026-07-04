@@ -68,9 +68,8 @@ export class Breath {
       multiplier *= 0.7;
     }
 
-    // Vulnerability and shame
+    // Vulnerability and shame - use direct assignment to avoid type narrowing issues
     if (vulnerabilityDetected || shameDetected) {
-      // Only downgrade if at feast or meal level
       if (strategy === "feast") {
         strategy = "meal";
       } else if (strategy === "meal") {
@@ -82,8 +81,11 @@ export class Breath {
     // Early conversation
     if (msgCount < 3) {
       multiplier *= 0.55;
-      if (strategy === "meal") strategy = "bite";
-      else if (strategy === "feast") strategy = "meal";
+      if (strategy === "meal") {
+        strategy = "bite";
+      } else if (strategy === "feast") {
+        strategy = "meal";
+      }
     }
 
     // Risk flags
@@ -94,21 +96,31 @@ export class Breath {
       multiplier *= 0.6;
     }
 
-    const baseTargets: Record<BreathBudget["strategy"], number> = {
-      hook: 120,
-      bite: 280,
-      meal: 550,
-      feast: 800,
-    };
+    // Map strategy to target using a simple switch for type safety
+    let baseTarget = 280; // default bite
+    switch (strategy) {
+      case "hook":
+        baseTarget = 120;
+        break;
+      case "bite":
+        baseTarget = 280;
+        break;
+      case "meal":
+        baseTarget = 550;
+        break;
+      case "feast":
+        baseTarget = 800;
+        break;
+    }
 
-    let target = Math.floor(baseTargets[strategy] * multiplier);
+    let target = Math.floor(baseTarget * multiplier);
     target = Math.min(target, Breath.ABSOLUTE_MAX);
     target = Math.max(target, Breath.MIN_LENGTH);
 
     return {
       maxChars: Breath.ABSOLUTE_MAX,
       targetChars: target,
-      strategy,
+      strategy: strategy,
       why: `stage=${stage}, attention=${attention}, intent=${intent}, msgCount=${msgCount}, silence=${minutesSinceLastStudentMessage}m, vulnerability=${vulnerabilityDetected}, shame=${shameDetected}`,
     };
   }
