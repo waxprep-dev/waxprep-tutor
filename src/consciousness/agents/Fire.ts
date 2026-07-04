@@ -27,9 +27,8 @@ export class Fire {
 
     try {
       const res = await this.callWithRetry(messages, maxTokens);
-      // Ensure we have a string before calling cleanResponse
-      const content = typeof res === 'string' ? res : (res?.content || res?.toString() || "");
-      let cleaned = this.cleanResponse(content);
+      // res is now properly typed as string
+      let cleaned = this.cleanResponse(res);
 
       if (budget && cleaned.length > budget.maxChars) {
         logger.warn("Fire exceeded budget, self-compressing", { length: cleaned.length, budget: budget.targetChars });
@@ -54,13 +53,14 @@ export class Fire {
           max_tokens: maxTokens || 400,
           agent: "fire"
         });
+        // Ensure we return a string
         return res.content || "";
       } catch (e) {
         if (i === this.maxRetries - 1) throw e;
         await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
       }
     }
-    throw new Error("Fire failed after retries");
+    return "";
   }
 
   private cleanResponse(text: string): string {
