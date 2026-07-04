@@ -1,38 +1,47 @@
 import express from "express";
+import cors from "cors";
 import { config } from "./config";
-import { logger } from "./utils/logger";
 import { handleWebhookGet, handleWebhookPost } from "./whatsapp/webhook";
-import { pool } from "./db/client";
+import { logger } from "./utils/logger";
 
 const app = express();
+const port = process.env.PORT || 3000;
 
-// IMPORTANT: webhook signature verification needs the raw body.
-// We use express.raw() and then manually parse JSON inside the handler.
-app.use(
-  "/webhook",
-  express.raw({ type: "application/json" }),
-  (req, _res, next) => {
-    // Save raw body for signature verification
-    (req as any).rawBody = req.body.toString("utf8");
-    try {
-      req.body = JSON.parse((req as any).rawBody);
-    } catch (e) {
-      req.body = {};
-    }
-    next();
-  }
-);
+// Middleware
+app.use(cors());
+app.use(express.json({ verify: (req: any, res, buf) => { req.rawBody = buf; } }));
 
-// All other routes get normal JSON parsing
-app.use(express.json());
+// Health check (for keep-alive and monitoring)
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
 
-// Health check
-app.get("/health", async (_req, res) => {
+// Dream Worker trigger (for cron-job.org)
+app.post("/run-dream", async (req, res) => {
   try {
-    await pool.query("SELECT 1");
-    res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
-  } catch (err: any) {
-    res.status(500).json({ status: "error", error: err.message });
+    const { dreamWorker } = await import("./workers/dreamWorker");
+    logger.info("🌙 Dream Worker triggered externally via /run-dream");
+    
+    // Run the dream worker asynchronously so we don't timeout
+    dreamWorker.run()
+      .then(() => {
+        logger.info("🌙 Dream Worker completed successfully");
+      })
+      .catch((error: any) => {
+        logger.error("🌙 Dream Worker failed", { error: error.message });
+      });
+    
+    res.status(200).json({ 
+      success: true, 
+      message: "Dream Worker started in background",
+      timestamp: new Date().toISOString()
+    });
+  } catch (error: any) {
+    logger.error("Failed to trigger Dream Worker", { error: error.message });
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
   }
 });
 
@@ -40,16 +49,11 @@ app.get("/health", async (_req, res) => {
 app.get("/webhook", handleWebhookGet);
 app.post("/webhook", handleWebhookPost);
 
-// Start server
-app.listen(config.port, () => {
-  logger.info(`Tutor server running on port ${config.port}`, {
-    env: config.nodeEnv,
-  });
+// Root route
+app.get("/", (req, res) => {
+  res.send("WaxPrep Tutor is running!");
 });
 
-// Graceful shutdown
-process.on("SIGTERM", async () => {
-  logger.info("SIGTERM received, shutting down");
-  await pool.end();
-  process.exit(0);
+app.listen(port, () => {
+  logger.info(`Tutor server running on port ${port}`, { env: process.env.NODE_ENV });
 });
