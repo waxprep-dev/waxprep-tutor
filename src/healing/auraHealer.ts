@@ -36,13 +36,13 @@ export class AURAHealer {
     latencyMs: number,
     studentPhone?: string
   ): Promise<HealingEvent | null> {
-    const checks = [
+    const checks: (HealingEvent | null)[] = [
       this.checkTimeout(latencyMs, operation),
       this.checkRateLimit(result),
       this.checkParseError(result, expectedResult),
       this.checkCharacterBreak(result),
-      this.checkRepetition(result, studentPhone),
-      this.checkHallucination(result, expectedResult),
+      await this.checkRepetition(result, studentPhone),
+      await this.checkHallucination(result, expectedResult),
       this.checkSafetyBreach(result),
       this.checkToolFailure(result),
       this.checkPerformanceDegradation(latencyMs, operation)
@@ -50,7 +50,14 @@ export class AURAHealer {
 
     for (const check of checks) {
       if (check) {
-        const event = { ...check, studentPhone };
+        const event: HealingEvent = {
+          eventType: check.eventType,
+          severity: check.severity,
+          description: check.description,
+          studentPhone: studentPhone,
+          rootCause: check.rootCause,
+          metadata: check.metadata
+        };
         await this.logEvent(event);
         return event;
       }
