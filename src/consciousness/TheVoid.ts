@@ -12,6 +12,7 @@ import { Fire } from "./agents/Fire";
 import { Guardian } from "./agents/Guardian";
 import { Witness } from "./agents/Witness";
 import { Archivist } from "./agents/Archivist";
+import { Perception, ContextBundle, GuardianDecision } from "./types";
 import { callLLM } from "../llm/client";
 import { query } from "../db/client";
 import { embed } from "../memory/embeddings";
@@ -19,9 +20,9 @@ import { logger } from "../utils/logger";
 
 export interface VoidResult {
   response: string;
-  perception: any;
-  contextBundle: any;
-  guardianDecision: any;
+  perception: Perception;
+  contextBundle: ContextBundle;
+  guardianDecision: GuardianDecision;
   toolsCalled: string[];
   latencyMs: number;
   routingPath: string;
@@ -132,7 +133,7 @@ export class TheVoid {
     toolsCalled: string[]
   ): Promise<VoidResult> {
     // Build a minimal context from profile only
-    const minimalContext = {
+    const minimalContext: ContextBundle = {
       student_profile: {
         name: studentProfile?.preferred_name || studentProfile?.full_name || "Student",
         origin: studentProfile?.city || "Nigeria",
@@ -148,6 +149,9 @@ export class TheVoid {
       retrieval_actions: { tools_to_call: [], data_to_save: [] }
     };
 
+    // Get default perception for Guardian
+    const defaultPerception = this.getDefaultPerception();
+
     // Generate dynamic prompt for Fire based on Reflex output
     const firePrompt = await this.generateDynamicFirePrompt(studentProfile, reflexOutput, null);
 
@@ -155,8 +159,8 @@ export class TheVoid {
     const fireResponse = await this.fire.generateResponse(minimalContext, firePrompt, studentMessage);
     toolsCalled.push("fire");
 
-    // GUARDIAN — Mandatory review (but lightweight)
-    const guardianDecision = await this.guardian.review(fireResponse, null, "");
+    // GUARDIAN — Mandatory review (pass default perception instead of null)
+    const guardianDecision = await this.guardian.review(fireResponse, defaultPerception, "");
     toolsCalled.push("guardian");
 
     const finalResponse = guardianDecision.decision === "approve"
@@ -178,7 +182,7 @@ export class TheVoid {
 
     return {
       response: finalResponse,
-      perception: this.getDefaultPerception(),
+      perception: defaultPerception,
       contextBundle: minimalContext,
       guardianDecision,
       toolsCalled,
@@ -205,8 +209,8 @@ export class TheVoid {
     startTime: number,
     toolsCalled: string[]
   ): Promise<VoidResult> {
-    let perception = this.getDefaultPerception();
-    let contextBundle = this.getDefaultContextBundle();
+    let perception: Perception = this.getDefaultPerception();
+    let contextBundle: ContextBundle = this.getDefaultContextBundle();
 
     // MIRROR — Only if Cortex predicted it would help
     if (plan.agents.includes("mirror")) {
@@ -419,7 +423,7 @@ export class TheVoid {
   // ============================================================
   private async emergencyResponse(
     studentId: string,
-    perception: any,
+    perception: Perception,
     startTime: number,
     toolsCalled: string[],
     plan: CortexPlan
@@ -436,7 +440,7 @@ Be human first. Include Nigeria helpline if relevant. Keep under 50 words.`;
         response,
         perception,
         contextBundle: this.getDefaultContextBundle(),
-        guardianDecision: { decision: "escalate", reason: "Emergency" },
+        guardianDecision: { decision: "escalate", reason: "Emergency", modified_response: null, quality_checks: {}, safety_checks: {}, escalation: { needed: true, reason: "Emergency", human_alert: `Student ${studentId} emergency` } },
         toolsCalled,
         latencyMs: Date.now() - startTime,
         routingPath: "EMERGENCY",
@@ -448,7 +452,7 @@ Be human first. Include Nigeria helpline if relevant. Keep under 50 words.`;
     }
   }
 
-  private async generateDynamicFallback(profile: any, perception: any | null, reason: string): Promise<string> {
+  private async generateDynamicFallback(profile: any, perception: Perception | null, reason: string): Promise<string> {
     const prompt = `Generate a brief fallback message for a WhatsApp tutor.
 Profile: ${JSON.stringify(profile)}
 Reason: ${reason}
@@ -463,11 +467,12 @@ Match student's language. Under 20 words. Never mention AI or system.`;
   }
 
   private fallbackResponse(studentId: string, profile: any, startTime: number, toolsCalled: string[]): VoidResult {
+    const defaultPerception = this.getDefaultPerception();
     return {
       response: "Omo, network wahala — send that again when you can.",
-      perception: this.getDefaultPerception(),
+      perception: defaultPerception,
       contextBundle: this.getDefaultContextBundle(),
-      guardianDecision: { decision: "approve", reason: "System fallback" },
+      guardianDecision: { decision: "approve", reason: "System fallback", modified_response: null, quality_checks: {}, safety_checks: {}, escalation: { needed: false, reason: "", human_alert: "" } },
       toolsCalled,
       latencyMs: Date.now() - startTime,
       routingPath: "FALLBACK",
@@ -518,17 +523,21 @@ Match student's language. Under 20 words. Never mention AI or system.`;
     return hash.toString(16);
   }
 
-  private getDefaultPerception(): any {
+  private getDefaultPerception(): Perception {
     return {
       intent: { primary: "other", confidence: 0.5, sub_intents: [] },
-      emotional_state: { primary_emotion: "neutral", intensity: 0.3, vulnerability_detected: false, shame_detected: false, pride_detected: false },
+      emotional_state: { primary_emotion: "neutral", intensity: 0.3, emotional_triggers: [], vulnerability_detected: false, shame_detected: false, pride_detected: false },
       cognitive_state: { understanding_level: "beginner", confusion_detected: false, pretending_to_understand: false, engagement_level: "medium", attention_span_estimate: "medium" },
       social_context: { formality_level: "casual", relationship_stage: "stranger", trust_level: "low", power_dynamic: "student_seeks_help" },
+      dimensions_detected: { intellectual: true, emotional: false, social: false, economic: false, physical: false, spiritual: false, cultural: false },
+      urgency: { level: "none", reason: "default" },
+      student_needs: { immediate: "unknown", underlying: "unknown", unstated: "unknown" },
+      cultural_signals: { language_used: "english", references: [], world_indicators: [] },
       risk_flags: { suicidal_ideation: false, self_harm: false, abuse_indicators: false, extreme_distress: false, academic_crisis: false }
     };
   }
 
-  private getDefaultContextBundle(): any {
+  private getDefaultContextBundle(): ContextBundle {
     return {
       student_profile: { name: "Student", origin: "Unknown", teaching_signature: "NEW", current_mood: "neutral", last_topic: "none", last_mood: "neutral" },
       relevant_memories: { past_conversations: [], concepts_known: [], concepts_struggling: [], misconceptions: [], procedural_rules: [], relational_notes: [] },
@@ -545,8 +554,8 @@ Match student's language. Under 20 words. Never mention AI or system.`;
   async evolve(
     studentId: string,
     studentMessage: string,
-    perception: any,
-    contextBundle: any,
+    perception: Perception,
+    contextBundle: ContextBundle,
     fireResponse: string,
     studentNextMessage: string | null,
     currentSignature: any,
