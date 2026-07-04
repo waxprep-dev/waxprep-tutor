@@ -1,66 +1,43 @@
-import dotenv from "dotenv";
-dotenv.config();
-
-function required(name: string): string {
-  const v = process.env[name];
-  if (!v) throw new Error(`Missing required env var: ${name}`);
-  return v;
-}
-
-function optional(name: string, fallback: string): string {
-  return process.env[name] || fallback;
-}
+// ============================================================
+// CENTRALIZED CONFIGURATION
+// ============================================================
 
 export const config = {
-  port: parseInt(optional("PORT", "3000"), 10),
-  nodeEnv: optional("NODE_ENV", "development"),
-
-  databaseUrl: required("DATABASE_URL"),
-
-  whatsapp: {
-    phoneNumberId: required("WHATSAPP_PHONE_NUMBER_ID"),
-    accessToken: required("WHATSAPP_ACCESS_TOKEN"),
-    verifyToken: required("WHATSAPP_VERIFY_TOKEN"),
-    appSecret: required("WHATSAPP_APP_SECRET"),
-  },
-
-  groq: {
-    apiKey: required("GROQ_API_KEY"),
-    baseUrl: optional("GROQ_BASE_URL", "https://api.groq.com/openai/v1"),
-    model: optional("GROQ_MODEL", "llama-3.3-70b-versatile"),
-  },
-
-  kimi: {
-    apiKey: optional("KIMI_API_KEY", ""),
-    baseUrl: optional("KIMI_BASE_URL", "https://api.moonshot.cn/v1"),
-    model: optional("KIMI_MODEL", "moonshot-v1-8k"),
-  },
-
-  anthropic: {
-    apiKey: optional("ANTHROPIC_API_KEY", ""),
-    model: optional("CLAUDE_MODEL", "claude-3-5-sonnet-20241022"),
-  },
-
-  openai: {
-    apiKey: optional("OPENAI_API_KEY", ""),
-    model: optional("OPENAI_MODEL", "gpt-4o"),
-    embeddingModel: optional("EMBEDDING_MODEL", "text-embedding-3-small"),
-  },
-  cerebras: {
-    apiKey: optional("CEREBRAS_API_KEY", ""),
-    baseUrl: optional("CEREBRAS_BASE_URL", "https://api.cerebras.ai/v1"),
-    model: optional("CEREBRAS_MODEL", "llama-3.3-70b"),
-  },
-
-
-  embeddingProvider: optional("EMBEDDING_PROVIDER", "local") as "local" | "openai",
-
-  tutor: {
-    defaultName: optional("DEFAULT_TUTOR_NAME", "Wax"),
-    defaultFormality: optional("DEFAULT_TUTOR_FORMALITY", "casual"),
-  },
-
-  safety: {
-    distressHelpline: required("DISTRESS_HELPLINE_NIGERIA"),
-  },
+  NODE_ENV: process.env.NODE_ENV || "development",
+  PORT: parseInt(process.env.PORT || "3000"),
+  
+  // Database
+  DATABASE_URL: process.env.DATABASE_URL || "",
+  DB_POOL_SIZE: parseInt(process.env.DB_POOL_SIZE || "20"),
+  DB_STATEMENT_TIMEOUT: parseInt(process.env.DB_STATEMENT_TIMEOUT || "30000"),
+  
+  // WhatsApp
+  WHATSAPP_VERIFY_TOKEN: process.env.WHATSAPP_VERIFY_TOKEN || "",
+  WHATSAPP_API_TOKEN: process.env.WHATSAPP_API_TOKEN || "",
+  WHATSAPP_PHONE_NUMBER_ID: process.env.WHATSAPP_PHONE_NUMBER_ID || "",
+  META_APP_SECRET: process.env.META_APP_SECRET || "",
+  
+  // LLM
+  CEREBRAS_API_KEY: process.env.CEREBRAS_API_KEY || "",
+  GROQ_API_KEY: process.env.GROQ_API_KEY || "",
+  KIMI_API_KEY: process.env.KIMI_API_KEY || "",
+  OPENAI_API_KEY: process.env.OPENAI_API_KEY || "",
+  
+  // Safety & Crisis
+  EMERGENCY_PHONE_NUMBER: process.env.EMERGENCY_PHONE_NUMBER || "0800-123-4567",
+  EMERGENCY_WEBHOOK_URL: process.env.EMERGENCY_WEBHOOK_URL || "",
+  CRISIS_ALERT_EMAIL: process.env.CRISIS_ALERT_EMAIL || "",
+  
+  // System Limits
+  MAX_MESSAGE_LENGTH: parseInt(process.env.MAX_MESSAGE_LENGTH || "4096"),
+  MAX_EPISODE_MESSAGES: parseInt(process.env.MAX_EPISODE_MESSAGES || "50"),
+  EPISODE_TIMEOUT_HOURS: parseInt(process.env.EPISODE_TIMEOUT_HOURS || "6"),
+  WEBHOOK_TIMEOUT_MS: parseInt(process.env.WEBHOOK_TIMEOUT_MS || "15000"),
+  
+  // Logging
+  LOG_LEVEL: process.env.LOG_LEVEL || "info",
+  PII_LOGGING_ENABLED: process.env.PII_LOGGING_ENABLED === "true",
 };
+
+export const IS_PRODUCTION = config.NODE_ENV === "production";
+export const IS_DEVELOPMENT = config.NODE_ENV === "development";
