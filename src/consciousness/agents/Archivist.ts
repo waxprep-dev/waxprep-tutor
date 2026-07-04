@@ -10,7 +10,7 @@ export class Archivist {
   ): Promise<any> {
     try {
       const messages = [
-        { role: "system", content: systemPrompt || "You are the Archivist. Update memory based on reflection. Output JSON." },
+        { role: "system" as const, content: systemPrompt || "You are the Archivist. Update memory based on reflection. Output JSON." },
         {
           role: "user",
           content: `Reflection: ${JSON.stringify(reflection)}`

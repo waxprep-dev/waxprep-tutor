@@ -130,7 +130,7 @@ export interface Reflection {
 }
 
 export interface GuardianDecision {
-  decision: "approve" | "modify" | "block" | "escalate";
+  decision: "approve" | "modify" | "compress" | "block" | "escalate";
   reason: string;
   modified_response: string | null;
   quality_checks: Record<string, boolean>;
@@ -158,3 +158,26 @@ export interface AgentConfig {
 }
 
 // =====================================================
+
+// ============================================================
+// BREATH BUDGET — Pacing Protocol
+// ============================================================
+export interface BreathBudget {
+  targetChars: number;
+  maxChars: number;
+  strategy: "hook" | "bite" | "meal" | "feast";
+  why: string;
+}
+
+// ============================================================
+// UPDATED VOID RESULT
+// ============================================================
+export interface VoidResult {
+  response: string;
+  perception: Perception;
+  contextBundle: ContextBundle;
+  guardianDecision: GuardianDecision;
+  toolsCalled: string[];
+  latencyMs: number;
+  breathBudget?: BreathBudget;
+}

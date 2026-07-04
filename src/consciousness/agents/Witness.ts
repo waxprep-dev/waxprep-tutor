@@ -12,7 +12,7 @@ export class Witness {
   ): Promise<any> {
     try {
       const messages = [
-        { role: "system", content: systemPrompt || "You are the Witness. Reflect on this interaction. Output JSON." },
+        { role: "system" as const, content: systemPrompt || "You are the Witness. Reflect on this interaction. Output JSON." },
         {
           role: "user",
           content: `Student: "${studentMessage}"\nWax: "${fireResponse}"\nReply: "${studentNextMessage || 'N/A'}"`

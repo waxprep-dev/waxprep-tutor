@@ -5,15 +5,8 @@ import { River } from "./agents/River";
 import { Fire } from "./agents/Fire";
 import { Guardian } from "./agents/Guardian";
 import { Breath, BreathBudget } from "./agents/Breath";
-import { Perception, ContextBundle, GuardianDecision } from "./types";
+import { Perception, ContextBundle, GuardianDecision, VoidResult } from "./types";
 import { logger } from "../utils/logger";
-
-export interface VoidResult {
-  response: string;
-  toolsCalled: string[];
-  latencyMs: number;
-  breathBudget?: BreathBudget;
-}
 
 export class TheVoid {
   private mirror: Mirror;
@@ -79,13 +72,28 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
           perception?.risk_flags?.extreme_distress) {
         return {
           response: "Hey. You are not alone. Please reach out to someone you trust. I'm here with you.",
+          perception,
+          contextBundle: this.getDefaultContextBundle(),
+          guardianDecision: {
+            decision: "escalate",
+            reason: "Critical risk detected",
+            modified_response: null,
+            quality_checks: {},
+            safety_checks: {},
+            escalation: { needed: true, reason: "Critical risk", human_alert: `Student ${studentId} showing risk flags` }
+          },
           toolsCalled,
           latencyMs: Date.now() - startTime,
         };
       }
 
       console.log(`[Void] Calling River for student ${studentId}`);
-      const contextBundle = await this.river.buildContext(perception, studentProfile, availableMemory, conversationHistory.join("\n"), this.riverPrompt);
+      const contextBundle = await this.river.buildContext(
+        perception,
+        studentProfile,
+        availableMemory,
+        this.riverPrompt
+      );
       toolsCalled.push("river");
 
       const minutesSinceLast = this.estimateMinutesSinceLast(conversationHistory);
@@ -127,6 +135,9 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
 
       return {
         response: finalResponse,
+        perception,
+        contextBundle,
+        guardianDecision,
         toolsCalled,
         latencyMs: Date.now() - startTime,
         breathBudget,
@@ -136,6 +147,16 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       logger.error(`[Void] Orchestration failed for student ${studentId}:`, error);
       return {
         response: "Omo, network wahala — try again.",
+        perception: this.getDefaultPerception(),
+        contextBundle: this.getDefaultContextBundle(),
+        guardianDecision: {
+          decision: "approve",
+          reason: "System failure — fallback response",
+          modified_response: null,
+          quality_checks: {},
+          safety_checks: {},
+          escalation: { needed: false, reason: "", human_alert: "" }
+        },
         toolsCalled,
         latencyMs: Date.now() - startTime,
       };
@@ -145,6 +166,31 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   private estimateMinutesSinceLast(history: string[]): number {
     if (!history || history.length === 0) return 10;
     return 2;
+  }
+
+  private getDefaultPerception(): Perception {
+    return {
+      intent: { primary: "other", confidence: 0.5, sub_intents: [] },
+      emotional_state: { primary_emotion: "neutral", intensity: 0.3, emotional_triggers: [], vulnerability_detected: false, shame_detected: false, pride_detected: false },
+      cognitive_state: { understanding_level: "beginner", confusion_detected: false, pretending_to_understand: false, engagement_level: "medium", attention_span_estimate: "medium" },
+      social_context: { formality_level: "casual", relationship_stage: "stranger", trust_level: "low", power_dynamic: "student_seeks_help" },
+      dimensions_detected: { intellectual: true, emotional: false, social: false, economic: false, physical: false, spiritual: false, cultural: false },
+      urgency: { level: "none", reason: "default" },
+      student_needs: { immediate: "unknown", underlying: "unknown", unstated: "unknown" },
+      cultural_signals: { language_used: "english", references: [], world_indicators: [] },
+      risk_flags: { suicidal_ideation: false, self_harm: false, abuse_indicators: false, extreme_distress: false, academic_crisis: false }
+    };
+  }
+
+  private getDefaultContextBundle(): ContextBundle {
+    return {
+      student_profile: { name: "Student", origin: "Unknown", teaching_signature: "NEW", current_mood: "neutral", last_topic: "none", last_mood: "neutral" },
+      relevant_memories: { past_conversations: [], concepts_known: [], concepts_struggling: [], misconceptions: [], procedural_rules: [], relational_notes: [] },
+      contextual_examples: { recommended_analogy: "danfo bus", alternative_analogies: [], cultural_bridge: "Nigerian context", previous_successful_approach: "none" },
+      teaching_recommendations: { suggested_topic: "introduction", suggested_depth: "surface", suggested_pace: "medium", suggested_tone: "gentle", avoid: [], emphasize: [] },
+      conversation_state: { current_flow_state: "connection", recommended_next_state: "discovery", message_count_this_episode: 0, time_since_last_message: "unknown" },
+      retrieval_actions: { tools_to_call: [], data_to_save: [] }
+    };
   }
 }
 

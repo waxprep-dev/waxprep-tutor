@@ -7,14 +7,7 @@
 // attention span, relationship stage, intent, and silence.
 // =====================================================
 
-import { Perception, ContextBundle } from "../types";
-
-export interface BreathBudget {
-  targetChars: number;
-  maxChars: number;
-  strategy: "hook" | "bite" | "meal" | "feast";
-  why: string;
-}
+import { Perception, ContextBundle, BreathBudget } from "../types";
 
 export class Breath {
   private static readonly ABSOLUTE_MAX = 900;
@@ -36,16 +29,13 @@ export class Breath {
     const vulnerabilityDetected = perception.emotional_state?.vulnerability_detected || false;
     const shameDetected = perception.emotional_state?.shame_detected || false;
 
-    // Relationship stage: strangers get less air, trusted get more
     if (stage === "stranger") multiplier *= 0.6;
     else if (stage === "acquaintance") multiplier *= 0.8;
     else if (stage === "close") multiplier *= 1.15;
 
-    // Attention span: respect cognitive limits
     if (attention === "short") multiplier *= 0.5;
     else if (attention === "long") multiplier *= 1.2;
 
-    // Silence penalty: if student ghosted for 8+ minutes, throw a hook not a rope
     if (minutesSinceLastStudentMessage > 8) {
       strategy = "hook";
       multiplier = 0.35;
@@ -53,7 +43,6 @@ export class Breath {
       multiplier *= 0.7;
     }
 
-    // Intent-based strategy selection
     if (intent === "greeting" || intent === "small_talk" || intent === "casual_chat") {
       strategy = "hook";
       multiplier *= 0.5;
@@ -62,26 +51,23 @@ export class Breath {
       multiplier *= 1.3;
     } else if (intent === "emotional_expression") {
       strategy = "bite";
-      multiplier *= 0.8; // Emotions need space but not lectures
+      multiplier *= 0.8;
     } else if (intent === "complaint" || intent === "crisis") {
       strategy = "bite";
-      multiplier *= 0.7; // Crisis needs clarity, not chapters
+      multiplier *= 0.7;
     }
 
-    // Vulnerability and shame: student opened up — be present, not verbose
     if (vulnerabilityDetected || shameDetected) {
       strategy = strategy === "feast" ? "meal" : strategy === "meal" ? "bite" : strategy;
       multiplier *= 0.7;
     }
 
-    // Early conversation (first 3 messages): do not lecture a stranger
     if (msgCount < 3) {
       multiplier *= 0.55;
       if (strategy === "meal") strategy = "bite";
       if (strategy === "feast") strategy = "meal";
     }
 
-    // Risk flags: if student is in danger, short and direct
     if (perception.risk_flags?.suicidal_ideation ||
         perception.risk_flags?.self_harm ||
         perception.risk_flags?.extreme_distress) {
@@ -113,7 +99,6 @@ export class Breath {
       return { text: response, wasTrimmed: false };
     }
 
-    // Find natural breath point near target
     let cutIndex = response.lastIndexOf(". ", budget.targetChars);
     if (cutIndex === -1) cutIndex = response.lastIndexOf("! ", budget.targetChars);
     if (cutIndex === -1) cutIndex = response.lastIndexOf("? ", budget.targetChars);
