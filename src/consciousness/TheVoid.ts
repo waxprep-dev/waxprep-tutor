@@ -20,9 +20,6 @@ export interface VoidResult {
   latencyMs: number;
 }
 
-// ============================================================
-// CRISIS ALERT SYSTEM
-// ============================================================
 async function triggerCrisisAlert(
   studentId: string, 
   perception: Perception,
@@ -170,7 +167,8 @@ export class TheVoid {
       logger.info("Calling Fire", { studentId });
       const fireResponse = await this.fire.generateResponse(
         contextBundle,
-        this.firePrompt
+        this.firePrompt,
+        studentMessage  // Pass the student message as third argument
       );
       toolsCalled.push("fire");
 
@@ -234,9 +232,6 @@ export class TheVoid {
     }
   }
 
-  // ============================================================
-  // EVOLUTION — NOW FULLY FUNCTIONAL
-  // ============================================================
   async evolve(
     studentId: string,
     studentMessage: string,

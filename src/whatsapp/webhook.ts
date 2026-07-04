@@ -279,7 +279,7 @@ async function processWebhookAsync(body: any): Promise<void> {
           contextBundleResult,
           finalResponse,
           null,
-          context.profile?.teaching_signature,
+          null,  // currentSignature - not needed for now
           context
         );
       } catch (evolveError: any) {

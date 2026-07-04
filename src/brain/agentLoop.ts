@@ -186,7 +186,9 @@ export async function runAgentLoop(
         logger.info("Executing tool", { tool: toolCall.function?.name, args });
 
         try {
-          const { result } = await executeTool(toolCall, context);
+          const toolResult = await executeTool(toolCall, context);
+          // executeTool returns { success: boolean, result: any, error?: string }
+          const result = toolResult.result || toolResult;
           allToolCalls.push({ name: toolCall.function.name, args, result });
 
           const content = typeof result === "string" 
