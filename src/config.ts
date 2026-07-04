@@ -15,10 +15,10 @@ export const config = {
   // WhatsApp
   whatsapp: {
     verifyToken: process.env.WHATSAPP_VERIFY_TOKEN || "",
-    apiToken: process.env.WHATSAPP_API_TOKEN || "",
-    accessToken: process.env.WHATSAPP_API_TOKEN || "",  // alias for apiToken
+    apiToken: process.env.WHATSAPP_ACCESS_TOKEN || "",  // Changed from WHATSAPP_API_TOKEN
+    accessToken: process.env.WHATSAPP_ACCESS_TOKEN || "",  // Alias
     phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || "",
-    appSecret: process.env.META_APP_SECRET || "",
+    appSecret: process.env.WHATSAPP_APP_SECRET || "",  // Changed from META_APP_SECRET
   },
   
   // LLM Providers
@@ -33,16 +33,16 @@ export const config = {
   },
   openai: {
     apiKey: process.env.OPENAI_API_KEY || "",
-    embeddingModel: process.env.OPENAI_EMBEDDING_MODEL || "text-embedding-3-small",
+    embeddingModel: process.env.EMBEDDING_MODEL || "text-embedding-3-small",
   },
   
   // Embedding
-  embeddingProvider: process.env.EMBEDDING_PROVIDER || "openai",
+  embeddingProvider: process.env.EMBEDDING_PROVIDER || "local",
   embeddingModel: process.env.EMBEDDING_MODEL || "text-embedding-3-small",
   
   // Safety & Crisis
   emergency: {
-    phoneNumber: process.env.EMERGENCY_PHONE_NUMBER || "0800-123-4567",
+    phoneNumber: process.env.DISTRESS_HELPLINE_NIGERIA || "0800-123-4567",
     webhookUrl: process.env.EMERGENCY_WEBHOOK_URL || "",
     alertEmail: process.env.CRISIS_ALERT_EMAIL || "",
   },
