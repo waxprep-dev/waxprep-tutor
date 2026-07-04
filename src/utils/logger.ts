@@ -49,10 +49,9 @@ function deepRedact(obj: any): any {
 }
 
 function log(level: LogLevel, message: string, meta?: Record<string, any>) {
-  const levels: Record<LogLevel, number> = { debug: 0, info: 1, warn: 2, error: 3 };
-  const currentLevel: LogLevel = (config.LOG_LEVEL as LogLevel) || "info";
-  
-  if (levels[level] < levels[currentLevel]) return;
+  const currentLevel = config.logLevel || config.LOG_LEVEL || "info";
+  const levelMap: Record<LogLevel, number> = { debug: 0, info: 1, warn: 2, error: 3 };
+  if (levelMap[level] < levelMap[currentLevel as LogLevel]) return;
 
   const entry: any = {
     timestamp: new Date().toISOString(),
@@ -63,7 +62,7 @@ function log(level: LogLevel, message: string, meta?: Record<string, any>) {
   };
 
   if (meta) {
-    entry.meta = config.PII_LOGGING_ENABLED ? meta : deepRedact(meta);
+    entry.meta = config.piiLoggingEnabled || config.PII_LOGGING_ENABLED ? meta : deepRedact(meta);
   }
 
   const output = JSON.stringify(entry);

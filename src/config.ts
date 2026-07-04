@@ -1,6 +1,5 @@
 // ============================================================
-// CONFIGURATION — ORIGINAL STRUCTURE
-// Matches existing codebase expectations
+// CONFIGURATION — MATCHES ALL EXISTING FILES
 // ============================================================
 
 export const config = {
@@ -10,11 +9,14 @@ export const config = {
   
   // Database
   databaseUrl: process.env.DATABASE_URL || "",
+  dbPoolSize: parseInt(process.env.DB_POOL_SIZE || "20"),
+  dbStatementTimeout: parseInt(process.env.DB_STATEMENT_TIMEOUT || "30000"),
   
   // WhatsApp
   whatsapp: {
     verifyToken: process.env.WHATSAPP_VERIFY_TOKEN || "",
     apiToken: process.env.WHATSAPP_API_TOKEN || "",
+    accessToken: process.env.WHATSAPP_API_TOKEN || "",  // alias for apiToken
     phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || "",
     appSecret: process.env.META_APP_SECRET || "",
   },
@@ -31,7 +33,12 @@ export const config = {
   },
   openai: {
     apiKey: process.env.OPENAI_API_KEY || "",
+    embeddingModel: process.env.OPENAI_EMBEDDING_MODEL || "text-embedding-3-small",
   },
+  
+  // Embedding
+  embeddingProvider: process.env.EMBEDDING_PROVIDER || "openai",
+  embeddingModel: process.env.EMBEDDING_MODEL || "text-embedding-3-small",
   
   // Safety & Crisis
   emergency: {
@@ -41,15 +48,15 @@ export const config = {
   },
   
   // System Limits
-  limits: {
-    maxMessageLength: parseInt(process.env.MAX_MESSAGE_LENGTH || "4096"),
-    maxEpisodeMessages: parseInt(process.env.MAX_EPISODE_MESSAGES || "50"),
-    episodeTimeoutHours: parseInt(process.env.EPISODE_TIMEOUT_HOURS || "6"),
-    webhookTimeoutMs: parseInt(process.env.WEBHOOK_TIMEOUT_MS || "15000"),
-  },
+  MAX_MESSAGE_LENGTH: parseInt(process.env.MAX_MESSAGE_LENGTH || "4096"),
+  MAX_EPISODE_MESSAGES: parseInt(process.env.MAX_EPISODE_MESSAGES || "50"),
+  EPISODE_TIMEOUT_HOURS: parseInt(process.env.EPISODE_TIMEOUT_HOURS || "6"),
+  WEBHOOK_TIMEOUT_MS: parseInt(process.env.WEBHOOK_TIMEOUT_MS || "15000"),
   
   // Logging
+  LOG_LEVEL: process.env.LOG_LEVEL || "info",
   logLevel: process.env.LOG_LEVEL || "info",
+  PII_LOGGING_ENABLED: process.env.PII_LOGGING_ENABLED === "true",
   piiLoggingEnabled: process.env.PII_LOGGING_ENABLED === "true",
 };
 

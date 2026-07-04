@@ -1,13 +1,11 @@
 // ============================================================
 // INPUT VALIDATION
-// Sanitization and validation for all external inputs
 // ============================================================
 
 import { config } from "../config";
 
-// ============================================================
-// WHATSAPP MESSAGE VALIDATION
-// ============================================================
+const MAX_MESSAGE_LENGTH = config.MAX_MESSAGE_LENGTH || 4096;
+
 export function validateTimestamp(timestamp: string): Date {
   if (!timestamp || typeof timestamp !== "string") {
     throw new Error(`Invalid timestamp: ${timestamp}`);
@@ -43,8 +41,8 @@ export function sanitizeMessageText(text: string): string {
   
   let cleaned = text.trim().replace(/\s+/g, " ");
   
-  if (cleaned.length > config.MAX_MESSAGE_LENGTH) {
-    cleaned = cleaned.slice(0, config.MAX_MESSAGE_LENGTH);
+  if (cleaned.length > MAX_MESSAGE_LENGTH) {
+    cleaned = cleaned.slice(0, MAX_MESSAGE_LENGTH);
   }
   
   cleaned = cleaned.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");

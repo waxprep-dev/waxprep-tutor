@@ -1,93 +1,86 @@
-import axios from "axios";
+// ============================================================
+// EMBEDDINGS — Uses config.embeddingProvider
+// ============================================================
+
 import { config } from "../config";
 import { logger } from "../utils/logger";
 
-const LOCAL_MODEL_ID = "Xenova/all-MiniLM-L6-v2";
-export const LOCAL_EMBEDDING_DIM = 384;
-export const OPENAI_EMBEDDING_DIM = 1536;
+let model: any = null;
+let modelName = config.embeddingModel || "Xenova/all-MiniLM-L6-v2";
 
-export const EMBEDDING_DIMENSIONS =
-  config.embeddingProvider === "openai" ? OPENAI_EMBEDDING_DIM : LOCAL_EMBEDDING_DIM;
-
-let localExtractorPromise: Promise<any> | null = null;
-
-async function getLocalExtractor() {
-  if (!localExtractorPromise) {
-    localExtractorPromise = (async () => {
-      const { pipeline } = await import("@huggingface/transformers");
-      logger.info("Loading local embedding model (first call only, then cached)", {
-        model: LOCAL_MODEL_ID,
-      });
-      return pipeline("feature-extraction", LOCAL_MODEL_ID, { dtype: "q8" });
-    })();
+export async function embed(text: string): Promise<number[]> {
+  if (!text || typeof text !== "string") {
+    logger.warn("Empty or invalid text for embedding");
+    return [];
   }
-  return localExtractorPromise;
+  
+  const trimmed = text.trim().slice(0, 1000);
+  
+  try {
+    const provider = config.embeddingProvider || "local";
+    
+    if (provider === "openai") {
+      return await embedOpenAI(trimmed);
+    } else {
+      return await embedLocal(trimmed);
+    }
+  } catch (error: any) {
+    logger.error("Embedding failed", { error: error.message, provider: config.embeddingProvider });
+    return [];
+  }
 }
 
 async function embedLocal(text: string): Promise<number[]> {
-  const extractor = await getLocalExtractor();
-  const output = await extractor(text, { pooling: "mean", normalize: true });
-  return Array.from(output.data as Float32Array);
-}
-
-async function embedLocalBatch(texts: string[]): Promise<number[][]> {
-  const extractor = await getLocalExtractor();
-  const output = await extractor(texts, { pooling: "mean", normalize: true });
-  return output.tolist();
+  try {
+    const { pipeline } = await import("@huggingface/transformers");
+    
+    if (!model) {
+      logger.info("Loading local embedding model", { model: modelName });
+      model = await pipeline("feature-extraction", modelName);
+    }
+    
+    const result = await model(text, { pooling: "mean", normalize: true });
+    return Array.from(result.data);
+  } catch (error: any) {
+    logger.error("Local embedding failed", { error: error.message });
+    throw error;
+  }
 }
 
 async function embedOpenAI(text: string): Promise<number[]> {
-  const response = await axios.post(
-    "https://api.openai.com/v1/embeddings",
-    { input: text, model: config.openai.embeddingModel },
-    {
-      headers: {
-        Authorization: `Bearer ${config.openai.apiKey}`,
-        "Content-Type": "application/json",
-      },
-      timeout: 30000,
-    }
-  );
-  return response.data.data[0].embedding;
-}
-
-async function embedOpenAIBatch(texts: string[]): Promise<number[][]> {
-  const response = await axios.post(
-    "https://api.openai.com/v1/embeddings",
-    { input: texts, model: config.openai.embeddingModel },
-    {
-      headers: {
-        Authorization: `Bearer ${config.openai.apiKey}`,
-        "Content-Type": "application/json",
-      },
-      timeout: 60000,
-    }
-  );
-  return response.data.data.map((d: any) => d.embedding);
-}
-
-export async function embed(text: string): Promise<number[] | null> {
-  try {
-    if (config.embeddingProvider === "openai") return await embedOpenAI(text);
-    return await embedLocal(text);
-  } catch (err: any) {
-    logger.error("Embedding failed — degrading gracefully, not crashing", {
-      provider: config.embeddingProvider,
-      error: err.response?.data || err.message,
-    });
-    return null;
+  const apiKey = config.openai?.apiKey;
+  if (!apiKey) {
+    throw new Error("OpenAI API key not configured");
   }
+  
+  const response = await fetch("https://api.openai.com/v1/embeddings", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: config.openai.embeddingModel || "text-embedding-3-small",
+      input: text,
+    }),
+  });
+  
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`OpenAI embedding failed: ${response.status} - ${error}`);
+  }
+  
+  const data = await response.json();
+  return data.data?.[0]?.embedding || [];
 }
 
-export async function embedBatch(texts: string[]): Promise<number[][] | null> {
-  try {
-    if (config.embeddingProvider === "openai") return await embedOpenAIBatch(texts);
-    return await embedLocalBatch(texts);
-  } catch (err: any) {
-    logger.error("Batch embedding failed — degrading gracefully, not crashing", {
-      provider: config.embeddingProvider,
-      error: err.response?.data || err.message,
-    });
-    return null;
+export async function embedBatch(texts: string[]): Promise<number[][]> {
+  const results: number[][] = [];
+  for (const text of texts) {
+    const embedding = await embed(text);
+    if (embedding.length > 0) {
+      results.push(embedding);
+    }
   }
+  return results;
 }
