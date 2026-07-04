@@ -2,7 +2,7 @@
 // THE CORTEX — System 2 Deliberative Router
 // When the Reflex is uncertain, the Cortex decides.
 // Uses ONE LLM call to predict which agents will reduce prediction error.
-// Inspired by Intermittent Active Inference and Predictive Processing
+// Enhanced with temporal and circadian context.
 // ============================================================
 
 import { callLLM } from "../llm/client";
@@ -13,9 +13,9 @@ export interface CortexPlan {
   agents: string[];
   skip: string[];
   reasoning: string;
-  expectedFreeEnergyReduction: number; // How much will this plan reduce uncertainty?
+  expectedFreeEnergyReduction: number;
   confidence: number;
-  toolPredictions: string[]; // Which tools will likely be needed?
+  toolPredictions: string[];
   emotionalDirective?: string;
   cognitiveDirective?: string;
 }
@@ -28,13 +28,11 @@ export interface CortexContext {
   reflexOutput: any;
   recentPlans: any[];
   memoryContext: any;
+  temporalGene?: string;       // NEW
+  circadianProfile?: any;      // NEW
 }
 
 export class Cortex {
-  // ============================================================
-  // THE CORE FUNCTION: Predict, don't execute
-  // One LLM call → full routing plan
-  // ============================================================
   async generatePlan(ctx: CortexContext): Promise<CortexPlan> {
     const prompt = this.buildPredictivePrompt(ctx);
 
@@ -56,11 +54,11 @@ export class Cortex {
     }
   }
 
-  // ============================================================
-  // PROMPT: The Cortex is a predictive planner
-  // It predicts which agents will reduce prediction error
-  // ============================================================
   private buildPredictivePrompt(ctx: CortexContext): string {
+    const temporalContext = ctx.temporalGene 
+      ? `\n## TEMPORAL CONTEXT\nCurrent temporal gene: ${ctx.temporalGene}\nCircadian: ${ctx.circadianProfile?.chronotype || 'unknown'}\n` 
+      : '';
+
     return `You are the CORTEX — the deliberative routing layer of Wax.
 
 Your job is NOT to respond to the student. Your job is to PREDICT which cognitive resources are needed.
@@ -74,7 +72,7 @@ An agent should only activate resources that will reduce "expected free energy" 
 - Profile: ${JSON.stringify(ctx.profile, null, 2)}
 - Reflex assessment: ${JSON.stringify(ctx.reflexOutput, null, 2)}
 - Recent routing plans: ${ctx.recentPlans.slice(-3).map((p: any) => `${p.plan} (success: ${p.was_successful})`).join("; ")}
-
+${temporalContext}
 ## AVAILABLE AGENTS
 1. mirror — Perceives emotion, intent, risk, cultural signals (cost: 1 LLM call)
 2. river — Retrieves context, memories, concepts (cost: 1 LLM call)
@@ -118,20 +116,15 @@ Return ONLY valid JSON:
       const cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
       const parsed = JSON.parse(cleaned);
 
-      // Enforce mandatory agents
       const agents = new Set(parsed.agents || []);
       agents.add("fire");
       agents.add("guardian");
-
-      // Remove background agents from main path
       agents.delete("witness");
       agents.delete("archivist");
 
-      // Build skip list
       const allAgents = ["mirror", "river", "fire", "guardian", "witness", "archivist"];
       const skip = allAgents.filter(a => !agents.has(a));
 
-      // FIX: Ensure toolPredictions is string[]
       let toolPredictions: string[] = [];
       if (Array.isArray(parsed.toolPredictions)) {
         toolPredictions = parsed.toolPredictions.filter((t: any) => typeof t === 'string');
@@ -164,10 +157,6 @@ Return ONLY valid JSON:
     };
   }
 
-  // ============================================================
-  // LEARNING: Update from outcomes
-  // Did the plan actually reduce prediction error?
-  // ============================================================
   async learnFromOutcome(
     plan: CortexPlan,
     outcome: { studentSatisfied: boolean; responseQuality: number; latencyMs: number }
@@ -191,21 +180,17 @@ Return ONLY valid JSON:
         ]
       );
 
-      // Simple heuristic-based learning
       const learningRate = 0.05;
 
       if (!outcome.studentSatisfied && plan.skip.includes("mirror")) {
-        // We probably missed emotional cues — increase mirror weight
         await this.updateAgentWeight("mirror", learningRate);
       }
 
       if (!outcome.studentSatisfied && plan.skip.includes("river")) {
-        // We probably missed context — increase river weight
         await this.updateAgentWeight("river", learningRate);
       }
 
       if (outcome.latencyMs > 4000 && plan.agents.includes("mirror") && plan.agents.includes("river")) {
-        // Maybe we didn't need both — decrease weights slightly
         await this.updateAgentWeight("mirror", -learningRate * 0.5);
       }
 
@@ -221,8 +206,6 @@ Return ONLY valid JSON:
   }
 
   private async updateAgentWeight(agent: string, delta: number): Promise<void> {
-    // In production: update learned weights in database
-    // For now: log only
     logger.info("Cortex learning update", { agent, delta });
   }
 }
