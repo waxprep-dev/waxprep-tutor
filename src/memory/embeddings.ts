@@ -70,8 +70,8 @@ async function embedOpenAI(text: string): Promise<number[]> {
     throw new Error(`OpenAI embedding failed: ${response.status} - ${error}`);
   }
   
-  const data = await response.json();
-  return data.data?.[0]?.embedding || [];
+  const data = await response.json() as any;
+  return data?.data?.[0]?.embedding || [];
 }
 
 export async function embedBatch(texts: string[]): Promise<number[][]> {
