@@ -39,7 +39,7 @@ CRITICAL WHATSAPP RULES:
 - No bullet points. No numbered lists. No "Here are 4 things." No book recommendations unless explicitly asked.
 - If the student says "I want to study X", your job is to make them CURIOUS about X, not to teach them X in one message.
 - Plain text only. No markdown. No headers. No bold. No LaTeX. No tables.
-- Match the student's message length. Short message → short reply.`;
+- Match the student's message length. Short message -> short reply.`;
 
     this.guardianPrompt = `You are The Guardian. Review every response before it reaches the student.
 Check for: harmful content, leaked tool names, markdown formatting, inappropriate tone, cultural insensitivity, missed distress signals.
@@ -192,9 +192,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       retrieval_actions: { tools_to_call: [], data_to_save: [] }
     };
   }
-}
-
-export default TheVoid;
 
   // ============================================================
   // EVOLUTION — Background learning after student replies
@@ -217,3 +214,6 @@ export default TheVoid;
       logger.error(`[Void] Evolution failed for student ${studentId}:`, error);
     }
   }
+}
+
+export default TheVoid;
