@@ -9,53 +9,63 @@ interface LockEntry {
   lastOutboundAt: number;
   lastInboundAt: number;
   consecutiveOutbound: number;
+  lastMessageLength: number;
 }
 
 const locks = new Map<string, LockEntry>();
 
-// Increased cooldown to prevent blocking legitimate responses
-const COOLDOWN_MS = 15_000; // 15 seconds (was 45s)
-const MAX_CONSECUTIVE = 2; // Allow 2 consecutive before blocking
+// All values are configurable via environment variables
+const COOLDOWN_MS = parseInt(process.env.GHOST_LOCK_COOLDOWN_MS || "45000");
+const MAX_CONSECUTIVE = parseInt(process.env.GHOST_LOCK_MAX_CONSECUTIVE || "1");
 
 export function canSend(phone: string): { allowed: boolean; reason?: string } {
   const now = Date.now();
   const entry = locks.get(phone);
 
   if (!entry) {
-    locks.set(phone, { phone, lastOutboundAt: 0, lastInboundAt: 0, consecutiveOutbound: 0 });
+    locks.set(phone, { 
+      phone, 
+      lastOutboundAt: 0, 
+      lastInboundAt: 0, 
+      consecutiveOutbound: 0, 
+      lastMessageLength: 0 
+    });
     return { allowed: true };
   }
 
-  // Always allow if student replied (inbound after outbound)
-  if (entry.lastInboundAt > entry.lastOutboundAt) {
-    entry.consecutiveOutbound = 0;
-    return { allowed: true };
-  }
-
-  if (entry.consecutiveOutbound >= MAX_CONSECUTIVE) {
+  // If we already sent without receiving a reply, block
+  if (entry.consecutiveOutbound >= MAX_CONSECUTIVE && entry.lastOutboundAt > entry.lastInboundAt) {
     return {
       allowed: false,
-      reason: `GhostLock: ${phone} already sent ${entry.consecutiveOutbound}x without reply.`
+      reason: `GhostLock: ${phone} already sent ${entry.consecutiveOutbound}x without reply.`,
     };
   }
 
-  if (now - entry.lastOutboundAt < COOLDOWN_MS) {
+  // Cooldown between messages
+  if (now - entry.lastOutboundAt < COOLDOWN_MS && entry.lastOutboundAt > entry.lastInboundAt) {
     return {
       allowed: false,
-      reason: `GhostLock: ${phone} on cooldown (${Math.round((COOLDOWN_MS - (now - entry.lastOutboundAt)) / 1000)}s remaining).`
+      reason: `GhostLock: ${phone} on cooldown.`,
     };
   }
 
   return { allowed: true };
 }
 
-export function recordOutbound(phone: string): void {
+export function recordOutbound(phone: string, messageLength: number = 0): void {
   const entry = locks.get(phone);
   if (entry) {
     entry.lastOutboundAt = Date.now();
     entry.consecutiveOutbound += 1;
+    entry.lastMessageLength = messageLength;
   } else {
-    locks.set(phone, { phone, lastOutboundAt: Date.now(), lastInboundAt: 0, consecutiveOutbound: 1 });
+    locks.set(phone, {
+      phone,
+      lastOutboundAt: Date.now(),
+      lastInboundAt: 0,
+      consecutiveOutbound: 1,
+      lastMessageLength: messageLength,
+    });
   }
 }
 
@@ -65,6 +75,16 @@ export function recordInbound(phone: string): void {
     entry.lastInboundAt = Date.now();
     entry.consecutiveOutbound = 0;
   } else {
-    locks.set(phone, { phone, lastOutboundAt: 0, lastInboundAt: Date.now(), consecutiveOutbound: 0 });
+    locks.set(phone, {
+      phone,
+      lastOutboundAt: 0,
+      lastInboundAt: Date.now(),
+      consecutiveOutbound: 0,
+      lastMessageLength: 0,
+    });
   }
+}
+
+export function resetLock(phone: string): void {
+  locks.delete(phone);
 }
