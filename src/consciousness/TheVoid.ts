@@ -129,13 +129,23 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
 
       // STEP 2: THE RIVER — Build Context
       console.log(`[Void] Calling River for student ${studentId}`);
-      const contextBundle = await this.river.buildContext(
+      let contextBundle = await this.river.buildContext(
         perception,
         studentProfile,
         availableMemory,
         this.riverPrompt
       );
       toolsCalled.push("river");
+
+      // SAFETY: Ensure conversation_state exists
+      if (!contextBundle.conversation_state) {
+        contextBundle.conversation_state = {
+          current_flow_state: "connection",
+          recommended_next_state: "discovery",
+          message_count_this_episode: 0,
+          time_since_last_message: "unknown"
+        };
+      }
 
       // Inject meta data into context so Fire knows conversation depth
       if (meta) {
@@ -268,7 +278,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   }
 
   private async applyEvolution(studentId: string, evolution: any): Promise<void> {
-    // Implement actual database updates here
     for (const update of evolution.memory_updates || []) {
       console.log(`[Void] Memory update: ${update.action} ${update.table} — ${update.reason}`);
     }
@@ -323,7 +332,12 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       relevant_memories: { past_conversations: [], concepts_known: [], concepts_struggling: [], misconceptions: [], procedural_rules: [], relational_notes: [] },
       contextual_examples: { recommended_analogy: "danfo bus", alternative_analogies: [], cultural_bridge: "Nigerian context", previous_successful_approach: "none" },
       teaching_recommendations: { suggested_topic: "introduction", suggested_depth: "surface", suggested_pace: "medium", suggested_tone: "gentle", avoid: [], emphasize: [] },
-      conversation_state: { current_flow_state: "connection", recommended_next_state: "discovery", message_count_this_episode: 0, time_since_last_message: "unknown" },
+      conversation_state: { 
+        current_flow_state: "connection", 
+        recommended_next_state: "discovery", 
+        message_count_this_episode: 0, 
+        time_since_last_message: "unknown" 
+      },
       retrieval_actions: { tools_to_call: [], data_to_save: [] },
     };
   }
