@@ -13,8 +13,9 @@ interface LockEntry {
 
 const locks = new Map<string, LockEntry>();
 
-const COOLDOWN_MS = 45_000;
-const MAX_CONSECUTIVE = 1;
+// Increased cooldown to prevent blocking legitimate responses
+const COOLDOWN_MS = 15_000; // 15 seconds (was 45s)
+const MAX_CONSECUTIVE = 2; // Allow 2 consecutive before blocking
 
 export function canSend(phone: string): { allowed: boolean; reason?: string } {
   const now = Date.now();
@@ -25,17 +26,23 @@ export function canSend(phone: string): { allowed: boolean; reason?: string } {
     return { allowed: true };
   }
 
-  if (entry.consecutiveOutbound >= MAX_CONSECUTIVE && entry.lastOutboundAt > entry.lastInboundAt) {
+  // Always allow if student replied (inbound after outbound)
+  if (entry.lastInboundAt > entry.lastOutboundAt) {
+    entry.consecutiveOutbound = 0;
+    return { allowed: true };
+  }
+
+  if (entry.consecutiveOutbound >= MAX_CONSECUTIVE) {
     return {
       allowed: false,
-      reason: `GhostLock: ${phone} already sent ${entry.consecutiveOutbound}x without reply.`,
+      reason: `GhostLock: ${phone} already sent ${entry.consecutiveOutbound}x without reply.`
     };
   }
 
   if (now - entry.lastOutboundAt < COOLDOWN_MS) {
     return {
       allowed: false,
-      reason: `GhostLock: ${phone} on cooldown.`,
+      reason: `GhostLock: ${phone} on cooldown (${Math.round((COOLDOWN_MS - (now - entry.lastOutboundAt)) / 1000)}s remaining).`
     };
   }
 
@@ -47,6 +54,8 @@ export function recordOutbound(phone: string): void {
   if (entry) {
     entry.lastOutboundAt = Date.now();
     entry.consecutiveOutbound += 1;
+  } else {
+    locks.set(phone, { phone, lastOutboundAt: Date.now(), lastInboundAt: 0, consecutiveOutbound: 1 });
   }
 }
 
@@ -55,5 +64,7 @@ export function recordInbound(phone: string): void {
   if (entry) {
     entry.lastInboundAt = Date.now();
     entry.consecutiveOutbound = 0;
+  } else {
+    locks.set(phone, { phone, lastOutboundAt: 0, lastInboundAt: Date.now(), consecutiveOutbound: 0 });
   }
 }

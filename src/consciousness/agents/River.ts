@@ -34,7 +34,7 @@ export class River {
         const res = await callLLM({
           messages,
           temperature: 0.2,
-          max_tokens: 800, // Increased from default
+          max_tokens: 1200, // Increased from 800 to prevent truncation
           agent: "river"
         });
         return res.content || "";
@@ -50,7 +50,6 @@ export class River {
     try {
       let cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
       
-      // Try to fix truncated JSON
       if (!this.isValidJSON(cleaned)) {
         const lastBrace = cleaned.lastIndexOf('}');
         if (lastBrace > 0) {
@@ -59,7 +58,6 @@ export class River {
             return JSON.parse(partial);
           }
         }
-        // Try adding closing braces
         let attempt = cleaned;
         let openBraces = (cleaned.match(/{/g) || []).length;
         let closeBraces = (cleaned.match(/}/g) || []).length;

@@ -1,7 +1,6 @@
 // FILE: src/consciousness/agents/Breath.ts
 // =====================================================
 // The Breath — Pacing Oracle of TheVoid
-// "Fire without Breath becomes a wildfire."
 // =====================================================
 
 import { Perception, ContextBundle } from "../types";
@@ -84,6 +83,10 @@ export class Breath {
   }
 
   enforce(response: string, budget: BreathBudget): { text: string; wasTrimmed: boolean; continuation?: string } {
+    if (!response || typeof response !== "string") {
+      return { text: "I'm here. What would you like to talk about?", wasTrimmed: true };
+    }
+
     if (response.length <= budget.maxChars) {
       return { text: response, wasTrimmed: false };
     }
