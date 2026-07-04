@@ -188,14 +188,10 @@ export async function runAgentLoop(
         try {
           const toolResult = await executeTool(toolCall, context);
           
-          // Handle different return types from executeTool
-          let result: any;
-          if (typeof toolResult === 'string') {
-            result = toolResult;
-          } else if (toolResult && typeof toolResult === 'object') {
-            result = toolResult.result || toolResult;
-          } else {
-            result = toolResult;
+          // Extract result from whatever executeTool returns
+          let result = toolResult;
+          if (toolResult && typeof toolResult === 'object' && 'result' in toolResult) {
+            result = (toolResult as any).result;
           }
           
           allToolCalls.push({ name: toolCall.function.name, args, result });
