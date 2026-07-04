@@ -249,6 +249,13 @@ async function processWebhookAsync(body: any): Promise<void> {
   }
 
   const latency = Date.now() - startTime;
+  const HARD_CAP = 900;
+  if (finalResponse.length > HARD_CAP) {
+    logger.warn("Emergency trim in webhook", { length: finalResponse.length, phone: fromPhone });
+    const trimmed = finalResponse.slice(0, HARD_CAP);
+    const lastBreak = Math.max(trimmed.lastIndexOf(". "), trimmed.lastIndexOf("! "), trimmed.lastIndexOf("? "));
+    finalResponse = lastBreak > 300 ? trimmed.slice(0, lastBreak + 1) + " Want me to continue?" : trimmed.slice(0, 400) + " …";
+  }
 
   if (!finalResponse) {
     logger.warn("No final response generated", { phone: fromPhone });
@@ -308,3 +315,5 @@ async function processWebhookAsync(body: any): Promise<void> {
     });
   }
 }
+
+import { canSend, recordOutbound, recordInbound } from "../utils/ghostLock";
