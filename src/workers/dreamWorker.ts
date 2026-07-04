@@ -35,12 +35,10 @@ export class DreamWorker {
         `SELECT DISTINCT student_phone FROM episodic_chunks WHERE consolidation_status = 'fresh'`
       );
       let totalMerged = 0, totalConcepts = 0;
-      let chunksPruned = 0;
       for (const s of students) {
         const result = await hippocampus.consolidateEpisodes(s.student_phone);
         totalMerged += result.merged;
         totalConcepts += result.concepts;
-        chunksPruned += result.pruned || 0;
       }
       logger.info("Episode consolidation complete", { totalMerged, totalConcepts });
 
@@ -73,7 +71,7 @@ export class DreamWorker {
       return {
         chunksProcessed: students.length,
         chunksMerged: totalMerged,
-        chunksPruned: chunksPruned,
+        chunksPruned: 0, // prune_working_memory handles this
         patternsExtracted,
         genesEvolved,
         predictionsValidated,
