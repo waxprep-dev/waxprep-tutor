@@ -1,24 +1,22 @@
 import { Request, Response } from "express";
 import { verifyWebhookSignature, verifyChallenge } from "./verify";
-import { query, withTransaction } from "../db/client";
+import { query, queryOne } from "../db/client";
 import { createIfMissing, touchStudent, incrementOutboundCount } from "../memory/profile";
 import { getOrCreateCurrentEpisode, incrementEpisodeMessageCount, getRecentHistory } from "../memory/episodes";
 import { assembleContext } from "../memory/retrieval";
 import { buildPrompt } from "../brain/promptBuilder";
 import { runAgentLoop } from "../brain/agentLoop";
-import { sendTextMessage } from "./sender";
+import { sendTextMessage, sendTypingIndicator } from "./sender";
 import { logger } from "../utils/logger";
 import TheVoid from "../consciousness/TheVoid";
-import { config } from "../config";
-import { 
-  validateTimestamp, 
-  sanitizeMessageId, 
-  sanitizeMessageText, 
-  sanitizeInteractivePayload
-} from "../utils/validation";
-import { generateSecureId } from "../utils/security";
+import { pulse, shouldShowTyping } from "../utils/presencePulse";
+import { canSend, recordOutbound, recordInbound } from "../utils/ghostLock";
 
 const theVoid = new TheVoid();
+
+// Hard cap — one law to rule them all
+const HARD_CAP = 900;
+const MIN_LENGTH = 60;
 
 const FALLBACK_MESSAGE = process.env.FALLBACK_MESSAGE || 
   "Gimme one sec, gathering my thoughts on that 🧠 — try sending it again in a moment.";
@@ -41,19 +39,8 @@ export async function handleWebhookPost(req: Request, res: Response): Promise<vo
   const rawBody = (req as any).rawBody as string;
   const signature = req.headers["x-hub-signature-256"] as string | undefined;
 
-  // Debug logging
-  logger.info("Webhook received", { 
-    hasSignature: !!signature,
-    signaturePrefix: signature?.slice(0, 20),
-    bodyLength: rawBody?.length,
-    appSecretConfigured: !!config.whatsapp?.appSecret
-  });
-
   if (!verifyWebhookSignature(rawBody, signature)) {
-    logger.warn("Invalid webhook signature", { 
-      signature: signature?.slice(0, 20),
-      appSecret: config.whatsapp?.appSecret ? "configured" : "missing"
-    });
+    logger.warn("Invalid webhook signature");
     res.status(401).send("Invalid signature");
     return;
   }
@@ -97,148 +84,168 @@ async function runAgentLoopSafely(
     await query(
       `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_response, timestamp, episode_id)
        VALUES ($1, $2, 'outbound', $3, $3, NOW(), $4)`,
-      [generateSecureId("fallback"), ctx.phone, FALLBACK_MESSAGE, ctx.episodeId]
+      [`fallback_${Date.now()}`, ctx.phone, FALLBACK_MESSAGE, ctx.episodeId]
     );
     
     return null;
   }
 }
 
+// ============================================================
+// MAIN PROCESSING PIPELINE
+// ============================================================
 async function processWebhookAsync(body: any): Promise<void> {
-  const entry = body.entry?.[0];
-  const change = entry?.changes?.[0];
-  const value = change?.value;
-  const message = value?.messages?.[0];
-
-  if (!message) return;
-
-  const fromPhone = message.from;
-  if (!fromPhone || typeof fromPhone !== "string") {
-    logger.warn("Missing or invalid from phone");
-    return;
-  }
-
-  const rawMessageId = message.id;
-  if (!rawMessageId || typeof rawMessageId !== "string") {
-    logger.warn("Missing message ID");
-    return;
-  }
-  const messageId = sanitizeMessageId(rawMessageId);
-
-  let timestamp: Date;
   try {
-    timestamp = validateTimestamp(message.timestamp);
-  } catch (err: any) {
-    logger.error("Invalid timestamp in webhook", { timestamp: message.timestamp, error: err.message });
-    timestamp = new Date();
-  }
+    const entry = body.entry?.[0];
+    const change = entry?.changes?.[0];
+    const value = change?.value;
+    const message = value?.messages?.[0];
 
-  // FIRST: Create or get episode
-  await createIfMissing(fromPhone);
-  await touchStudent(fromPhone);
+    if (!message) return;
 
-  const episode = await getOrCreateCurrentEpisode(fromPhone);
-  await incrementEpisodeMessageCount(episode.episode_id);
-
-  // NOW: Insert message with valid episode_id
-  const duplicateCheck = await query(
-    `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
-     VALUES ($1, $2, 'inbound', $3, $4, $5)
-     ON CONFLICT (message_id) DO NOTHING
-     RETURNING message_id`,
-    [messageId, fromPhone, "[placeholder]", timestamp, episode.episode_id]
-  );
-
-  if (duplicateCheck.length === 0) {
-    logger.info("Duplicate message, skipping", { message_id: messageId });
-    return;
-  }
-
-  let messageText = "";
-  
-  if (message.type === "text") {
-    messageText = sanitizeMessageText(message.text?.body || "");
-  } else if (message.type === "interactive") {
-    messageText = sanitizeInteractivePayload(message.interactive);
-  } else if (message.type === "audio") {
-    messageText = "[Voice message received — transcription not yet available]";
-    await sendTextMessage(fromPhone, 
-      "I can't listen to voice notes yet 😅. Send me a text message and I'll help you right away!"
-    );
-    return;
-  } else {
-    await sendTextMessage(fromPhone, "I can read text best right now. Send me a message!");
-    return;
-  }
-
-  if (!messageText || messageText.length === 0) {
-    logger.info("Empty message after sanitization, skipping");
-    return;
-  }
-
-  logger.info("Inbound message", {
-    from: fromPhone,
-    type: message.type,
-    message_id: messageId,
-    length: messageText.length,
-  });
-
-  // Update the message with real text
-  await query(
-    `UPDATE message_log 
-     SET raw_text = $1
-     WHERE message_id = $2`,
-    [messageText, messageId]
-  );
-
-  const history = await getRecentHistory(fromPhone, episode.episode_id, messageId, 20);
-  const context = await assembleContext(fromPhone, messageText);
-
-  const startTime = Date.now();
-  let finalResponse = "";
-  let allToolCalls: any[] = [];
-  let totalTokens = 0;
-  let modelUsed = "cerebras";
-  let perceptionResult: any = null;
-  let contextBundleResult: any = null;
-
-  try {
-    const voidResult = await theVoid.processMessage(
-      fromPhone,
-      messageText,
-      history.map((m: any) => m.content || ""),
-      context.profile,
-      { ...context, currentEpisodeId: episode.episode_id }
-    );
-    
-    finalResponse = voidResult.response || "";
-    allToolCalls = voidResult.toolsCalled || [];
-    perceptionResult = voidResult.perception;
-    contextBundleResult = voidResult.contextBundle;
-    
-    if (voidResult.guardianDecision?.decision !== "approve") {
-      logger.warn("Guardian intervened", { 
-        decision: voidResult.guardianDecision?.decision,
-        reason: voidResult.guardianDecision?.reason 
-      });
+    const fromPhone = message.from;
+    if (!fromPhone || typeof fromPhone !== "string") {
+      logger.warn("Missing or invalid from phone");
+      return;
     }
-    
-  } catch (voidError: any) {
-    const isSafetyError = voidError.message?.toLowerCase().includes("safety") ||
-                          voidError.message?.toLowerCase().includes("crisis") ||
-                          voidError.message?.toLowerCase().includes("risk");
-    
-    if (isSafetyError) {
-      logger.error("TheVoid safety failure, NOT falling back to agentLoop", { error: voidError.message });
-      finalResponse = FALLBACK_MESSAGE;
+
+    const rawMessageId = message.id;
+    if (!rawMessageId || typeof rawMessageId !== "string") {
+      logger.warn("Missing message ID");
+      return;
+    }
+    const messageId = rawMessageId;
+
+    const timestamp = new Date(parseInt(message.timestamp) * 1000);
+
+    // Duplicate check
+    const existing = await query(`SELECT message_id FROM message_log WHERE message_id = $1`, [messageId]);
+    if (existing.length > 0) {
+      logger.info("Duplicate message, skipping", { message_id: messageId });
+      return;
+    }
+
+    // Extract message text
+    let messageText = "";
+    if (message.type === "text") {
+      messageText = message.text.body || "";
+    } else if (message.type === "interactive") {
+      const interactive = message.interactive;
+      if (interactive.type === "button_reply") {
+        messageText = interactive.button_reply.title || "";
+      } else if (interactive.type === "list_reply") {
+        messageText = interactive.list_reply.title || "";
+      } else {
+        messageText = JSON.stringify(interactive);
+      }
+    } else if (message.type === "audio") {
+      messageText = "[Voice message received]";
+      await sendTextMessage(fromPhone, 
+        "I can't listen to voice notes yet 😅. Send me a text message and I'll help you right away!"
+      );
+      return;
     } else {
+      await sendTextMessage(fromPhone, "I can read text best right now. Send me a message!");
+      return;
+    }
+
+    if (!messageText || messageText.trim().length === 0) {
+      logger.info("Empty message after sanitization, skipping");
+      return;
+    }
+
+    logger.info("Inbound message", {
+      from: fromPhone,
+      type: message.type,
+      message_id: messageId,
+      length: messageText.length,
+    });
+
+    // Create/update student
+    await createIfMissing(fromPhone);
+    await touchStudent(fromPhone);
+    recordInbound(fromPhone);
+
+    // Get/create episode
+    const episode = await getOrCreateCurrentEpisode(fromPhone);
+    await incrementEpisodeMessageCount(episode.episode_id);
+
+    // Log inbound message
+    await query(
+      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, timestamp, episode_id)
+       VALUES ($1, $2, 'inbound', $3, $4, $5)
+       ON CONFLICT (message_id) DO NOTHING`,
+      [messageId, fromPhone, messageText, timestamp, episode.episode_id]
+    );
+
+    // Get history with chronological order and speaker labels
+    const history = await getRecentHistory(fromPhone, episode.episode_id, messageId);
+    
+    // Calculate minutes since last student message
+    let minutesSinceLast = 10;
+    const studentMessages = history.filter((h: any) => h.direction === 'inbound');
+    if (studentMessages.length > 1) {
+      const lastStudentMsg = studentMessages[studentMessages.length - 2]; // Before current
+      if (lastStudentMsg?.timestamp) {
+        minutesSinceLast = (timestamp.getTime() - new Date(lastStudentMsg.timestamp).getTime()) / 60000;
+      }
+    }
+
+    // Get actual message count from database
+    const episodeData = await queryOne(
+      `SELECT message_count FROM episodes WHERE episode_id = $1`,
+      [episode.episode_id]
+    );
+    const msgCountThisEpisode = episodeData?.message_count || 0;
+
+    // Presence Pulse — detect engagement/withdrawal
+    const presence = await pulse(fromPhone, episode.episode_id, messageText, timestamp);
+    logger.info("Presence Pulse", {
+      phone: fromPhone,
+      disengagement: presence.disengagementScore,
+      withdrawing: presence.isWithdrawing,
+      hesitating: presence.isHesitating,
+      repeating: presence.isRepeating,
+    });
+
+    // Send typing indicator if appropriate
+    if (shouldShowTyping(messageText, presence, 3000)) {
+      sendTypingIndicator(fromPhone, messageId).catch(() => {});
+    }
+
+    // Assemble context
+    const context = await assembleContext(fromPhone, messageText);
+
+    // Process message
+    const startTime = Date.now();
+    let finalResponse = "";
+    let allToolCalls: any[] = [];
+    let totalTokens = 0;
+    let modelUsed = "cerebras";
+
+    try {
+      const voidResult = await theVoid.processMessage(
+        fromPhone,
+        messageText,
+        history.map((m: any) => m.formatted || m.content || ""),
+        context.profile,
+        context,
+        {
+          minutesSinceLast,
+          messageCountThisEpisode,
+          presence,
+          incomingMessageId: messageId,
+        }
+      );
+      finalResponse = voidResult.response || "";
+      allToolCalls = voidResult.toolsCalled || [];
+    } catch (voidError: any) {
       logger.warn("TheVoid failed, falling back to agentLoop", { error: voidError.message });
       const messages = buildPrompt(context, messageText, history);
       const fallbackResult = await runAgentLoopSafely(messages, {
         phone: fromPhone,
         episodeId: episode.episode_id,
       });
-      
       if (fallbackResult) {
         finalResponse = fallbackResult.finalResponse || "";
         allToolCalls = fallbackResult.allToolCalls || [];
@@ -246,74 +253,71 @@ async function processWebhookAsync(body: any): Promise<void> {
         modelUsed = fallbackResult.modelUsed || "cerebras";
       }
     }
-  }
 
-  const latency = Date.now() - startTime;
-  const HARD_CAP = 900;
-  if (finalResponse.length > HARD_CAP) {
-    logger.warn("Emergency trim in webhook", { length: finalResponse.length, phone: fromPhone });
-    const trimmed = finalResponse.slice(0, HARD_CAP);
-    const lastBreak = Math.max(trimmed.lastIndexOf(". "), trimmed.lastIndexOf("! "), trimmed.lastIndexOf("? "));
-    finalResponse = lastBreak > 300 ? trimmed.slice(0, lastBreak + 1) + " Want me to continue?" : trimmed.slice(0, 400) + " …";
-  }
+    if (!finalResponse) {
+      logger.warn("No final response generated", { phone: fromPhone });
+      return;
+    }
 
-  if (!finalResponse) {
-    logger.warn("No final response generated", { phone: fromPhone });
-    return;
-  }
+    // EMERGENCY HARD CAP — never exceed 900 characters
+    if (finalResponse.length > HARD_CAP) {
+      logger.warn("Emergency trim in webhook", { 
+        length: finalResponse.length, 
+        phone: fromPhone 
+      });
+      const trimmed = finalResponse.slice(0, HARD_CAP);
+      const lastBreak = Math.max(
+        trimmed.lastIndexOf(". "),
+        trimmed.lastIndexOf("! "),
+        trimmed.lastIndexOf("? ")
+      );
+      finalResponse = lastBreak > 300 
+        ? trimmed.slice(0, lastBreak + 1) + " Want me to continue?" 
+        : trimmed.slice(0, 400) + " …";
+    }
 
-  const outboundMessageId = generateSecureId("out");
+    // Minimum length guard — never send empty soul
+    if (finalResponse.length < MIN_LENGTH && finalResponse.length > 0) {
+      const warmFallbacks = [
+        "I'm listening. Tell me more.",
+        "I hear you. What's on your mind?",
+        "That's interesting. Tell me more.",
+      ];
+      finalResponse = warmFallbacks[Math.floor(Math.random() * warmFallbacks.length)];
+    }
 
-  await query(
-    `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_tool_calls, ai_response, timestamp, episode_id, latency_ms, model_used)
-     VALUES ($1, $2, 'outbound', $3, $4, $5, NOW(), $6, $7, $8)`,
-    [
-      outboundMessageId,
-      fromPhone,
-      finalResponse,
-      JSON.stringify(allToolCalls),
-      finalResponse,
-      episode.episode_id,
-      latency,
-      modelUsed
-    ]
-  );
+    // Ghost Lock check — prevent panic double messages
+    const lockCheck = canSend(fromPhone);
+    if (!lockCheck.allowed) {
+      logger.warn("GhostLock prevented send", { 
+        phone: fromPhone, 
+        reason: lockCheck.reason 
+      });
+      return;
+    }
 
-  await incrementOutboundCount(fromPhone);
-  if (finalResponse.length > 900) {
-    logger.warn("Emergency trim in webhook", { length: finalResponse.length, phone: fromPhone });
-    const trimmed = finalResponse.slice(0, 900);
-    const lastBreak = Math.max(trimmed.lastIndexOf(". "), trimmed.lastIndexOf("! "), trimmed.lastIndexOf("? "));
-    finalResponse = lastBreak > 300 ? trimmed.slice(0, lastBreak + 1) : trimmed.slice(0, 400);
-  }
-  await sendTextMessage(fromPhone, finalResponse);
+    // Log outbound message
+    await query(
+      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_tool_calls, ai_response, timestamp, episode_id, latency_ms, model_used)
+       VALUES ($1, $2, 'outbound', $3, $4, $5, NOW(), $6, $7, $8)`,
+      [`ai_${messageId}`, fromPhone, finalResponse, JSON.stringify(allToolCalls), finalResponse, 
+       episode.episode_id, Date.now() - startTime, modelUsed]
+    );
 
-  logger.info("Message processed", {
-    phone: fromPhone,
-    type: message.type,
-    latency_ms: latency,
-    tokens: totalTokens,
-    tool_calls: allToolCalls.length,
-  });
+    await incrementOutboundCount(fromPhone);
+    await sendTextMessage(fromPhone, finalResponse);
+    recordOutbound(fromPhone, finalResponse.length);
 
-  if (perceptionResult && contextBundleResult) {
-    setImmediate(async () => {
-      try {
-        await theVoid.evolve(
-          fromPhone,
-          messageText,
-          perceptionResult,
-          contextBundleResult,
-          finalResponse,
-          null,
-          null,
-          context
-        );
-      } catch (evolveError: any) {
-        logger.error("Background evolution failed", { error: evolveError.message });
-      }
+    logger.info("Message processed", {
+      phone: fromPhone,
+      type: message.type,
+      latency_ms: Date.now() - startTime,
+      tokens: totalTokens,
+      tool_calls: allToolCalls.length,
+      response_length: finalResponse.length,
     });
+
+  } catch (err: any) {
+    logger.error("Webhook processing error", { error: err.message, stack: err.stack });
   }
 }
-
-import { canSend, recordOutbound, recordInbound } from "../utils/ghostLock";
