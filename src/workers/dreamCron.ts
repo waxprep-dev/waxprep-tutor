@@ -1,7 +1,7 @@
 // FILE: src/workers/dreamCron.ts
 // DREAM CRON — Scheduled entry point for the Dream Worker
 
-import dreamWorker from "./dreamWorker";
+import { dreamWorker } from "./dreamWorker";
 import { logger } from "../utils/logger";
 
 export async function runDream(): Promise<void> {
@@ -25,7 +25,6 @@ export async function runDream(): Promise<void> {
     const errMsg = error instanceof Error ? error.message : String(error);
     const errStack = error instanceof Error ? error.stack : undefined;
     
-    // FIX: Always pass object for metadata
     const logData: Record<string, any> = {
       error: errMsg,
       durationMs: Date.now() - startTime
@@ -46,7 +45,6 @@ if (require.main === module) {
     })
     .catch((err: unknown) => {
       const errMsg = err instanceof Error ? err.message : String(err);
-      // FIX: Pass error as object, not string
       logger.error("Dream failed with error:", { error: errMsg });
       process.exit(1);
     });
