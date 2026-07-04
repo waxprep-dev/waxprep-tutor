@@ -12,55 +12,59 @@ export class Fire {
     budget?: BreathBudget
   ): Promise<string> {
     const lengthDirective = budget
-      ? `\n\n[LENGTH PROTOCOL]\nYou are on WhatsApp. Your strict budget is ${budget.targetChars} characters (max ${budget.maxChars}).\nStrategy: ${budget.strategy}.\nWhy: ${budget.why}.\nCount your characters. One idea. One question. No lists. No markdown. No headers. Plain text only.`
+      ? `\n\n[LENGTH PROTOCOL — OBEY OR BE EXTINGUISHED]\nYou are on WhatsApp. Your strict budget is ${budget.targetChars} characters (max ${budget.maxChars}).\nStrategy: ${budget.strategy}.\nWhy: ${budget.why}.\nCount your characters. One idea. One question. No lists.`
       : "";
 
     const messages = [
       { role: "system" as const, content: systemPrompt + lengthDirective },
       {
         role: "user" as const,
-        content: `Context Bundle: ${JSON.stringify(contextBundle)}\n\nGenerate the best possible WhatsApp response. Plain text only. No JSON. No markdown headers. No bullet points. No numbered lists.`,
-      },
+        content: `Context Bundle: ${JSON.stringify(contextBundle)}\n\nGenerate the best possible WhatsApp response. Plain text only. No JSON. No markdown headers. No bullet points.`
+      }
     ];
 
     const maxTokens = budget ? Math.min(800, Math.ceil(budget.maxChars / 1.8)) : 400;
 
     try {
       const res = await this.callWithRetry(messages, maxTokens);
-      let cleaned = this.cleanResponse(res);
+      // Ensure we have a string before calling cleanResponse
+      const content = typeof res === 'string' ? res : (res?.content || res?.toString() || "");
+      let cleaned = this.cleanResponse(content);
 
       if (budget && cleaned.length > budget.maxChars) {
         logger.warn("Fire exceeded budget, self-compressing", { length: cleaned.length, budget: budget.targetChars });
         cleaned = await this.compress(cleaned, budget);
       }
 
-      return cleaned;
-    } catch (e: any) {
-      logger.error("Fire generation failed", { error: e.message });
+      return cleaned || "I'm here. What would you like to talk about?";
+    } catch (error: any) {
+      logger.error("Fire generation failed", { error: error.message });
       return "Give me a moment — trying again.";
     }
   }
 
-  private async callWithRetry(messages: any[], maxTokens?: number): Promise<any> {
+  private async callWithRetry(messages: any[], maxTokens?: number): Promise<string> {
     for (let i = 0; i < this.maxRetries; i++) {
       try {
-        return await callLLM({
+        const res = await callLLM({
           messages,
           tools: TOOLS,
           tool_choice: "auto",
           temperature: 0.7,
           max_tokens: maxTokens || 400,
+          agent: "fire"
         });
+        return res.content || "";
       } catch (e) {
         if (i === this.maxRetries - 1) throw e;
-        await new Promise((r) => setTimeout(r, 1000 * Math.pow(2, i)));
+        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
       }
     }
     throw new Error("Fire failed after retries");
   }
 
   private cleanResponse(text: string): string {
-    if (!text) return "";
+    if (!text || typeof text !== "string") return "";
     return text
       .replace(/^#{1,6}\s+/gm, "")
       .replace(/\*\*/g, "")
@@ -72,6 +76,8 @@ export class Fire {
   }
 
   private async compress(text: string, budget: BreathBudget): Promise<string> {
+    if (!text || typeof text !== "string") return "I'm here. What would you like to talk about?";
+    
     const compressMsg = [
       {
         role: "system" as const,
@@ -84,6 +90,7 @@ export class Fire {
         messages: compressMsg,
         temperature: 0.2,
         max_tokens: Math.ceil(budget.maxChars / 1.8),
+        agent: "fire"
       });
       const compressed = (res.content || text).trim();
       return compressed.length > budget.maxChars ? compressed.slice(0, budget.maxChars) : compressed;
