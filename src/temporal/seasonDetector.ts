@@ -81,6 +81,10 @@ export class SeasonDetector {
       [studentPhone, (season?.season_number || 0) + 1]
     );
 
+    if (!newSeason) {
+      throw new Error(`Failed to create new season for student ${studentPhone}`);
+    }
+
     return { newSeasonId: newSeason.season_id, seasonNumber: newSeason.season_number };
   }
 
@@ -110,7 +114,6 @@ export class SeasonDetector {
 
     const similarity = this.cosineSimilarity(currentEmbedding, seasonEmbedding);
 
-    // If similarity < 0.6, topic has shifted significantly
     if (similarity < 0.6) {
       return { shouldEnd: true, reason: `Topic shift detected (similarity: ${similarity.toFixed(2)})` };
     }
@@ -175,7 +178,6 @@ export class SeasonDetector {
 
     if (chunks.length < 5) return { shouldEnd: false, reason: "Not enough emotional data" };
 
-    // Detect arc: started confused (low valence, high load), ended confident (high valence, low load)
     const firstThird = chunks.slice(0, Math.floor(chunks.length / 3));
     const lastThird = chunks.slice(Math.floor(chunks.length * 2 / 3));
 
@@ -211,27 +213,32 @@ export class SeasonDetector {
   // GENERATE SEASON SUMMARY
   // ============================================================
   private async generateSeasonSummary(studentPhone: string, seasonId: string): Promise<string> {
-    const chunks = await query(
-      `SELECT content, speaker, emotional_valence FROM episodic_chunks
-       WHERE student_phone = $1 AND episode_id IN (
-         SELECT episode_id FROM message_log WHERE season_id = $2
-       )
-       ORDER BY sequence_number ASC`,
-      [studentPhone, seasonId]
-    );
+    try {
+      const chunks = await query(
+        `SELECT content, speaker, emotional_valence FROM episodic_chunks
+         WHERE student_phone = $1 AND episode_id IN (
+           SELECT episode_id FROM message_log WHERE season_id = $2
+         )
+         ORDER BY sequence_number ASC`,
+        [studentPhone, seasonId]
+      );
 
-    const keyConcepts = await query(
-      `SELECT DISTINCT concept_name FROM semantic_concepts
-       WHERE student_phone = $1 AND first_encountered > (
-         SELECT started_at FROM conversation_seasons WHERE season_id = $2
-       )`,
-      [studentPhone, seasonId]
-    );
+      const keyConcepts = await query(
+        `SELECT DISTINCT concept_name FROM semantic_concepts
+         WHERE student_phone = $1 AND first_encountered > (
+           SELECT started_at FROM conversation_seasons WHERE season_id = $2
+         )`,
+        [studentPhone, seasonId]
+      );
 
-    const concepts = keyConcepts.map((c: any) => c.concept_name).join(", ");
-    const emotionalJourney = this.describeEmotionalJourney(chunks);
+      const concepts = keyConcepts.map((c: any) => c.concept_name).join(", ");
+      const emotionalJourney = this.describeEmotionalJourney(chunks);
 
-    return `Season Summary: Learned ${concepts}. Emotional journey: ${emotionalJourney}.`;
+      return concepts ? `Learned ${concepts}. Emotional journey: ${emotionalJourney}.` : `Emotional journey: ${emotionalJourney}.`;
+    } catch (error) {
+      logger.warn("Season summary generation failed", { error: error instanceof Error ? error.message : String(error) });
+      return "Season completed.";
+    }
   }
 
   private describeEmotionalJourney(chunks: any[]): string {
