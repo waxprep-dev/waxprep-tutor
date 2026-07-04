@@ -216,26 +216,30 @@ async function processWebhookAsync(body: any): Promise<void> {
     // Assemble context
     const context = await assembleContext(fromPhone, messageText);
 
-    // Process message
+    // Process message — pass meta as separate object (TheVoid will be updated next)
     const startTime = Date.now();
     let finalResponse = "";
     let allToolCalls: any[] = [];
     let totalTokens = 0;
     let modelUsed = "cerebras";
 
+    // Prepare meta data for TheVoid (will be used when TheVoid is updated)
+    const meta = {
+      minutesSinceLast,
+      messageCountThisEpisode: msgCountThisEpisode,
+      presence,
+      incomingMessageId: messageId,
+    };
+
     try {
+      // Pass meta as the 6th argument (TheVoid will be updated to accept it)
       const voidResult = await theVoid.processMessage(
         fromPhone,
         messageText,
         history.map((m: any) => m.formatted || m.content || ""),
         context.profile,
         context,
-        {
-          minutesSinceLast,
-          messageCountThisEpisode,
-          presence,
-          incomingMessageId: messageId,
-        }
+        meta
       );
       finalResponse = voidResult.response || "";
       allToolCalls = voidResult.toolsCalled || [];
