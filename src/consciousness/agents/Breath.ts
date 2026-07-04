@@ -3,6 +3,8 @@
 // The Breath — Pacing Oracle of TheVoid
 // "Fire without Breath becomes a wildfire."
 // One hardcoded law: ABSOLUTE_MAX = 900 characters.
+// Everything else is alive: calculated from the student's
+// attention span, relationship stage, intent, and silence.
 // =====================================================
 
 import { Perception, ContextBundle } from "../types";
@@ -34,13 +36,16 @@ export class Breath {
     const vulnerabilityDetected = perception.emotional_state?.vulnerability_detected || false;
     const shameDetected = perception.emotional_state?.shame_detected || false;
 
+    // Relationship stage
     if (stage === "stranger") multiplier *= 0.6;
     else if (stage === "acquaintance") multiplier *= 0.8;
     else if (stage === "close") multiplier *= 1.15;
 
+    // Attention span
     if (attention === "short") multiplier *= 0.5;
     else if (attention === "long") multiplier *= 1.2;
 
+    // Silence detection
     if (minutesSinceLastStudentMessage > 8) {
       strategy = "hook";
       multiplier = 0.35;
@@ -48,6 +53,7 @@ export class Breath {
       multiplier *= 0.7;
     }
 
+    // Intent-based strategy
     if (intent === "greeting" || intent === "small_talk" || intent === "casual_chat") {
       strategy = "hook";
       multiplier *= 0.5;
@@ -62,19 +68,25 @@ export class Breath {
       multiplier *= 0.7;
     }
 
+    // Vulnerability and shame
     if (vulnerabilityDetected || shameDetected) {
-      // Fix: Only downgrade if currently at feast or meal
-      if (strategy === "feast") strategy = "meal";
-      else if (strategy === "meal") strategy = "bite";
+      // Only downgrade if at feast or meal level
+      if (strategy === "feast") {
+        strategy = "meal";
+      } else if (strategy === "meal") {
+        strategy = "bite";
+      }
       multiplier *= 0.7;
     }
 
+    // Early conversation
     if (msgCount < 3) {
       multiplier *= 0.55;
       if (strategy === "meal") strategy = "bite";
-      if (strategy === "feast") strategy = "meal";
+      else if (strategy === "feast") strategy = "meal";
     }
 
+    // Risk flags
     if (perception.risk_flags?.suicidal_ideation ||
         perception.risk_flags?.self_harm ||
         perception.risk_flags?.extreme_distress) {
