@@ -202,10 +202,12 @@ export async function healthCheck(): Promise<EmbeddingHealth> {
     }
   }
 
-  const status: EmbeddingHealth["status"] =
-    modelStatus === "ready" && vectorDimensions > 0 ? "healthy"
-    : modelStatus === "loading" ? "degraded"
-    : "unhealthy";
+  let status: EmbeddingHealth["status"] = "unhealthy";
+  if (modelStatus === "ready" && vectorDimensions > 0) {
+    status = "healthy";
+  } else if (modelStatus === "loading") {
+    status = "degraded";
+  }
 
   return {
     status,
