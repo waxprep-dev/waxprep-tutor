@@ -4,8 +4,8 @@ import { Fire } from "./agents/Fire";
 import { Guardian } from "./agents/Guardian";
 import { Witness } from "./agents/Witness";
 import { Archivist } from "./agents/Archivist";
+import { Resonance } from "./agents/Resonance";
 import { TheOracle, OraclePlan, OracleContext } from "./TheOracle";
-import { cortex, CortexPlan } from "./cortex";
 import { Perception, ContextBundle, GuardianDecision } from "./types";
 import { logger } from "../utils/logger";
 
@@ -33,6 +33,7 @@ export class TheVoid {
   private witness: Witness;
   private archivist: Archivist;
   private oracle: TheOracle;
+  private resonance: Resonance;
 
   private mirrorPrompt: string;
   private riverPrompt: string;
@@ -49,10 +50,10 @@ export class TheVoid {
     this.witness = new Witness();
     this.archivist = new Archivist();
     this.oracle = new TheOracle();
+    this.resonance = new Resonance();
 
     this.mirrorPrompt = "You are The Mirror. You perceive the student. Read their message and detect intent, emotion, shame signals, risk flags, and cultural signals. Output a structured perception as JSON. Never speak to the student.";
     this.riverPrompt = "You are The River. You retrieve and build context. Based on the perception and student profile, retrieve relevant memories, concepts, and relational notes. Output a context bundle as JSON. Never speak to the student.";
-
     this.firePrompt = `You are Wax. You are texting a student on WhatsApp. You are a smart, warm friend — not a professor, not a chatbot.
 
 CRITICAL RULES:
@@ -86,7 +87,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   }
 
   // ============================================================
-  // MAIN ORCHESTRATION — WITH ORACLE
+  // MAIN ORCHESTRATION
   // ============================================================
   async processMessage(
     studentId: string,
@@ -100,12 +101,10 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
     const toolsCalled: string[] = [];
 
     try {
-      // ============================================================
-      // STEP 0: THE ORACLE — Decide what to do
-      // ============================================================
+      // STEP 0: THE ORACLE
       console.log(`[Void] Calling Oracle for student ${studentId}`);
       
-      const oracleCtx: OracleContext = {
+      const oracleCtx = {
         studentPhone: studentId,
         message: studentMessage,
         history: conversationHistory,
@@ -116,13 +115,9 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
 
       const plan = await this.oracle.generatePlan(oracleCtx);
       toolsCalled.push("oracle");
+      console.log(`[Void] Oracle plan: agents=${plan.orchestration.agents.join(',')}`);
 
-      // Log the plan
-      console.log(`[Void] Oracle plan: agents=${plan.orchestration.agents.join(',')}, tools=${plan.tools.join(',')}`);
-
-      // ============================================================
-      // STEP 1: THE MIRROR — Perceive (only if Oracle says so)
-      // ============================================================
+      // STEP 1: THE MIRROR
       let perception = this.getDefaultPerception();
       
       if (plan.orchestration.agents.includes("mirror")) {
@@ -134,7 +129,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
         );
         toolsCalled.push("mirror");
 
-        // Check for critical risk flags
         if (perception?.risk_flags?.suicidal_ideation ||
             perception?.risk_flags?.self_harm ||
             perception?.risk_flags?.extreme_distress) {
@@ -157,9 +151,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
         }
       }
 
-      // ============================================================
-      // STEP 2: THE RIVER — Build Context (only if Oracle says so)
-      // ============================================================
+      // STEP 2: THE RIVER
       let contextBundle = this.getDefaultContextBundle();
       
       if (plan.orchestration.agents.includes("river")) {
@@ -172,7 +164,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
         );
         toolsCalled.push("river");
 
-        // Ensure conversation_state exists
         if (!contextBundle.conversation_state) {
           contextBundle.conversation_state = {
             current_flow_state: "connection",
@@ -182,7 +173,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
           };
         }
 
-        // Inject meta data if available
         if (meta) {
           contextBundle.conversation_state.message_count_this_episode = meta.messageCountThisEpisode || 0;
           contextBundle.conversation_state.time_since_last_message = meta.minutesSinceLast 
@@ -201,9 +191,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
         }
       }
 
-      // ============================================================
-      // STEP 3: THE FIRE — Generate Response (ALWAYS runs)
-      // ============================================================
+      // STEP 3: THE FIRE
       console.log(`[Void] Calling Fire for student ${studentId}`);
       const fireResponse = await this.fire.generateResponse(
         contextBundle,
@@ -211,9 +199,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       );
       toolsCalled.push("fire");
 
-      // ============================================================
-      // STEP 4: THE GUARDIAN — Review (ALWAYS runs)
-      // ============================================================
+      // STEP 4: THE GUARDIAN
       console.log(`[Void] Calling Guardian for student ${studentId}`);
       const guardianDecision = await this.guardian.review(
         fireResponse,
@@ -222,7 +208,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       );
       toolsCalled.push("guardian");
 
-      // Handle Guardian decision
       let finalResponse: string;
       switch (guardianDecision.decision) {
         case "approve":
@@ -276,7 +261,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   }
 
   // ============================================================
-  // EVOLUTION — Background learning after student replies
+  // EVOLUTION — WITH RESONANCE INTEGRATION
   // ============================================================
   async evolve(
     studentId: string,
@@ -291,6 +276,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
     try {
       console.log(`[Void] Starting evolution for student ${studentId}`);
 
+      // STEP 5: THE WITNESS
       const reflection = await this.witness.reflect(
         studentMessage,
         perception,
@@ -300,6 +286,22 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
         this.witnessPrompt
       );
 
+      // ============================================================
+      // RESONANCE — Detect student drift and suggest re-engagement
+      // ============================================================
+      const pulse = this.resonance.detect(studentNextMessage, perception, contextBundle);
+      
+      if (pulse.shouldInject) {
+        console.log(`[Void] RESONANCE PULSE: ${pulse.tone} — ${pulse.reason}`);
+        console.log(`[Void] Resonance suggestion: ${pulse.suggestion}`);
+        
+        // Store the resonance pulse in memory so the next Fire generation knows to pivot
+        if (pulse.suggestion) {
+          await this.storeResonancePulse(studentId, pulse);
+        }
+      }
+
+      // STEP 6: THE ARCHIVIST
       const evolution = await this.archivist.evolve(
         reflection,
         currentSignature,
@@ -314,6 +316,15 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
     } catch (error: any) {
       console.error(`[Void] Evolution failed for student ${studentId}:`, error);
     }
+  }
+
+  // ============================================================
+  // STORE RESONANCE PULSE
+  // ============================================================
+  private async storeResonancePulse(studentId: string, pulse: any): Promise<void> {
+    // Store the pulse in a temporary table or memory for the next Fire generation
+    // For now, we log it and it will be available in the context
+    console.log(`[Void] Resonance pulse stored for ${studentId}: ${pulse.tone}`);
   }
 
   private async applyEvolution(studentId: string, evolution: any): Promise<void> {
