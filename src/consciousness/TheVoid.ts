@@ -6,6 +6,7 @@ import { Witness } from "./agents/Witness";
 import { Archivist } from "./agents/Archivist";
 import { Resonance } from "./agents/Resonance";
 import { TheOracle, OraclePlan, OracleContext } from "./TheOracle";
+import { TheSeer } from "../predictive/TheSeer";
 import { Perception, ContextBundle, GuardianDecision } from "./types";
 import { logger } from "../utils/logger";
 
@@ -33,6 +34,7 @@ export class TheVoid {
   private witness: Witness;
   private archivist: Archivist;
   private oracle: TheOracle;
+  private seer: TheSeer;
   private resonance: Resonance;
 
   private mirrorPrompt: string;
@@ -50,6 +52,7 @@ export class TheVoid {
     this.witness = new Witness();
     this.archivist = new Archivist();
     this.oracle = new TheOracle();
+    this.seer = new TheSeer();
     this.resonance = new Resonance();
 
     this.mirrorPrompt = "You are The Mirror. You perceive the student. Read their message and detect intent, emotion, shame signals, risk flags, and cultural signals. Output a structured perception as JSON. Never speak to the student.";
@@ -87,7 +90,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   }
 
   // ============================================================
-  // MAIN ORCHESTRATION
+  // MAIN ORCHESTRATION — WITH SEER
   // ============================================================
   async processMessage(
     studentId: string,
@@ -101,7 +104,38 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
     const toolsCalled: string[] = [];
 
     try {
-      // STEP 0: THE ORACLE
+      // ============================================================
+      // STEP 0: THE SEER — Predict before anything else
+      // ============================================================
+      console.log(`[Void] Calling Seer for student ${studentId}`);
+      const predictions = await this.seer.generatePredictions(studentId);
+      toolsCalled.push("seer");
+      
+      console.log(`[Void] Seer predictions: burnoutRisk=${predictions.burnoutRisk}, nextStruggle=${predictions.nextStruggle}, optimalModality=${predictions.optimalModality}`);
+
+      // If burnout risk is critical, bypass everything and respond with care
+      if (predictions.burnoutRisk > 0.8) {
+        console.log(`[Void] Critical burnout detected for ${studentId}, switching to support mode`);
+        return {
+          response: this.generateBurnoutResponse(studentProfile),
+          perception: this.getDefaultPerception(),
+          contextBundle: this.getDefaultContextBundle(),
+          guardianDecision: {
+            decision: "approve",
+            reason: "Burnout support mode",
+            modified_response: null,
+            quality_checks: {},
+            safety_checks: {},
+            escalation: { needed: false, reason: "", human_alert: "" }
+          },
+          toolsCalled,
+          latencyMs: Date.now() - startTime,
+        };
+      }
+
+      // ============================================================
+      // STEP 1: THE ORACLE — Now with predictions
+      // ============================================================
       console.log(`[Void] Calling Oracle for student ${studentId}`);
       
       const oracleCtx = {
@@ -110,14 +144,16 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
         history: conversationHistory,
         profile: studentProfile,
         engagement: availableMemory?.engagement || {},
-        recentPredictions: []
+        recentPredictions: [predictions]
       };
 
       const plan = await this.oracle.generatePlan(oracleCtx);
       toolsCalled.push("oracle");
       console.log(`[Void] Oracle plan: agents=${plan.orchestration.agents.join(',')}`);
 
-      // STEP 1: THE MIRROR
+      // ============================================================
+      // STEP 2: THE MIRROR
+      // ============================================================
       let perception = this.getDefaultPerception();
       
       if (plan.orchestration.agents.includes("mirror")) {
@@ -151,7 +187,9 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
         }
       }
 
-      // STEP 2: THE RIVER
+      // ============================================================
+      // STEP 3: THE RIVER
+      // ============================================================
       let contextBundle = this.getDefaultContextBundle();
       
       if (plan.orchestration.agents.includes("river")) {
@@ -189,9 +227,18 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
             contextBundle.student_profile.current_mood = "repeating";
           }
         }
+
+        // Inject Seer predictions into context for Fire
+        contextBundle.teaching_recommendations.suggested_topic = predictions.nextStruggle || "general";
+        contextBundle.teaching_recommendations.suggested_pace = 
+          predictions.burnoutRisk > 0.5 ? "slow" : "medium";
+        contextBundle.student_profile.current_mood = 
+          predictions.burnoutRisk > 0.5 ? "vulnerable" : "engaged";
       }
 
-      // STEP 3: THE FIRE
+      // ============================================================
+      // STEP 4: THE FIRE
+      // ============================================================
       console.log(`[Void] Calling Fire for student ${studentId}`);
       const fireResponse = await this.fire.generateResponse(
         contextBundle,
@@ -199,7 +246,9 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       );
       toolsCalled.push("fire");
 
-      // STEP 4: THE GUARDIAN
+      // ============================================================
+      // STEP 5: THE GUARDIAN
+      // ============================================================
       console.log(`[Void] Calling Guardian for student ${studentId}`);
       const guardianDecision = await this.guardian.review(
         fireResponse,
@@ -261,7 +310,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   }
 
   // ============================================================
-  // EVOLUTION — WITH RESONANCE INTEGRATION
+  // EVOLUTION — WITH RESONANCE
   // ============================================================
   async evolve(
     studentId: string,
@@ -276,7 +325,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
     try {
       console.log(`[Void] Starting evolution for student ${studentId}`);
 
-      // STEP 5: THE WITNESS
       const reflection = await this.witness.reflect(
         studentMessage,
         perception,
@@ -286,22 +334,15 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
         this.witnessPrompt
       );
 
-      // ============================================================
-      // RESONANCE — Detect student drift and suggest re-engagement
-      // ============================================================
       const pulse = this.resonance.detect(studentNextMessage, perception, contextBundle);
       
       if (pulse.shouldInject) {
         console.log(`[Void] RESONANCE PULSE: ${pulse.tone} — ${pulse.reason}`);
-        console.log(`[Void] Resonance suggestion: ${pulse.suggestion}`);
-        
-        // Store the resonance pulse in memory so the next Fire generation knows to pivot
         if (pulse.suggestion) {
           await this.storeResonancePulse(studentId, pulse);
         }
       }
 
-      // STEP 6: THE ARCHIVIST
       const evolution = await this.archivist.evolve(
         reflection,
         currentSignature,
@@ -318,12 +359,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
     }
   }
 
-  // ============================================================
-  // STORE RESONANCE PULSE
-  // ============================================================
   private async storeResonancePulse(studentId: string, pulse: any): Promise<void> {
-    // Store the pulse in a temporary table or memory for the next Fire generation
-    // For now, we log it and it will be available in the context
     console.log(`[Void] Resonance pulse stored for ${studentId}: ${pulse.tone}`);
   }
 
@@ -341,6 +377,11 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
         console.error(`[Void] CRITICAL ALERT for student ${studentId}: ${alert.message}`);
       }
     }
+  }
+
+  private generateBurnoutResponse(profile: any): string {
+    const name = profile?.preferred_name || profile?.full_name || "Student";
+    return `Hey ${name}. I can see you're going through it. We don't have to do school today. How's your head? What's one good thing that happened this week?`;
   }
 
   private getEmergencyResponse(perception: Perception): string {
