@@ -9,6 +9,7 @@ import { TheOracle, OraclePlan, OracleContext } from "./TheOracle";
 import { TheSeer } from "../predictive/TheSeer";
 import { circadianEngine } from "../temporal/circadianEngine";
 import { auraHealer } from "../healing/auraHealer";
+import { metacognitiveScaffolder } from "../teaching/metacognitiveScaffolder";
 import { Perception, ContextBundle, GuardianDecision } from "./types";
 import { logger } from "../utils/logger";
 
@@ -92,7 +93,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   }
 
   // ============================================================
-  // MAIN ORCHESTRATION — WITH AURA HEALER
+  // MAIN ORCHESTRATION — WITH METACOGNITIVE SCAFFOLDER
   // ============================================================
   async processMessage(
     studentId: string,
@@ -163,7 +164,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       }
 
       // ============================================================
-      // STEP 3: THE MIRROR — WITH AURA HEALER
+      // STEP 3: THE MIRROR
       // ============================================================
       let perception = this.getDefaultPerception();
       
@@ -178,7 +179,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
           );
           toolsCalled.push("mirror");
 
-          // Check for anomalies
           const anomaly = await auraHealer.detectAnomaly(
             "mirror",
             perception,
@@ -225,7 +225,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       }
 
       // ============================================================
-      // STEP 4: THE RIVER — WITH AURA HEALER
+      // STEP 4: THE RIVER
       // ============================================================
       let contextBundle = this.getDefaultContextBundle();
       
@@ -300,15 +300,54 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       }
 
       // ============================================================
-      // STEP 5: THE FIRE — WITH AURA HEALER
+      // STEP 4.5: METACOGNITIVE SCAFFOLDER — Detect student state
+      // ============================================================
+      let scaffoldPlan = null;
+      try {
+        console.log(`[Void] Running Metacognitive Scaffolder for student ${studentId}`);
+        const topic = contextBundle?.teaching_recommendations?.suggested_topic || "general";
+        scaffoldPlan = await metacognitiveScaffolder.generateScaffold(
+          studentId,
+          topic,
+          studentMessage,
+          conversationHistory
+        );
+        
+        if (scaffoldPlan) {
+          console.log(`[Void] Scaffold: mode=${scaffoldPlan.mode}, difficulty=${scaffoldPlan.difficulty}`);
+          console.log(`[Void] Scaffold prompts: ${scaffoldPlan.prompts?.join(" | ")}`);
+          
+          // Inject scaffold into Fire's context
+          if (scaffoldPlan.prompts && scaffoldPlan.prompts.length > 0) {
+            contextBundle.scaffold = {
+              mode: scaffoldPlan.mode,
+              prompts: scaffoldPlan.prompts,
+              expectedOutcome: scaffoldPlan.expectedOutcome,
+            };
+          }
+        }
+      } catch (error: any) {
+        console.log(`[Void] Metacognitive Scaffolder failed: ${error.message}`);
+        // Non-critical, continue
+      }
+
+      // ============================================================
+      // STEP 5: THE FIRE
       // ============================================================
       let fireResponse = "";
       const fireStart = Date.now();
+      
+      // Build fire prompt with scaffold if available
+      let firePrompt = plan.prompts.fire || this.firePrompt;
+      if (scaffoldPlan && scaffoldPlan.prompts && scaffoldPlan.prompts.length > 0) {
+        firePrompt += `\n\nMETACOGNITIVE SCAFFOLD:\nStudent needs: ${scaffoldPlan.mode}\nUse these prompts if appropriate: ${scaffoldPlan.prompts.join(" | ")}`;
+      }
+      
       try {
         console.log(`[Void] Calling Fire for student ${studentId}`);
         fireResponse = await this.fire.generateResponse(
           contextBundle,
-          plan.prompts.fire || this.firePrompt
+          firePrompt
         );
         toolsCalled.push("fire");
 
@@ -326,7 +365,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
           if (healed.success && healed.actionTaken.includes('Regenerated')) {
             fireResponse = await this.fire.generateResponse(
               contextBundle,
-              plan.prompts.fire || this.firePrompt + "\n[HEALED: " + healed.actionTaken + "]"
+              firePrompt + "\n[HEALED: " + healed.actionTaken + "]"
             );
           }
         }
@@ -343,7 +382,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       }
 
       // ============================================================
-      // STEP 6: THE GUARDIAN — WITH AURA HEALER
+      // STEP 6: THE GUARDIAN
       // ============================================================
       let guardianDecision: GuardianDecision = {
         decision: "approve",
@@ -410,6 +449,25 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
 
       const latencyMs = Date.now() - startTime;
 
+      // Evaluate scaffold if used
+      if (scaffoldPlan) {
+        setImmediate(async () => {
+          try {
+            const evalResult = await metacognitiveScaffolder.evaluateScaffold(
+              studentId,
+              scaffoldPlan,
+              finalResponse
+            );
+            if (evalResult.effective) {
+              console.log(`[Void] Scaffold effective: ${evalResult.evidence}`);
+              await metacognitiveScaffolder.updateMetacognitiveProfile(studentId, evalResult);
+            }
+          } catch (e) {
+            // Non-critical
+          }
+        });
+      }
+
       // Update circadian profile
       if (fireResponse) {
         setImmediate(() => {
@@ -433,7 +491,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
     } catch (error: any) {
       console.error(`[Void] Orchestration failed for student ${studentId}:`, error);
       
-      // Try AURA healing for critical failure
       try {
         const healed = await auraHealer.heal({
           eventType: 'llm_timeout',
