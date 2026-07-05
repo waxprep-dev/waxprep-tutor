@@ -61,8 +61,6 @@ export async function embed(text: string): Promise<number[]> {
       if (model && modelStatus === "ready") {
         const result = await model(trimmed, { pooling: "mean", normalize: true });
         return Array.from(result.data);
-      } else {
-        logger.error("Model reload succeeded but status is not ready, or model is null.");
       }
     } catch (recoveryError: any) {
       logger.error("Model recovery failed", { error: recoveryError.message });
@@ -88,22 +86,22 @@ export async function embedBatch(texts: string[]): Promise<number[][]> {
 }
 
 export async function prewarm(): Promise<boolean> {
-  // If already ready, return true immediately
+  // If already ready, return immediately
   if (modelStatus === "ready") {
     logger.debug("Model already pre-warmed");
     return true;
   }
 
-  // If currently loading, wait for it to finish
+  // If already loading, wait for it to finish
   if (modelStatus === "loading") {
     logger.debug("Model pre-warm already in progress, waiting...");
     await waitForModelReady(30000);
-    // After waiting, return true if ready, false otherwise
-    return modelStatus === "ready";
+    // Use a local variable to avoid TypeScript narrowing issues
+    const currentStatus = modelStatus;
+    return currentStatus === "ready";
   }
 
-  // If we get here, modelStatus is not "ready" or "loading"
-  // So we need to start the pre-warm process
+  // If we get here, modelStatus is neither "ready" nor "loading"
   modelStatus = "loading";
   modelLoadError = null;
   const startTime = Date.now();
