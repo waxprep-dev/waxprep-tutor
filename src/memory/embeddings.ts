@@ -94,9 +94,12 @@ export async function prewarm(): Promise<boolean> {
   if (modelStatus === "loading") {
     logger.debug("Model pre-warm already in progress, waiting...");
     await waitForModelReady(30000);
-    // Read the current status AFTER waiting to avoid TypeScript narrowing issue
-    const statusAfterWaiting = modelStatus;
-    return statusAfterWaiting === "ready";
+    // Explicitly check the status after the wait
+    if (modelStatus === "ready") {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   modelStatus = "loading";
