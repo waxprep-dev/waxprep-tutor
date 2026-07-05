@@ -5,7 +5,7 @@ let model: any = null;
 let modelStatus: "unloaded" | "loading" | "ready" | "failed" = "unloaded";
 let modelLoadError: string | null = null;
 let modelLoadTimeMs: number = 0;
-let lastUsedAt: number = 0;
+let lastUsedAt: number = Date.now();
 
 const MODEL_NAME = "Xenova/all-MiniLM-L6-v2";
 const PREWARM_CONFIG = {
@@ -58,9 +58,11 @@ export async function embed(text: string): Promise<number[]> {
     try {
       logger.info("Attempting model recovery after inference failure");
       await reloadModel();
-      if (model) {
+      if (model && modelStatus === "ready") {
         const result = await model(trimmed, { pooling: "mean", normalize: true });
         return Array.from(result.data);
+      } else {
+        logger.error("Model reload succeeded but status is not ready, or model is null.");
       }
     } catch (recoveryError: any) {
       logger.error("Model recovery failed", { error: recoveryError.message });
@@ -94,17 +96,13 @@ export async function prewarm(): Promise<boolean> {
   if (modelStatus === "loading") {
     logger.debug("Model pre-warm already in progress, waiting...");
     await waitForModelReady(30000);
-    // Explicitly check the status after the wait
-    if (modelStatus === "ready") {
-      return true;
-    } else {
-      return false;
-    }
+    // Capture the status AFTER waiting to avoid compiler confusion
+    const statusAfterWait = modelStatus;
+    return statusAfterWait === "ready";
   }
 
   modelStatus = "loading";
   modelLoadError = null;
-
   const startTime = Date.now();
 
   for (let attempt = 1; attempt <= PREWARM_CONFIG.maxRetries; attempt++) {
@@ -171,6 +169,13 @@ export async function prewarm(): Promise<boolean> {
 
 export async function reloadModel(): Promise<boolean> {
   logger.info("Forcing model reload");
+  if (model && typeof model.dispose === 'function') {
+    try {
+      await model.dispose();
+    } catch (disposeErr) {
+      logger.warn("Could not dispose of old model instance", { error: (disposeErr as Error).message });
+    }
+  }
   model = null;
   modelStatus = "unloaded";
   return prewarm();
@@ -178,6 +183,13 @@ export async function reloadModel(): Promise<boolean> {
 
 export async function shutdownEmbeddings(): Promise<void> {
   logger.info("Shutting down embedding model");
+  if (model && typeof model.dispose === 'function') {
+    try {
+      await model.dispose();
+    } catch (disposeErr) {
+      logger.warn("Could not dispose of model instance during shutdown", { error: (disposeErr as Error).message });
+    }
+  }
   model = null;
   modelStatus = "unloaded";
   inferenceCount = 0;
@@ -200,7 +212,18 @@ export async function healthCheck(): Promise<EmbeddingHealth> {
 
   if (canInfer) {
     try {
-      const testResult = await model("test", { pooling: "mean", normalize: true });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      const signal = controller.signal;
+
+      const testResult = await Promise.race([
+        model("test", { pooling: "mean", normalize: true }),
+        new Promise((_, reject) => {
+          signal.addEventListener('abort', () => reject(new Error('Health check inference timed out')));
+        })
+      ]);
+
+      clearTimeout(timeoutId);
       vectorDimensions = Array.from(testResult.data).length;
     } catch (e) {
       logger.warn("Health check inference failed", { error: (e as Error).message });
