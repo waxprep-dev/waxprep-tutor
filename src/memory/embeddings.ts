@@ -86,22 +86,19 @@ export async function embedBatch(texts: string[]): Promise<number[][]> {
 }
 
 export async function prewarm(): Promise<boolean> {
-  // If already ready, return immediately
   if (modelStatus === "ready") {
     logger.debug("Model already pre-warmed");
     return true;
   }
 
-  // If already loading, wait for it to finish
   if (modelStatus === "loading") {
     logger.debug("Model pre-warm already in progress, waiting...");
     await waitForModelReady(30000);
-    // Use a local variable to avoid TypeScript narrowing issues
-    const currentStatus = modelStatus;
-    return currentStatus === "ready";
+    // SIMPLE FIX: Cast to any to bypass TypeScript's type narrowing
+    const status = modelStatus as any;
+    return status === "ready";
   }
 
-  // If we get here, modelStatus is neither "ready" nor "loading"
   modelStatus = "loading";
   modelLoadError = null;
   const startTime = Date.now();
