@@ -110,7 +110,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       // ============================================================
       console.log(`[Void] Getting Circadian context for student ${studentId}`);
       const temporalGene = await circadianEngine.getTemporalGene(studentId);
-      const circadianProfile = await circadianEngine.getCircadianProfile(studentId);
       
       console.log(`[Void] Circadian: ${temporalGene.geneName} — ${temporalGene.reason}`);
 
