@@ -9,6 +9,7 @@ import { runAgentLoop } from "../brain/agentLoop";
 import { sendTextMessage, sendTypingIndicator } from "./sender";
 import { logger } from "../utils/logger";
 import TheVoid from "../consciousness/TheVoid";
+import { seasonDetector } from "../temporal/seasonDetector";
 import { pulse, shouldShowTyping } from "../utils/presencePulse";
 import { canSend, recordOutbound, recordInbound } from "../utils/ghostLock";
 
@@ -92,7 +93,7 @@ async function runAgentLoopSafely(
 }
 
 // ============================================================
-// MAIN PROCESSING PIPELINE
+// MAIN PROCESSING PIPELINE — WITH SEASON DETECTOR
 // ============================================================
 async function processWebhookAsync(body: any): Promise<void> {
   try {
@@ -178,6 +179,74 @@ async function processWebhookAsync(body: any): Promise<void> {
       [messageId, fromPhone, messageText, timestamp, episode.episode_id]
     );
 
+    // ============================================================
+    // SEASON DETECTOR — Check if season should end
+    // ============================================================
+    const seasonCheck = await seasonDetector.checkSeasonEnd(fromPhone, messageText, episode.episode_id);
+    
+    let currentSeasonId: string | null = null;
+    let seasonNumber = 1;
+    
+    if (seasonCheck.shouldEnd) {
+      logger.info(`[Season] Season ending for ${fromPhone}: ${seasonCheck.reason}`);
+      
+      // Get current season
+      const currentSeason = await queryOne(
+        `SELECT season_id, season_number FROM conversation_seasons 
+         WHERE student_phone = $1 AND is_active = true 
+         ORDER BY season_number DESC LIMIT 1`,
+        [fromPhone]
+      );
+      
+      if (currentSeason) {
+        const result = await seasonDetector.endSeason(
+          fromPhone,
+          currentSeason.season_id,
+          seasonCheck.summary || "Season ended",
+          messageText
+        );
+        currentSeasonId = result.newSeasonId;
+        seasonNumber = result.seasonNumber;
+        logger.info(`[Season] New season ${seasonNumber} started for ${fromPhone}`);
+      } else {
+        // Create first season
+        const newSeason = await queryOne(
+          `INSERT INTO conversation_seasons (student_phone, season_number, is_active)
+           VALUES ($1, 1, true)
+           RETURNING season_id, season_number`,
+          [fromPhone]
+        );
+        if (newSeason) {
+          currentSeasonId = newSeason.season_id;
+          seasonNumber = newSeason.season_number;
+        }
+      }
+    } else {
+      // Get current season
+      const currentSeason = await queryOne(
+        `SELECT season_id, season_number FROM conversation_seasons 
+         WHERE student_phone = $1 AND is_active = true 
+         ORDER BY season_number DESC LIMIT 1`,
+        [fromPhone]
+      );
+      if (currentSeason) {
+        currentSeasonId = currentSeason.season_id;
+        seasonNumber = currentSeason.season_number;
+      } else {
+        // Create first season
+        const newSeason = await queryOne(
+          `INSERT INTO conversation_seasons (student_phone, season_number, is_active)
+           VALUES ($1, 1, true)
+           RETURNING season_id, season_number`,
+          [fromPhone]
+        );
+        if (newSeason) {
+          currentSeasonId = newSeason.season_id;
+          seasonNumber = newSeason.season_number;
+        }
+      }
+    }
+
     // Get history with chronological order and speaker labels
     const history = await getRecentHistory(fromPhone, episode.episode_id, messageId);
     
@@ -185,7 +254,7 @@ async function processWebhookAsync(body: any): Promise<void> {
     let minutesSinceLast = 10;
     const studentMessages = history.filter((h: any) => h.direction === 'inbound');
     if (studentMessages.length > 1) {
-      const lastStudentMsg = studentMessages[studentMessages.length - 2]; // Before current
+      const lastStudentMsg = studentMessages[studentMessages.length - 2];
       if (lastStudentMsg?.timestamp) {
         minutesSinceLast = (timestamp.getTime() - new Date(lastStudentMsg.timestamp).getTime()) / 60000;
       }
@@ -198,7 +267,7 @@ async function processWebhookAsync(body: any): Promise<void> {
     );
     const msgCountThisEpisode = episodeData?.message_count || 0;
 
-    // Presence Pulse — detect engagement/withdrawal
+    // Presence Pulse
     const presence = await pulse(fromPhone, episode.episode_id, messageText, timestamp);
     logger.info("Presence Pulse", {
       phone: fromPhone,
@@ -216,14 +285,14 @@ async function processWebhookAsync(body: any): Promise<void> {
     // Assemble context
     const context = await assembleContext(fromPhone, messageText);
 
-    // Process message — pass meta as separate object (TheVoid will be updated next)
+    // Process message
     const startTime = Date.now();
     let finalResponse = "";
     let allToolCalls: any[] = [];
     let totalTokens = 0;
     let modelUsed = "cerebras";
 
-    // Prepare meta data for TheVoid (will be used when TheVoid is updated)
+    // Prepare meta data
     const meta = {
       minutesSinceLast,
       messageCountThisEpisode: msgCountThisEpisode,
@@ -232,13 +301,12 @@ async function processWebhookAsync(body: any): Promise<void> {
     };
 
     try {
-      // Pass meta as the 6th argument (TheVoid will be updated to accept it)
       const voidResult = await theVoid.processMessage(
         fromPhone,
         messageText,
         history.map((m: any) => m.formatted || m.content || ""),
         context.profile,
-        context,
+        { ...context, currentEpisodeId: episode.episode_id, currentSeasonId, seasonNumber },
         meta
       );
       finalResponse = voidResult.response || "";
@@ -263,7 +331,7 @@ async function processWebhookAsync(body: any): Promise<void> {
       return;
     }
 
-    // EMERGENCY HARD CAP — never exceed 900 characters
+    // Emergency hard cap
     if (finalResponse.length > HARD_CAP) {
       logger.warn("Emergency trim in webhook", { 
         length: finalResponse.length, 
@@ -280,7 +348,7 @@ async function processWebhookAsync(body: any): Promise<void> {
         : trimmed.slice(0, 400) + " …";
     }
 
-    // Minimum length guard — never send empty soul
+    // Minimum length guard
     if (finalResponse.length < MIN_LENGTH && finalResponse.length > 0) {
       const warmFallbacks = [
         "I'm listening. Tell me more.",
@@ -290,7 +358,7 @@ async function processWebhookAsync(body: any): Promise<void> {
       finalResponse = warmFallbacks[Math.floor(Math.random() * warmFallbacks.length)];
     }
 
-    // Ghost Lock check — prevent panic double messages
+    // Ghost Lock check
     const lockCheck = canSend(fromPhone);
     if (!lockCheck.allowed) {
       logger.warn("GhostLock prevented send", { 
@@ -302,10 +370,10 @@ async function processWebhookAsync(body: any): Promise<void> {
 
     // Log outbound message
     await query(
-      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_tool_calls, ai_response, timestamp, episode_id, latency_ms, model_used)
-       VALUES ($1, $2, 'outbound', $3, $4, $5, NOW(), $6, $7, $8)`,
+      `INSERT INTO message_log (message_id, student_phone, direction, raw_text, ai_tool_calls, ai_response, timestamp, episode_id, latency_ms, model_used, season_id)
+       VALUES ($1, $2, 'outbound', $3, $4, $5, NOW(), $6, $7, $8, $9)`,
       [`ai_${messageId}`, fromPhone, finalResponse, JSON.stringify(allToolCalls), finalResponse, 
-       episode.episode_id, Date.now() - startTime, modelUsed]
+       episode.episode_id, Date.now() - startTime, modelUsed, currentSeasonId]
     );
 
     await incrementOutboundCount(fromPhone);
@@ -319,6 +387,8 @@ async function processWebhookAsync(body: any): Promise<void> {
       tokens: totalTokens,
       tool_calls: allToolCalls.length,
       response_length: finalResponse.length,
+      season: seasonNumber,
+      seasonId: currentSeasonId,
     });
 
   } catch (err: any) {
