@@ -4,6 +4,8 @@ import { Fire } from "./agents/Fire";
 import { Guardian } from "./agents/Guardian";
 import { Witness } from "./agents/Witness";
 import { Archivist } from "./agents/Archivist";
+import { TheOracle, OraclePlan, OracleContext } from "./TheOracle";
+import { cortex, CortexPlan } from "./cortex";
 import { Perception, ContextBundle, GuardianDecision } from "./types";
 import { logger } from "../utils/logger";
 
@@ -30,6 +32,7 @@ export class TheVoid {
   private guardian: Guardian;
   private witness: Witness;
   private archivist: Archivist;
+  private oracle: TheOracle;
 
   private mirrorPrompt: string;
   private riverPrompt: string;
@@ -45,6 +48,7 @@ export class TheVoid {
     this.guardian = new Guardian();
     this.witness = new Witness();
     this.archivist = new Archivist();
+    this.oracle = new TheOracle();
 
     this.mirrorPrompt = "You are The Mirror. You perceive the student. Read their message and detect intent, emotion, shame signals, risk flags, and cultural signals. Output a structured perception as JSON. Never speak to the student.";
     this.riverPrompt = "You are The River. You retrieve and build context. Based on the perception and student profile, retrieve relevant memories, concepts, and relational notes. Output a context bundle as JSON. Never speak to the student.";
@@ -82,7 +86,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   }
 
   // ============================================================
-  // MAIN ORCHESTRATION — Now accepts meta parameter
+  // MAIN ORCHESTRATION — WITH ORACLE
   // ============================================================
   async processMessage(
     studentId: string,
@@ -96,90 +100,125 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
     const toolsCalled: string[] = [];
 
     try {
-      // STEP 1: THE MIRROR — Perceive
-      console.log(`[Void] Calling Mirror for student ${studentId}`);
-      const perception = await this.mirror.perceive(
-        studentMessage,
-        conversationHistory,
-        this.mirrorPrompt
-      );
-      toolsCalled.push("mirror");
+      // ============================================================
+      // STEP 0: THE ORACLE — Decide what to do
+      // ============================================================
+      console.log(`[Void] Calling Oracle for student ${studentId}`);
+      
+      const oracleCtx: OracleContext = {
+        studentPhone: studentId,
+        message: studentMessage,
+        history: conversationHistory,
+        profile: studentProfile,
+        engagement: availableMemory?.engagement || {},
+        recentPredictions: []
+      };
 
-      // Check for critical risk flags
-      if (perception?.risk_flags?.suicidal_ideation ||
-          perception?.risk_flags?.self_harm ||
-          perception?.risk_flags?.extreme_distress) {
-        console.log(`[Void] CRITICAL RISK detected for student ${studentId}`);
-        return {
-          response: "Hey. You are not alone. Please reach out to someone you trust. I'm here with you.",
+      const plan = await this.oracle.generatePlan(oracleCtx);
+      toolsCalled.push("oracle");
+
+      // Log the plan
+      console.log(`[Void] Oracle plan: agents=${plan.orchestration.agents.join(',')}, tools=${plan.tools.join(',')}`);
+
+      // ============================================================
+      // STEP 1: THE MIRROR — Perceive (only if Oracle says so)
+      // ============================================================
+      let perception = this.getDefaultPerception();
+      
+      if (plan.orchestration.agents.includes("mirror")) {
+        console.log(`[Void] Calling Mirror for student ${studentId}`);
+        perception = await this.mirror.perceive(
+          studentMessage,
+          conversationHistory,
+          plan.prompts.mirror || this.mirrorPrompt
+        );
+        toolsCalled.push("mirror");
+
+        // Check for critical risk flags
+        if (perception?.risk_flags?.suicidal_ideation ||
+            perception?.risk_flags?.self_harm ||
+            perception?.risk_flags?.extreme_distress) {
+          console.log(`[Void] CRITICAL RISK detected for student ${studentId}`);
+          return {
+            response: "Hey. You are not alone. Please reach out to someone you trust. I'm here with you.",
+            perception,
+            contextBundle: this.getDefaultContextBundle(),
+            guardianDecision: {
+              decision: "escalate",
+              reason: "Critical risk detected",
+              modified_response: null,
+              quality_checks: {},
+              safety_checks: {},
+              escalation: { needed: true, reason: "Critical risk", human_alert: `Student ${studentId} showing risk flags` },
+            },
+            toolsCalled,
+            latencyMs: Date.now() - startTime,
+          };
+        }
+      }
+
+      // ============================================================
+      // STEP 2: THE RIVER — Build Context (only if Oracle says so)
+      // ============================================================
+      let contextBundle = this.getDefaultContextBundle();
+      
+      if (plan.orchestration.agents.includes("river")) {
+        console.log(`[Void] Calling River for student ${studentId}`);
+        contextBundle = await this.river.buildContext(
           perception,
-          contextBundle: this.getDefaultContextBundle(),
-          guardianDecision: {
-            decision: "escalate",
-            reason: "Critical risk detected",
-            modified_response: null,
-            quality_checks: {},
-            safety_checks: {},
-            escalation: { needed: true, reason: "Critical risk", human_alert: `Student ${studentId} showing risk flags` },
-          },
-          toolsCalled,
-          latencyMs: Date.now() - startTime,
-        };
-      }
+          studentProfile,
+          availableMemory,
+          plan.prompts.river || this.riverPrompt
+        );
+        toolsCalled.push("river");
 
-      // STEP 2: THE RIVER — Build Context
-      console.log(`[Void] Calling River for student ${studentId}`);
-      let contextBundle = await this.river.buildContext(
-        perception,
-        studentProfile,
-        availableMemory,
-        this.riverPrompt
-      );
-      toolsCalled.push("river");
-
-      // SAFETY: Ensure conversation_state exists
-      if (!contextBundle.conversation_state) {
-        contextBundle.conversation_state = {
-          current_flow_state: "connection",
-          recommended_next_state: "discovery",
-          message_count_this_episode: 0,
-          time_since_last_message: "unknown"
-        };
-      }
-
-      // Inject meta data into context so Fire knows conversation depth
-      if (meta) {
-        contextBundle.conversation_state.message_count_this_episode = meta.messageCountThisEpisode || 0;
-        contextBundle.conversation_state.time_since_last_message = meta.minutesSinceLast 
-          ? `${meta.minutesSinceLast} minutes` 
-          : "unknown";
-        
-        // If student is withdrawing, flag it for Fire
-        if (meta.presence?.isWithdrawing) {
-          console.log(`[Void] Student ${studentId} is withdrawing. Forcing warm, short response.`);
-          contextBundle.student_profile.current_mood = "withdrawing";
+        // Ensure conversation_state exists
+        if (!contextBundle.conversation_state) {
+          contextBundle.conversation_state = {
+            current_flow_state: "connection",
+            recommended_next_state: "discovery",
+            message_count_this_episode: 0,
+            time_since_last_message: "unknown"
+          };
         }
-        
-        if (meta.presence?.isRepeating) {
-          console.log(`[Void] Student ${studentId} is repeating themselves. They feel unheard.`);
-          contextBundle.student_profile.current_mood = "repeating";
+
+        // Inject meta data if available
+        if (meta) {
+          contextBundle.conversation_state.message_count_this_episode = meta.messageCountThisEpisode || 0;
+          contextBundle.conversation_state.time_since_last_message = meta.minutesSinceLast 
+            ? `${meta.minutesSinceLast} minutes` 
+            : "unknown";
+          
+          if (meta.presence?.isWithdrawing) {
+            console.log(`[Void] Student ${studentId} is withdrawing.`);
+            contextBundle.student_profile.current_mood = "withdrawing";
+          }
+          
+          if (meta.presence?.isRepeating) {
+            console.log(`[Void] Student ${studentId} is repeating themselves.`);
+            contextBundle.student_profile.current_mood = "repeating";
+          }
         }
       }
 
-      // STEP 3: THE FIRE — Generate Response
+      // ============================================================
+      // STEP 3: THE FIRE — Generate Response (ALWAYS runs)
+      // ============================================================
       console.log(`[Void] Calling Fire for student ${studentId}`);
       const fireResponse = await this.fire.generateResponse(
         contextBundle,
-        this.firePrompt
+        plan.prompts.fire || this.firePrompt
       );
       toolsCalled.push("fire");
 
-      // STEP 4: THE GUARDIAN — Review
+      // ============================================================
+      // STEP 4: THE GUARDIAN — Review (ALWAYS runs)
+      // ============================================================
       console.log(`[Void] Calling Guardian for student ${studentId}`);
       const guardianDecision = await this.guardian.review(
         fireResponse,
         perception,
-        this.guardianPrompt
+        plan.prompts.guardian || this.guardianPrompt
       );
       toolsCalled.push("guardian");
 
