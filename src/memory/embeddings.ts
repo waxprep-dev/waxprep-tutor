@@ -93,14 +93,22 @@ export async function prewarm(): Promise<boolean> {
     return true;
   }
 
+  // Use a flag to avoid TypeScript narrowing issues after await
+  let shouldCheckStatusAfterWait = false;
+
   if (modelStatus === "loading") {
     logger.debug("Model pre-warm already in progress, waiting...");
     await waitForModelReady(30000);
-    // Capture the status AFTER waiting to avoid compiler confusion
-    const statusAfterWait = modelStatus;
-    return statusAfterWait === "ready";
+    shouldCheckStatusAfterWait = true;
   }
 
+  // Check outside the narrowed 'if' block to avoid TS2367
+  if (shouldCheckStatusAfterWait) {
+    return modelStatus === "ready";
+  }
+
+  // If we get here, modelStatus is not "loading" or "ready"
+  // So we need to start the pre-warm process
   modelStatus = "loading";
   modelLoadError = null;
   const startTime = Date.now();
