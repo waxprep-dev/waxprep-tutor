@@ -7,6 +7,7 @@ import { Archivist } from "./agents/Archivist";
 import { Resonance } from "./agents/Resonance";
 import { TheOracle, OraclePlan, OracleContext } from "./TheOracle";
 import { TheSeer } from "../predictive/TheSeer";
+import { circadianEngine } from "../temporal/circadianEngine";
 import { Perception, ContextBundle, GuardianDecision } from "./types";
 import { logger } from "../utils/logger";
 
@@ -90,7 +91,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   }
 
   // ============================================================
-  // MAIN ORCHESTRATION — WITH SEER
+  // MAIN ORCHESTRATION — WITH CIRCADIAN + SEER
   // ============================================================
   async processMessage(
     studentId: string,
@@ -105,15 +106,24 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
 
     try {
       // ============================================================
-      // STEP 0: THE SEER — Predict before anything else
+      // STEP 0: CIRCADIAN — Time-aware tutoring
+      // ============================================================
+      console.log(`[Void] Getting Circadian context for student ${studentId}`);
+      const temporalGene = await circadianEngine.getTemporalGene(studentId);
+      const circadianProfile = await circadianEngine.getCircadianProfile(studentId);
+      
+      console.log(`[Void] Circadian: ${temporalGene.geneName} — ${temporalGene.reason}`);
+
+      // ============================================================
+      // STEP 1: THE SEER — Predict
       // ============================================================
       console.log(`[Void] Calling Seer for student ${studentId}`);
       const predictions = await this.seer.generatePredictions(studentId);
       toolsCalled.push("seer");
       
-      console.log(`[Void] Seer predictions: burnoutRisk=${predictions.burnoutRisk}, nextStruggle=${predictions.nextStruggle}, optimalModality=${predictions.optimalModality}`);
+      console.log(`[Void] Seer: burnoutRisk=${predictions.burnoutRisk}, nextStruggle=${predictions.nextStruggle}`);
 
-      // If burnout risk is critical, bypass everything and respond with care
+      // If burnout risk is critical
       if (predictions.burnoutRisk > 0.8) {
         console.log(`[Void] Critical burnout detected for ${studentId}, switching to support mode`);
         return {
@@ -134,7 +144,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       }
 
       // ============================================================
-      // STEP 1: THE ORACLE — Now with predictions
+      // STEP 2: THE ORACLE — With circadian context
       // ============================================================
       console.log(`[Void] Calling Oracle for student ${studentId}`);
       
@@ -151,8 +161,13 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       toolsCalled.push("oracle");
       console.log(`[Void] Oracle plan: agents=${plan.orchestration.agents.join(',')}`);
 
+      // Inject circadian context into prompts
+      if (plan.prompts.fire) {
+        plan.prompts.fire += `\n\n${temporalGene.geneName}: ${temporalGene.reason}`;
+      }
+
       // ============================================================
-      // STEP 2: THE MIRROR
+      // STEP 3: THE MIRROR
       // ============================================================
       let perception = this.getDefaultPerception();
       
@@ -188,7 +203,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       }
 
       // ============================================================
-      // STEP 3: THE RIVER
+      // STEP 4: THE RIVER
       // ============================================================
       let contextBundle = this.getDefaultContextBundle();
       
@@ -228,16 +243,19 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
           }
         }
 
-        // Inject Seer predictions into context for Fire
+        // Inject Seer predictions
         contextBundle.teaching_recommendations.suggested_topic = predictions.nextStruggle || "general";
         contextBundle.teaching_recommendations.suggested_pace = 
           predictions.burnoutRisk > 0.5 ? "slow" : "medium";
+        
+        // Inject Circadian context
         contextBundle.student_profile.current_mood = 
-          predictions.burnoutRisk > 0.5 ? "vulnerable" : "engaged";
+          temporalGene.geneName === 'late_night' ? 'tired' : 
+          temporalGene.geneName === 'morning_energy' ? 'alert' : 'neutral';
       }
 
       // ============================================================
-      // STEP 4: THE FIRE
+      // STEP 5: THE FIRE
       // ============================================================
       console.log(`[Void] Calling Fire for student ${studentId}`);
       const fireResponse = await this.fire.generateResponse(
@@ -247,7 +265,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       toolsCalled.push("fire");
 
       // ============================================================
-      // STEP 5: THE GUARDIAN
+      // STEP 6: THE GUARDIAN
       // ============================================================
       console.log(`[Void] Calling Guardian for student ${studentId}`);
       const guardianDecision = await this.guardian.review(
@@ -280,6 +298,17 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
 
       const latencyMs = Date.now() - startTime;
 
+      // Update circadian profile after response
+      if (fireResponse) {
+        setImmediate(() => {
+          try {
+            circadianEngine.updateProfile(studentId, new Date(), studentMessage.length, latencyMs);
+          } catch (e) {
+            // Non-critical, ignore
+          }
+        });
+      }
+
       return {
         response: finalResponse,
         perception,
@@ -310,7 +339,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   }
 
   // ============================================================
-  // EVOLUTION — WITH RESONANCE
+  // EVOLUTION
   // ============================================================
   async evolve(
     studentId: string,
