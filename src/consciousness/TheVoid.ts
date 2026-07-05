@@ -10,6 +10,7 @@ import { TheSeer } from "../predictive/TheSeer";
 import { circadianEngine } from "../temporal/circadianEngine";
 import { auraHealer } from "../healing/auraHealer";
 import { metacognitiveScaffolder } from "../teaching/metacognitiveScaffolder";
+import { mindPalace } from "../memory/mindPalace";
 import { Perception, ContextBundle, GuardianDecision } from "./types";
 import { logger } from "../utils/logger";
 
@@ -93,7 +94,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   }
 
   // ============================================================
-  // MAIN ORCHESTRATION — WITH METACOGNITIVE SCAFFOLDER
+  // MAIN ORCHESTRATION — WITH MIND PALACE
   // ============================================================
   async processMessage(
     studentId: string,
@@ -225,7 +226,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       }
 
       // ============================================================
-      // STEP 4: THE RIVER
+      // STEP 4: THE RIVER — WITH MIND PALACE INTEGRATION
       // ============================================================
       let contextBundle = this.getDefaultContextBundle();
       
@@ -240,6 +241,46 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
             plan.prompts.river || this.riverPrompt
           );
           toolsCalled.push("river");
+
+          // ============================================================
+          // MIND PALACE INTEGRATION: Enhance context with Mind Palace memory
+          // ============================================================
+          // Get working memory (recent conversation)
+          const workingMemory = await mindPalace.getWorkingMemory(studentId);
+          if (workingMemory.length > 0) {
+            console.log(`[Void] Mind Palace: loaded ${workingMemory.length} working memory chunks`);
+          }
+
+          // Get episodic memory (past conversations)
+          const episodicMemory = await mindPalace.getEpisodicMemory(studentId, studentMessage, 5);
+          if (episodicMemory.length > 0) {
+            console.log(`[Void] Mind Palace: loaded ${episodicMemory.length} episodic memories`);
+            // Inject into context
+            contextBundle.relevant_memories.past_conversations = episodicMemory.map((m: any) => ({
+              content: m.content,
+              timestamp: m.created_at,
+              importance: m.importance_score
+            }));
+          }
+
+          // Get semantic memory (concepts the student knows)
+          const semanticMemory = await mindPalace.getSemanticMemory(studentId, studentMessage);
+          if (semanticMemory.length > 0) {
+            console.log(`[Void] Mind Palace: loaded ${semanticMemory.length} semantic memories`);
+            const concepts = semanticMemory.map((m: any) => m.metadata?.concept || "general");
+            contextBundle.relevant_memories.concepts_known = concepts;
+          }
+
+          // Get procedural memory (what works for this student)
+          const proceduralMemory = await mindPalace.getProceduralMemory(studentId, studentMessage);
+          if (proceduralMemory.length > 0) {
+            console.log(`[Void] Mind Palace: loaded ${proceduralMemory.length} procedural rules`);
+            contextBundle.relevant_memories.procedural_rules = proceduralMemory.map((m: any) => ({
+              rule: m.content,
+              trigger: m.metadata?.trigger || "general",
+              confidence: m.metadata?.confidence || 0.5
+            }));
+          }
 
           const anomaly = await auraHealer.detectAnomaly(
             "river",
@@ -300,7 +341,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       }
 
       // ============================================================
-      // STEP 4.5: METACOGNITIVE SCAFFOLDER — Detect student state
+      // STEP 4.5: METACOGNITIVE SCAFFOLDER
       // ============================================================
       let scaffoldPlan = null;
       try {
@@ -315,9 +356,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
         
         if (scaffoldPlan) {
           console.log(`[Void] Scaffold: mode=${scaffoldPlan.mode}, difficulty=${scaffoldPlan.difficulty}`);
-          console.log(`[Void] Scaffold prompts: ${scaffoldPlan.prompts?.join(" | ")}`);
-          
-          // Inject scaffold into Fire's context
           if (scaffoldPlan.prompts && scaffoldPlan.prompts.length > 0) {
             contextBundle.scaffold = {
               mode: scaffoldPlan.mode,
@@ -328,7 +366,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
         }
       } catch (error: any) {
         console.log(`[Void] Metacognitive Scaffolder failed: ${error.message}`);
-        // Non-critical, continue
       }
 
       // ============================================================
@@ -337,7 +374,6 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       let fireResponse = "";
       const fireStart = Date.now();
       
-      // Build fire prompt with scaffold if available
       let firePrompt = plan.prompts.fire || this.firePrompt;
       if (scaffoldPlan && scaffoldPlan.prompts && scaffoldPlan.prompts.length > 0) {
         firePrompt += `\n\nMETACOGNITIVE SCAFFOLD:\nStudent needs: ${scaffoldPlan.mode}\nUse these prompts if appropriate: ${scaffoldPlan.prompts.join(" | ")}`;
@@ -448,6 +484,41 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       }
 
       const latencyMs = Date.now() - startTime;
+
+      // ============================================================
+      // SAVE TO MIND PALACE
+      // ============================================================
+      setImmediate(async () => {
+        try {
+          // Store in working memory
+          await mindPalace.addWorkingMemory(
+            studentId,
+            `Student: ${studentMessage}\nWax: ${fireResponse}`
+          );
+
+          // Store in episodic memory
+          const content = `Student: ${studentMessage}\nWax: ${fireResponse}\nEmotion: ${perception?.emotional_state?.primary_emotion || "neutral"}`;
+          await mindPalace.addEpisodicMemory(studentId, content, 0.6);
+
+          // If we have concepts, store them semantically
+          const concepts = contextBundle?.relevant_memories?.concepts_known || [];
+          for (const concept of concepts) {
+            if (typeof concept === 'string' && concept.length > 2) {
+              await mindPalace.addSemanticMemory(
+                studentId,
+                `Student learned about ${concept}`,
+                concept,
+                0.3,
+                0.5
+              );
+            }
+          }
+
+          console.log(`[Void] Stored memories in Mind Palace for ${studentId}`);
+        } catch (e) {
+          // Non-critical
+        }
+      });
 
       // Evaluate scaffold if used
       if (scaffoldPlan) {
