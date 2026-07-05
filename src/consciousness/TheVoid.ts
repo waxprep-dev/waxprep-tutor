@@ -8,6 +8,7 @@ import { Resonance } from "./agents/Resonance";
 import { TheOracle, OraclePlan, OracleContext } from "./TheOracle";
 import { TheSeer } from "../predictive/TheSeer";
 import { circadianEngine } from "../temporal/circadianEngine";
+import { auraHealer } from "../healing/auraHealer";
 import { Perception, ContextBundle, GuardianDecision } from "./types";
 import { logger } from "../utils/logger";
 
@@ -91,7 +92,7 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   }
 
   // ============================================================
-  // MAIN ORCHESTRATION — WITH CIRCADIAN + SEER
+  // MAIN ORCHESTRATION — WITH AURA HEALER
   // ============================================================
   async processMessage(
     studentId: string,
@@ -103,26 +104,24 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
   ): Promise<VoidResult> {
     const startTime = Date.now();
     const toolsCalled: string[] = [];
+    const healingEvents: any[] = [];
 
     try {
       // ============================================================
-      // STEP 0: CIRCADIAN — Time-aware tutoring
+      // STEP 0: CIRCADIAN
       // ============================================================
       console.log(`[Void] Getting Circadian context for student ${studentId}`);
       const temporalGene = await circadianEngine.getTemporalGene(studentId);
-      
       console.log(`[Void] Circadian: ${temporalGene.geneName} — ${temporalGene.reason}`);
 
       // ============================================================
-      // STEP 1: THE SEER — Predict
+      // STEP 1: THE SEER
       // ============================================================
       console.log(`[Void] Calling Seer for student ${studentId}`);
       const predictions = await this.seer.generatePredictions(studentId);
       toolsCalled.push("seer");
-      
       console.log(`[Void] Seer: burnoutRisk=${predictions.burnoutRisk}, nextStruggle=${predictions.nextStruggle}`);
 
-      // If burnout risk is critical
       if (predictions.burnoutRisk > 0.8) {
         console.log(`[Void] Critical burnout detected for ${studentId}, switching to support mode`);
         return {
@@ -143,10 +142,9 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       }
 
       // ============================================================
-      // STEP 2: THE ORACLE — With circadian context
+      // STEP 2: THE ORACLE
       // ============================================================
       console.log(`[Void] Calling Oracle for student ${studentId}`);
-      
       const oracleCtx = {
         studentPhone: studentId,
         message: studentMessage,
@@ -160,119 +158,234 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
       toolsCalled.push("oracle");
       console.log(`[Void] Oracle plan: agents=${plan.orchestration.agents.join(',')}`);
 
-      // Inject circadian context into prompts
       if (plan.prompts.fire) {
         plan.prompts.fire += `\n\n${temporalGene.geneName}: ${temporalGene.reason}`;
       }
 
       // ============================================================
-      // STEP 3: THE MIRROR
+      // STEP 3: THE MIRROR — WITH AURA HEALER
       // ============================================================
       let perception = this.getDefaultPerception();
       
       if (plan.orchestration.agents.includes("mirror")) {
-        console.log(`[Void] Calling Mirror for student ${studentId}`);
-        perception = await this.mirror.perceive(
-          studentMessage,
-          conversationHistory,
-          plan.prompts.mirror || this.mirrorPrompt
-        );
-        toolsCalled.push("mirror");
+        const mirrorStart = Date.now();
+        try {
+          console.log(`[Void] Calling Mirror for student ${studentId}`);
+          perception = await this.mirror.perceive(
+            studentMessage,
+            conversationHistory,
+            plan.prompts.mirror || this.mirrorPrompt
+          );
+          toolsCalled.push("mirror");
 
-        if (perception?.risk_flags?.suicidal_ideation ||
-            perception?.risk_flags?.self_harm ||
-            perception?.risk_flags?.extreme_distress) {
-          console.log(`[Void] CRITICAL RISK detected for student ${studentId}`);
-          return {
-            response: "Hey. You are not alone. Please reach out to someone you trust. I'm here with you.",
+          // Check for anomalies
+          const anomaly = await auraHealer.detectAnomaly(
+            "mirror",
             perception,
-            contextBundle: this.getDefaultContextBundle(),
-            guardianDecision: {
-              decision: "escalate",
-              reason: "Critical risk detected",
-              modified_response: null,
-              quality_checks: {},
-              safety_checks: {},
-              escalation: { needed: true, reason: "Critical risk", human_alert: `Student ${studentId} showing risk flags` },
-            },
-            toolsCalled,
-            latencyMs: Date.now() - startTime,
-          };
+            this.getDefaultPerception(),
+            Date.now() - mirrorStart,
+            studentId
+          );
+          if (anomaly) {
+            const healed = await auraHealer.heal(anomaly);
+            healingEvents.push({ ...anomaly, recovery: healed });
+            console.log(`[Void] AURA healed mirror anomaly: ${anomaly.eventType}`);
+          }
+
+          if (perception?.risk_flags?.suicidal_ideation ||
+              perception?.risk_flags?.self_harm ||
+              perception?.risk_flags?.extreme_distress) {
+            console.log(`[Void] CRITICAL RISK detected for student ${studentId}`);
+            return {
+              response: "Hey. You are not alone. Please reach out to someone you trust. I'm here with you.",
+              perception,
+              contextBundle: this.getDefaultContextBundle(),
+              guardianDecision: {
+                decision: "escalate",
+                reason: "Critical risk detected",
+                modified_response: null,
+                quality_checks: {},
+                safety_checks: {},
+                escalation: { needed: true, reason: "Critical risk", human_alert: `Student ${studentId} showing risk flags` },
+              },
+              toolsCalled,
+              latencyMs: Date.now() - startTime,
+            };
+          }
+        } catch (error: any) {
+          const healed = await auraHealer.heal({
+            eventType: 'llm_timeout',
+            severity: 'high',
+            description: `Mirror failed: ${error.message}`,
+            studentPhone: studentId
+          });
+          healingEvents.push({ type: 'mirror_failure', recovery: healed });
+          console.log(`[Void] AURA healed mirror failure: ${error.message}`);
         }
       }
 
       // ============================================================
-      // STEP 4: THE RIVER
+      // STEP 4: THE RIVER — WITH AURA HEALER
       // ============================================================
       let contextBundle = this.getDefaultContextBundle();
       
       if (plan.orchestration.agents.includes("river")) {
-        console.log(`[Void] Calling River for student ${studentId}`);
-        contextBundle = await this.river.buildContext(
-          perception,
-          studentProfile,
-          availableMemory,
-          plan.prompts.river || this.riverPrompt
-        );
-        toolsCalled.push("river");
+        const riverStart = Date.now();
+        try {
+          console.log(`[Void] Calling River for student ${studentId}`);
+          contextBundle = await this.river.buildContext(
+            perception,
+            studentProfile,
+            availableMemory,
+            plan.prompts.river || this.riverPrompt
+          );
+          toolsCalled.push("river");
 
-        if (!contextBundle.conversation_state) {
-          contextBundle.conversation_state = {
-            current_flow_state: "connection",
-            recommended_next_state: "discovery",
-            message_count_this_episode: 0,
-            time_since_last_message: "unknown"
-          };
-        }
-
-        if (meta) {
-          contextBundle.conversation_state.message_count_this_episode = meta.messageCountThisEpisode || 0;
-          contextBundle.conversation_state.time_since_last_message = meta.minutesSinceLast 
-            ? `${meta.minutesSinceLast} minutes` 
-            : "unknown";
-          
-          if (meta.presence?.isWithdrawing) {
-            console.log(`[Void] Student ${studentId} is withdrawing.`);
-            contextBundle.student_profile.current_mood = "withdrawing";
+          const anomaly = await auraHealer.detectAnomaly(
+            "river",
+            contextBundle,
+            this.getDefaultContextBundle(),
+            Date.now() - riverStart,
+            studentId
+          );
+          if (anomaly) {
+            const healed = await auraHealer.heal(anomaly);
+            healingEvents.push({ ...anomaly, recovery: healed });
+            console.log(`[Void] AURA healed river anomaly: ${anomaly.eventType}`);
           }
-          
-          if (meta.presence?.isRepeating) {
-            console.log(`[Void] Student ${studentId} is repeating themselves.`);
-            contextBundle.student_profile.current_mood = "repeating";
-          }
-        }
 
-        // Inject Seer predictions
-        contextBundle.teaching_recommendations.suggested_topic = predictions.nextStruggle || "general";
-        contextBundle.teaching_recommendations.suggested_pace = 
-          predictions.burnoutRisk > 0.5 ? "slow" : "medium";
-        
-        // Inject Circadian context
-        contextBundle.student_profile.current_mood = 
-          temporalGene.geneName === 'late_night' ? 'tired' : 
-          temporalGene.geneName === 'morning_energy' ? 'alert' : 'neutral';
+          if (!contextBundle.conversation_state) {
+            contextBundle.conversation_state = {
+              current_flow_state: "connection",
+              recommended_next_state: "discovery",
+              message_count_this_episode: 0,
+              time_since_last_message: "unknown"
+            };
+          }
+
+          if (meta) {
+            contextBundle.conversation_state.message_count_this_episode = meta.messageCountThisEpisode || 0;
+            contextBundle.conversation_state.time_since_last_message = meta.minutesSinceLast 
+              ? `${meta.minutesSinceLast} minutes` 
+              : "unknown";
+            
+            if (meta.presence?.isWithdrawing) {
+              console.log(`[Void] Student ${studentId} is withdrawing.`);
+              contextBundle.student_profile.current_mood = "withdrawing";
+            }
+            
+            if (meta.presence?.isRepeating) {
+              console.log(`[Void] Student ${studentId} is repeating themselves.`);
+              contextBundle.student_profile.current_mood = "repeating";
+            }
+          }
+
+          contextBundle.teaching_recommendations.suggested_topic = predictions.nextStruggle || "general";
+          contextBundle.teaching_recommendations.suggested_pace = 
+            predictions.burnoutRisk > 0.5 ? "slow" : "medium";
+          
+          contextBundle.student_profile.current_mood = 
+            temporalGene.geneName === 'late_night' ? 'tired' : 
+            temporalGene.geneName === 'morning_energy' ? 'alert' : 'neutral';
+        } catch (error: any) {
+          const healed = await auraHealer.heal({
+            eventType: 'llm_timeout',
+            severity: 'high',
+            description: `River failed: ${error.message}`,
+            studentPhone: studentId
+          });
+          healingEvents.push({ type: 'river_failure', recovery: healed });
+          console.log(`[Void] AURA healed river failure: ${error.message}`);
+        }
       }
 
       // ============================================================
-      // STEP 5: THE FIRE
+      // STEP 5: THE FIRE — WITH AURA HEALER
       // ============================================================
-      console.log(`[Void] Calling Fire for student ${studentId}`);
-      const fireResponse = await this.fire.generateResponse(
-        contextBundle,
-        plan.prompts.fire || this.firePrompt
-      );
-      toolsCalled.push("fire");
+      let fireResponse = "";
+      const fireStart = Date.now();
+      try {
+        console.log(`[Void] Calling Fire for student ${studentId}`);
+        fireResponse = await this.fire.generateResponse(
+          contextBundle,
+          plan.prompts.fire || this.firePrompt
+        );
+        toolsCalled.push("fire");
+
+        const anomaly = await auraHealer.detectAnomaly(
+          "fire",
+          fireResponse,
+          "",
+          Date.now() - fireStart,
+          studentId
+        );
+        if (anomaly) {
+          const healed = await auraHealer.heal(anomaly);
+          healingEvents.push({ ...anomaly, recovery: healed });
+          console.log(`[Void] AURA healed fire anomaly: ${anomaly.eventType}`);
+          if (healed.success && healed.actionTaken.includes('Regenerated')) {
+            fireResponse = await this.fire.generateResponse(
+              contextBundle,
+              plan.prompts.fire || this.firePrompt + "\n[HEALED: " + healed.actionTaken + "]"
+            );
+          }
+        }
+      } catch (error: any) {
+        const healed = await auraHealer.heal({
+          eventType: 'llm_timeout',
+          severity: 'critical',
+          description: `Fire failed: ${error.message}`,
+          studentPhone: studentId
+        });
+        healingEvents.push({ type: 'fire_failure', recovery: healed });
+        console.log(`[Void] AURA healed fire failure: ${error.message}`);
+        fireResponse = "Give me a moment — trying again.";
+      }
 
       // ============================================================
-      // STEP 6: THE GUARDIAN
+      // STEP 6: THE GUARDIAN — WITH AURA HEALER
       // ============================================================
-      console.log(`[Void] Calling Guardian for student ${studentId}`);
-      const guardianDecision = await this.guardian.review(
-        fireResponse,
-        perception,
-        plan.prompts.guardian || this.guardianPrompt
-      );
-      toolsCalled.push("guardian");
+      let guardianDecision: GuardianDecision = {
+        decision: "approve",
+        reason: "Default approve",
+        modified_response: null,
+        quality_checks: {},
+        safety_checks: {},
+        escalation: { needed: false, reason: "", human_alert: "" }
+      };
+      const guardianStart = Date.now();
+      
+      try {
+        console.log(`[Void] Calling Guardian for student ${studentId}`);
+        guardianDecision = await this.guardian.review(
+          fireResponse,
+          perception,
+          plan.prompts.guardian || this.guardianPrompt
+        );
+        toolsCalled.push("guardian");
+
+        const anomaly = await auraHealer.detectAnomaly(
+          "guardian",
+          guardianDecision,
+          { decision: "approve" },
+          Date.now() - guardianStart,
+          studentId
+        );
+        if (anomaly) {
+          const healed = await auraHealer.heal(anomaly);
+          healingEvents.push({ ...anomaly, recovery: healed });
+          console.log(`[Void] AURA healed guardian anomaly: ${anomaly.eventType}`);
+        }
+      } catch (error: any) {
+        const healed = await auraHealer.heal({
+          eventType: 'llm_timeout',
+          severity: 'medium',
+          description: `Guardian failed: ${error.message}`,
+          studentPhone: studentId
+        });
+        healingEvents.push({ type: 'guardian_failure', recovery: healed });
+        console.log(`[Void] AURA healed guardian failure: ${error.message}`);
+      }
 
       let finalResponse: string;
       switch (guardianDecision.decision) {
@@ -297,13 +410,13 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
 
       const latencyMs = Date.now() - startTime;
 
-      // Update circadian profile after response
+      // Update circadian profile
       if (fireResponse) {
         setImmediate(() => {
           try {
             circadianEngine.updateProfile(studentId, new Date(), studentMessage.length, latencyMs);
           } catch (e) {
-            // Non-critical, ignore
+            // Non-critical
           }
         });
       }
@@ -319,6 +432,20 @@ Output JSON: { decision: "approve" | "modify" | "compress" | "block" | "escalate
 
     } catch (error: any) {
       console.error(`[Void] Orchestration failed for student ${studentId}:`, error);
+      
+      // Try AURA healing for critical failure
+      try {
+        const healed = await auraHealer.heal({
+          eventType: 'llm_timeout',
+          severity: 'critical',
+          description: `Critical orchestrator failure: ${error.message}`,
+          studentPhone: studentId
+        });
+        console.log(`[Void] AURA healed critical failure: ${healed.actionTaken}`);
+      } catch (e) {
+        // Ignore
+      }
+
       return {
         response: this.getFallbackResponse(),
         perception: this.getDefaultPerception(),
