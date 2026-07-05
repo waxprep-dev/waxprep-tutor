@@ -88,26 +88,21 @@ export async function embedBatch(texts: string[]): Promise<number[][]> {
 }
 
 export async function prewarm(): Promise<boolean> {
+  // If already ready, return true immediately
   if (modelStatus === "ready") {
     logger.debug("Model already pre-warmed");
     return true;
   }
 
-  // Use a flag to avoid TypeScript narrowing issues after await
-  let shouldCheckStatusAfterWait = false;
-
+  // If currently loading, wait for it to finish
   if (modelStatus === "loading") {
     logger.debug("Model pre-warm already in progress, waiting...");
     await waitForModelReady(30000);
-    shouldCheckStatusAfterWait = true;
-  }
-
-  // Check outside the narrowed 'if' block to avoid TS2367
-  if (shouldCheckStatusAfterWait) {
+    // After waiting, return true if ready, false otherwise
     return modelStatus === "ready";
   }
 
-  // If we get here, modelStatus is not "loading" or "ready"
+  // If we get here, modelStatus is not "ready" or "loading"
   // So we need to start the pre-warm process
   modelStatus = "loading";
   modelLoadError = null;
