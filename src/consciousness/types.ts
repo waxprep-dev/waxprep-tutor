@@ -1,5 +1,6 @@
-// FILE: src/consciousness/types.ts
-// =====================================================
+// ============================================================
+// CONSCIOUSNESS TYPES
+// ============================================================
 
 export interface Perception {
   intent: {
@@ -70,12 +71,12 @@ export interface ContextBundle {
     last_mood: string;
   };
   relevant_memories: {
-    past_conversations: string[];
+    past_conversations: any[];
     concepts_known: string[];
     concepts_struggling: string[];
-    misconceptions: string[];
-    procedural_rules: string[];
-    relational_notes: string[];
+    misconceptions: any[];
+    procedural_rules: any[];
+    relational_notes: any[];
   };
   contextual_examples: {
     recommended_analogy: string;
@@ -98,66 +99,29 @@ export interface ContextBundle {
     time_since_last_message: string;
   };
   retrieval_actions: {
-    tools_to_call: { tool: string; reason: string }[];
-    data_to_save: { what: string; where: string; why: string }[];
+    tools_to_call: Array<{ tool: string; reason: string }>;
+    data_to_save: Array<{ what: string; where: string; why: string }>;
   };
-}
-
-export interface Reflection {
-  interaction_quality: {
-    score: number;
-    assessment: string;
-    reason: string;
+  // ADDED: Scaffold property for metacognitive scaffolding
+  scaffold?: {
+    mode: string;
+    prompts: string[];
+    expectedOutcome: string;
   };
-  what_worked: string[];
-  what_failed: string[];
-  missed_opportunities: string[];
-  emotional_missed: string[];
-  cognitive_missed: string[];
-  pattern_detected: {
-    pattern_type: string;
-    description: string;
-    confidence: number;
-    recommended_action: string;
-  };
-  teaching_effectiveness: {
-    concept_understood: boolean;
-    student_engaged: boolean;
-    would_student_return: boolean;
-    risk_of_churn: number;
-  };
-  system_improvements: string[];
 }
 
 export interface GuardianDecision {
   decision: "approve" | "modify" | "compress" | "block" | "escalate";
   reason: string;
   modified_response: string | null;
-  quality_checks: Record<string, boolean>;
-  safety_checks: Record<string, boolean>;
+  quality_checks: any;
+  safety_checks: any;
   escalation: {
     needed: boolean;
     reason: string;
     human_alert: string;
   };
 }
-
-export interface ArchivistOutput {
-  memory_updates: any[];
-  signature_evolution: any;
-  new_patterns: any[];
-  procedural_rules: any[];
-  alerts: any[];
-}
-
-export interface AgentConfig {
-  modelTier: "fast" | "capable" | "best";
-  maxTokens: number;
-  temperature: number;
-  retryAttempts: number;
-}
-
-// =====================================================
 
 // ============================================================
 // BREATH BUDGET — Pacing Protocol
@@ -170,7 +134,7 @@ export interface BreathBudget {
 }
 
 // ============================================================
-// UPDATED VOID RESULT
+// VOID RESULT
 // ============================================================
 export interface VoidResult {
   response: string;
