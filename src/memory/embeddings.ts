@@ -12,7 +12,6 @@ const PREWARM_CONFIG = {
   maxRetries: 3,
   baseDelayMs: 2000,
   warmupText: "The quick brown fox jumps over the lazy dog. This is a warmup sentence to initialize the embedding pipeline.",
-  quantized: true,
 };
 
 let inferenceCount = 0;
@@ -106,16 +105,12 @@ export async function prewarm(): Promise<boolean> {
   for (let attempt = 1; attempt <= PREWARM_CONFIG.maxRetries; attempt++) {
     try {
       logger.info(`Pre-warming embedding model (attempt ${attempt}/${PREWARM_CONFIG.maxRetries})`, {
-        model: MODEL_NAME,
-        quantized: PREWARM_CONFIG.quantized
+        model: MODEL_NAME
       });
 
       const { pipeline } = await import("@huggingface/transformers");
 
-      model = await pipeline("feature-extraction", MODEL_NAME, {
-        quantized: PREWARM_CONFIG.quantized,
-        revision: "main",
-      });
+      model = await pipeline("feature-extraction", MODEL_NAME);
 
       logger.info("Running warmup inference...");
       const warmupResult = await model(PREWARM_CONFIG.warmupText, {
@@ -185,7 +180,7 @@ export async function shutdownEmbeddings(): Promise<void> {
 
 export interface EmbeddingHealth {
   status: "healthy" | "degraded" | "unhealthy";
-  modelStatus: typeof modelStatus;
+  modelStatus: string;
   vectorDimensions: number;
   loadTimeMs: number;
   inferenceCount: number;
