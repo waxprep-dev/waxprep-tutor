@@ -1,34 +1,69 @@
 /**
- * Main Server Entry Point
- * Orchestrates all workers in single process (Render-friendly)
- * For production scale: split workers to separate processes/services
+ * WaxPrep Main Server — UPDATED with CUGA Memory Bridge
+ *
+ * Orchestrates all workers and registers memory bridge endpoints
+ * for the CUGA Python service to access your TypeScript memory system.
  */
 
 import { startServer } from './webhook/server.js';
 import { startMessageWorker } from './workers/messageWorker.js';
 import { startStatusWorker } from './workers/statusWorker.js';
 import { startDLQWorker } from './workers/dlqWorker.js';
-import { startConsolidationWorker } from './memory/workers/consolidationWorker.js'; // <-- NEW IMPORT
+import { startConsolidationWorker } from './memory/workers/consolidationWorker.js';
+import { registerMemoryBridge } from './bridge/memoryBridge.js';
 import { logger } from './utils/logger.js';
 
 async function main() {
-  logger.info('Starting WhatsApp Webhook Infrastructure with Memory System...');
-  
-  // Start HTTP server
+  logger.info('Starting WaxPrep WhatsApp Infrastructure with CUGA AI Brain...');
+
+  // Start HTTP server (Fastify)
   const server = await startServer();
-  
-  // Start workers (in-process for Render; use separate services at scale)
+
+  // ═══════════════════════════════════════════════════════════════
+  // NEW: Register memory bridge endpoints for CUGA
+  // These allow the Python CUGA service to access YOUR memory
+  // ═══════════════════════════════════════════════════════════════
+  if (process.env.ENABLE_MEMORY_BRIDGE !== 'false') {
+    await registerMemoryBridge(server);
+    logger.info('Memory-CUGA bridge registered');
+  }
+
+  // Start all workers
   const messageWorker = startMessageWorker();
   const statusWorker = startStatusWorker();
   const dlqWorker = startDLQWorker();
-  
-  // Start memory consolidation worker
-  const consolidationWorker = startConsolidationWorker(); // <-- NEW WORKER
-  
-  logger.info('All systems operational');
-  
+  const consolidationWorker = startConsolidationWorker();
+
+  logger.info('╔══════════════════════════════════════════════════════════════╗');
+  logger.info('║     🧠 WaxPrep AI Tutor with CUGA Brain — ONLINE            ║');
+  logger.info('╠══════════════════════════════════════════════════════════════╣');
+  logger.info('║  Webhook Server:  http://localhost:3000                     ║');
+  logger.info('║  Memory Bridge:   /memory/* endpoints active                ║');
+  logger.info('║  CUGA Service:    Connects to CUGA_SERVICE_URL              ║');
+  logger.info('║  Model Host:      Modal.com (Qwen3.6-35B-A3B)               ║');
+  logger.info('╚══════════════════════════════════════════════════════════════╝');
+
+  // Graceful shutdown
+  process.on('SIGTERM', () => gracefulShutdown(server, 'SIGTERM'));
+  process.on('SIGINT', () => gracefulShutdown(server, 'SIGINT'));
+
   // Keep process alive
-  await new Promise(() => {}); // Never resolves, process runs until signal
+  await new Promise(() => {});
+}
+
+async function gracefulShutdown(server: any, signal: string) {
+  logger.info({ signal }, 'Shutting down gracefully...');
+
+  await server.close();
+
+  const { shutdownQueues } = await import('./queue/index.js');
+  await shutdownQueues();
+
+  const { closeRedis } = await import('./storage/idempotency.js');
+  await closeRedis();
+
+  logger.info('Shutdown complete');
+  process.exit(0);
 }
 
 main().catch((err) => {
