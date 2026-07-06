@@ -1,11 +1,26 @@
-node_modules/
-dist/
-.env
-*.log
-.DS_Store
+# Target directories
+target/
+ghost_gateway/target/
 
-# Old Python project files
-waxprep/
-waxprep-backup-20260611-1730/
-*.py
-__pycache__/
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+ehthumbs.db
+Icon?

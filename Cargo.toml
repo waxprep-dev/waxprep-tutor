@@ -1,0 +1,12 @@
+[workspace]
+resolver = "2"
+members = [
+    "ghost_gateway",
+    # Additional services will be added here as we build them
+]
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
