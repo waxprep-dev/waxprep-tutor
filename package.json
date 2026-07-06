@@ -1,7 +1,7 @@
 {
   "name": "waxprep-whatsapp-webhook",
-  "version": "1.0.0",
-  "description": "Nigeria AI Tutor WhatsApp - Production Grade Webhook Infrastructure",
+  "version": "2.0.0",
+  "description": "Nigeria AI Tutor WhatsApp - Production Grade Webhook Infrastructure with CUGA AI Brain",
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
@@ -9,7 +9,8 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "lint": "eslint src --ext .ts",
-    "start:worker": "node dist/workers/messageWorker.js"
+    "start:worker": "node dist/workers/messageWorker.js",
+    "deploy:render": "render deploy --name waxprep-webhook"
   },
   "keywords": [
     "whatsapp",
@@ -17,7 +18,10 @@
     "ai",
     "nigeria",
     "tutor",
-    "messaging"
+    "messaging",
+    "cuga",
+    "modal",
+    "multi-agent"
   ],
   "author": "Waxprep Dev Team",
   "license": "MIT",

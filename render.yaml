@@ -1,53 +1,118 @@
 services:
+  # ┌─────────────────────────────────────────────────────────────────┐
+  # │  WAXPREP AI TUTOR - MAIN WEBHOOK SERVER                       │
+  # │  Handles WhatsApp webhooks, queues, and memory system         │
+  # └─────────────────────────────────────────────────────────────────┘
   - type: web
-    name: whatsapp-webhook
+    name: waxprep-webhook
     runtime: node
     plan: standard
-    buildCommand: npm install && npm run build
+    region: oregon  # Choose closest to your users
+    buildCommand: |
+      npm install
+      npm run build
     startCommand: npm start
-    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 10000
+        value: 3000
       - key: REDIS_URL
         fromService:
+          name: waxprep-redis
           type: redis
-          name: webhook-redis
           property: connectionString
-      - key: META_APP_SECRET
-        sync: false
-      - key: META_VERIFY_TOKEN
-        sync: false
-      - key: META_PHONE_NUMBER_ID
-        sync: false
-      - key: META_ACCESS_TOKEN
-        sync: false
       - key: SUPABASE_URL
-        sync: false
+        sync: false  # Enter your Supabase URL in Render dashboard
       - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false
-
-  # Optional: Separate worker service for scale
-  - type: worker
-    name: whatsapp-worker
-    runtime: node
-    plan: standard
-    buildCommand: npm install && npm run build
-    startCommand: npm run start:worker
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: REDIS_URL
+        sync: false  # Enter your Supabase service role key in Render dashboard
+      - key: META_APP_SECRET
+        sync: false  # Enter your Meta app secret in Render dashboard
+      - key: META_VERIFY_TOKEN
+        sync: false  # Enter your Meta verify token in Render dashboard
+      - key: META_PHONE_NUMBER_ID
+        sync: false  # Enter your Meta phone number ID in Render dashboard
+      - key: META_ACCESS_TOKEN
+        sync: false  # Enter your Meta access token in Render dashboard
+      - key: CUGA_SERVICE_URL
         fromService:
-          type: redis
-          name: webhook-redis
-          property: connectionString
-      # ... same env vars as web service
+          name: waxprep-cuga
+          type: web
+          property: publicHostname
+      - key: MODAL_ENDPOINT
+        sync: false  # Enter your Modal endpoint URL in Render dashboard
+      - key: MODAL_TOKEN
+        sync: false  # Enter your Modal token in Render dashboard
+      - key: LOG_LEVEL
+        value: info
+      - key: ENABLE_CUGA
+        value: true
+      - key: ENABLE_MEMORY_BRIDGE
+        value: true
+      - key: ENABLE_COMPLEXITY_ANALYSIS
+        value: true
 
-  # Redis for queues and idempotency
+  # ┌─────────────────────────────────────────────────────────────────┐
+  # │  CUGA AI BRAIN SERVICE                                         │
+  # │  Python service that connects to Modal model and memory system │
+  # └─────────────────────────────────────────────────────────────────┘
+  - type: web
+    name: waxprep-cuga
+    runtime: python
+    plan: standard
+    region: oregon
+    rootDir: src/ai-brain/cuga-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port 8000
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: MODAL_ENDPOINT
+        sync: false  # Enter your Modal endpoint URL in Render dashboard
+      - key: MODAL_TOKEN
+        sync: false  # Enter your Modal token in Render dashboard
+      - key: MEMORY_API_URL
+        fromService:
+          name: waxprep-webhook
+          type: web
+          property: publicHostname
+      - key: LOG_LEVEL
+        value: info
+
+  # ┌─────────────────────────────────────────────────────────────────┐
+  # │  REDIS DATABASE - Message Queues & Session Cache              │
+  # │  Handles BullMQ queues and fast session memory                │
+  # └─────────────────────────────────────────────────────────────────┘
   - type: redis
-    name: webhook-redis
-    plan: starter
-    ipAllowList: [] # Restrict in production
+    name: waxprep-redis
+    plan: free  # For development; upgrade to paid for production
+    region: oregon
+    ipAllowList: []
+
+# ┌─────────────────────────────────────────────────────────────────────┐
+# │  AUTOSCALING CONFIGURATION                                         │
+# │  Scale based on queue depth and CPU usage                         │
+# └─────────────────────────────────────────────────────────────────────┘
+autoscaling:
+  - serviceName: waxprep-webhook
+    minInstances: 1
+    maxInstances: 10
+    cpuThreshold: 70
+    memoryThreshold: 70
+    customMetrics:
+      - type: queueDepth
+        queueName: messages
+        threshold: 100
+        scaleUp: 2
+        scaleDown: 1
+
+  - serviceName: waxprep-cuga
+    minInstances: 1
+    maxInstances: 5
+    cpuThreshold: 60
+    customMetrics:
+      - type: queueDepth
+        queueName: cuga_requests
+        threshold: 50
+        scaleUp: 1
+        scaleDown: 1

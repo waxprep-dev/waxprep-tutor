@@ -1,26 +1,39 @@
-# WaxPrep AI Brain — CUGA Service Dockerfile
-FROM python:3.11-slim
+# WaxPrep AI Tutor - Production Dockerfile for Render
+FROM node:18-alpine
 
+# Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install system dependencies for Node.js and Python
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
     gcc \
-    && rm -rf /var/lib/apt/lists/*
+    g++ \
+    make \
+    libc-dev \
+    linux-headers \
+    bash \
+    curl
 
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy package files
+COPY package*.json ./
+
+# Install Node.js dependencies
+RUN npm ci --only=production
 
 # Copy application code
 COPY . .
 
+# Build TypeScript
+RUN npm run build
+
 # Expose port
-EXPOSE 8000
+EXPOSE 3000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+    CMD curl -f http://localhost:3000/health || exit 1
 
-# Run server
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+# Start the application
+CMD ["npm", "start"]
