@@ -1,0 +1,27 @@
+# For detailed configuration reference, see the docs:
+# https://supabase.com/docs/guides/local-development/cli/config
+
+[api]
+port = 54321
+schemas = ["public", "storage", "auth"]
+extra_search_path = ["public", "extensions"]
+
+[db]
+port = 54322
+major_version = 15
+
+[studio]
+port = 54323
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000"]
+jwt_expiry = 3600
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+double_opt_in = false
+
+[analytics]
+enabled = false
