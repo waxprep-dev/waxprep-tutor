@@ -6,51 +6,42 @@ services:
   - type: web
     name: waxprep-webhook
     runtime: node
-    plan: standard
-    region: oregon  # Choose closest to your users
-    buildCommand: |
-      npm install
-      npm run build
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 3000
+        value: 10000
+      - key: NODE_VERSION
+        value: 20.11.0
       - key: REDIS_URL
         fromService:
           name: waxprep-redis
           type: redis
           property: connectionString
       - key: SUPABASE_URL
-        sync: false  # Enter your Supabase URL in Render dashboard
+        sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false  # Enter your Supabase service role key in Render dashboard
+        sync: false
       - key: META_APP_SECRET
-        sync: false  # Enter your Meta app secret in Render dashboard
+        sync: false
       - key: META_VERIFY_TOKEN
-        sync: false  # Enter your Meta verify token in Render dashboard
+        sync: false
       - key: META_PHONE_NUMBER_ID
-        sync: false  # Enter your Meta phone number ID in Render dashboard
+        sync: false
       - key: META_ACCESS_TOKEN
-        sync: false  # Enter your Meta access token in Render dashboard
+        sync: false
       - key: CUGA_SERVICE_URL
-        fromService:
-          name: waxprep-cuga
-          type: web
-          property: publicHostname
+        sync: false
       - key: MODAL_ENDPOINT
-        sync: false  # Enter your Modal endpoint URL in Render dashboard
+        sync: false
       - key: MODAL_TOKEN
-        sync: false  # Enter your Modal token in Render dashboard
+        sync: false
       - key: LOG_LEVEL
         value: info
-      - key: ENABLE_CUGA
-        value: true
-      - key: ENABLE_MEMORY_BRIDGE
-        value: true
-      - key: ENABLE_COMPLEXITY_ANALYSIS
-        value: true
 
   # ┌─────────────────────────────────────────────────────────────────┐
   # │  CUGA AI BRAIN SERVICE                                         │
@@ -59,60 +50,26 @@ services:
   - type: web
     name: waxprep-cuga
     runtime: python
-    plan: standard
+    plan: free
     region: oregon
-    rootDir: src/ai-brain/cuga-service
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app:app --host 0.0.0.0 --port 8000
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: PORT
-        value: 8000
+      - key: PYTHON_VERSION
+        value: 3.11.0
       - key: MODAL_ENDPOINT
-        sync: false  # Enter your Modal endpoint URL in Render dashboard
+        sync: false
       - key: MODAL_TOKEN
-        sync: false  # Enter your Modal token in Render dashboard
+        sync: false
       - key: MEMORY_API_URL
-        fromService:
-          name: waxprep-webhook
-          type: web
-          property: publicHostname
-      - key: LOG_LEVEL
-        value: info
+        sync: false
 
   # ┌─────────────────────────────────────────────────────────────────┐
   # │  REDIS DATABASE - Message Queues & Session Cache              │
-  # │  Handles BullMQ queues and fast session memory                │
   # └─────────────────────────────────────────────────────────────────┘
   - type: redis
     name: waxprep-redis
-    plan: free  # For development; upgrade to paid for production
+    plan: free
     region: oregon
     ipAllowList: []
-
-# ┌─────────────────────────────────────────────────────────────────────┐
-# │  AUTOSCALING CONFIGURATION                                         │
-# │  Scale based on queue depth and CPU usage                         │
-# └─────────────────────────────────────────────────────────────────────┘
-autoscaling:
-  - serviceName: waxprep-webhook
-    minInstances: 1
-    maxInstances: 10
-    cpuThreshold: 70
-    memoryThreshold: 70
-    customMetrics:
-      - type: queueDepth
-        queueName: messages
-        threshold: 100
-        scaleUp: 2
-        scaleDown: 1
-
-  - serviceName: waxprep-cuga
-    minInstances: 1
-    maxInstances: 5
-    cpuThreshold: 60
-    customMetrics:
-      - type: queueDepth
-        queueName: cuga_requests
-        threshold: 50
-        scaleUp: 1
-        scaleDown: 1
+    maxmemoryPolicy: noeviction
