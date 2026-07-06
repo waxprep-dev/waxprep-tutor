@@ -1,0 +1,40 @@
+{
+  "name": "waxprep-whatsapp-webhook",
+  "version": "1.0.0",
+  "description": "Nigeria AI Tutor WhatsApp - Production Grade Webhook Infrastructure",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "lint": "eslint src --ext .ts",
+    "start:worker": "node dist/workers/messageWorker.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "webhook",
+    "ai",
+    "nigeria",
+    "tutor",
+    "messaging"
+  ],
+  "author": "Waxprep Dev Team",
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/raw-body": "^4.0.0",
+    "bullmq": "^4.0.0",
+    "fastify": "^4.20.0",
+    "ioredis": "^5.3.0",
+    "pino": "^8.14.0",
+    "supabase": "^1.80.0",
+    "tsx": "^3.12.0",
+    "typescript": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0"
+  }
+}
