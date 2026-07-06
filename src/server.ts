@@ -8,10 +8,11 @@ import { startServer } from './webhook/server.js';
 import { startMessageWorker } from './workers/messageWorker.js';
 import { startStatusWorker } from './workers/statusWorker.js';
 import { startDLQWorker } from './workers/dlqWorker.js';
+import { startConsolidationWorker } from './memory/workers/consolidationWorker.js'; // <-- NEW IMPORT
 import { logger } from './utils/logger.js';
 
 async function main() {
-  logger.info('Starting WhatsApp Webhook Infrastructure Stage 1...');
+  logger.info('Starting WhatsApp Webhook Infrastructure with Memory System...');
   
   // Start HTTP server
   const server = await startServer();
@@ -20,6 +21,9 @@ async function main() {
   const messageWorker = startMessageWorker();
   const statusWorker = startStatusWorker();
   const dlqWorker = startDLQWorker();
+  
+  // Start memory consolidation worker
+  const consolidationWorker = startConsolidationWorker(); // <-- NEW WORKER
   
   logger.info('All systems operational');
   
