@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: whatsapp-webhook
+    runtime: node
+    plan: standard
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: webhook-redis
+          property: connectionString
+      - key: META_APP_SECRET
+        sync: false
+      - key: META_VERIFY_TOKEN
+        sync: false
+      - key: META_PHONE_NUMBER_ID
+        sync: false
+      - key: META_ACCESS_TOKEN
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+
+  # Optional: Separate worker service for scale
+  - type: worker
+    name: whatsapp-worker
+    runtime: node
+    plan: standard
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:worker
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: webhook-redis
+          property: connectionString
+      # ... same env vars as web service
+
+  # Redis for queues and idempotency
+  - type: redis
+    name: webhook-redis
+    plan: starter
+    ipAllowList: [] # Restrict in production
