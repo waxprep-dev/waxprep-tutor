@@ -4,13 +4,12 @@
  * This replaces the placeholder processWithAI() with the full CUGA multi-agent system.
  * CUGA lives BEHIND the queue — never in the webhook handler.
  */
-
 import { Queue, Worker, Job } from 'bullmq';
 import { config } from '../config/index.js';
 import { logger } from '../utils/logger.js';
 import { memory } from '../memory/index.js';
 import { Timer } from '../utils/timing.js';
-import type { WebhookEvent } from '../types/webhook.js';
+import type { WebhookEvent, MessageEvent } from '../types/webhook.js';
 
 // Import the new modules
 import { EmbeddingService } from '../utils/embedder.js';
@@ -62,8 +61,8 @@ interface ProcessingResult {
     latencyMs: number;
     tokensIn: number;
     tokensOut: number;
-    emotionalState: any;
-    intent: any;
+    emotionalState: Record<string, unknown>;
+    intent: Record<string, unknown>;
   };
 }
 
@@ -77,7 +76,6 @@ async function processWithAI(
 
   // Initialize the embedding service
   const embedder = EmbeddingService.fromEnvironment();
-  await embedder.initializeCentroids?.(); // If available
 
   // Step 1: Classify intent probabilistically
   const intentResult = await IntentClassifier.getInstance(embedder).classify(
@@ -98,8 +96,8 @@ async function processWithAI(
     currentMessage: message,
     messageEmbedding: (await embedder.embed(message)).embedding,
     recentTurns: context.recentTurns || [],
-    episodicMemories: context.episodicMemories || [],
-    longTermFacts: context.longTermFacts || [],
+    episodicMemories: [],
+    longTermFacts: [],
     intentDistribution: intentResult.distribution,
     emotionalState: [emotionalState.valence, emotionalState.arousal, emotionalState.dominance],
     userProfile: userProfile || {
@@ -108,25 +106,25 @@ async function processWithAI(
       learningStyle: 'adaptive',
       proficiencyVector: {},
       engagementScore: 0.5,
-      preferences: { 
-        language: 'en', 
-        tone: 'friendly', 
-        complexity: 0.5, 
-        examplePreference: [] 
+      preferences: {
+        language: 'en',
+        tone: 'friendly',
+        complexity: 0.5,
+        examplePreference: [],
       },
       goals: [],
       weaknesses: [],
       strengths: [],
-      recentActivity: { 
-        lastSessionAt: Date.now(), 
-        sessionCount: 1, 
-        avgSatisfaction: 0.8 
-      }
+      recentActivity: {
+        lastSessionAt: Date.now(),
+        sessionCount: 1,
+        avgSatisfaction: 0.8,
+      },
     },
     session: {
-      messageCount: context.messageCount || 1,
-      startTime: context.startTime || Date.now(),
-      subjectTrajectory: context.subjectTrajectory || []
+      messageCount: 1,
+      startTime: Date.now(),
+      subjectTrajectory: [],
     },
   });
 
@@ -148,14 +146,18 @@ async function processWithAI(
       intentConfidence: intentResult.confidence,
       mode: 'balanced',
     },
-    async (systemPrompt, userMessage, ctx) => {
+    async (
+      systemPrompt: string,
+      userMessage: string,
+      ctx: Record<string, unknown>,
+    ) => {
       // This function would call your LLM to generate a response
       // For now, we'll call the CUGA client which may use this prompt internally
       const cugaResponse = await cugaClient.tutor(userMessage, userId, {
         systemPrompt,
-        recentTurns: ctx.recentTurns,
+        recentTurns: ctx.recentTurns as Array<{ role: string; content: string }>,
         retrievedMemories: [],
-        userProfile: ctx.userProfile,
+        userProfile: ctx.userProfile as Record<string, unknown>,
         activeTask: undefined,
         assemblyMetadata: {
           durationMs: timer.elapsedMs(),
@@ -170,7 +172,7 @@ async function processWithAI(
         confidence: cugaResponse.confidence,
         tokensUsed: {
           prompt: cugaResponse.tokens_used?.prompt || 0,
-          completion: cugaResponse.tokens_used?.completion || 0
+          completion: cugaResponse.tokens_used?.completion || 0,
         },
         latencyMs: timer.elapsedMs(),
       };
@@ -222,7 +224,7 @@ async function processWithAI(
       `Study session at ${new Date().toISOString()}`,
       1.0,
     );
-  } catch (e) {
+  } catch {
     // Non-critical
   }
 
@@ -234,12 +236,20 @@ async function processWithAI(
       tools: agentResponse.response.toolsUsed,
       confidence: agentResponse.response.confidence,
       mode: 'balanced',
-      complexity: 0.5, // Would come from complexity analysis
+      complexity: 0.5,
       latencyMs,
       tokensIn: agentResponse.response.tokensUsed.prompt,
       tokensOut: agentResponse.response.tokensUsed.completion,
-      emotionalState,
-      intent: intentResult,
+      emotionalState: {
+        valence: emotionalState.valence,
+        arousal: emotionalState.arousal,
+        dominance: emotionalState.dominance,
+        category: emotionalState.category,
+      },
+      intent: {
+        primary: intentResult.primaryIntent,
+        confidence: intentResult.confidence,
+      },
     },
   };
 }
@@ -251,7 +261,7 @@ async function processWithAI(
 interface WhatsAppMessage {
   to: string;
   body: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -319,12 +329,22 @@ interface MessageJobData {
 }
 
 /**
+ * Check if an event is a message event with text
+ */
+function isMessageEvent(event: WebhookEvent): event is MessageEvent {
+  return event.type === 'message';
+}
+
+/**
  * Handle a single incoming WhatsApp message
  */
-async function handleMessage(job: Job<MessageJobData>): Promise<any> {
-  const { event, sourceIp } = job.data;
-  const userId = event.from;
-  const messageText = event.text || '';
+async function handleMessage(job: Job<MessageJobData>): Promise<Record<string, unknown>> {
+  const { event } = job.data;
+
+  // Cast to MessageEvent to access .from and .text
+  const msgEvent = isMessageEvent(event) ? event : null;
+  const userId = msgEvent?.from || event.sourcePhone || 'unknown';
+  const messageText = msgEvent?.text || '';
 
   logger.info({
     jobId: job.id,
@@ -334,14 +354,14 @@ async function handleMessage(job: Job<MessageJobData>): Promise<any> {
   }, 'Processing message with integrated AI pipeline');
 
   // Skip non-text messages (images, audio, etc. — handle separately)
-  if (event.type !== 'text' || !messageText) {
+  if (!msgEvent || !messageText) {
     logger.info({ jobId: job.id, type: event.type }, 'Skipping non-text message');
     return { success: true, skipped: true, reason: 'non-text' };
   }
 
   try {
     // Step 1: Send typing indicator for UX
-    await sendTypingIndicator(userId).catch(() => {});
+    await sendTypingIndicator(userId).catch(() => { /* ignore */ });
 
     // Step 2: Process with integrated AI pipeline
     const result = await processWithAI(messageText, userId);
@@ -388,8 +408,8 @@ async function handleMessage(job: Job<MessageJobData>): Promise<any> {
     if (job.attemptsMade >= config.queue.maxRetries - 1) {
       await sendWhatsAppMessage({
         to: userId,
-        body: "I apologize, I'm having technical difficulties. Please try again! 🙏",
-      }).catch(() => {});
+        body: "I apologize, I'm having technical difficulties. Please try again!",
+      }).catch(() => { /* ignore */ });
     }
 
     throw error;
@@ -408,7 +428,7 @@ export function startMessageWorker(): Worker<MessageJobData> {
       connection: redisConnection,
       concurrency: config.queue.concurrency,
       limiter: {
-        max: 60,        // Max 60 jobs per minute
+        max: 60,
         duration: 60000,
       },
     }
@@ -416,7 +436,7 @@ export function startMessageWorker(): Worker<MessageJobData> {
 
   // Event handlers
   worker.on('completed', (job, result) => {
-    if (!result?.skipped) {
+    if (!(result as Record<string, unknown>)?.skipped) {
       logger.info({ jobId: job.id, result }, 'Job completed');
     }
   });
@@ -424,7 +444,7 @@ export function startMessageWorker(): Worker<MessageJobData> {
   worker.on('failed', (job, error) => {
     logger.error({
       jobId: job?.id,
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       attempts: job?.attemptsMade,
     }, 'Job failed after all retries');
   });
@@ -446,8 +466,8 @@ export function startStatusWorker(): Worker {
   const worker = new Worker(
     `${config.queue.prefix}:status`,
     async (job) => {
-      const { event } = job.data;
-      logger.debug({ event }, 'Status update received');
+      const data = job.data as { event?: Record<string, unknown> };
+      logger.debug({ event: data.event }, 'Status update received');
       // Track message delivery status
       // Update analytics in Supabase
     },
@@ -488,4 +508,3 @@ export function startDLQWorker(): Worker {
 // ═══════════════════════════════════════════════════════════════
 
 export { messageQueue, statusQueue };
-EOF
