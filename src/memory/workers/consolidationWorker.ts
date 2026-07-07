@@ -51,33 +51,33 @@ class PlaceholderAIService implements AIService {
   async summarizeSession(session: SessionMemory): Promise<SessionSummaryResult> {
     // This is a placeholder - replace with actual AI integration
     logger.warn('Using placeholder AI service - replace with actual Gamma-4/Kimi integration');
-    
+
     // Analyze the session turns to create a summary
     const allContent = session.turns.map(t => t.content).join(' ');
-    
+
     // Extract some basic information
     const keyOutcomes: string[] = [];
     const openItems: string[] = [];
     const userGoals: string[] = [];
     const aiActions: string[] = [];
-    
+
     // Simple keyword-based extraction (replace with real NLP)
     if (allContent.toLowerCase().includes('thank')) {
       keyOutcomes.push('Student expressed gratitude');
     }
-    
+
     if (allContent.toLowerCase().includes('confused')) {
       openItems.push('Student showed confusion about a topic');
     }
-    
+
     if (allContent.toLowerCase().includes('goal')) {
       userGoals.push('Student mentioned a learning goal');
     }
-    
+
     if (allContent.toLowerCase().includes('example')) {
       aiActions.push('AI provided an example');
     }
-    
+
     return {
       summary: `Session with ${session.userId} covering various topics. Student participated actively.`,
       keyOutcomes: keyOutcomes.length > 0 ? keyOutcomes : ['General participation'],
@@ -93,11 +93,11 @@ class PlaceholderAIService implements AIService {
   async extractFacts(session: SessionMemory, summary: SessionSummaryResult): Promise<LongTermMemory[]> {
     // This is a placeholder - replace with actual AI fact extraction
     logger.warn('Using placeholder fact extraction - replace with actual AI integration');
-    
+
     // In a real implementation, this would use your AI model to extract
     // specific facts about the user from the session
     const facts: LongTermMemory[] = [];
-    
+
     // Example: Extract learning preferences
     if (summary.topicCoverage.includes('math') || session.turns.some(t => t.content.toLowerCase().includes('math'))) {
       facts.push({
@@ -128,7 +128,7 @@ class PlaceholderAIService implements AIService {
         }
       });
     }
-    
+
     return facts;
   }
 }
@@ -136,7 +136,7 @@ class PlaceholderAIService implements AIService {
 export class ConsolidationWorker {
   private worker: Worker<ConsolidationJobData>;
   private queue: Queue<ConsolidationJobData>;
-  private readonly redisConnection: any;
+  private readonly redisConnection: { host: string; port: number; password?: string; db: number };
   private readonly aiService: AIService;
 
   constructor(aiService?: AIService) {
@@ -161,24 +161,24 @@ export class ConsolidationWorker {
 
         try {
           await this.consolidateSession(job.data.sessionId, job.data.userId);
-          
+
           const durationMs = timer.elapsedMs();
-          logger.info({ 
-            jobId: job.id, 
-            sessionId: job.data.sessionId, 
-            durationMs 
+          logger.info({
+            jobId: job.id,
+            sessionId: job.data.sessionId,
+            durationMs
           }, 'Memory consolidation completed');
-          
+
           return { success: true, durationMs };
         } catch (error) {
           const durationMs = timer.elapsedMs();
-          logger.error({ 
-            jobId: job.id, 
-            sessionId: job.data.sessionId, 
+          logger.error({
+            jobId: job.id,
+            sessionId: job.data.sessionId,
             error: error instanceof Error ? error.message : String(error),
             durationMs
           }, 'Memory consolidation failed');
-          
+
           throw error;
         }
       },
@@ -197,10 +197,10 @@ export class ConsolidationWorker {
     });
 
     this.worker.on('failed', (job, err) => {
-      logger.error({ 
-        jobId: job?.id, 
-        sessionId: job?.data.sessionId, 
-        error: err.message 
+      logger.error({
+        jobId: job?.id,
+        sessionId: job?.data.sessionId,
+        error: err.message
       }, 'Consolidation job failed');
     });
   }
@@ -212,7 +212,7 @@ export class ConsolidationWorker {
     const sessionStorage = getSessionStorage();
     const episodicStorage = getEpisodicStorage();
     const longTermStorage = getLongTermStorage();
-    
+
     // Get the session to consolidate
     const session = await sessionStorage.getActiveSession(userId);
     if (!session || session.sessionId !== sessionId) {
@@ -222,7 +222,7 @@ export class ConsolidationWorker {
 
     // Use AI to summarize the session
     const summaryResult = await this.aiService.summarizeSession(session);
-    
+
     // Create episodic memory from the summary
     const episodicMemory: Omit<EpisodicMemory, 'id' | 'createdAt' | 'updatedAt'> = {
       userId: session.userId,
@@ -257,24 +257,24 @@ export class ConsolidationWorker {
 
     // Save episodic memory
     await episodicStorage.create(episodicMemory);
-    
+
     // Extract facts using AI
     const facts = await this.aiService.extractFacts(session, summaryResult);
-    
+
     // Save facts to long-term memory
     if (facts.length > 0) {
       await longTermStorage.bulkUpsert(facts);
     }
-    
+
     // Update session to mark as consolidated
     // In a real implementation, you might want to archive the session
     // rather than keep it in active memory
-    
-    logger.info({ 
-      userId, 
-      sessionId, 
-      episodicMemoryId: episodicMemory.id, 
-      factsExtracted: facts.length 
+
+    logger.info({
+      userId,
+      sessionId,
+      episodicMemoryId: episodicMemory.id,
+      factsExtracted: facts.length
     }, 'Session consolidated successfully');
   }
 
@@ -282,8 +282,8 @@ export class ConsolidationWorker {
    * Queue a consolidation job
    */
   async queueConsolidation(
-    sessionId: string, 
-    userId: string, 
+    sessionId: string,
+    userId: string,
     trigger: 'session_end' | 'scheduled' | 'manual' = 'session_end',
     delay?: number
   ): Promise<string> {
@@ -307,11 +307,11 @@ export class ConsolidationWorker {
       },
     });
 
-    logger.info({ 
-      jobId: job.id, 
-      sessionId, 
-      userId, 
-      delay 
+    logger.info({
+      jobId: job.id,
+      sessionId,
+      userId,
+      delay
     }, 'Consolidation job queued');
 
     return job.id;
@@ -378,7 +378,7 @@ export function getConsolidationWorker(): ConsolidationWorker | null {
 
 // For direct usage without BullMQ
 export async function consolidateSessionDirect(
-  sessionId: string, 
+  sessionId: string,
   userId: string,
   aiService?: AIService
 ): Promise<void> {
