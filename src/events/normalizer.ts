@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * Validates the basic structure of an incoming webhook payload
  */
-export function validatePayloadStructure(payload: any): boolean {
+export function validatePayloadStructure(payload: unknown): boolean {
   if (!payload || typeof payload !== 'object') {
     console.error('Invalid payload: not an object');
     return false;
@@ -72,8 +72,8 @@ export function normalizePayload(payload: WebhookPayload): WebhookEvent[] {
  * Normalizes a message object into a standardized MessageEvent
  */
 function normalizeMessage(
-  message: any,
-  value: any,
+  message: Record<string, unknown>,
+  value: Record<string, unknown>,
   entryId: string
 ): MessageEvent | null {
   try {
@@ -109,7 +109,7 @@ function normalizeMessage(
         break;
       case 'interactive':
         // Handle buttons, lists, etc.
-        textContent = message.interactive?.button_reply?.title || 
+        textContent = message.interactive?.button_reply?.title ||
                      message.interactive?.list_reply?.title ||
                      'Interactive message';
         break;
@@ -163,8 +163,8 @@ function normalizeMessage(
  * Normalizes a status object into a standardized StatusEvent
  */
 function normalizeStatus(
-  status: any,
-  value: any,
+  status: Record<string, unknown>,
+  value: Record<string, unknown>,
   entryId: string
 ): StatusEvent | null {
   try {
@@ -238,7 +238,7 @@ export function extractContactInfo(payload: WebhookPayload): Map<string, { name:
  */
 export function determinePricingCategory(
   timestamp: number,
-  conversation: any,
+  conversation: Record<string, unknown> | null,
   isBusinessInitiated: boolean
 ): string {
   // If we have conversation data, determine pricing based on that
