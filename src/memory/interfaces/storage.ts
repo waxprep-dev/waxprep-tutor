@@ -25,7 +25,7 @@ export interface SessionStorage {
   updateTask(sessionId: string, task: TaskState): Promise<SessionMemory>;
   closeSession(sessionId: string, summary?: string): Promise<SessionMemory>;
   deleteSession(sessionId: string): Promise<void>;
-  
+
   /**
    * Session Queries
    */
@@ -42,13 +42,13 @@ export interface EpisodicStorage {
   getByUserId(userId: string, limit?: number): Promise<EpisodicMemory[]>;
   update(id: string, updates: Partial<EpisodicMemory>): Promise<EpisodicMemory>;
   delete(id: string): Promise<void>;
-  
+
   /**
    * Vector Search
    */
   search(query: SearchParams): Promise<EpisodicMemory[]>;
   findSimilar(sessionId: string, limit?: number): Promise<EpisodicMemory[]>;
-  
+
   /**
    * Analytics
    */
@@ -70,19 +70,19 @@ export interface LongTermStorage {
   update(id: string, updates: Partial<LongTermMemory>): Promise<LongTermMemory>;
   delete(id: string): Promise<void>;
   markDeprecated(id: string): Promise<LongTermMemory>;
-  
+
   /**
    * Vector Search
    */
   search(query: SearchParams): Promise<LongTermMemory[]>;
   findRelated(userId: string, category: string, limit?: number): Promise<LongTermMemory[]>;
-  
+
   /**
    * Contradiction Management
    */
   findContradictions(userId: string, key: string): Promise<LongTermMemory[]>;
   resolveContradiction(memoryIds: string[], winnerId: string): Promise<void>;
-  
+
   /**
    * Batch Operations
    */
@@ -102,19 +102,19 @@ export interface ProceduralStorage {
   update(id: string, updates: Partial<ProceduralMemory>): Promise<ProceduralMemory>;
   deactivate(id: string): Promise<ProceduralMemory>;
   delete(id: string): Promise<void>;
-  
+
   /**
    * Rule Activation
    */
-  getActiveRules(userId: string, context?: any): Promise<ProceduralMemory[]>;
+  getActiveRules(userId: string, context?: Record<string, unknown>): Promise<ProceduralMemory[]>;
   activateRule(id: string): Promise<ProceduralMemory>;
   incrementActivation(id: string): Promise<void>;
-  
+
   /**
    * Audit Trail
    */
   getAuditTrail(id: string): Promise<import('../types/memory.js').RuleAuditEntry[]>;
-  logActivation(ruleId: string, context?: any): Promise<void>;
+  logActivation(ruleId: string, context?: Record<string, unknown>): Promise<void>;
 }
 
 /**
@@ -126,12 +126,12 @@ export interface MemoryStorage {
   episodic: EpisodicStorage;
   longTerm: LongTermStorage;
   procedural: ProceduralStorage;
-  
+
   /**
    * Cross-layer operations
    */
   migrateSessionToEpisodic(sessionId: string): Promise<EpisodicMemory>;
   cleanupExpiredMemories(cutoffDate: number): Promise<void>;
-  exportUserData(userId: string): Promise<any>;
-  importUserData(userId: string, data: any): Promise<void>;
+  exportUserData(userId: string): Promise<Record<string, unknown>>;
+  importUserData(userId: string, data: Record<string, unknown>): Promise<void>;
 }
