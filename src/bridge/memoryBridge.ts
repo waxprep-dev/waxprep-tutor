@@ -76,7 +76,7 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
       confidence = 0.8,
     } = request.body as {
       userId: string;
-      category: any;
+      category: string;
       key: string;
       value: string;
       content: string;
@@ -190,19 +190,19 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
 
       // Combine and sort by relevance
       const allMemories = [
-        ...episodic.map((m: any) => ({
+        ...episodic.map((m) => ({
           id: m.id,
           content: m.summary || m.content,
-          type: 'episodic',
-          layer: 'episodic',
-          similarity: m.similarity || 0.85,
+          type: 'episodic' as const,
+          layer: 'episodic' as const,
+          similarity: 0.85,
         })),
-        ...longTerm.map((m: any) => ({
+        ...longTerm.map((m) => ({
           id: m.id,
           content: m.content,
           type: m.category || 'longterm',
-          layer: 'longterm',
-          similarity: m.similarity || 0.85,
+          layer: 'longterm' as const,
+          similarity: 0.85,
         })),
       ];
 
