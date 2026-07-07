@@ -9,15 +9,19 @@ import { Queue, Worker, Job } from 'bullmq';
 import { config } from '../config/index.js';
 import { logger } from '../utils/logger.js';
 import { memory } from '../memory/index.js';
-import {
-  cugaClient,
-  analyzeComplexity,
-  determineReasoningMode,
-  formatForWhatsApp,
-  CugaError
-} from '../cugaClient.js';
 import { Timer } from '../utils/timing.js';
 import type { WebhookEvent } from '../types/webhook.js';
+
+// Import the new modules
+import { EmbeddingService } from '../utils/embedder.js';
+import { IntentClassifier } from '../intent/classifier.js';
+import { EmotionalIntelligence } from '../emotional/intelligence.js';
+import { DynamicPromptEngine } from '../prompt-engine/engine.js';
+import { ToolSystem } from '../tools/index.js';
+import { MultiAgentOrchestrator } from '../orchestration/multi-agent.js';
+
+// Import CUGA client
+import { cugaClient } from '../cugaClient.js';
 
 // ═══════════════════════════════════════════════════════════════
 // QUEUE SETUP
@@ -43,7 +47,7 @@ const statusQueue = new Queue(`${config.queue.prefix}:status`, {
 });
 
 // ═══════════════════════════════════════════════════════════════
-// AI PROCESSING WITH CUGA
+// AI PROCESSING WITH FULL INTEGRATION
 // ═══════════════════════════════════════════════════════════════
 
 interface ProcessingResult {
@@ -58,59 +62,149 @@ interface ProcessingResult {
     latencyMs: number;
     tokensIn: number;
     tokensOut: number;
+    emotionalState: any;
+    intent: any;
   };
 }
 
 /**
- * Process message with CUGA AI Brain — the heart of the tutoring system */
+ * Process message with integrated AI pipeline — the heart of the tutoring system */
 async function processWithAI(
   message: string,
   userId: string,
 ): Promise<ProcessingResult> {
   const timer = new Timer();
 
-  // Step 1: Assemble context from YOUR memory system
+  // Initialize the embedding service
+  const embedder = EmbeddingService.fromEnvironment();
+  await embedder.initializeCentroids?.(); // If available
+
+  // Step 1: Classify intent probabilistically
+  const intentResult = await IntentClassifier.getInstance(embedder).classify(
+    message,
+    [] // conversation history
+  );
+
+  // Step 2: Assess emotional state using VAD model
+  const emotionalState = await EmotionalIntelligence.getInstance(embedder)
+    .assessEmotionalState(message, userId);
+
+  // Step 3: Load conversation history and user profile from memory
   const context = await memory.assembleContext(userId, message);
+  const userProfile = await memory.getUserProfile(userId);
 
-  // Step 2: Analyze complexity MATHEMATICALLY (no hardcoded rules)
-  const complexity = analyzeComplexity(message);
-  const mode = determineReasoningMode(message);
+  // Step 4: Assemble dynamic prompt using attention mechanism
+  const promptResult = await DynamicPromptEngine.getInstance(embedder).assemblePrompt({
+    currentMessage: message,
+    messageEmbedding: (await embedder.embed(message)).embedding,
+    recentTurns: context.recentTurns || [],
+    episodicMemories: context.episodicMemories || [],
+    longTermFacts: context.longTermFacts || [],
+    intentDistribution: intentResult.distribution,
+    emotionalState: [emotionalState.valence, emotionalState.arousal, emotionalState.dominance],
+    userProfile: userProfile || {
+      name: '',
+      subjects: [],
+      learningStyle: 'adaptive',
+      proficiencyVector: {},
+      engagementScore: 0.5,
+      preferences: { 
+        language: 'en', 
+        tone: 'friendly', 
+        complexity: 0.5, 
+        examplePreference: [] 
+      },
+      goals: [],
+      weaknesses: [],
+      strengths: [],
+      recentActivity: { 
+        lastSessionAt: Date.now(), 
+        sessionCount: 1, 
+        avgSatisfaction: 0.8 
+      }
+    },
+    session: {
+      messageCount: context.messageCount || 1,
+      startTime: context.startTime || Date.now(),
+      subjectTrajectory: context.subjectTrajectory || []
+    },
+  });
 
-  logger.info({
+  // Step 5: Select tools based on embedding similarity
+  const tools = await ToolSystem.getInstance(embedder).selectTools(message, {
     userId,
-    complexity: complexity.toFixed(3),
-    mode,
-    messagePreview: message.substring(0, 80),
-  }, 'CUGA complexity analysis');
+    userProfile: userProfile || {},
+    conversationHistory: context.recentTurns || [],
+    intent: intentResult.primaryIntent,
+  });
 
-  // Step 3: Call CUGA AI Brain with full context
-  const cugaResponse = await cugaClient.tutor(message, userId, context, mode);
+  // Step 6: Route to best agent using multi-agent orchestrator
+  const agentResponse = await MultiAgentOrchestrator.getInstance(embedder).route(
+    message,
+    {
+      userProfile: userProfile || {},
+      recentTurns: context.recentTurns || [],
+      intent: intentResult.primaryIntent,
+      intentConfidence: intentResult.confidence,
+      mode: 'balanced',
+    },
+    async (systemPrompt, userMessage, ctx) => {
+      // This function would call your LLM to generate a response
+      // For now, we'll call the CUGA client which may use this prompt internally
+      const cugaResponse = await cugaClient.tutor(userMessage, userId, {
+        systemPrompt,
+        recentTurns: ctx.recentTurns,
+        retrievedMemories: [],
+        userProfile: ctx.userProfile,
+        activeTask: undefined,
+        assemblyMetadata: {
+          durationMs: timer.elapsedMs(),
+          tokensUsed: 0,
+          tokensBudget: 8000,
+          memorySources: { session: 0, episodic: 0, longTerm: 0, procedural: 0 },
+        },
+      });
+
+      return {
+        text: cugaResponse.answer,
+        confidence: cugaResponse.confidence,
+        tokensUsed: {
+          prompt: cugaResponse.tokens_used?.prompt || 0,
+          completion: cugaResponse.tokens_used?.completion || 0
+        },
+        latencyMs: timer.elapsedMs(),
+      };
+    }
+  );
 
   const latencyMs = timer.elapsedMs();
 
-  // Step 4: Record exchange in YOUR memory system
+  // Step 7: Record exchange in memory system
   await memory.recordExchange(
     userId,
     `msg_${Date.now()}`,
     message,
-    cugaResponse.answer,
+    agentResponse.response.text,
     {
-      tokensIn: cugaResponse.tokens_used.prompt,
-      tokensOut: cugaResponse.tokens_used.completion,
+      tokensIn: agentResponse.response.tokensUsed.prompt,
+      tokensOut: agentResponse.response.tokensUsed.completion,
       latencyMs,
+      agentUsed: agentResponse.response.agentName,
+      intent: intentResult.primaryIntent,
+      emotionalState: emotionalState,
     }
   );
 
-  // Step 5: Store learning moment if confidence is high
-  if (cugaResponse.confidence > 0.85 && cugaResponse.routing?.detected_subject) {
+  // Step 8: Store learning moment if confidence is high
+  if (agentResponse.response.confidence > 0.85 && agentResponse.routingDecision) {
     try {
       await memory.storeFact(
         userId,
         'skill',
-        `engagement_${cugaResponse.routing.detected_subject}`,
+        `engagement_${intentResult.primaryIntent}`,
         'active',
-        `Student actively engaged with ${cugaResponse.routing.detected_subject} tutoring via ${cugaResponse.agent_used}`,
-        cugaResponse.confidence,
+        `Student actively engaged with ${intentResult.primaryIntent} tutoring via ${agentResponse.response.agentName}`,
+        agentResponse.response.confidence,
       );
     } catch (e) {
       // Non-critical: don't fail if memory storage fails
@@ -118,7 +212,7 @@ async function processWithAI(
     }
   }
 
-  // Step 6: Track study streak for gamification
+  // Step 9: Track study streak for gamification
   try {
     await memory.storeFact(
       userId,
@@ -133,17 +227,19 @@ async function processWithAI(
   }
 
   return {
-    text: cugaResponse.answer,
+    text: agentResponse.response.text,
     metadata: {
-      agent: cugaResponse.agent_used,
-      subject: cugaResponse.routing?.detected_subject || 'general',
-      tools: cugaResponse.tools_used,
-      confidence: cugaResponse.confidence,
-      mode: cugaResponse.mode,
-      complexity,
+      agent: agentResponse.response.agentName,
+      subject: intentResult.primaryIntent,
+      tools: agentResponse.response.toolsUsed,
+      confidence: agentResponse.response.confidence,
+      mode: 'balanced',
+      complexity: 0.5, // Would come from complexity analysis
       latencyMs,
-      tokensIn: cugaResponse.tokens_used.prompt,
-      tokensOut: cugaResponse.tokens_used.completion,
+      tokensIn: agentResponse.response.tokensUsed.prompt,
+      tokensOut: agentResponse.response.tokensUsed.completion,
+      emotionalState,
+      intent: intentResult,
     },
   };
 }
@@ -235,7 +331,7 @@ async function handleMessage(job: Job<MessageJobData>): Promise<any> {
     userId,
     messagePreview: messageText.substring(0, 60),
     attempt: job.attemptsMade + 1,
-  }, 'Processing message with CUGA AI Brain');
+  }, 'Processing message with integrated AI pipeline');
 
   // Skip non-text messages (images, audio, etc. — handle separately)
   if (event.type !== 'text' || !messageText) {
@@ -247,11 +343,14 @@ async function handleMessage(job: Job<MessageJobData>): Promise<any> {
     // Step 1: Send typing indicator for UX
     await sendTypingIndicator(userId).catch(() => {});
 
-    // Step 2: Process with CUGA AI Brain
+    // Step 2: Process with integrated AI pipeline
     const result = await processWithAI(messageText, userId);
 
-    // Step 3: Format for WhatsApp
-    const whatsappMessage = formatForWhatsApp(result.text);
+    // Step 3: Format for WhatsApp (ensure it's under character limits)
+    let whatsappMessage = result.text;
+    if (whatsappMessage.length > 1024) {
+      whatsappMessage = whatsappMessage.substring(0, 1020) + '...';
+    }
 
     // Step 4: Send response
     await sendWhatsAppMessage({
@@ -268,7 +367,6 @@ async function handleMessage(job: Job<MessageJobData>): Promise<any> {
       subject: result.metadata.subject,
       mode: result.metadata.mode,
       confidence: result.metadata.confidence.toFixed(3),
-      complexity: result.metadata.complexity.toFixed(3),
       latencyMs: result.metadata.latencyMs,
       tokensIn: result.metadata.tokensIn,
       tokensOut: result.metadata.tokensOut,
@@ -284,32 +382,7 @@ async function handleMessage(job: Job<MessageJobData>): Promise<any> {
     };
 
   } catch (error) {
-    // Handle specific error types
-    if (error instanceof CugaError) {
-      logger.error({ jobId: job.id, error: error.message }, 'CUGA error');
-
-      // Send fallback message to user
-      await sendWhatsAppMessage({
-        to: userId,
-        body: "I'm having trouble thinking right now. Let me try again in a moment! 🤔",
-      }).catch(() => {});
-
-      throw error; // Allow BullMQ retry
-    }
-
-    // Network/model errors — send friendly fallback
-    if (error instanceof TypeError && error.message.includes('fetch')) {
-      logger.error({ jobId: job.id }, 'CUGA service unreachable');
-
-      await sendWhatsAppMessage({
-        to: userId,
-        body: "I'm taking a quick break. Back in 30 seconds! ⏳",
-      }).catch(() => {});
-
-      throw error;
-    }
-
-    logger.error({ jobId: job.id, error }, 'Unexpected processing error');
+    logger.error({ jobId: job.id, error }, 'Processing error');
 
     // Last resort: send generic response so user isn't left hanging
     if (job.attemptsMade >= config.queue.maxRetries - 1) {
@@ -360,7 +433,7 @@ export function startMessageWorker(): Worker<MessageJobData> {
     logger.error({ error }, 'Worker error');
   });
 
-  logger.info('Message worker started with CUGA AI Brain');
+  logger.info('Message worker started with integrated AI pipeline');
 
   return worker;
 }
@@ -415,3 +488,4 @@ export function startDLQWorker(): Worker {
 // ═══════════════════════════════════════════════════════════════
 
 export { messageQueue, statusQueue };
+EOF

@@ -5,6 +5,14 @@
 
 import { AssembledContext, SessionTurn, RetrievedMemory } from './memory/types/memory.js';
 
+// NEW IMPORTS — Add at the top of cugaClient.ts
+import { promptEngine } from './prompt-engine/engine.js';
+import { intentClassifier } from './intent/classifier.js';
+import { emotionalIntelligence } from './emotional/intelligence.js';
+import { multiAgentOrchestrator } from './orchestration/multi-agent.js';
+import { toolSystem } from './tools/index.js';
+import { EmbeddingService } from './utils/embedder.js';
+
 // ═══════════════════════════════════════════════════════════════
 // CONFIGURATION
 // ═══════════════════════════════════════════════════════════════
@@ -36,6 +44,19 @@ interface TutorResponse {
     detected_subject: string;
     agent_name: string;
   };
+  emotional_state: {
+    valence: number;
+    arousal: number;
+    dominance: number;
+    category: string;
+    confidence: number;
+  };
+  intent: {
+    primary_intent: string;
+    confidence: number;
+    distribution: Record<string, number>;
+  };
+  latency_ms: number;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -301,3 +322,4 @@ export function formatForWhatsApp(text: string): string {
 // ═══════════════════════════════════════════════════════════════
 
 export const cugaClient = new CugaClient();
+EOF
