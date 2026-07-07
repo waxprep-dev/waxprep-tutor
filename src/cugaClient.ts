@@ -3,7 +3,7 @@
  * Connects YOUR message worker to the CUGA Python service
  */
 
-import { AssembledContext, SessionTurn, RetrievedMemory } from './memory/types/memory.js';
+import { AssembledContext } from './memory/types/memory.js';
 
 // NEW IMPORTS — Add at the top of cugaClient.ts
 import { promptEngine } from './prompt-engine/engine.js';
@@ -26,7 +26,7 @@ interface CugaConfig {
 interface TutorRequest {
   message: string;
   user_id: string;
-  context: Record<string, any>;
+  context: Record<string, unknown>;
   mode: 'fast' | 'balanced' | 'accurate';
 }
 
@@ -66,7 +66,7 @@ interface TutorResponse {
 export class CugaClient {
   private config: CugaConfig;
 
-  constructor(config: Partial<CugaConfig> = {}) {
+  constructor(config?: Partial<CugaConfig>) {
     this.config = {
       baseUrl: process.env.CUGA_SERVICE_URL || 'http://localhost:8000',
       apiKey: process.env.CUGA_API_KEY || '',
@@ -176,7 +176,7 @@ export class CugaClient {
   /**
    * Health check
    */
-  async health(): Promise<{ status: string; version: string; services: any }> {
+  async health(): Promise<{ status: string; version: string; services: Record<string, unknown> }> {
     const response = await fetch(`${this.config.baseUrl}/health`, {
       signal: AbortSignal.timeout(5000),
     });
@@ -202,7 +202,7 @@ export class CugaClient {
       throw new CugaError('Failed to list agents');
     }
 
-    const data = await response.json();
+    const data = await response.json() as { agents: Record<string, { name: string; description: string; specialties: string[] }> };
     return data.agents;
   }
 
@@ -210,15 +210,15 @@ export class CugaClient {
   // PRIVATE HELPERS
   // ═══════════════════════════════════════════════════════════
 
-  private serializeContext(context: AssembledContext): Record<string, any> {
+  private serializeContext(context: AssembledContext): Record<string, unknown> {
     return {
       userProfile: context.userProfile,
-      recentTurns: context.recentTurns.slice(-10).map((turn: SessionTurn) => ({
+      recentTurns: context.recentTurns.slice(-10).map((turn) => ({
         role: turn.role,
         content: turn.content,
         timestamp: turn.timestamp,
       })),
-      retrievedMemories: context.retrievedMemories.map((mem: RetrievedMemory) => ({
+      retrievedMemories: (context.retrievedMemories || []).map((mem) => ({
         content: mem.content,
         type: mem.type,
         similarity: mem.similarity,
@@ -252,7 +252,7 @@ export function analyzeComplexity(message: string): number {
 
   // Mathematical notation detection
   const mathPatterns = [
-    { pattern: /[\^\√∫∑∏∂∇πθ]/g, weight: 0.15 },
+    { pattern: /[\^\√\∫\∑\∏\∂\∇\π\θ]/g, weight: 0.15 },
     { pattern: /[xXyZ][\s]*[=+\-]/g, weight: 0.15 },
     { pattern: /\d+\s*[+\-×÷*/=]/g, weight: 0.1 },
     { pattern: /(solve|prove|derive|integrate|differentiate|calculate|find the)/gi, weight: 0.12 },
@@ -322,4 +322,3 @@ export function formatForWhatsApp(text: string): string {
 // ═══════════════════════════════════════════════════════════════
 
 export const cugaClient = new CugaClient();
-EOF
