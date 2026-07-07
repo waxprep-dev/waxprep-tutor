@@ -1,280 +1,202 @@
 /**
- * Supabase Storage Layer
- * PostgreSQL persistence with upsert semantics for event auditing
+ * Supabase storage implementation for messages and webhook events
  */
-
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { config } from '../config/index.js';
-import { WebhookEvent, MessageEvent, StatusEvent } from '../types/webhook.js';
-import { logDatabaseOperation } from '../utils/logger.js';
-import { Timer } from '../utils/timing.js';
-import { Database } from './database.types.js'; // This will be generated based on your DB schema
+import { logger } from '../utils/logger.js';
+import type { WebhookEvent } from '../types/webhook.js';
+import type { Database } from './database.types.js';
 
-let supabaseClient: SupabaseClient<Database> | null = null;
+type MessageStatusRow = Database['public']['Tables']['message_statuses']['Row'];
+type MessageStatusUpdate = Database['public']['Tables']['message_statuses']['Update'];
 
-export function getSupabaseClient(): SupabaseClient<Database> {
-  if (!supabaseClient) {
-    supabaseClient = createClient<Database>(
-      config.supabase.url,
-      config.supabase.serviceRoleKey,
-      {
-        auth: {
-          autoRefreshToken: true,
-          persistSession: true,
-        },
-        db: {
-          schema: 'public'
-        }
-      }
-    );
+let supabase: SupabaseClient<Database> | null = null;
+
+export function getSupabase(): SupabaseClient<Database> {
+  if (supabase) return supabase;
+
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !key) {
+    throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be configured');
   }
-  return supabaseClient;
+
+  supabase = createClient<Database>(url, key, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+
+  return supabase;
 }
 
-/**
- * Persist an incoming webhook event to the database
- * Uses upsert to handle potential duplicates
- */
-export async function persistEvent(event: WebhookEvent): Promise<boolean> {
-  const timer = new Timer();
-  const client = getSupabaseClient();
+// ------------------------------------------------------------------
+// Conversation operations
+// ------------------------------------------------------------------
 
-  try {
-    const { error } = await client
-      .from('webhook_events')
-      .upsert({
-        id: event.id,
-        event_type: event.type,
-        event_subtype: event.subtype,
-        source_phone: event.sourcePhone,
-        phone_number_id: event.phoneNumberId,
-        timestamp: new Date(event.timestamp * 1000).toISOString(),
-        raw_payload: event.rawPayload,
-        metadata: event.metadata,
-        created_at: new Date().toISOString()
-      }, {
-        onConflict: 'id', // Conflict on the id column
-        ignoreDuplicates: false // Don't ignore, but don't fail either
-      });
+export async function getOrCreateConversation(recipientId: string): Promise<string> {
+  const client = getSupabase();
 
-    if (error) {
-      console.error('Error persisting event:', error);
-      return false;
-    }
+  const { data: existing, error: findErr } = await client
+    .from('conversations')
+    .select('id')
+    .eq('recipient_id', recipientId)
+    .single();
 
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('upsert', 'webhook_events', durationMs, true);
-    return true;
-  } catch (error) {
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('upsert', 'webhook_events', durationMs, false);
-    console.error('Unexpected error persisting event:', error);
-    return false;
+  if (findErr && findErr.code !== 'PGRST116') {
+    logger.error({ err: findErr, recipientId }, 'Error finding conversation');
+    throw findErr;
   }
+
+  if (existing?.id) {
+    return existing.id;
+  }
+
+  const { data: created, error: createErr } = await client
+    .from('conversations')
+    .insert({ recipient_id: recipientId })
+    .select('id')
+    .single();
+
+  if (createErr || !created) {
+    logger.error({ err: createErr, recipientId }, 'Error creating conversation');
+    throw createErr || new Error('Failed to create conversation');
+  }
+
+  return created.id;
 }
 
-/**
- * Mark an event as processed in the database
- */
-export async function markEventProcessed(
-  eventId: string,
-  errorMessage?: string
-): Promise<boolean> {
-  const timer = new Timer();
-  const client = getSupabaseClient();
+export async function recordMessage(
+  conversationId: string,
+  direction: 'inbound' | 'outbound',
+  content: string,
+  metadata?: Record<string, unknown>,
+): Promise<string> {
+  const client = getSupabase();
 
-  try {
-    const { error } = await client
-      .from('webhook_events')
-      .update({
-        processed: true,
-        processed_at: new Date().toISOString(),
-        error_message: errorMessage || null
-      })
-      .eq('id', eventId);
+  const { data, error } = await client
+    .from('messages')
+    .insert({
+      conversation_id: conversationId,
+      direction,
+      content,
+      metadata: metadata ?? {},
+    })
+    .select('id')
+    .single();
 
-    if (error) {
-      console.error('Error marking event as processed:', error);
-      return false;
-    }
-
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('update', 'webhook_events', durationMs, true);
-    return true;
-  } catch (error) {
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('update', 'webhook_events', durationMs, false);
-    console.error('Unexpected error marking event as processed:', error);
-    return false;
+  if (error || !data) {
+    logger.error({ err: error, conversationId }, 'Error recording message');
+    throw error || new Error('Failed to record message');
   }
+
+  return data.id;
 }
 
-/**
- * Update message status in the database
- */
-export async function updateMessageStatus(statusEvent: StatusEvent): Promise<boolean> {
-  const timer = new Timer();
-  const client = getSupabaseClient();
+// ------------------------------------------------------------------
+// Message status tracking
+// ------------------------------------------------------------------
 
-  try {
-    const { error } = await client
-      .from('message_statuses')
-      .upsert({
-        message_id: statusEvent.messageId,
-        current_status: statusEvent.status,
-        recipient_id: statusEvent.recipientId,
-        conversation_id: statusEvent.conversationId || null,
-        pricing_category: statusEvent.pricingCategory || null,
-        updated_at: new Date().toISOString()
-      }, {
-        onConflict: 'message_id',
-        ignoreDuplicates: false
-      });
+// Valid message statuses
+export type MessageDeliveryStatus = 'sent' | 'delivered' | 'read' | 'failed';
 
-    if (error) {
-      console.error('Error updating message status:', error);
-      return false;
-    }
+export async function updateMessageStatus(
+  conversationId: string,
+  status: MessageDeliveryStatus,
+  metadata?: Record<string, unknown>,
+): Promise<void> {
+  const client = getSupabase();
 
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('upsert', 'message_statuses', durationMs, true);
-    return true;
-  } catch (error) {
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('upsert', 'message_statuses', durationMs, false);
-    console.error('Unexpected error updating message status:', error);
-    return false;
+  const update: MessageStatusUpdate = {
+    current_status: status,
+    ...(metadata ? { pricing_category: metadata.pricingCategory as string | undefined } : {}),
+  };
+
+  const { error } = await client
+    .from('message_statuses')
+    .upsert({
+      conversation_id: conversationId,
+      ...update,
+    }, { onConflict: 'conversation_id' });
+
+  if (error) {
+    logger.error({ err: error, conversationId, status }, 'Error updating message status');
+    throw error;
   }
 }
 
-/**
- * Get the current status of a message
- */
-export async function getMessageStatus(messageId: string): Promise<StatusEvent | null> {
-  const timer = new Timer();
-  const client = getSupabaseClient();
+export async function getMessageStatus(conversationId: string): Promise<MessageStatusRow | null> {
+  const client = getSupabase();
 
-  try {
-    const { data, error } = await client
-      .from('message_statuses')
-      .select('*')
-      .eq('message_id', messageId)
-      .single();
+  const { data, error } = await client
+    .from('message_statuses')
+    .select('*')
+    .eq('conversation_id', conversationId)
+    .single();
 
-    if (error) {
-      if (error.code === 'PGRST116') { // No rows returned
-        return null;
-      }
-      console.error('Error getting message status:', error);
-      return null;
-    }
+  if (error) {
+    if (error.code === 'PGRST116') return null;
+    logger.error({ err: error, conversationId }, 'Error getting message status');
+    throw error;
+  }
 
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('select', 'message_statuses', durationMs, true);
-    
-    // Convert the database row to a StatusEvent
-    return {
-      id: `status_${messageId}`,
-      type: 'status',
-      subtype: 'query_result',
-      source: 'database',
-      sourcePhone: '',
-      phoneNumberId: '',
-      timestamp: Date.now(),
-      rawPayload: data,
-      metadata: {},
-      status: data.current_status,
-      messageId: data.message_id,
-      recipientId: data.recipient_id,
-      conversationId: data.conversation_id,
-      pricingCategory: data.pricing_category
-    };
-  } catch (error) {
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('select', 'message_statuses', durationMs, false);
-    console.error('Unexpected error getting message status:', error);
-    return null;
+  return data;
+}
+
+// ------------------------------------------------------------------
+// Webhook events storage
+// ------------------------------------------------------------------
+
+export async function storeWebhookEvents(events: WebhookEvent[]): Promise<void> {
+  const client = getSupabase();
+
+  if (events.length === 0) return;
+
+  const rows = events.map(event => ({
+    id: event.id,
+    type: event.type,
+    subtype: event.subtype,
+    source: event.source,
+    source_phone: event.sourcePhone,
+    phone_number_id: event.phoneNumberId,
+    timestamp: event.timestamp,
+    raw_payload: event.rawPayload as Database['public']['Tables']['webhook_events']['Insert']['raw_payload'],
+    metadata: (event.metadata ?? {}) as Database['public']['Tables']['webhook_events']['Insert']['metadata'],
+  }));
+
+  const { error } = await client
+    .from('webhook_events')
+    .insert(rows);
+
+  if (error) {
+    logger.error({ err: error, count: events.length }, 'Error storing webhook events');
+    throw error;
   }
 }
 
-/**
- * Get unprocessed events for monitoring/recovery
- */
-export async function getUnprocessedEvents(limit: number = 100): Promise<WebhookEvent[]> {
-  const timer = new Timer();
-  const client = getSupabaseClient();
+export async function getRecentEvents(hours: number = 24): Promise<WebhookEvent[]> {
+  const client = getSupabase();
+  const since = new Date(Date.now() - hours * 3600000).toISOString();
 
-  try {
-    const { data, error } = await client
-      .from('webhook_events')
-      .select('*')
-      .is('processed', false)
-      .limit(limit)
-      .order('created_at', { ascending: false });
+  const { data, error } = await client
+    .from('webhook_events')
+    .select('*')
+    .gte('timestamp', since)
+    .order('timestamp', { ascending: false })
+    .limit(1000);
 
-    if (error) {
-      console.error('Error getting unprocessed events:', error);
-      return [];
-    }
-
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('select', 'webhook_events', durationMs, true);
-    
-    // Convert database rows to WebhookEvent objects
-    return data.map(row => ({
-      id: row.id,
-      type: row.event_type,
-      subtype: row.event_subtype,
-      source: 'database_query',
-      sourcePhone: row.source_phone,
-      phoneNumberId: row.phone_number_id,
-      timestamp: Math.floor(new Date(row.timestamp).getTime() / 1000),
-      rawPayload: row.raw_payload,
-      metadata: row.metadata || {}
-    }));
-  } catch (error) {
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('select', 'webhook_events', durationMs, false);
-    console.error('Unexpected error getting unprocessed events:', error);
-    return [];
+  if (error) {
+    logger.error({ err: error }, 'Error getting recent events');
+    throw error;
   }
-}
 
-/**
- * Count total events by type
- */
-export async function countEventsByType(type: string): Promise<number> {
-  const timer = new Timer();
-  const client = getSupabaseClient();
-
-  try {
-    const { count, error } = await client
-      .from('webhook_events')
-      .select('*', { count: 'exact', head: true })
-      .eq('event_type', type);
-
-    if (error) {
-      console.error('Error counting events:', error);
-      return 0;
-    }
-
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('count', 'webhook_events', durationMs, true);
-    return count || 0;
-  } catch (error) {
-    const durationMs = timer.elapsedMs();
-    logDatabaseOperation('count', 'webhook_events', durationMs, false);
-    console.error('Unexpected error counting events:', error);
-    return 0;
-  }
-}
-
-/**
- * Close Supabase client connection
- */
-export async function closeSupabase(): Promise<void> {
-  if (supabaseClient) {
-    // Supabase doesn't have a direct disconnect method
-    // Connections are managed automatically
-  }
+  return (data ?? []).map(row => ({
+    id: row.id,
+    type: row.type,
+    subtype: row.subtype,
+    source: row.source,
+    sourcePhone: row.source_phone,
+    phoneNumberId: row.phone_number_id,
+    timestamp: row.timestamp,
+    rawPayload: row.raw_payload as Record<string, unknown>,
+    metadata: (row.metadata ?? {}) as Record<string, unknown>,
+  }));
 }
