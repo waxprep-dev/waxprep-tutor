@@ -1,217 +1,215 @@
 /**
- * Webhook Server
- * Fastify-based HTTP server with:
- * - Raw body capture for HMAC verification
- * - Sub-100ms response time guarantee
- * - Signature verification before any processing
- * - Immediate queue-and-ack pattern
+ * Fastify webhook server for receiving WhatsApp Cloud API events
  */
-
 import Fastify from 'fastify';
-import rawBody from '@fastify/raw-body';
-import { config } from '../config/index.js';
-import { logger, logWebhookIngress, logSignatureFailure } from '../utils/logger.js';
-import { Timer, withTimeout } from '../utils/timing.js';
-import { verifyWebhookSignature } from '../security/signature.js';
-import { claimEvent, isEventProcessed } from '../storage/idempotency.js';
-import { normalizePayload, validatePayloadStructure } from '../events/normalizer.js';
-import { enqueueEvent, initializeQueues, getQueueMetrics } from '../queue/index.js';
-import { persistEvent } from '../storage/supabase.js';
-import type { WebhookEvent } from '../types/webhook.js';
+import { logger } from '../utils/logger.js';
+import { verifySignature } from '../security/signature.js';
+import { isDuplicate } from '../storage/idempotency.js';
+import { messageQueue, statusQueue } from '../queue/index.js';
+import type { WebhookPayload } from '../types/webhook.js';
+import { getMessageJobOptions } from '../queue/index.js';
 
-const fastify = Fastify({
-  logger: false, // We use our own structured logger
-  trustProxy: true,
-  // Critical: Keep body as raw buffer for signature verification
-  bodyLimit: config.webhook.maxBodySize,
-});
+// ------------------------------------------------------------------
+// 1.  Raw body plugin (inline — avoids @fastify/raw-body dependency)
+// ------------------------------------------------------------------
+import type { FastifyInstance } from 'fastify';
 
-// Register raw body plugin
-await fastify.register(rawBody, {
-  field: 'rawBody',
-  global: true,
-  encoding: 'utf8',
-  runFirst: true,
-});
-
-/**
- * Health check endpoint
- * Render uses this for uptime monitoring
- */
-fastify.get('/health', async () => {
-  const redis = (await import('../storage/idempotency.js')).getRedisClient();
-  const redisHealthy = redis.status === 'ready';
-  
-  return {
-    status: redisHealthy ? 'healthy' : 'degraded',
-    timestamp: Date.now(),
-    version: '1.0.0',
-  };
-});
-
-/**
- * Queue metrics endpoint (protected, for monitoring)
- */
-fastify.get('/metrics/queues', async (request, reply) => {
-  // Simple API key check - enhance as needed
-  const apiKey = request.headers['x-api-key'];
-  if (apiKey !== config.meta.appSecret.substring(0, 32)) {
-    return reply.status(401).send({ error: 'Unauthorized' });
-  }
-  
-  const metrics = await getQueueMetrics();
-  return { metrics, timestamp: Date.now() };
-});
-
-/**
- * Webhook verification endpoint (GET)
- * Meta calls this to verify webhook URL ownership
- */
-fastify.get('/webhook', async (request, reply) => {
-  const query = request.query as Record<string, string>;
-  
-  const mode = query['hub.mode'];
-  const token = query['hub.verify_token'];
-  const challenge = query['hub.challenge'];
-  
-  if (mode !== 'subscribe' || token !== config.meta.verifyToken) {
-    logger.warn({ mode, token: token?.substring(0, 8) }, 'Webhook verification failed');
-    return reply.status(403).send({ error: 'Verification failed' });
-  }
-  
-  logger.info('Webhook verified successfully');
-  return reply.status(200).send(challenge);
-});
-
-/**
- * Webhook event receiver (POST)
- * The critical path: verify -> claim -> queue -> respond < 100ms
- */
-fastify.post('/webhook', {
-  // Ensure we have raw body available
-  config: { rawBody: true },
-}, async (request, reply) => {
-  const timer = new Timer();
-  const sourceIp = request.ip;
-  const signature = request.headers[config.security.signatureHeader] as string | undefined;
-  
-  try {
-    // === STAGE 1: Signature Verification (non-negotiable) ===
-    const rawBody = (request as unknown as { rawBody: Buffer }).rawBody;
-    
-    if (!rawBody) {
-      logger.error('Raw body not available - check middleware order');
-      return reply.status(500).send({ error: 'Server configuration error' });
+async function rawBodyPlugin(fastify: FastifyInstance): Promise<void> {
+  fastify.addContentTypeParser(
+    'application/json',
+    { parseAs: 'buffer' },
+    (_request, body: Buffer, done) => {
+      done(null, body);
     }
-    
-    try {
-      verifyWebhookSignature(signature, rawBody);
-    } catch (sigError) {
-      logSignatureFailure(sourceIp, sigError instanceof Error ? sigError.message : 'Unknown');
-      return reply.status(401).send({ error: 'Invalid signature' });
-    }
-    
-    // === STAGE 2: Parse and Validate ===
-    const payload = request.body as Record<string, unknown>;
-    
-    if (!validatePayloadStructure(payload)) {
-      return reply.status(400).send({ error: 'Invalid payload structure' });
-    }
-    
-    // === STAGE 3: Normalize Events ===
-    const events = normalizePayload(payload);
-    
-    if (events.length === 0) {
-      // Acknowledge even if no events extracted (heartbeat/keepalive)
-      return reply.status(200).send({ received: true, events: 0 });
-    }
-    
-    // === STAGE 4: Process Each Event (parallel where safe) ===
-    const results = await Promise.allSettled(
-      events.map(async (event: WebhookEvent) => {
-        // Check idempotency
-        const { claimed, isDuplicate } = await claimEvent(event.id);
-        
-        if (!claimed) {
-          logWebhookIngress(event.id, event.type, sourceIp, timer.elapsedMs(), true);
-          return { eventId: event.id, queued: false, duplicate: true };
-        }
-        
-        // Persist for audit trail (fire and forget, don't block response)
-        persistEvent(event).catch(err => {
-          logger.error({ eventId: event.id, err }, 'Failed to persist event');
-        });
-        
-        // Enqueue for processing
-        const jobId = await enqueueEvent(event, sourceIp, signature || '');
-        
-        logWebhookIngress(event.id, event.type, sourceIp, timer.elapsedMs(), false);
-        
-        return { eventId: event.id, queued: true, jobId };
-      })
-    );
-    
-    // === STAGE 5: Respond Immediately ===
-    const successful = results.filter(r => r.status === 'fulfilled').length;
-    
-    // Hard limit: respond within timeout budget
-    const elapsed = timer.elapsedMs();
-    if (elapsed > config.webhook.timeoutMs) {
-      logger.warn({ elapsed, timeout: config.webhook.timeoutMs }, 'Webhook response approaching timeout');
-    }
-    
-    return reply.status(200).send({
-      received: true,
-      events: events.length,
-      processed: successful,
-      durationMs: elapsed,
-    });
-    
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    logger.error({ sourceIp, error: errorMessage, elapsed: timer.elapsedMs() }, 'Webhook processing error');
-    
-    // Still return 200 to prevent Meta retries for non-retryable errors
-    // Only return 5xx for actual server errors that need retry
-    return reply.status(200).send({
-      received: true,
-      error: 'Processing queued for retry',
-    });
-  }
-});
-
-/**
- * Graceful shutdown
- */
-async function closeGracefully(signal: string) {
-  logger.info({ signal }, 'Received signal, starting graceful shutdown...');
-  
-  await fastify.close();
-  
-  const { shutdownQueues } = await import('../queue/index.js');
-  await shutdownQueues();
-  
-  const { closeRedis } = await import('../storage/idempotency.js');
-  await closeRedis();
-  
-  logger.info('Shutdown complete');
-  process.exit(0);
+  );
 }
 
-process.on('SIGTERM', () => closeGracefully('SIGTERM'));
-process.on('SIGINT', () => closeGracefully('SIGINT'));
+// ------------------------------------------------------------------
+// 2.  Create server
+// ------------------------------------------------------------------
+export function startServer(): FastifyInstance {
+  const app = Fastify({ logger: false });
 
-// Start server
-export async function startServer() {
-  initializeQueues();
-  
-  await fastify.listen({
-    port: config.server.port,
-    host: '0.0.0.0', // Required for Render
+  void app.register(rawBodyPlugin);
+
+  // ----------------------------------------------------------------
+  // GET /webhook — Meta verification
+  // ----------------------------------------------------------------
+  app.get('/webhook', async (request, reply) => {
+    const query = request.query as Record<string, string>;
+    const mode = query['hub.mode'];
+    const token = query['hub.verify_token'];
+    const challenge = query['hub.challenge'];
+
+    if (mode === 'subscribe' && token === process.env.VERIFY_TOKEN) {
+      logger.info('Webhook verified');
+      return reply.status(200).send(challenge);
+    }
+
+    logger.warn('Webhook verification failed');
+    return reply.status(403).send('Forbidden');
   });
-  
-  logger.info({ port: config.server.port }, 'Webhook server started');
-  return fastify;
+
+  // ----------------------------------------------------------------
+  // POST /webhook — Receive events
+  // ----------------------------------------------------------------
+  app.post('/webhook', async (request, reply) => {
+    const rawBody = request.body as Buffer;
+    const signature = request.headers['x-hub-signature-256'] as string;
+
+    if (!signature) {
+      logger.warn('Missing signature');
+      return reply.status(400).send('Missing signature');
+    }
+
+    try {
+      verifySignature(rawBody.toString(), signature);
+    } catch {
+      logger.warn('Invalid signature');
+      return reply.status(403).send('Invalid signature');
+    }
+
+    let payload: WebhookPayload;
+    try {
+      payload = JSON.parse(rawBody.toString()) as WebhookPayload;
+    } catch {
+      return reply.status(400).send('Invalid JSON');
+    }
+
+    if (!payload.entry || !Array.isArray(payload.entry)) {
+      return reply.status(200).send({ status: 'no_entries' });
+    }
+
+    const events = extractEvents(payload);
+    logger.info({ count: events.length }, 'Received webhook events');
+
+    const results: Array<{ eventId: string; queued: boolean; duplicate?: boolean }> = [];
+
+    for (const event of events) {
+      const dup = await isDuplicate(event.id);
+      if (dup) {
+        results.push({ eventId: event.id, queued: false, duplicate: true });
+        continue;
+      }
+
+      try {
+        if (event.type === 'message') {
+          await messageQueue.add(
+            'process-message',
+            {
+              eventId: event.id,
+              phoneNumberId: event.phoneNumberId,
+              payload: event.rawPayload,
+              timestamp: event.timestamp,
+            },
+            getMessageJobOptions(event.priority ?? 5),
+          );
+        } else if (event.type === 'status') {
+          await statusQueue.add('process-status', {
+            statuses: [{
+              recipientId: event.sourcePhone,
+              status: event.subtype,
+              timestamp: event.timestamp,
+              messageId: event.id,
+            }],
+            phoneNumberId: event.phoneNumberId,
+            timestamp: event.timestamp,
+          });
+        }
+
+        results.push({ eventId: event.id, queued: true });
+      } catch (err) {
+        logger.error({ err, eventId: event.id }, 'Failed to queue event');
+        results.push({ eventId: event.id, queued: false });
+      }
+    }
+
+    return reply.status(200).send({ status: 'processed', results });
+  });
+
+  // ----------------------------------------------------------------
+  // Health check
+  // ----------------------------------------------------------------
+  app.get('/health', async (_request, reply) => {
+    return reply.status(200).send({ status: 'ok', timestamp: new Date().toISOString() });
+  });
+
+  return app;
 }
 
-startServer();
+// ------------------------------------------------------------------
+// 3.  Event extraction from payload
+// ------------------------------------------------------------------
+interface ExtractedEvent {
+  id: string;
+  type: 'message' | 'status';
+  subtype: string;
+  source: string;
+  sourcePhone: string;
+  phoneNumberId: string;
+  timestamp: number;
+  rawPayload: Record<string, unknown>;
+  priority?: number;
+  metadata?: Record<string, unknown>;
+}
+
+function extractEvents(payload: WebhookPayload): ExtractedEvent[] {
+  const events: ExtractedEvent[] = [];
+
+  for (const entry of payload.entry) {
+    for (const change of entry.changes || []) {
+      const value = change.value;
+      if (!value) continue;
+
+      const phoneNumberId = value.metadata?.phone_number_id || 'unknown';
+
+      // Messages
+      if (value.messages) {
+        for (const msg of value.messages) {
+          const isText = msg.type === 'text';
+          const isInteractive = msg.type === 'interactive';
+          const priority = isText ? 5 : isInteractive ? 4 : 3;
+
+          events.push({
+            id: msg.id,
+            type: 'message',
+            subtype: msg.type,
+            source: msg.from,
+            sourcePhone: msg.from,
+            phoneNumberId,
+            timestamp: parseInt(msg.timestamp, 10) * 1000,
+            rawPayload: msg as unknown as Record<string, unknown>,
+            priority,
+            metadata: {
+              messageType: msg.type,
+              hasText: !!msg.text?.body,
+              hasMedia: ['image', 'audio', 'video', 'document'].includes(msg.type),
+            },
+          });
+        }
+      }
+
+      // Statuses
+      if (value.statuses) {
+        for (const status of value.statuses) {
+          events.push({
+            id: status.id,
+            type: 'status',
+            subtype: status.status,
+            source: status.recipient_id,
+            sourcePhone: status.recipient_id,
+            phoneNumberId,
+            timestamp: parseInt(status.timestamp, 10) * 1000,
+            rawPayload: status as unknown as Record<string, unknown>,
+            metadata: {
+              conversationId: status.conversation?.id,
+              pricingCategory: status.pricing?.category,
+            },
+          });
+        }
+      }
+    }
+  }
+
+  return events;
+}
