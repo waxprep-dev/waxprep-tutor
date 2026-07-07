@@ -5,6 +5,7 @@
  * for the CUGA Python service to access your TypeScript memory system.
  */
 
+import type { FastifyInstance } from 'fastify';
 import { startServer } from './webhook/server.js';
 import { startMessageWorker } from './workers/messageWorker.js';
 import { startStatusWorker } from './workers/statusWorker.js';
@@ -19,29 +20,23 @@ async function main() {
   // Start HTTP server (Fastify)
   const server = await startServer();
 
-  // ═══════════════════════════════════════════════════════════════
-  // NEW: Register memory bridge endpoints for CUGA
+  // Register memory bridge endpoints for CUGA
   // These allow the Python CUGA service to access YOUR memory
-  // ═══════════════════════════════════════════════════════════════
   if (process.env.ENABLE_MEMORY_BRIDGE !== 'false') {
     await registerMemoryBridge(server);
     logger.info('Memory-CUGA bridge registered');
   }
 
   // Start all workers
-  const messageWorker = startMessageWorker();
-  const statusWorker = startStatusWorker();
-  const dlqWorker = startDLQWorker();
-  const consolidationWorker = startConsolidationWorker();
+  startMessageWorker();
+  startStatusWorker();
+  startDLQWorker();
+  startConsolidationWorker();
 
-  logger.info('╔══════════════════════════════════════════════════════════════╗');
-  logger.info('║     🧠 WaxPrep AI Tutor with CUGA Brain — ONLINE            ║');
-  logger.info('╠══════════════════════════════════════════════════════════════╣');
-  logger.info('║  Webhook Server:  http://localhost:3000                     ║');
-  logger.info('║  Memory Bridge:   /memory/* endpoints active                ║');
-  logger.info('║  CUGA Service:    Connects to CUGA_SERVICE_URL              ║');
-  logger.info('║  Model Host:      Modal.com (Qwen3.6-35B-A3B)               ║');
-  logger.info('╚══════════════════════════════════════════════════════════════╝');
+  logger.info('WaxPrep AI Tutor with CUGA Brain -- ONLINE');
+  logger.info('Webhook Server:  http://localhost:3000');
+  logger.info('Memory Bridge:   /memory/* endpoints active');
+  logger.info('CUGA Service:    Connects to CUGA_SERVICE_URL');
 
   // Graceful shutdown
   process.on('SIGTERM', () => gracefulShutdown(server, 'SIGTERM'));
@@ -51,13 +46,13 @@ async function main() {
   await new Promise(() => {});
 }
 
-async function gracefulShutdown(server: any, signal: string) {
+async function gracefulShutdown(server: FastifyInstance, signal: string) {
   logger.info({ signal }, 'Shutting down gracefully...');
 
   await server.close();
 
-  const { shutdownQueues } = await import('./queue/index.js');
-  await shutdownQueues();
+  const { closeQueues } = await import('./queue/index.js');
+  await closeQueues();
 
   const { closeRedis } = await import('./storage/idempotency.js');
   await closeRedis();
