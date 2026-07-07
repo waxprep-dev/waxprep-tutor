@@ -4,16 +4,16 @@
  * Balances token budget, relevance, and personalization
  */
 
-import { 
-  AssembledContext, 
-  UserProfile, 
-  SessionMemory, 
-  SessionTurn, 
-  EpisodicMemory, 
-  LongTermMemory, 
+import {
+  AssembledContext,
+  UserProfile,
+  SessionMemory,
+  SessionTurn,
+  EpisodicMemory,
+  LongTermMemory,
   ProceduralMemory,
   RetrievedMemory,
-  TaskState 
+  TaskState
 } from '../types/memory.js';
 import { SessionStorage } from '../interfaces/storage.js';
 import { EpisodicStorage } from '../interfaces/storage.js';
@@ -36,17 +36,17 @@ export interface ContextAssemblyConfig {
   recentTurnsTokens: number;     // For recent conversation (e.g., 3000)
   retrievedMemoryTokens: number; // For retrieved memories (e.g., 2000)
   userProfileTokens: number;     // For user profile (e.g., 1000)
-  
+
   // Retrieval parameters
   maxRecentTurns: number;        // Max turns from current session (e.g., 7)
   maxEpisodicMatches: number;    // Max episodic memories to retrieve (e.g., 3)
   maxLongTermMatches: number;    // Max long-term facts to retrieve (e.g., 5)
   similarityThreshold: number;   // Minimum similarity for retrieval (e.g., 0.7)
-  
+
   // Filtering criteria
   minConfidence: number;         // Minimum confidence for long-term facts (e.g., 0.6)
   includeInactiveRules: boolean; // Whether to include deactivated rules (false)
-  
+
   // Prioritization weights
   recencyWeight: number;         // Weight for temporal proximity (e.g., 0.3)
   relevanceWeight: number;       // Weight for semantic similarity (e.g., 0.5)
@@ -108,25 +108,25 @@ export class ContextAssembler {
     tenantId?: string
   ): Promise<AssembledContext> {
     const timer = new Timer();
-    
+
     // Step 1: Get recent session context
     const recentTurns = await this.getRecentTurns(userId);
-    
+
     // Step 2: Create embedding for current message
     const queryEmbedding = await embedder.embed(currentMessage);
-    
+
     // Step 3: Retrieve relevant episodic memories
     const episodicMemories = await this.retrieveEpisodicMemories(userId, queryEmbedding);
-    
+
     // Step 4: Retrieve relevant long-term memories
     const longTermMemories = await this.retrieveLongTermMemories(userId, queryEmbedding);
-    
+
     // Step 5: Get active procedural rules
     const activeRules = await this.getActiveRules(userId, tenantId);
-    
+
     // Step 6: Build user profile
     const userProfile = await this.buildUserProfile(userId, longTermMemories);
-    
+
     // Step 7: Generate system prompt
     const systemPrompt = await this.generateSystemPrompt(
       userProfile,
@@ -134,10 +134,10 @@ export class ContextAssembler {
       episodicMemories,
       longTermMemories
     );
-    
+
     // Step 8: Create active task context (if applicable)
     const activeTask = await this.getActiveTask(recentTurns);
-    
+
     // Step 9: Package everything
     const assembledContext: AssembledContext = {
       systemPrompt,
@@ -197,7 +197,7 @@ export class ContextAssembler {
     // Estimate token usage and truncate if necessary
     let tokenCount = 0;
     const truncatedTurns: SessionTurn[] = [];
-    
+
     for (const turn of recentTurns.reverse()) { // Start from most recent
       const turnTokens = this.estimateStringTokens(turn.content);
       if (tokenCount + turnTokens > this.config.recentTurnsTokens) {
@@ -214,7 +214,7 @@ export class ContextAssembler {
    * Retrieve relevant episodic memories using vector search
    */
   private async retrieveEpisodicMemories(
-    userId: string, 
+    userId: string,
     queryEmbedding: import('../types/memory.js').VectorEmbedding
   ): Promise<EpisodicMemory[]> {
     try {
@@ -229,7 +229,7 @@ export class ContextAssembler {
       // Calculate actual similarities and filter
       const similarities = searchResults.map(memory => ({
         memory,
-        similarity: memory.vector 
+        similarity: memory.vector
           ? embedder.cosineSimilarity(queryEmbedding.embedding, memory.vector.embedding)
           : 0
       }));
@@ -268,7 +268,7 @@ export class ContextAssembler {
         .filter(memory => memory.metadata.confidence >= this.config.minConfidence)
         .map(memory => ({
           memory,
-          similarity: memory.vector 
+          similarity: memory.vector
             ? embedder.cosineSimilarity(queryEmbedding.embedding, memory.vector.embedding)
             : 0
         }))
@@ -290,7 +290,7 @@ export class ContextAssembler {
     try {
       // Get rules in priority order
       const allRules = await this.proceduralStorage.getByUserId(userId);
-      
+
       // Filter active rules and sort by priority
       return allRules
         .filter(rule => {
@@ -345,7 +345,9 @@ export class ContextAssembler {
       }
       else if (memory.category === 'preference') {
         if (memory.key === 'learning_style') {
-          profile.learningStyle = memory.value as any;
+          const validStyles = ['visual', 'auditory', 'kinesthetic', 'reading'] as const;
+          const style = memory.value as string;
+          profile.learningStyle = validStyles.includes(style as typeof validStyles[number]) ? style as typeof validStyles[number] : 'visual';
         }
         if (memory.key === 'language') {
           profile.preferences.language = memory.value;
@@ -396,34 +398,34 @@ export class ContextAssembler {
 
     // Start with base identity
     promptParts.push("You are Amina, a compassionate and knowledgeable AI tutor from Nigeria.");
-    
+
     // Add user-specific context
     if (userProfile.name) {
       promptParts.push(`The student you're helping is named ${userProfile.name}.`);
     }
-    
+
     if (userProfile.grade) {
       promptParts.push(`They are in ${userProfile.grade} grade.`);
     }
-    
+
     if (userProfile.subjects.length > 0) {
       promptParts.push(`They are studying: ${userProfile.subjects.join(', ')}.`);
     }
-    
+
     // Add learning preferences
     promptParts.push(`Their preferred learning style is ${userProfile.learningStyle}.`);
     promptParts.push(`Use ${userProfile.preferences.language} as the primary language.`);
     promptParts.push(`Maintain a ${userProfile.preferences.tone} tone in your responses.`);
-    
+
     // Add academic context
     if (userProfile.weaknesses.length > 0) {
       promptParts.push(`They struggle with: ${userProfile.weaknesses.join(', ')}. Be patient and provide extra explanation for these topics.`);
     }
-    
+
     if (userProfile.strengths.length > 0) {
       promptParts.push(`Their strengths include: ${userProfile.strengths.join(', ')}. Build on these when possible.`);
     }
-    
+
     // Add current goals
     if (userProfile.goals.length > 0) {
       const activeGoals = userProfile.goals.filter(g => g.status === 'in-progress');
@@ -431,7 +433,7 @@ export class ContextAssembler {
         promptParts.push(`Current goals: ${activeGoals.map(g => g.description).join('; ')}. Help them work toward these objectives.`);
       }
     }
-    
+
     // Add relevant episodic context
     if (episodicMemories.length > 0) {
       promptParts.push("\nPrevious session context:");
@@ -439,19 +441,19 @@ export class ContextAssembler {
         promptParts.push(`- ${episode.summary}`);
       }
     }
-    
+
     // Add important long-term facts
     const importantFacts = longTermMemories
       .filter(m => m.metadata.salience > 0.7) // Only highly salient facts
       .slice(0, 5); // Limit to 5 facts
-    
+
     if (importantFacts.length > 0) {
       promptParts.push("\nImportant facts about this student:");
       for (const fact of importantFacts) {
         promptParts.push(`- ${fact.category}: ${fact.content}`);
       }
     }
-    
+
     // Add procedural rules (safety, compliance, etc.)
     if (activeRules.length > 0) {
       promptParts.push("\nRules for this conversation:");
@@ -459,7 +461,7 @@ export class ContextAssembler {
         promptParts.push(`- ${rule.condition} → ${rule.action} (Priority: ${rule.priority})`);
       }
     }
-    
+
     // Add general guidelines
     promptParts.push("\nGeneral guidelines:");
     promptParts.push("- Be culturally aware of Nigerian educational context");
@@ -470,7 +472,7 @@ export class ContextAssembler {
 
     // Join all parts and ensure it fits within token budget
     let fullPrompt = promptParts.join('\n\n');
-    
+
     // Truncate if necessary
     const maxPromptLength = this.config.systemPromptTokens * 4; // Rough estimate: 4 chars per token
     if (fullPrompt.length > maxPromptLength) {
@@ -487,7 +489,7 @@ export class ContextAssembler {
     // Look for ongoing tasks in recent conversation
     // This is a simplified implementation - could be enhanced with NLP
     const taskKeywords = ['help me with', 'I need to learn', 'teach me', 'how do I', 'can you explain'];
-    
+
     for (const turn of recentTurns.reverse()) {
       const content = turn.content.toLowerCase();
       if (taskKeywords.some(keyword => content.includes(keyword))) {
@@ -503,7 +505,7 @@ export class ContextAssembler {
         };
       }
     }
-    
+
     return undefined;
   }
 
@@ -517,31 +519,25 @@ export class ContextAssembler {
     longTermMemories: LongTermMemory[]
   ): number {
     let total = 0;
-    
+
     // System prompt
     total += this.estimateStringTokens(systemPrompt);
-    
+
     // Recent turns
     for (const turn of recentTurns) {
       total += this.estimateStringTokens(turn.content);
     }
-    
+
     // Episodic memories
     for (const memory of episodicMemories) {
       total += this.estimateStringTokens(memory.summary);
     }
-    
+
     // Long-term memories
     for (const memory of longTermMemories) {
       total += this.estimateStringTokens(memory.content);
     }
-    
-    // User profile
-    total += this.estimateStringTokens(JSON.stringify({
-      name: 'userProfile', // Simplified estimation
-      length: Object.keys(userProfile).length
-    }));
-    
+
     return total;
   }
 
@@ -578,12 +574,12 @@ export async function recordUserTurn(
 ): Promise<void> {
   const sessionStorage = getSessionStorage();
   let session = await sessionStorage.getActiveSession(userId);
-  
+
   if (!session) {
     // Create new session if none exists
     session = await sessionStorage.createSession(userId);
   }
-  
+
   const turn: SessionTurn = {
     id: messageId,
     role: 'user',
@@ -594,7 +590,7 @@ export async function recordUserTurn(
       sentiment: 'neutral' // Could be enhanced with sentiment analysis
     }
   };
-  
+
   await sessionStorage.addTurnToSession(session.sessionId, turn);
 }
 
@@ -612,7 +608,7 @@ export async function recordAssistantTurn(
 ): Promise<void> {
   const sessionStorage = getSessionStorage();
   const session = await sessionStorage.getActiveSession(userId);
-  
+
   if (!session) {
     // Create new session if none exists
     const newSession = await sessionStorage.createSession(userId);
@@ -629,7 +625,7 @@ export async function recordAssistantTurn(
         sentiment: 'neutral'
       }
     };
-    
+
     await sessionStorage.addTurnToSession(session.sessionId, turn);
   }
 }
