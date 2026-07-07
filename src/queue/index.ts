@@ -1,314 +1,204 @@
 /**
- * Queue Management System
- * BullMQ queues with priority, retries, dead-letter support
+ * Unified Queue module
+ * Wraps BullMQ for message and status processing
  */
+import { Queue, Worker, Job, type ConnectionOptions, type JobsOptions } from 'bullmq';
+import type { RedisOptions } from 'ioredis';
+import { logger } from '../utils/logger.js';
 
-import { Queue, Worker, QueueScheduler, Job, QueueEvents, UnrecoverableError } from 'bullmq';
-import { Redis } from 'ioredis';
-import { config } from '../config/index.js';
-import { WebhookJobData } from '../types/queue.js';
-import { WebhookEvent } from '../types/webhook.js';
-import { logEventQueued, logger } from '../utils/logger.js';
-import { Timer } from '../utils/timing.js';
+// ------------------------------------------------------------------
+// 1.  Redis connection options (plain object — compatible with bullmq)
+// ------------------------------------------------------------------
+function buildRedisConnection(): ConnectionOptions {
+  const redisUrl = process.env.REDIS_URL;
+  if (!redisUrl) {
+    throw new Error('REDIS_URL is not configured');
+  }
 
-// Redis connection for BullMQ
-const connection = new Redis(config.redis.url, {
-  password: config.redis.password,
-  db: config.redis.db,
-  maxRetriesPerRequest: 3,
-  retryDelayOnFailover: 100,
+  // Return a RedisOptions object that bullmq's ConnectionOptions accepts
+  const opts: RedisOptions = {
+    maxRetriesPerRequest: null,
+    enableReadyCheck: false,
+  };
+
+  // If the URL contains rediss://, enable TLS
+  if (redisUrl.startsWith('rediss://')) {
+    opts.tls = {};
+  }
+
+  return { ...opts, url: redisUrl } as ConnectionOptions;
+}
+
+// ------------------------------------------------------------------
+// 2.  Job data types
+// ------------------------------------------------------------------
+export interface WebhookJobData {
+  eventId: string;
+  phoneNumberId: string;
+  payload: Record<string, unknown>;
+  timestamp: number;
+  attempts?: number;
+  priority?: number;
+}
+
+export interface StatusJobData {
+  statuses: Array<{
+    recipientId: string;
+    conversationId?: string;
+    status: string;
+    timestamp: number;
+    messageId?: string;
+  }>;
+  phoneNumberId: string;
+  timestamp: number;
+}
+
+export interface DlqRetryData {
+  originalJobId: string;
+  queueName: string;
+  data: WebhookJobData;
+  errorMessage: string;
+  retryCount: number;
+}
+
+// ------------------------------------------------------------------
+// 3.  Queues
+// ------------------------------------------------------------------
+const redisConn = buildRedisConnection();
+
+export const messageQueue = new Queue<WebhookJobData>('messages', {
+  connection: redisConn,
+  defaultJobOptions: {
+    removeOnComplete: { count: 500, age: 86400 },
+    removeOnFail: { count: 200, age: 604800 },
+    attempts: 3,
+    backoff: { type: 'exponential', delay: 1000 },
+    priority: 5,
+  },
 });
 
-// Queues
-let messageQueue: Queue<WebhookJobData>;
-let statusQueue: Queue<WebhookJobData>;
-let dlqQueue: Queue<WebhookJobData>;
+export const statusQueue = new Queue<StatusJobData>('statuses', {
+  connection: redisConn,
+  defaultJobOptions: {
+    removeOnComplete: { count: 500, age: 86400 },
+    removeOnFail: { count: 200, age: 604800 },
+    attempts: 2,
+    backoff: { type: 'fixed', delay: 500 },
+    priority: 3,
+  },
+});
 
-// Schedulers
-let messageQueueScheduler: QueueScheduler;
-let statusQueueScheduler: QueueScheduler;
+export const dlqQueue = new Queue<DlqRetryData>('dlq', {
+  connection: redisConn,
+  defaultJobOptions: {
+    removeOnComplete: { count: 100 },
+    removeOnFail: { count: 500 },
+    attempts: 3,
+    backoff: { type: 'fixed', delay: 5000 },
+  },
+});
 
-export function initializeQueues(): void {
-  // Initialize message queue (for incoming messages)
-  messageQueue = new Queue<WebhookJobData>(`${config.queue.prefix}:messages`, {
-    connection,
-    defaultJobOptions: {
-      attempts: config.queue.maxRetries,
-      backoff: {
-        type: 'exponential',
-        delay: 1000, // Start with 1 second
-      },
-      removeOnComplete: { age: 3600 }, // Remove after 1 hour
-      removeOnFail: { age: 24 * 3600 }, // Remove after 24 hours
-    },
-  });
-
-  // Initialize status queue (for delivery/read receipts)
-  statusQueue = new Queue<WebhookJobData>(`${config.queue.prefix}:statuses`, {
-    connection,
-    defaultJobOptions: {
-      attempts: config.queue.maxRetries,
-      backoff: {
-        type: 'exponential',
-        delay: 1000,
-      },
-      removeOnComplete: { age: 3600 },
-      removeOnFail: { age: 24 * 3600 },
-    },
-  });
-
-  // Initialize dead letter queue (for permanently failed events)
-  dlqQueue = new Queue<WebhookJobData>(`${config.queue.prefix}:dlq`, {
-    connection,
-    defaultJobOptions: {
-      attempts: 1, // DLQ jobs shouldn't retry
-      removeOnComplete: { age: 7 * 24 * 3600 }, // Keep longer for review
-      removeOnFail: { age: 7 * 24 * 3600 },
-    },
-  });
-
-  // Initialize schedulers for delayed jobs
-  messageQueueScheduler = new QueueScheduler(`${config.queue.prefix}:messages`, { connection });
-  statusQueueScheduler = new QueueScheduler(`${config.queue.prefix}:statuses`, { connection });
-
-  logger.info('Queues initialized');
-}
-
-export async function enqueueEvent(
-  event: WebhookEvent,
-  sourceIp: string,
-  signature: string
-): Promise<string> {
-  const timer = new Timer();
-  
-  let queue: Queue<WebhookJobData>;
-  let queueName: string;
-  
-  switch (event.type) {
-    case 'message':
-      queue = messageQueue;
-      queueName = `${config.queue.prefix}:messages`;
-      break;
-    case 'status':
-      queue = statusQueue;
-      queueName = `${config.queue.prefix}:statuses`;
-      break;
-    default:
-      queue = messageQueue; // Default to message queue
-      queueName = `${config.queue.prefix}:messages`;
-  }
-
-  const jobData: WebhookJobData = {
-    event,
-    receivedAt: Date.now(),
-    sourceIp,
-    signature,
-    retryCount: 0,
+// ------------------------------------------------------------------
+// 4.  Job options helpers
+// ------------------------------------------------------------------
+export function getMessageJobOptions(priority: number = 5, delay?: number): JobsOptions {
+  return {
+    priority,
+    delay,
+    attempts: 3,
+    backoff: { type: 'exponential', delay: 1000 },
   };
-
-  // Add priority based on event type and urgency
-  const opts = {
-    priority: event.type === 'message' ? 1 : 2, // Messages have higher priority than status updates
-    // Add rate limiting for Meta's API limits
-    ...(event.type === 'message' && {
-      limiter: {
-        max: 80, // Per phone number per minute (Meta's limit)
-        duration: 60000,
-      }
-    })
-  };
-
-  const job = await queue.add(`event-${event.id}`, jobData, opts);
-  
-  const durationMs = timer.elapsedMs();
-  logEventQueued(event.id, event.type, queueName);
-  
-  logger.info({
-    eventId: event.id,
-    queueName,
-    durationMs
-  }, 'Event enqueued successfully');
-  
-  return job.id;
 }
 
-export async function enqueueEventWithDelay(
-  event: WebhookEvent,
-  sourceIp: string,
-  signature: string,
-  delayMs: number
-): Promise<string> {
-  const jobData: WebhookJobData = {
-    event,
-    receivedAt: Date.now(),
-    sourceIp,
-    signature,
-    retryCount: 0,
-  };
+// ------------------------------------------------------------------
+// 5.  Queue health check
+// ------------------------------------------------------------------
+export async function checkQueueHealth(): Promise<{
+  messages: { waiting: number; active: number; failed: number };
+  statuses: { waiting: number; active: number; failed: number };
+  dlq: { waiting: number; active: number; failed: number };
+}> {
+  const [msgWaiting, msgActive, msgFailed] = await Promise.all([
+    messageQueue.getWaitingCount(),
+    messageQueue.getActiveCount(),
+    messageQueue.getFailedCount(),
+  ]);
 
-  const queue = event.type === 'status' ? statusQueue : messageQueue;
-  const queueName = event.type === 'status' ? 
-    `${config.queue.prefix}:statuses` : 
-    `${config.queue.prefix}:messages`;
+  const [stsWaiting, stsActive, stsFailed] = await Promise.all([
+    statusQueue.getWaitingCount(),
+    statusQueue.getActiveCount(),
+    statusQueue.getFailedCount(),
+  ]);
 
-  const job = await queue.add(
-    `delayed-event-${event.id}`,
-    jobData,
-    { delay: delayMs }
-  );
-
-  logEventQueued(event.id, event.type, queueName);
-  
-  return job.id;
-}
-
-export async function moveToDeadLetter(job: Job<WebhookJobData>, reason: string): Promise<void> {
-  const jobData = job.data;
-  jobData.retryCount = job.attemptsMade;
-  
-  await dlqQueue.add(
-    `dlq-${job.id}`,
-    {
-      ...jobData,
-      event: {
-        ...jobData.event,
-        metadata: {
-          ...jobData.event.metadata,
-          failedAt: Date.now(),
-          failureReason: reason,
-          originalQueue: job.queueName,
-        }
-      }
-    },
-    { attempts: 1 }
-  );
-
-  logger.error({
-    jobId: job.id,
-    eventId: jobData.event.id,
-    reason,
-  }, 'Moved job to dead letter queue');
-}
-
-export async function getQueueMetrics(): Promise<import('../types/queue.js').QueueMetrics> {
-  if (!messageQueue || !statusQueue) {
-    throw new Error('Queues not initialized');
-  }
-
-  const [messageMetrics, statusMetrics, dlqMetrics] = await Promise.all([
-    Promise.all([
-      messageQueue.getWaitingCount(),
-      messageQueue.getActiveCount(),
-      messageQueue.getCompletedCount(),
-      messageQueue.getFailedCount(),
-      messageQueue.getDelayedCount(),
-      messageQueue.getPausedCount(),
-    ]),
-    Promise.all([
-      statusQueue.getWaitingCount(),
-      statusQueue.getActiveCount(),
-      statusQueue.getCompletedCount(),
-      statusQueue.getFailedCount(),
-      statusQueue.getDelayedCount(),
-      statusQueue.getPausedCount(),
-    ]),
-    Promise.all([
-      dlqQueue.getWaitingCount(),
-      dlqQueue.getActiveCount(),
-      dlqQueue.getCompletedCount(),
-      dlqQueue.getFailedCount(),
-      dlqQueue.getDelayedCount(),
-      dlqQueue.getPausedCount(),
-    ]),
+  const [dlqWaiting, dlqActive, dlqFailed] = await Promise.all([
+    dlqQueue.getWaitingCount(),
+    dlqQueue.getActiveCount(),
+    dlqQueue.getFailedCount(),
   ]);
 
   return {
-    waiting: messageMetrics[0] + statusMetrics[0] + dlqMetrics[0],
-    active: messageMetrics[1] + statusMetrics[1] + dlqMetrics[1],
-    completed: messageMetrics[2] + statusMetrics[2] + dlqMetrics[2],
-    failed: messageMetrics[3] + statusMetrics[3] + dlqMetrics[3],
-    delayed: messageMetrics[4] + statusMetrics[4] + dlqMetrics[4],
-    paused: messageMetrics[5] + statusMetrics[5] + dlqMetrics[5],
+    messages: { waiting: msgWaiting, active: msgActive, failed: msgFailed },
+    statuses: { waiting: stsWaiting, active: stsActive, failed: stsFailed },
+    dlq: { waiting: dlqWaiting, active: dlqActive, failed: dlqFailed },
   };
 }
 
-export async function getQueueLength(queueName: string): Promise<number> {
-  switch (queueName) {
-    case 'messages':
-      return await messageQueue.getWaitingCount();
-    case 'statuses':
-      return await statusQueue.getWaitingCount();
-    case 'dlq':
-      return await dlqQueue.getWaitingCount();
-    default:
-      throw new Error(`Unknown queue: ${queueName}`);
+// ------------------------------------------------------------------
+// 6.  Job info
+// ------------------------------------------------------------------
+export async function getJobInfo(jobId: string): Promise<{
+  id: string;
+  state: string;
+  progress: number | object;
+  attemptsMade: number;
+  failedReason: string | undefined;
+} | null> {
+  const job = await messageQueue.getJob(jobId);
+  if (!job) return null;
+
+  const state = await job.getState();
+  return {
+    id: job.id ?? jobId,
+    state,
+    progress: job.progress || 0,
+    attemptsMade: job.attemptsMade,
+    failedReason: job.failedReason ?? undefined,
+  };
+}
+
+// ------------------------------------------------------------------
+// 7.  Wait for completion
+// ------------------------------------------------------------------
+export async function waitForCompletion(jobId: string, timeoutMs: number = 30000): Promise<{
+  success: boolean;
+  result?: unknown;
+  error?: string;
+}> {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    const info = await getJobInfo(jobId);
+    if (!info) return { success: false, error: 'Job not found' };
+    if (info.state === 'completed') return { success: true };
+    if (info.state === 'failed') return { success: false, error: info.failedReason };
+    await new Promise(r => setTimeout(r, 500));
   }
+  return { success: false, error: 'Timeout waiting for job' };
 }
 
-export async function pauseQueue(queueName: string): Promise<void> {
-  switch (queueName) {
-    case 'messages':
-      await messageQueue.pause();
-      break;
-    case 'statuses':
-      await statusQueue.pause();
-      break;
-    case 'dlq':
-      await dlqQueue.pause();
-      break;
-    default:
-      throw new Error(`Unknown queue: ${queueName}`);
-  }
+// ------------------------------------------------------------------
+// 8.  Graceful shutdown
+// ------------------------------------------------------------------
+export async function closeQueues(): Promise<void> {
+  await Promise.all([
+    messageQueue.close(),
+    statusQueue.close(),
+    dlqQueue.close(),
+  ]);
+  logger.info('All queues closed');
 }
 
-export async function resumeQueue(queueName: string): Promise<void> {
-  switch (queueName) {
-    case 'messages':
-      await messageQueue.resume();
-      break;
-    case 'statuses':
-      await statusQueue.resume();
-      break;
-    case 'dlq':
-      await dlqQueue.resume();
-      break;
-    default:
-      throw new Error(`Unknown queue: ${queueName}`);
-  }
-}
-
-export async function cleanQueue(queueName: string, graceMs: number): Promise<void> {
-  const queue = getQueueByName(queueName);
-  await queue.clean(graceMs, 1000); // Clean up to 1000 jobs
-}
-
-function getQueueByName(queueName: string): Queue<WebhookJobData> {
-  switch (queueName) {
-    case 'messages':
-      return messageQueue;
-    case 'statuses':
-      return statusQueue;
-    case 'dlq':
-      return dlqQueue;
-    default:
-      throw new Error(`Unknown queue: ${queueName}`);
-  }
-}
-
-export async function shutdownQueues(): Promise<void> {
-  try {
-    if (messageQueue) await messageQueue.close();
-    if (statusQueue) await statusQueue.close();
-    if (dlqQueue) await dlqQueue.close();
-    if (messageQueueScheduler) await messageQueueScheduler.close();
-    if (statusQueueScheduler) await statusQueueScheduler.close();
-    if (connection) await connection.quit();
-    
-    logger.info('Queues shut down successfully');
-  } catch (error) {
-    logger.error({ error }, 'Error shutting down queues');
-  }
-}
-
-// Export queues for direct access if needed
-export { messageQueue, statusQueue, dlqQueue };
+// ------------------------------------------------------------------
+// 9.  Re-export types
+// ------------------------------------------------------------------
+export { Worker, Job };
+export type { JobsOptions };
