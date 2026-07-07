@@ -11,8 +11,8 @@ export interface WebhookEvent {
   sourcePhone: string;
   phoneNumberId: string;
   timestamp: number;
-  rawPayload: any;
-  metadata: Record<string, any>;
+  rawPayload: Record<string, unknown>;
+  metadata: Record<string, unknown>;
 }
 
 export interface MessageEvent extends WebhookEvent {
@@ -39,7 +39,7 @@ export interface StatusEvent extends WebhookEvent {
     code: number;
     title: string;
     message: string;
-    error_data?: any;
+    error_data?: Record<string, unknown>;
   };
 }
 
@@ -97,9 +97,9 @@ export interface WebhookPayload {
             name?: string;
             address?: string;
           };
-          contacts?: Array<any>;
-          interactive?: any;
-          button?: any;
+          contacts?: Array<Record<string, unknown>>;
+          interactive?: Record<string, unknown>;
+          button?: Record<string, unknown>;
           type: string;
           context?: {
             message_id: string;
@@ -128,7 +128,7 @@ export interface WebhookPayload {
             code: number;
             title: string;
             message: string;
-            error_data?: any;
+            error_data?: Record<string, unknown>;
           }>;
         }>;
       };
