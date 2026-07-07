@@ -6,11 +6,11 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
-import { 
-  ProceduralMemory, 
+import {
+  ProceduralMemory,
   RuleType,
   RuleScope,
-  RuleAuditEntry 
+  RuleAuditEntry
 } from '../types/memory.js';
 import { ProceduralStorage } from '../interfaces/storage.js';
 import { config } from '../../config/index.js';
@@ -44,7 +44,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
     rule: Omit<ProceduralMemory, 'id' | 'createdAt' | 'updatedAt' | 'auditLog'>
   ): Promise<ProceduralMemory> {
     const id = `rule_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
-    
+
     const newRule: ProceduralMemory = {
       ...rule,
       id,
@@ -94,13 +94,13 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
       throw new Error(`Failed to create procedural rule: ${error.message}`);
     }
 
-    logger.info({ 
-      ruleId: id, 
-      ruleType: newRule.ruleType, 
+    logger.info({
+      ruleId: id,
+      ruleType: newRule.ruleType,
       scope: newRule.scope,
       priority: newRule.priority
     }, 'Created procedural rule');
-    
+
     return newRule;
   }
 
@@ -152,8 +152,8 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
    * Get rules by scope (global, tenant, user, session)
    */
   async getByScope(
-    scope: 'global' | 'tenant' | 'user', 
-    userId?: string, 
+    scope: 'global' | 'tenant' | 'user',
+    userId?: string,
     tenantId?: string
   ): Promise<ProceduralMemory[]> {
     let query = this.supabase
@@ -191,7 +191,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
    */
   async getByType(ruleType: string): Promise<ProceduralMemory[]> {
     const now = new Date().toISOString();
-    
+
     const { data, error } = await this.supabase
       .from(this.tableName)
       .select('*')
@@ -237,7 +237,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
       actor: 'system', // This would come from the calling context in a real implementation
       details: { updates, previous: existing }
     };
-    
+
     updatedRule.auditLog = [...existing.auditLog, newAuditEntry];
 
     const { error } = await this.supabase
@@ -261,7 +261,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
     }
 
     logger.info({ id, version: updatedRule.version }, 'Updated procedural rule');
-    
+
     return updatedRule;
   }
 
@@ -270,7 +270,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
    */
   async deactivate(id: string): Promise<ProceduralMemory> {
     const now = new Date();
-    
+
     const updatedRule = await this.update(id, {
       effectiveTo: now.getTime(),
       metadata: {
@@ -280,7 +280,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
     });
 
     logger.info({ id }, 'Deactivated procedural rule');
-    
+
     return updatedRule;
   }
 
@@ -304,9 +304,9 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
   /**
    * Get active rules for a user based on context
    */
-  async getActiveRules(userId: string, context?: any): Promise<ProceduralMemory[]> {
+  async getActiveRules(userId: string, context?: Record<string, unknown>): Promise<ProceduralMemory[]> {
     const now = new Date().toISOString();
-    
+
     // Get all scopes of rules that apply to this user
     const [
       globalRules,
@@ -321,11 +321,11 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
         .lte('effective_from', now)
         .or(`effective_to.is.null, effective_to.gt.${now}`)
         .order('priority', { ascending: false }),
-      
+
       // Tenant rules (apply to all users in tenant)
       // For now, we'll assume no tenant is specified
       Promise.resolve({ data: [], error: null }),
-      
+
       // User-specific rules
       this.supabase
         .from(this.tableName)
@@ -366,7 +366,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
     });
 
     logger.info({ id }, 'Activated procedural rule');
-    
+
     return updatedRule;
   }
 
@@ -412,7 +412,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
   /**
    * Log rule activation
    */
-  async logActivation(ruleId: string, context?: any): Promise<void> {
+  async logActivation(ruleId: string, context?: Record<string, unknown>): Promise<void> {
     const existing = await this.getById(ruleId);
     if (!existing) {
       throw new Error(`Procedural rule not found: ${ruleId}`);
@@ -448,22 +448,22 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
    * Evaluate a condition against context
    * This is a simplified implementation - a full implementation would require a rule engine
    */
-  private evaluateCondition(condition: string, context: any): boolean {
+  private evaluateCondition(condition: string, context: Record<string, unknown>): boolean {
     try {
       // This is a very basic condition evaluator
       // In a real system, you'd want a proper expression parser
       if (condition.includes('user_is_frustrated')) {
-        return context?.user?.sentiment === 'negative';
+        return (context?.user as { sentiment?: string })?.sentiment === 'negative';
       }
       if (condition.includes('session_duration > 30')) {
-        return (context?.session?.duration || 0) > 30;
+        return ((context?.session as { duration?: number })?.duration || 0) > 30;
       }
       if (condition.includes('student_grade === "SS3"')) {
-        return context?.user?.grade === 'SS3';
+        return (context?.user as { grade?: string })?.grade === 'SS3';
       }
-      
+
       // For now, return true if condition contains any matching context
-      return Object.values(context || {}).some(value => 
+      return Object.values(context || {}).some(value =>
         condition.toLowerCase().includes(String(value).toLowerCase())
       );
     } catch (error) {
@@ -475,7 +475,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
   /**
    * Map database row to ProceduralMemory object
    */
-  private mapRowToMemory(row: any): ProceduralMemory {
+  private mapRowToMemory(row: Record<string, unknown>): ProceduralMemory {
     return {
       id: row.id,
       userId: row.user_id,
