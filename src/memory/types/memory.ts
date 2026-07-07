@@ -98,7 +98,7 @@ export interface LongTermMemory extends MemoryBase {
   value: string;
   content: string;
   context?: string;
-  contradictions: string[]; // IDs of conflicting memories
+  contradictions: string[];
   verificationStatus: VerificationStatus;
   vector: VectorEmbedding;
   metadata: MemoryBase['metadata'] & {
@@ -139,7 +139,7 @@ export interface ProceduralMemory extends MemoryBase {
   ruleType: RuleType;
   condition: string;
   action: string;
-  priority: number; // 1-100, higher wins
+  priority: number;
   scope: RuleScope;
   version: number;
   effectiveFrom: number;
@@ -166,7 +166,7 @@ export interface RuleAuditEntry {
   timestamp: number;
   action: 'created' | 'updated' | 'activated' | 'deactivated' | 'triggered';
   actor: string;
-  details?: any;
+  details?: Record<string, unknown>;
 }
 
 // Vector Embedding Types
@@ -177,12 +177,21 @@ export interface VectorEmbedding {
   normalized: boolean;
 }
 
+// Retrieved memory from search
+export interface RetrievedMemory {
+  id: string;
+  type: MemoryLayer;
+  content: string;
+  similarity: number;
+  metadata: Record<string, unknown>;
+}
+
 // Context Assembly Types
 export interface AssembledContext {
-  systemPrompt: string;
+  systemPrompt?: string;
   recentTurns: SessionTurn[];
-  retrievedMemories: RetrievedMemory[];
-  userProfile: UserProfile;
+  retrievedMemories?: RetrievedMemory[];
+  userProfile: UserProfile | Record<string, unknown>;
   activeTask?: TaskState;
   assemblyMetadata: {
     durationMs: number;
@@ -195,14 +204,6 @@ export interface AssembledContext {
       procedural: number;
     };
   };
-}
-
-export interface RetrievedMemory {
-  id: string;
-  type: MemoryLayer;
-  content: string;
-  similarity: number;
-  metadata: any;
 }
 
 export interface UserProfile {
@@ -241,7 +242,7 @@ export interface MemoryQueryParams {
   userId: string;
   tenantId?: string;
   categories?: LongTermMemoryCategory[];
-  dateRange?: [number, number]; // [start, end] in milliseconds
+  dateRange?: [number, number];
   limit?: number;
   confidenceThreshold?: number;
   includeInactive?: boolean;
