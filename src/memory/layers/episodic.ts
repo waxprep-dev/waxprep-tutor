@@ -6,10 +6,10 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
-import { 
-  EpisodicMemory, 
-  SearchParams, 
-  MemoryQueryParams 
+import {
+  EpisodicMemory,
+  SearchParams,
+  MemoryQueryParams
 } from '../types/memory.js';
 import { EpisodicStorage } from '../interfaces/storage.js';
 import { config } from '../../config/index.js';
@@ -44,10 +44,10 @@ export class EpisodicMemoryLayer implements EpisodicStorage {
     memory: Omit<EpisodicMemory, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<EpisodicMemory> {
     const id = `epi_${memory.userId}_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
-    
+
     // Generate embedding for the content
     const embedding = await embedder.embed(memory.content);
-    
+
     const newMemory: EpisodicMemory = {
       ...memory,
       id,
@@ -96,7 +96,7 @@ export class EpisodicMemoryLayer implements EpisodicStorage {
     }
 
     logger.info({ memoryId: id, userId: newMemory.userId }, 'Created episodic memory');
-    
+
     return newMemory;
   }
 
@@ -200,7 +200,7 @@ export class EpisodicMemoryLayer implements EpisodicStorage {
     }
 
     logger.info({ id }, 'Updated episodic memory');
-    
+
     return updatedMemory;
   }
 
@@ -250,10 +250,10 @@ export class EpisodicMemoryLayer implements EpisodicStorage {
       }
     }
 
-    logger.info({ 
-      userId: query.userId, 
-      results: memories.length, 
-      queryLength: query.query.length 
+    logger.info({
+      userId: query.userId,
+      results: memories.length,
+      queryLength: query.query.length
     }, 'Searched episodic memories');
 
     return memories;
@@ -320,12 +320,12 @@ export class EpisodicMemoryLayer implements EpisodicStorage {
 
     // Calculate stats
     const totalCount = memories.length;
-    
+
     const satisfactionSum = memories
       .filter(m => m.satisfactionScore !== undefined)
       .reduce((sum, m) => sum + (m.satisfactionScore || 0), 0);
-    
-    const avgSatisfaction = totalCount > 0 
+
+    const avgSatisfaction = totalCount > 0
       ? satisfactionSum / memories.filter(m => m.satisfactionScore !== undefined).length
       : 0;
 
@@ -356,7 +356,7 @@ export class EpisodicMemoryLayer implements EpisodicStorage {
   /**
    * Map database row to EpisodicMemory object
    */
-  private mapRowToMemory(row: any): EpisodicMemory {
+  private mapRowToMemory(row: Record<string, unknown>): EpisodicMemory {
     return {
       id: row.id,
       userId: row.user_id,
