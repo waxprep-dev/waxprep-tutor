@@ -6,13 +6,13 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
-import { 
-  LongTermMemory, 
-  SearchParams, 
+import {
+  LongTermMemory,
+  SearchParams,
   MemoryQueryParams,
   VerificationStatus,
   LongTermMemoryCategory,
-  LongTermMemoryFactType 
+  LongTermMemoryFactType
 } from '../types/memory.js';
 import { LongTermStorage } from '../interfaces/storage.js';
 import { config } from '../../config/index.js';
@@ -47,10 +47,10 @@ export class LongTermMemoryLayer implements LongTermStorage {
     memory: Omit<LongTermMemory, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<LongTermMemory> {
     const id = `ltm_${memory.userId}_${memory.key}_${Date.now()}`;
-    
+
     // Generate embedding for the content
     const embedding = await embedder.embed(memory.content);
-    
+
     const newMemory: LongTermMemory = {
       ...memory,
       id,
@@ -99,7 +99,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
     }
 
     logger.info({ memoryId: id, userId: newMemory.userId, category: newMemory.category }, 'Created long-term memory');
-    
+
     return newMemory;
   }
 
@@ -243,7 +243,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
     }
 
     logger.info({ id, category: updatedMemory.category }, 'Updated long-term memory');
-    
+
     return updatedMemory;
   }
 
@@ -277,7 +277,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
     });
 
     logger.info({ id }, 'Marked long-term memory as deprecated');
-    
+
     return updatedMemory;
   }
 
@@ -311,11 +311,11 @@ export class LongTermMemoryLayer implements LongTermStorage {
       }
     }
 
-    logger.info({ 
-      userId: query.userId, 
-      results: memories.length, 
+    logger.info({
+      userId: query.userId,
+      results: memories.length,
       queryLength: query.query.length,
-      categories: query.categories 
+      categories: query.categories
     }, 'Searched long-term memories');
 
     return memories;
@@ -390,10 +390,10 @@ export class LongTermMemoryLayer implements LongTermStorage {
       }
     }
 
-    logger.info({ 
-      userId, 
-      key, 
-      contradictionCount: actualContradictions.length 
+    logger.info({
+      userId,
+      key,
+      contradictionCount: actualContradictions.length
     }, 'Found contradictions');
 
     return actualContradictions;
@@ -423,7 +423,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
       if (memory && memory.id !== winnerId) {
         // Add the winner as a contradiction in this memory
         const updatedContradictions = [...memory.contradictions, winnerId];
-        
+
         await this.update(memory.id, {
           contradictions: updatedContradictions,
           verificationStatus: 'disputed',
@@ -440,7 +440,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
     if (winner) {
       const loserIds = memoryIds.filter(id => id !== winnerId);
       const updatedContradictions = [...winner.contradictions, ...loserIds];
-      
+
       await this.update(winnerId, {
         contradictions: updatedContradictions,
         verificationStatus: 'verified', // Winner is now verified
@@ -451,10 +451,10 @@ export class LongTermMemoryLayer implements LongTermStorage {
       });
     }
 
-    logger.info({ 
-      userId, 
-      resolvedIds: memoryIds, 
-      winnerId 
+    logger.info({
+      userId,
+      resolvedIds: memoryIds,
+      winnerId
     }, 'Resolved contradictions');
   }
 
@@ -468,7 +468,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
       try {
         // Check if a memory with the same user and key already exists
         const existing = await this.getByKey(memory.userId, memory.key);
-        
+
         if (existing) {
           // Update existing memory
           const updated = await this.update(existing.id, {
@@ -491,7 +491,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
     }
 
     logger.info({ upsertedCount: results.length }, 'Bulk upserted long-term memories');
-    
+
     return results;
   }
 
@@ -512,7 +512,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
     }
 
     logger.info({ updatedCount: results.length }, 'Bulk updated long-term memories');
-    
+
     return results;
   }
 
@@ -537,7 +537,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
   /**
    * Map database row to LongTermMemory object
    */
-  private mapRowToMemory(row: any): LongTermMemory {
+  private mapRowToMemory(row: Record<string, unknown>): LongTermMemory {
     return {
       id: row.id,
       userId: row.user_id,
