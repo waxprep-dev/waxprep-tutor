@@ -62,7 +62,11 @@ export class EpisodicMemoryLayer implements EpisodicStorage {
         confidence: memory.metadata.confidence ?? 0.8,
         salience: memory.metadata.salience ?? 0.5,
         source: memory.metadata.source ?? 'session_consolidation',
-        tags: memory.metadata.tags ?? ['episodic']
+        tags: memory.metadata.tags ?? ['episodic'],
+        sessionDuration: memory.metadata.sessionDuration ?? 0,
+        turnCount: memory.metadata.turnCount ?? 0,
+        topicCoverage: memory.metadata.topicCoverage ?? [],
+        difficultyLevel: memory.metadata.difficultyLevel ?? 0.5,
       },
       vector: embedding
     };
@@ -358,37 +362,54 @@ export class EpisodicMemoryLayer implements EpisodicStorage {
    */
   private mapRowToMemory(row: Record<string, unknown>): EpisodicMemory {
     return {
-      id: row.id,
-      userId: row.user_id,
-      tenantId: row.tenant_id,
+      id: row.id as string,
+      userId: row.user_id as string,
+      tenantId: row.tenant_id as string | undefined,
       layer: 'episodic',
-      sessionId: row.session_id,
-      content: row.content,
-      summary: row.summary,
-      keyOutcomes: row.key_outcomes || [],
-      openItems: row.open_items || [],
-      userGoals: row.user_goals || [],
-      aiActions: row.ai_actions || [],
-      durationMs: row.duration_ms,
-      turnCount: row.turn_count,
-      satisfactionScore: row.satisfaction_score,
+      sessionId: row.session_id as string,
+      content: row.content as string,
+      summary: row.summary as string,
+      keyOutcomes: (row.key_outcomes as string[]) || [],
+      openItems: (row.open_items as string[]) || [],
+      userGoals: (row.user_goals as string[]) || [],
+      aiActions: (row.ai_actions as string[]) || [],
+      durationMs: row.duration_ms as number | undefined,
+      turnCount: row.turn_count as number | undefined,
+      satisfactionScore: row.satisfaction_score as number | undefined,
       vector: {
-        embedding: row.embedding,
-        model: 'supabase-pgvector', // This would come from a config in a real implementation
-        dimensions: row.embedding ? row.embedding.length : 0,
+        embedding: row.embedding as number[],
+        model: 'supabase-pgvector',
+        dimensions: (row.embedding as number[])?.length || 0,
         normalized: true
       },
-      createdAt: new Date(row.created_at).getTime(),
-      updatedAt: new Date(row.updated_at).getTime(),
-      metadata: row.metadata || {
-        createdAt: new Date(row.created_at).getTime(),
-        updatedAt: new Date(row.updated_at).getTime(),
+      createdAt: new Date(row.created_at as string).getTime(),
+      updatedAt: new Date(row.updated_at as string).getTime(),
+      metadata: (row.metadata as {
+        createdAt: number;
+        updatedAt: number;
+        accessCount: number;
+        lastAccessedAt: number;
+        confidence: number;
+        salience: number;
+        source: string;
+        tags: string[];
+        sessionDuration: number;
+        turnCount: number;
+        topicCoverage: string[];
+        difficultyLevel: number;
+      }) || {
+        createdAt: new Date(row.created_at as string).getTime(),
+        updatedAt: new Date(row.updated_at as string).getTime(),
         accessCount: 0,
-        lastAccessedAt: new Date(row.last_accessed_at || row.created_at).getTime(),
+        lastAccessedAt: new Date((row.last_accessed_at || row.created_at) as string).getTime(),
         confidence: 0.8,
         salience: 0.5,
         source: 'database',
-        tags: ['episodic']
+        tags: ['episodic'],
+        sessionDuration: 0,
+        turnCount: 0,
+        topicCoverage: [],
+        difficultyLevel: 0.5,
       }
     };
   }
