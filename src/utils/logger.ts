@@ -1,13 +1,14 @@
 /**
  * Structured logging with Pino
  */
-import pino from 'pino';
+import pkg from 'pino';
+const pino = pkg.default || pkg;
 
-let loggerInstance: ReturnType<typeof pino>;
+let loggerInstance: any;
 
 export const logLevel: string = process.env.LOG_LEVEL || 'info';
 
-export function getLogger(): ReturnType<typeof pino> {
+export function getLogger(): any {
   if (!loggerInstance) {
     loggerInstance = pino({
       level: logLevel,
