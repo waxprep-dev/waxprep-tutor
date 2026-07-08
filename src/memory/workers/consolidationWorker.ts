@@ -276,7 +276,7 @@ export class ConsolidationWorker {
     logger.info({
       userId,
       sessionId,
-      episodicMemoryId: createdEpisodic.id ?? "unknown",
+      episodicMemoryId: createdEpisodic.id || "unknown",
       factsExtracted: facts.length
     }, 'Session consolidated successfully');
   }
