@@ -211,7 +211,7 @@ export interface UserProfile {
   name?: string;
   grade?: string;
   subjects?: string[];
-  learningStyle?: 'visual' | 'auditory' | 'kinesthetic' | 'reading';
+  learningStyle?: 'visual' | 'auditory' | 'kinesthetic' | 'reading' | 'adaptive';
   preferences: {
     language: string;
     tone: string;

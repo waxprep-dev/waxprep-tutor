@@ -355,20 +355,21 @@ export class ContextAssembler {
         if (memory.key === 'tone') {
           profile.preferences.tone = memory.value;
         }
+        // Handle preference-based weaknesses and strengths
+        if (memory.key === 'weakness') {
+          if (!profile.weaknesses.includes(memory.value)) {
+            profile.weaknesses.push(memory.value);
+          }
+        }
+        if (memory.key === 'strength') {
+          if (!profile.strengths.includes(memory.value)) {
+            profile.strengths.push(memory.value);
+          }
+        }
       }
       else if (memory.category === 'skill' || memory.category === 'knowledge') {
-      if (profile.subjects && !profile.subjects.includes(memory.value)) {
-        profile.subjects.push(memory.value);
-        }
-      }
-      else if (memory.category === 'preference') {
-        if (!profile.weaknesses.includes(memory.value)) {
-          profile.weaknesses.push(memory.value);
-        }
-      }
-      else if (memory.category === 'preference') {
-        if (!profile.strengths.includes(memory.value)) {
-          profile.strengths.push(memory.value);
+        if (profile.subjects && !profile.subjects.includes(memory.value)) {
+          profile.subjects.push(memory.value);
         }
       }
       else if (memory.category === 'goal') {

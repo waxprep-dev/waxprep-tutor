@@ -10,6 +10,7 @@ import { logger } from '../utils/logger.js';
 import { memory } from '../memory/index.js';
 import { Timer } from '../utils/timing.js';
 import type { WebhookEvent, MessageEvent } from '../types/webhook.js';
+import type { SessionTurn } from '../memory/types/memory.js';
 
 // Import the new modules
 import { EmbeddingService } from '../utils/embedder.js';
@@ -66,6 +67,31 @@ interface ProcessingResult {
   };
 }
 
+// Type for the prompt engine profile (inferred from usage)
+type LearningStyle = 'visual' | 'auditory' | 'kinesthetic' | 'reading' | 'adaptive';
+
+interface PromptEngineUserProfile {
+  name: string;
+  subjects: string[];
+  learningStyle: LearningStyle;
+  proficiencyVector: Record<string, number>;
+  engagementScore: number;
+  preferences: {
+    language: string;
+    tone: string;
+    complexity: number;
+    examplePreference: string[];
+  };
+  goals: Array<{ id: string; description: string; progress: number; priority: number; status: string }>;
+  weaknesses: string[];
+  strengths: string[];
+  recentActivity: {
+    lastSessionAt: number;
+    sessionCount: number;
+    avgSatisfaction: number;
+  };
+}
+
 /**
  * Process message with integrated AI pipeline — the heart of the tutoring system */
 async function processWithAI(
@@ -91,12 +117,21 @@ async function processWithAI(
   const context = await memory.assembleContext(userId, message);
   const userProfile = await memory.getUserProfile(userId);
 
+  // Helper to validate learning style
+  const validLearningStyles: LearningStyle[] = ['visual', 'auditory', 'kinesthetic', 'reading', 'adaptive'];
+  const normalizeLearningStyle = (style: unknown): LearningStyle => {
+    if (typeof style === 'string' && validLearningStyles.includes(style as LearningStyle)) {
+      return style as LearningStyle;
+    }
+    return 'adaptive';
+  };
+
   // Convert userProfile to a plain object for compatibility
-  const profileObj = userProfile && typeof userProfile === 'object' && 'id' in userProfile
+  const profileObj: PromptEngineUserProfile = userProfile && typeof userProfile === 'object' && 'id' in userProfile
     ? {
         name: (userProfile as { name?: string }).name || '',
         subjects: (userProfile as { subjects?: string[] }).subjects || [],
-        learningStyle: (userProfile as { learningStyle?: string }).learningStyle || 'adaptive',
+        learningStyle: normalizeLearningStyle((userProfile as { learningStyle?: string }).learningStyle),
         proficiencyVector: (userProfile as { proficiencyVector?: Record<string, number> }).proficiencyVector || {},
         engagementScore: (userProfile as { engagementScore?: number }).engagementScore || 0.5,
         preferences: (userProfile as { preferences?: { language: string; tone: string; complexity: number; examplePreference: string[] } }).preferences || {
@@ -117,7 +152,7 @@ async function processWithAI(
     : {
         name: '',
         subjects: [],
-        learningStyle: 'adaptive' as const as const,
+        learningStyle: 'adaptive',
         proficiencyVector: {},
         engagementScore: 0.5,
         preferences: {
@@ -178,9 +213,14 @@ async function processWithAI(
     ) => {
       // This function would call your LLM to generate a response
       // For now, we'll call the CUGA client which may use this prompt internally
+      const recentTurnsForCuga = (ctx.recentTurns as SessionTurn[] || []).map((turn: SessionTurn) => ({
+        role: turn.role,
+        content: turn.content,
+      }));
+
       const cugaResponse = await cugaClient.tutor(userMessage, userId, {
         systemPrompt,
-        recentTurns: ctx.recentTurns as Array<{ role: string; content: string }>,
+        recentTurns: recentTurnsForCuga,
         retrievedMemories: [],
         userProfile: ctx.userProfile as Record<string, unknown>,
         activeTask: undefined,
