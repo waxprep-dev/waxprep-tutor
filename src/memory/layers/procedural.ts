@@ -65,7 +65,9 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
         confidence: rule.metadata?.confidence ?? 1.0,
         salience: rule.metadata?.salience ?? 1.0,
         source: rule.metadata?.source ?? 'system_derived',
-        tags: rule.metadata?.tags ?? [rule.ruleType, rule.scope]
+        tags: rule.metadata?.tags ?? [rule.ruleType, rule.scope],
+        activationCount: rule.metadata?.activationCount ?? 0,
+        lastActivation: rule.metadata?.lastActivation ?? Date.now(),
       }
     };
 
@@ -137,7 +139,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
       .from(this.tableName)
       .select('*')
       .eq('user_id', userId)
-      .order('priority', { ascending: false }) // Higher priority first
+      .order('priority', { ascending: false })
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -162,7 +164,6 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
       .eq('scope', scope)
       .order('priority', { ascending: false });
 
-    // Apply scope-specific filters
     if (scope === 'user' && userId) {
       query = query.eq('user_id', userId);
     } else if (scope === 'tenant' && tenantId) {
@@ -171,7 +172,6 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
       query = query.is('user_id', null).is('tenant_id', null);
     }
 
-    // Filter for currently effective rules
     const now = new Date().toISOString();
     query = query.lte('effective_from', now);
     query = query.or(`effective_to.is.null, effective_to.gt.${now}`);
@@ -217,12 +217,11 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
       throw new Error(`Procedural rule not found: ${id}`);
     }
 
-    // Merge updates with existing data
     const updatedRule: ProceduralMemory = {
       ...existing,
       ...updates,
       updatedAt: Date.now(),
-      version: updates.version ?? existing.version + 1, // Increment version if not specified
+      version: updates.version ?? existing.version + 1,
       metadata: {
         ...existing.metadata,
         ...updates.metadata,
@@ -230,11 +229,10 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
       }
     };
 
-    // Add audit log entry
     const newAuditEntry: RuleAuditEntry = {
       timestamp: Date.now(),
       action: 'updated',
-      actor: 'system', // This would come from the calling context in a real implementation
+      actor: 'system',
       details: { updates, previous: existing }
     };
 
@@ -269,19 +267,18 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
    * Deactivate a rule (set effective_to to now)
    */
   async deactivate(id: string): Promise<ProceduralMemory> {
-    const now = new Date();
+    const existing = await this.getById(id);
+    if (!existing) {
+      throw new Error(`Procedural rule not found: ${id}`);
+    }
 
-    const updatedRule = await this.update(id, {
-      effectiveTo: now.getTime(),
+    return this.update(id, {
+      effectiveTo: Date.now(),
       metadata: {
-        ...this.getById(id)?.metadata,
+        ...existing.metadata,
         updatedAt: Date.now()
       }
     });
-
-    logger.info({ id }, 'Deactivated procedural rule');
-
-    return updatedRule;
   }
 
   /**
@@ -307,13 +304,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
   async getActiveRules(userId: string, context?: Record<string, unknown>): Promise<ProceduralMemory[]> {
     const now = new Date().toISOString();
 
-    // Get all scopes of rules that apply to this user
-    const [
-      globalRules,
-      tenantRules,
-      userRules
-    ] = await Promise.all([
-      // Global rules (apply to everyone)
+    const [globalRules, tenantRules, userRules] = await Promise.all([
       this.supabase
         .from(this.tableName)
         .select('*')
@@ -321,12 +312,7 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
         .lte('effective_from', now)
         .or(`effective_to.is.null, effective_to.gt.${now}`)
         .order('priority', { ascending: false }),
-
-      // Tenant rules (apply to all users in tenant)
-      // For now, we'll assume no tenant is specified
       Promise.resolve({ data: [], error: null }),
-
-      // User-specific rules
       this.supabase
         .from(this.tableName)
         .select('*')
@@ -336,20 +322,17 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
         .order('priority', { ascending: false })
     ]);
 
-    // Combine all rules and sort by priority
     const allRules = [
       ...(globalRules.data || []),
       ...(tenantRules.data || []),
       ...(userRules.data || [])
     ];
 
-    // Filter by condition if context is provided
     let filteredRules = allRules;
     if (context) {
       filteredRules = allRules.filter(rule => this.evaluateCondition(rule.condition, context));
     }
 
-    // Convert to ProceduralMemory objects and return
     return filteredRules.map(row => this.mapRowToMemory(row));
   }
 
@@ -357,17 +340,18 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
    * Activate a rule (set effective_to to null if previously deactivated)
    */
   async activateRule(id: string): Promise<ProceduralMemory> {
-    const updatedRule = await this.update(id, {
-      effectiveTo: undefined, // Remove deactivation date
+    const existing = await this.getById(id);
+    if (!existing) {
+      throw new Error(`Procedural rule not found: ${id}`);
+    }
+
+    return this.update(id, {
+      effectiveTo: undefined,
       metadata: {
-        ...this.getById(id)?.metadata,
+        ...existing.metadata,
         updatedAt: Date.now()
       }
     });
-
-    logger.info({ id }, 'Activated procedural rule');
-
-    return updatedRule;
   }
 
   /**
@@ -379,11 +363,10 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
       throw new Error(`Procedural rule not found: ${id}`);
     }
 
-    // Update metadata to increment activation count
     const updatedMetadata = {
       ...existing.metadata,
-      accessCount: existing.metadata.accessCount + 1,
-      lastAccessedAt: Date.now(),
+      activationCount: (existing.metadata.activationCount || 0) + 1,
+      lastActivation: Date.now(),
       updatedAt: Date.now()
     };
 
@@ -440,18 +423,14 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
       throw new Error(`Failed to log rule activation: ${error.message}`);
     }
 
-    // Also increment activation counter
     await this.incrementActivation(ruleId);
   }
 
   /**
    * Evaluate a condition against context
-   * This is a simplified implementation - a full implementation would require a rule engine
    */
   private evaluateCondition(condition: string, context: Record<string, unknown>): boolean {
     try {
-      // This is a very basic condition evaluator
-      // In a real system, you'd want a proper expression parser
       if (condition.includes('user_is_frustrated')) {
         return (context?.user as { sentiment?: string })?.sentiment === 'negative';
       }
@@ -462,13 +441,12 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
         return (context?.user as { grade?: string })?.grade === 'SS3';
       }
 
-      // For now, return true if condition contains any matching context
       return Object.values(context || {}).some(value =>
         condition.toLowerCase().includes(String(value).toLowerCase())
       );
     } catch (error) {
       logger.warn({ error, condition, context }, 'Failed to evaluate condition');
-      return false; // Fail safe
+      return false;
     }
   }
 
@@ -477,22 +455,33 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
    */
   private mapRowToMemory(row: Record<string, unknown>): ProceduralMemory {
     return {
-      id: row.id,
-      userId: row.user_id,
-      tenantId: row.tenant_id,
+      id: row.id as string,
+      userId: row.user_id as string,
+      tenantId: row.tenant_id as string | undefined,
       layer: 'procedural',
       ruleType: row.rule_type as RuleType,
-      condition: row.condition,
-      action: row.action,
-      priority: row.priority,
+      condition: row.condition as string,
+      action: row.action as string,
+      priority: row.priority as number,
       scope: row.scope as RuleScope,
-      version: row.version,
+      version: row.version as number,
       effectiveFrom: new Date(row.effective_from as string).getTime(),
       effectiveTo: row.effective_to ? new Date(row.effective_to as string).getTime() : undefined,
-      auditLog: row.audit_log || [],
+      auditLog: (row.audit_log as RuleAuditEntry[]) || [],
       createdAt: new Date(row.created_at as string).getTime(),
       updatedAt: new Date(row.updated_at as string).getTime(),
-      metadata: row.metadata || {
+      metadata: (row.metadata as {
+        createdAt: number;
+        updatedAt: number;
+        accessCount: number;
+        lastAccessedAt: number;
+        confidence: number;
+        salience: number;
+        source: string;
+        tags: string[];
+        activationCount: number;
+        lastActivation: number;
+      }) || {
         createdAt: new Date(row.created_at as string).getTime(),
         updatedAt: new Date(row.updated_at as string).getTime(),
         accessCount: 0,
@@ -500,7 +489,9 @@ export class ProceduralMemoryLayer implements ProceduralStorage {
         confidence: 1.0,
         salience: 1.0,
         source: 'database',
-        tags: [row.rule_type, row.scope]
+        tags: [row.rule_type as string, row.scope as string],
+        activationCount: 0,
+        lastActivation: Date.now(),
       }
     };
   }
