@@ -317,7 +317,7 @@ export class ConsolidationWorker {
       delay
     }, 'Consolidation job queued');
 
-    return job.id;
+    return job.id ?? "unknown";
   }
 
   /**
