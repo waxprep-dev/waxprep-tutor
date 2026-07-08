@@ -213,11 +213,6 @@ async function processWithAI(
     ) => {
       // This function would call your LLM to generate a response
       // For now, we'll call the CUGA client which may use this prompt internally
-      const recentTurnsForCuga = (ctx.recentTurns as SessionTurn[] || []).map((turn: SessionTurn) => ({ id: turn.id || `turn_${Date.now()}`, role: turn.role, content: turn.content, timestamp: turn.timestamp || Date.now() }));
-        role: turn.role,
-        content: turn.content,
-      }));
-
       const cugaResponse = await cugaClient.tutor(userMessage, userId, {
         systemPrompt,
         recentTurns: recentTurnsForCuga,
