@@ -6,7 +6,7 @@
 
 import { VectorEmbedding } from '../types/memory.js';
 import { config } from '../../config/index.js';
-import { getRedisClient } from '../../storage/idempotency.js';
+import { getRedis } from '../../storage/idempotency.js';
 import { logger } from '../../utils/logger.js';
 
 export interface EmbeddingProvider {
@@ -55,9 +55,9 @@ export class EmbeddingService {
 
     // Generate new embedding
     logger.info({ cacheHit: false, textLength: text.length }, 'Generating new embedding');
-    
+
     const embedding = await this.provider.embed(text);
-    
+
     // Cache the result
     await this.setCachedEmbedding(cacheKey, embedding);
 
@@ -74,11 +74,11 @@ export class EmbeddingService {
    */
   async embedBatch(texts: string[]): Promise<VectorEmbedding[]> {
     const results: VectorEmbedding[] = [];
-    
+
     for (const text of texts) {
       results.push(await this.embed(text));
     }
-    
+
     return results;
   }
 
@@ -125,9 +125,9 @@ export class EmbeddingService {
 
   private async getCachedEmbedding(cacheKey: string): Promise<VectorEmbedding | null> {
     try {
-      const redis = getRedisClient();
+      const redis = getRedis();
       const cached = await redis.get(cacheKey);
-      
+
       if (cached) {
         const parsed = JSON.parse(cached);
         return {
@@ -140,20 +140,20 @@ export class EmbeddingService {
     } catch (error) {
       logger.warn({ error, cacheKey }, 'Failed to get cached embedding');
     }
-    
+
     return null;
   }
 
   private async setCachedEmbedding(cacheKey: string, embedding: number[]): Promise<void> {
     try {
-      const redis = getRedisClient();
+      const redis = getRedis();
       const cacheData = {
         embedding,
         model: this.provider.getModelName(),
         dimensions: this.provider.getDimensions(),
         normalized: true,
       };
-      
+
       await redis.setex(cacheKey, this.cacheTTL, JSON.stringify(cacheData));
     } catch (error) {
       logger.warn({ error, cacheKey }, 'Failed to cache embedding');
@@ -165,16 +165,16 @@ export class EmbeddingService {
    */
   async clearCache(): Promise<void> {
     try {
-      const redis = getRedisClient();
+      const redis = getRedis();
       // Use SCAN to find all embedding cache keys
       const pattern = `${this.cachePrefix}:*`;
       const stream = redis.scanStream({ match: pattern });
-      
+
       const keys: string[] = [];
       for await (const chunk of stream) {
         keys.push(...chunk);
       }
-      
+
       if (keys.length > 0) {
         await redis.del(keys);
         logger.info({ keysCleared: keys.length }, 'Cleared embedding cache');
@@ -198,7 +198,7 @@ class PlaceholderEmbeddingProvider implements EmbeddingProvider {
     // based on the text content for consistency in testing
     const crypto = await import('crypto');
     const hash = crypto.createHash('md5').update(text).digest('hex');
-    
+
     // Convert hash to array of numbers in [-1, 1] range
     const embedding: number[] = [];
     for (let i = 0; i < this.dimensions; i++) {
@@ -208,7 +208,7 @@ class PlaceholderEmbeddingProvider implements EmbeddingProvider {
       const value = (parseInt(bytePair, 16) / 255) * 2 - 1; // Scale to [-1, 1]
       embedding.push(value);
     }
-    
+
     return embedding;
   }
 
