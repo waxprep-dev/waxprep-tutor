@@ -1,9 +1,9 @@
 /**
  * Structured logging with Pino
  */
-import pino, { Logger as PinoLogger } from 'pino';
+import pino from 'pino';
 
-export let logger: PinoLogger;
+export let logger: pino.Logger;
 
 // Keep this var for legacy code that reads logLevel
 export const logLevel: string = process.env.LOG_LEVEL || 'info';
