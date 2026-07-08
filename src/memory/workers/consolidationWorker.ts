@@ -307,17 +307,12 @@ export class ConsolidationWorker {
       backoff: {
         type: 'exponential',
         delay: 1000,
-      },
-    });
-
-      sessionId: sessionId ?? "unknown",
+    logger.info({
       jobId: job.id,
-      sessionId,
+      sessionId: sessionId ?? "unknown",
       userId,
       delay
     }, 'Consolidation job queued');
-
-    return job.id;
   }
 
   /**
