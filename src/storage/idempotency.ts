@@ -37,7 +37,7 @@ export async function isDuplicate(eventId: string): Promise<boolean> {
   const client = getRedis();
 
   // set returns 'OK' on success, null when key already exists
-  const result = await client.set(key, '1', 'NX', 'EX', IDEMPOTENCY_TTL_SECONDS);
+  const result = await client.set(key, '1', 'EX', IDEMPOTENCY_TTL_SECONDS, 'NX');
   return result !== 'OK';
 }
 

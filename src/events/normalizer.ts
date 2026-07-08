@@ -16,12 +16,13 @@ export function validatePayloadStructure(payload: unknown): boolean {
     return false;
   }
 
-  if (!payload.object) {
+  const obj = payload as Record<string, unknown>;
+  if (!obj.object) {
     console.error('Invalid payload: missing object field');
     return false;
   }
 
-  if (!Array.isArray(payload.entry)) {
+  if (!Array.isArray(obj.entry)) {
     console.error('Invalid payload: entry is not an array');
     return false;
   }
@@ -72,13 +73,13 @@ export function normalizePayload(payload: WebhookPayload): WebhookEvent[] {
  * Normalizes a message object into a standardized MessageEvent
  */
 function normalizeMessage(
-  message: Record<string, unknown>,
-  value: Record<string, unknown>,
+  message: WebhookPayload['entry'][0]['changes'][0]['value']['messages'] extends Array<infer T> ? T : never,
+  value: WebhookPayload['entry'][0]['changes'][0]['value'],
   entryId: string
 ): MessageEvent | null {
   try {
     // Determine message type
-    let messageType = message.type;
+    const messageType = message.type;
     let textContent: string | undefined;
     let mediaUrl: string | undefined;
 
@@ -87,7 +88,7 @@ function normalizeMessage(
         textContent = message.text?.body;
         break;
       case 'image':
-        mediaUrl = message.image?.id; // Will be resolved later
+        mediaUrl = message.image?.id;
         textContent = message.image?.caption;
         break;
       case 'video':
@@ -108,7 +109,6 @@ function normalizeMessage(
         textContent = 'Contact card shared';
         break;
       case 'interactive':
-        // Handle buttons, lists, etc.
         textContent = message.interactive?.button_reply?.title ||
                      message.interactive?.list_reply?.title ||
                      'Interactive message';
@@ -132,7 +132,7 @@ function normalizeMessage(
       sourcePhone: value.metadata?.display_phone_number || '',
       phoneNumberId: value.metadata?.phone_number_id || config.meta.phoneNumberId,
       timestamp: parseInt(message.timestamp, 10),
-      rawPayload: message,
+      rawPayload: message as unknown as Record<string, unknown>,
       metadata: {
         contactName: value.contacts?.[0]?.profile?.name || '',
         waId: message.from,
@@ -147,7 +147,7 @@ function normalizeMessage(
       mediaUrl,
       messageType: message.type,
       conversationId: message.context?.message_id || undefined,
-      pricingCategory: undefined, // Will be determined later
+      pricingCategory: undefined,
       waId: message.from,
       displayName: value.contacts?.[0]?.profile?.name || message.from,
     };
@@ -163,8 +163,8 @@ function normalizeMessage(
  * Normalizes a status object into a standardized StatusEvent
  */
 function normalizeStatus(
-  status: Record<string, unknown>,
-  value: Record<string, unknown>,
+  status: WebhookPayload['entry'][0]['changes'][0]['value']['statuses'] extends Array<infer T> ? T : never,
+  value: WebhookPayload['entry'][0]['changes'][0]['value'],
   entryId: string
 ): StatusEvent | null {
   try {
@@ -186,7 +186,7 @@ function normalizeStatus(
       sourcePhone: value.metadata?.display_phone_number || '',
       phoneNumberId: value.metadata?.phone_number_id || config.meta.phoneNumberId,
       timestamp: parseInt(status.timestamp, 10),
-      rawPayload: status,
+      rawPayload: status as unknown as Record<string, unknown>,
       metadata: {
         originalMessageId: status.id,
         entryId,
@@ -243,20 +243,16 @@ export function determinePricingCategory(
 ): string {
   // If we have conversation data, determine pricing based on that
   if (conversation) {
-    // If it's within 24hr window of a customer-initiated conversation
-    if (conversation.origin?.type === 'customer_initiated') {
+    const origin = conversation.origin as { type?: string } | undefined;
+    if (origin?.type === 'customer_initiated') {
       return 'AUTHENTICATION';
-    } else if (conversation.origin?.type === 'business_initiated') {
+    } else if (origin?.type === 'business_initiated') {
       return 'MARKETING';
     } else {
-      // Context exists but type is unknown, assume utility
       return 'UTILITY';
     }
   }
 
-  // If no conversation context, determine based on time
-  // If it's within 24 hours of a customer message, it's utility
-  // Otherwise, it might be marketing (though this is harder to determine without context)
   const now = Date.now() / 1000;
   const timeDiffHours = (now - timestamp) / 3600;
 
@@ -264,7 +260,6 @@ export function determinePricingCategory(
     return 'UTILITY';
   }
 
-  // Default fallback
   return isBusinessInitiated ? 'MARKETING' : 'UTILITY';
 }
 
