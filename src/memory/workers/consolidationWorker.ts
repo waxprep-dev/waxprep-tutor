@@ -276,7 +276,7 @@ export class ConsolidationWorker {
     logger.info({
       userId,
       sessionId,
-      episodicMemoryId: createdEpisodic.id || "unknown",
+      episodicMemoryId: createdEpisodic.id || 'unknown',
       factsExtracted: facts.length
     }, 'Session consolidated successfully');
   }
@@ -307,12 +307,17 @@ export class ConsolidationWorker {
       backoff: {
         type: 'exponential',
         delay: 1000,
+      },
+    });
+
     logger.info({
       jobId: job.id,
-      sessionId: sessionId ?? "unknown",
+      sessionId: sessionId || 'unknown',
       userId,
       delay
     }, 'Consolidation job queued');
+
+    return job.id;
   }
 
   /**
