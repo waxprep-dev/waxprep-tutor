@@ -28,10 +28,6 @@ export function getSupabase(): SupabaseClient<Database> {
   return supabase;
 }
 
-// ------------------------------------------------------------------
-// Message status tracking
-// ------------------------------------------------------------------
-
 export type MessageDeliveryStatus = 'sent' | 'delivered' | 'read' | 'failed';
 
 export async function updateMessageStatus(
@@ -41,17 +37,15 @@ export async function updateMessageStatus(
 ): Promise<void> {
   const client = getSupabase();
 
-  const updateData: MessageStatusUpdate = {
+  const updateData = {
+    conversation_id: conversationId,
     current_status: status,
     ...(metadata ? { pricing_category: metadata.pricingCategory as string | undefined } : {}),
   };
 
   const { error } = await client
     .from('message_statuses')
-    .upsert({
-      conversation_id: conversationId,
-      ...updateData,
-    }, { onConflict: 'conversation_id' });
+    .upsert(updateData, { onConflict: 'conversation_id' });
 
   if (error) {
     logger.error({ err: error, conversationId, status }, 'Error updating message status');
@@ -76,10 +70,6 @@ export async function getMessageStatus(conversationId: string): Promise<MessageS
 
   return data;
 }
-
-// ------------------------------------------------------------------
-// Webhook events storage
-// ------------------------------------------------------------------
 
 export async function storeWebhookEvents(events: WebhookEvent[]): Promise<void> {
   const client = getSupabase();

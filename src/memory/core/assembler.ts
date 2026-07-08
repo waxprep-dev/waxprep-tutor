@@ -361,12 +361,12 @@ export class ContextAssembler {
         profile.subjects.push(memory.value);
         }
       }
-      else if (memory.category === 'profile') {
+      else if (memory.category === 'preference') {
         if (!profile.weaknesses.includes(memory.value)) {
           profile.weaknesses.push(memory.value);
         }
       }
-      else if (memory.category === 'profile') {
+      else if (memory.category === 'preference') {
         if (!profile.strengths.includes(memory.value)) {
           profile.strengths.push(memory.value);
         }
@@ -409,7 +409,7 @@ export class ContextAssembler {
     }
 
     if (userProfile.subjects.length > 0) {
-      promptParts.push(`They are studying: ${userProfile.subjects.join(', ')}.`);
+      promptParts.push(`They are studying: ${, userProfile.subjects ? userProfile.subjects ? userProfile.subjects.join(', ')}.`);
     }
 
     // Add learning preferences
