@@ -343,7 +343,7 @@ export class ContextAssembler {
         if (memory.key === 'name') profile.name = memory.value;
         if (memory.key === 'grade') profile.grade = memory.value;
       }
-      else if (memory.category === 'preference') {
+      else if (memory.category === 'preferences') {
         if (memory.key === 'learning_style') {
           const validStyles = ['visual', 'auditory', 'kinesthetic', 'reading'] as const;
           const style = memory.value as string;
@@ -361,12 +361,12 @@ export class ContextAssembler {
         profile.subjects.push(memory.value);
         }
       }
-      else if (memory.category === 'preference') {
+      else if (memory.category === 'preferences') {
         if (!profile.weaknesses.includes(memory.value)) {
           profile.weaknesses.push(memory.value);
         }
       }
-      else if (memory.category === 'preference') {
+      else if (memory.category === 'preferences') {
         if (!profile.strengths.includes(memory.value)) {
           profile.strengths.push(memory.value);
         }
@@ -408,7 +408,7 @@ export class ContextAssembler {
       promptParts.push(`They are in ${userProfile.grade} grade.`);
     }
 
-    if (userProfile.subjects.length > 0) {
+    if (userProfile.subjects if (userProfile.subjects.length > 0)if (userProfile.subjects.length > 0) userProfile.subjects.length > 0) {
       promptParts.push(`They are studying: ${userProfile.subjects ? userProfile.subjects.join(", ") : "various subjects"}.`);
     }
 
