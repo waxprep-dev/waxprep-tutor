@@ -1,0 +1,18 @@
+# Fix the category comparisons in assembler.ts
+# Replace 'subject' with 'skill' or 'knowledge'
+# Replace 'weakness' and 'strength' with 'profile' or 'knowledge'
+
+# In the buildUserProfile method, change:
+#   else if (memory.category === 'subject') {
+# To:
+#   else if (memory.category === 'skill' || memory.category === 'knowledge') {
+
+# And change:
+#   else if (memory.category === 'weakness') {
+# To:
+#   else if (memory.category === 'profile' || memory.category === 'knowledge') {
+
+# And change:
+#   else if (memory.category === 'strength') {
+# To:
+#   else if (memory.category === 'profile' || memory.category === 'knowledge') {
