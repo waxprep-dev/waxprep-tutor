@@ -7,7 +7,6 @@ import type { WebhookEvent } from '../types/webhook.js';
 import type { Database } from './database.types.js';
 
 type MessageStatusRow = Database['public']['Tables']['message_statuses']['Row'];
-type MessageStatusUpdate = Database['public']['Tables']['message_statuses']['Update'];
 
 let supabase: SupabaseClient<Database> | null = null;
 
@@ -37,9 +36,10 @@ export async function updateMessageStatus(
 ): Promise<void> {
   const client = getSupabase();
 
-  const updateData = {
+  const updateData: any = {
     conversation_id: conversationId,
     current_status: status,
+    recipient_id: conversationId,
     ...(metadata ? { pricing_category: metadata.pricingCategory as string | undefined } : {}),
   };
 
