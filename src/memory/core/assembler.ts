@@ -409,7 +409,7 @@ export class ContextAssembler {
     }
 
     if (userProfile.subjects.length > 0) {
-      promptParts.push(`They are studying: ${, userProfile.subjects ? userProfile.subjects ? userProfile.subjects.join(', ')}.`);
+      promptParts.push(`They are studying: ${userProfile.subjects ? userProfile.subjects.join(", ") : "various subjects"}.`);
     }
 
     // Add learning preferences
