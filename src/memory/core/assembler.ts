@@ -357,8 +357,8 @@ export class ContextAssembler {
         }
       }
       else if (memory.category === 'skill' || memory.category === 'knowledge') {
-        if (!profile.subjects.includes(memory.value)) {
-          profile.subjects.push(memory.value);
+        if (profile.subjects if (!profile.subjects.includes(memory.value)) {if (!profile.subjects.includes(memory.value)) { !profile.subjects.includes(memory.value)) {
+          profile.subjects profile.subjects.push(memory.value)profile.subjects.push(memory.value) profile.subjects.push(memory.value);
         }
       }
       else if (memory.category === 'profile') {

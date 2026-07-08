@@ -20,9 +20,7 @@ import { getLongTermStorage } from '../memory/layers/longterm.js';
  */
 export async function registerMemoryBridge(fastify: FastifyInstance) {
 
-  // ═══════════════════════════════════════════════════════════════
   // POST /memory/retrieve — Retrieve relevant memories
-  // ═══════════════════════════════════════════════════════════════
   fastify.post('/memory/retrieve', async (request, reply) => {
     const { userId, query } = request.body as { userId: string; query: string };
 
@@ -31,11 +29,9 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
     }
 
     try {
-      // Call YOUR existing memory.assembleContext
       const context = await memory.assembleContext(userId, query);
 
-      // Return formatted memories
-      const memories = context.retrievedMemories?.map || [](m => ({
+      const memories = (context.retrievedMemories || []).map((m: any) => ({
         id: m.id,
         content: m.content,
         type: m.type,
@@ -45,7 +41,7 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
       return {
         memories,
         userProfile: context.userProfile,
-        recentTurns: context.recentTurns.slice(-5).map(t => ({
+        recentTurns: context.recentTurns.slice(-5).map((t: any) => ({
           role: t.role,
           content: t.content,
           timestamp: t.timestamp,
@@ -63,9 +59,7 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
     }
   });
 
-  // ═══════════════════════════════════════════════════════════════
   // POST /memory/fact — Store a fact in long-term memory
-  // ═══════════════════════════════════════════════════════════════
   fastify.post('/memory/fact', async (request, reply) => {
     const {
       userId,
@@ -101,9 +95,9 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
 
       return {
         success: true,
-        factId: fact.id,
-        category: fact.category,
-        key: fact.key,
+        factId: (fact as any).id,
+        category: (fact as any).category,
+        key: (fact as any).key,
       };
 
     } catch (error) {
@@ -115,9 +109,7 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
     }
   });
 
-  // ═══════════════════════════════════════════════════════════════
   // GET /memory/profile/:userId — Get user profile
-  // ═══════════════════════════════════════════════════════════════
   fastify.get('/memory/profile/:userId', async (request, reply) => {
     const { userId } = request.params as { userId: string };
 
@@ -128,16 +120,16 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
     try {
       const profile = await memory.getUserProfile(userId);
       return {
-        id: profile.id,
-        name: profile.name,
-        grade: profile.grade,
-        subjects: profile.subjects,
-        learningStyle: profile.learningStyle,
-        preferences: profile.preferences,
-        goals: profile.goals,
-        weaknesses: profile.weaknesses,
-        strengths: profile.strengths,
-        recentActivity: profile.recentActivity,
+        id: (profile as any).id,
+        name: (profile as any).name,
+        grade: (profile as any).grade,
+        subjects: (profile as any).subjects,
+        learningStyle: (profile as any).learningStyle,
+        preferences: (profile as any).preferences,
+        goals: (profile as any).goals,
+        weaknesses: (profile as any).weaknesses,
+        strengths: (profile as any).strengths,
+        recentActivity: (profile as any).recentActivity,
       };
 
     } catch (error) {
@@ -149,9 +141,7 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
     }
   });
 
-  // ═══════════════════════════════════════════════════════════════
   // POST /memory/search — Semantic search across all layers
-  // ═══════════════════════════════════════════════════════════════
   fastify.post('/memory/search', async (request, reply) => {
     const {
       userId,
@@ -172,32 +162,29 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
     }
 
     try {
-      // Get episodic memories using your storage layer
       const episodic = await getEpisodicStorage().search({
         userId,
-        query: 'dummy', // Will use vector search internally
+        query: 'dummy',
         limit,
         threshold,
       }).catch(() => []) || [];
 
-      // Get long-term memories using your storage layer
       const longTerm = await getLongTermStorage().search({
         userId,
-        query: 'dummy', // Will use vector search internally
+        query: 'dummy',
         limit,
         threshold,
       }).catch(() => []) || [];
 
-      // Combine and sort by relevance
       const allMemories = [
-        ...episodic.map((m) => ({
+        ...episodic.map((m: any) => ({
           id: m.id,
           content: m.summary || m.content,
           type: 'episodic' as const,
           layer: 'episodic' as const,
           similarity: 0.85,
         })),
-        ...longTerm.map((m) => ({
+        ...longTerm.map((m: any) => ({
           id: m.id,
           content: m.content,
           type: m.category || 'longterm',
@@ -221,9 +208,7 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
     }
   });
 
-  // ═══════════════════════════════════════════════════════════════
   // POST /memory/exchange — Record a full exchange
-  // ═══════════════════════════════════════════════════════════════
   fastify.post('/memory/exchange', async (request, reply) => {
     const {
       userId,
@@ -272,9 +257,7 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
     }
   });
 
-  // ═══════════════════════════════════════════════════════════════
   // GET /memory/health — Bridge health check
-  // ═══════════════════════════════════════════════════════════════
   fastify.get('/memory/health', async () => {
     return {
       status: 'healthy',
