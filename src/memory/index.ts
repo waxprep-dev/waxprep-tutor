@@ -119,7 +119,7 @@ class MemoryOrchestrator implements MemoryInterface {
   }
 
   async assembleContext(userId: string, currentMessage: string): Promise<AssembledContext> {
-    return this.assembler.assembleContextContext(userId, currentMessage);
+    return this.assembler.assembleContext(userId, currentMessage);
   }
 
   async recordExchange(
