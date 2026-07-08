@@ -65,7 +65,10 @@ export class LongTermMemoryLayer implements LongTermStorage {
         confidence: memory.metadata.confidence ?? 0.8,
         salience: memory.metadata.salience ?? 0.5,
         source: memory.metadata.source ?? 'user_input',
-        tags: memory.metadata.tags ?? [memory.category, memory.factType]
+        tags: memory.metadata.tags ?? [memory.category, memory.factType],
+        sourceMessages: memory.metadata.sourceMessages ?? [],
+        evidenceStrength: memory.metadata.evidenceStrength ?? 0.7,
+        temporalRelevance: memory.metadata.temporalRelevance ?? 0.8,
       },
       vector: embedding,
       contradictions: memory.contradictions ?? [],
@@ -268,17 +271,18 @@ export class LongTermMemoryLayer implements LongTermStorage {
    * Mark a memory as deprecated (soft delete)
    */
   async markDeprecated(id: string): Promise<LongTermMemory> {
-    const updatedMemory = await this.update(id, {
+    const existing = await this.getById(id);
+    if (!existing) {
+      throw new Error(`Long-term memory not found: ${id}`);
+    }
+
+    return this.update(id, {
       verificationStatus: 'deprecated',
       metadata: {
-        ...this.getById(id)?.metadata,
+        ...existing.metadata,
         updatedAt: Date.now()
       }
     });
-
-    logger.info({ id }, 'Marked long-term memory as deprecated');
-
-    return updatedMemory;
   }
 
   /**
@@ -330,7 +334,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
       .select('*')
       .eq('user_id', userId)
       .eq('category', category)
-      .neq('verification_status', 'deprecated') // Exclude deprecated
+      .neq('verification_status', 'deprecated')
       .order('metadata->>confidence', { ascending: false })
       .limit(limit);
 
@@ -357,7 +361,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
       .from(this.tableName)
       .select('*')
       .eq('user_id', userId)
-      .contains('contradictions', [baseMemory.id]) // Find memories that list this as contradiction
+      .contains('contradictions', [baseMemory.id])
       .neq('verification_status', 'deprecated');
 
     if (error) {
@@ -371,7 +375,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
       .select('*')
       .eq('user_id', userId)
       .eq('key', key)
-      .neq('id', baseMemory.id) // Exclude the base memory itself
+      .neq('id', baseMemory.id)
       .neq('verification_status', 'deprecated');
 
     if (sameKeyError) {
@@ -412,7 +416,6 @@ export class LongTermMemoryLayer implements LongTermStorage {
       throw new Error('One or more memories not found');
     }
 
-    // Get the user ID from the first memory (they should all be the same)
     const userId = memories[0]?.userId;
     if (!userId) {
       throw new Error('Could not determine user ID');
@@ -421,7 +424,6 @@ export class LongTermMemoryLayer implements LongTermStorage {
     // Update all other memories to mark them as contradicted by the winner
     for (const memory of memories) {
       if (memory && memory.id !== winnerId) {
-        // Add the winner as a contradiction in this memory
         const updatedContradictions = [...memory.contradictions, winnerId];
 
         await this.update(memory.id, {
@@ -443,7 +445,7 @@ export class LongTermMemoryLayer implements LongTermStorage {
 
       await this.update(winnerId, {
         contradictions: updatedContradictions,
-        verificationStatus: 'verified', // Winner is now verified
+        verificationStatus: 'verified',
         metadata: {
           ...winner.metadata,
           updatedAt: Date.now()
@@ -466,11 +468,9 @@ export class LongTermMemoryLayer implements LongTermStorage {
 
     for (const memory of memories) {
       try {
-        // Check if a memory with the same user and key already exists
         const existing = await this.getByKey(memory.userId, memory.key);
 
         if (existing) {
-          // Update existing memory
           const updated = await this.update(existing.id, {
             ...memory,
             metadata: {
@@ -480,13 +480,11 @@ export class LongTermMemoryLayer implements LongTermStorage {
           });
           results.push(updated);
         } else {
-          // Create new memory
           const created = await this.create(memory);
           results.push(created);
         }
       } catch (error) {
         logger.error({ error, userId: memory.userId, key: memory.key }, 'Failed to upsert memory');
-        // Continue with other memories instead of failing completely
       }
     }
 
@@ -507,7 +505,6 @@ export class LongTermMemoryLayer implements LongTermStorage {
         results.push(updated);
       } catch (error) {
         logger.error({ error, id: update.id }, 'Failed to update memory in bulk');
-        // Continue with other updates instead of failing completely
       }
     }
 
@@ -520,14 +517,11 @@ export class LongTermMemoryLayer implements LongTermStorage {
    * Check if two memories are contradictory
    */
   private isContradictory(memoryA: LongTermMemory, memoryB: LongTermMemory): boolean {
-    // Basic contradiction check - can be made more sophisticated
     if (memoryA.key !== memoryB.key) {
-      return false; // Different keys can't be contradictory
+      return false;
     }
 
-    // If they have the same key but significantly different content/values
     if (memoryA.value !== memoryB.value) {
-      // More sophisticated checks could involve semantic analysis
       return true;
     }
 
@@ -539,35 +533,50 @@ export class LongTermMemoryLayer implements LongTermStorage {
    */
   private mapRowToMemory(row: Record<string, unknown>): LongTermMemory {
     return {
-      id: row.id,
-      userId: row.user_id,
-      tenantId: row.tenant_id,
+      id: row.id as string,
+      userId: row.user_id as string,
+      tenantId: row.tenant_id as string | undefined,
       layer: 'longterm',
       category: row.category as LongTermMemoryCategory,
       factType: row.fact_type as LongTermMemoryFactType,
-      key: row.key,
-      value: row.value,
-      content: row.content,
-      context: row.context,
-      contradictions: row.contradictions || [],
+      key: row.key as string,
+      value: row.value as string,
+      content: row.content as string,
+      context: row.context as string | undefined,
+      contradictions: (row.contradictions as string[]) || [],
       verificationStatus: row.verification_status as VerificationStatus,
       vector: {
-        embedding: row.embedding,
-        model: 'supabase-pgvector', // This would come from a config in a real implementation
-        dimensions: row.embedding ? row.embedding.length : 0,
+        embedding: row.embedding as number[],
+        model: 'supabase-pgvector',
+        dimensions: (row.embedding as number[])?.length || 0,
         normalized: true
       },
-      createdAt: new Date(row.created_at).getTime(),
-      updatedAt: new Date(row.updated_at).getTime(),
-      metadata: row.metadata || {
-        createdAt: new Date(row.created_at).getTime(),
-        updatedAt: new Date(row.updated_at).getTime(),
+      createdAt: new Date(row.created_at as string).getTime(),
+      updatedAt: new Date(row.updated_at as string).getTime(),
+      metadata: (row.metadata as {
+        createdAt: number;
+        updatedAt: number;
+        accessCount: number;
+        lastAccessedAt: number;
+        confidence: number;
+        salience: number;
+        source: string;
+        tags: string[];
+        sourceMessages: string[];
+        evidenceStrength: number;
+        temporalRelevance: number;
+      }) || {
+        createdAt: new Date(row.created_at as string).getTime(),
+        updatedAt: new Date(row.updated_at as string).getTime(),
         accessCount: 0,
-        lastAccessedAt: new Date(row.last_accessed_at || row.created_at).getTime(),
+        lastAccessedAt: new Date((row.last_accessed_at || row.created_at) as string).getTime(),
         confidence: 0.8,
         salience: 0.5,
         source: 'database',
-        tags: [row.category, row.fact_type]
+        tags: [row.category as string, row.fact_type as string],
+        sourceMessages: [],
+        evidenceStrength: 0.7,
+        temporalRelevance: 0.8,
       }
     };
   }
