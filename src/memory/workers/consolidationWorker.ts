@@ -105,7 +105,7 @@ class PlaceholderAIService implements AIService {
         userId: session.userId,
         tenantId: session.tenantId,
         layer: 'longterm',
-        category: 'subject',
+        category: 'knowledge',
         factType: 'dynamic',
         key: 'preferred_subject',
         value: 'math',
@@ -124,7 +124,10 @@ class PlaceholderAIService implements AIService {
           confidence: 0.7,
           salience: 0.6,
           source: 'session_analysis',
-          tags: ['subject', 'interest', 'mathematics']
+          tags: ['subject', 'interest', 'mathematics'],
+          sourceMessages: [],
+          evidenceStrength: 0.7,
+          temporalRelevance: 0.8
         }
       });
     }
@@ -256,7 +259,7 @@ export class ConsolidationWorker {
     };
 
     // Save episodic memory
-    await episodicStorage.create(episodicMemory);
+    const createdEpisodic = await episodicStorage.create(episodicMemory);
 
     // Extract facts using AI
     const facts = await this.aiService.extractFacts(session, summaryResult);
@@ -273,7 +276,7 @@ export class ConsolidationWorker {
     logger.info({
       userId,
       sessionId,
-      episodicMemoryId: episodicMemory.id,
+      episodicMemoryId: createdEpisodic.id,
       factsExtracted: facts.length
     }, 'Session consolidated successfully');
   }
