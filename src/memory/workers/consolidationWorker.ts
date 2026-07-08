@@ -310,7 +310,7 @@ export class ConsolidationWorker {
       },
     });
 
-    logger.info({
+      sessionId: sessionId ?? "unknown",
       jobId: job.id,
       sessionId,
       userId,
