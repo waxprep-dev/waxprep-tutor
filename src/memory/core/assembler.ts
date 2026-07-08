@@ -356,17 +356,17 @@ export class ContextAssembler {
           profile.preferences.tone = memory.value;
         }
       }
-      else if (memory.category === 'subject') {
+      else if (memory.category === 'skill' || memory.category === 'knowledge') {
         if (!profile.subjects.includes(memory.value)) {
           profile.subjects.push(memory.value);
         }
       }
-      else if (memory.category === 'weakness') {
+      else if (memory.category === 'profile') {
         if (!profile.weaknesses.includes(memory.value)) {
           profile.weaknesses.push(memory.value);
         }
       }
-      else if (memory.category === 'strength') {
+      else if (memory.category === 'profile') {
         if (!profile.strengths.includes(memory.value)) {
           profile.strengths.push(memory.value);
         }

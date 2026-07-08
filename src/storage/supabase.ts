@@ -32,7 +32,6 @@ export function getSupabase(): SupabaseClient<Database> {
 // Message status tracking
 // ------------------------------------------------------------------
 
-// Valid message statuses
 export type MessageDeliveryStatus = 'sent' | 'delivered' | 'read' | 'failed';
 
 export async function updateMessageStatus(
@@ -42,7 +41,7 @@ export async function updateMessageStatus(
 ): Promise<void> {
   const client = getSupabase();
 
-  const update: MessageStatusUpdate = {
+  const updateData: MessageStatusUpdate = {
     current_status: status,
     ...(metadata ? { pricing_category: metadata.pricingCategory as string | undefined } : {}),
   };
@@ -51,7 +50,7 @@ export async function updateMessageStatus(
     .from('message_statuses')
     .upsert({
       conversation_id: conversationId,
-      ...update,
+      ...updateData,
     }, { onConflict: 'conversation_id' });
 
   if (error) {
@@ -91,7 +90,6 @@ export async function storeWebhookEvents(events: WebhookEvent[]): Promise<void> 
     id: event.id,
     event_type: event.type,
     event_subtype: event.subtype,
-    source: event.source,
     source_phone: event.sourcePhone,
     phone_number_id: event.phoneNumberId,
     timestamp: new Date(event.timestamp * 1000).toISOString(),
@@ -129,7 +127,7 @@ export async function getRecentEvents(hours: number = 24): Promise<WebhookEvent[
     id: row.id,
     type: row.event_type,
     subtype: row.event_subtype,
-    source: row.source,
+    source: 'whatsapp',
     sourcePhone: row.source_phone,
     phoneNumberId: row.phone_number_id,
     timestamp: new Date(row.timestamp).getTime() / 1000,
@@ -137,71 +135,3 @@ export async function getRecentEvents(hours: number = 24): Promise<WebhookEvent[
     metadata: (row.metadata ?? {}) as Record<string, unknown>,
   }));
 }
-
-// ------------------------------------------------------------------
-// NOTE: The following functions are commented out because the
-// 'conversations' and 'messages' tables do not exist in the
-// current Database schema. They will be re-enabled once these
-// tables are created in Supabase.
-// ------------------------------------------------------------------
-
-/*
-export async function getOrCreateConversation(recipientId: string): Promise<string> {
-  const client = getSupabase();
-
-  const { data: existing, error: findErr } = await client
-    .from('conversations')
-    .select('id')
-    .eq('recipient_id', recipientId)
-    .single();
-
-  if (findErr && findErr.code !== 'PGRST116') {
-    logger.error({ err: findErr, recipientId }, 'Error finding conversation');
-    throw findErr;
-  }
-
-  if (existing?.id) {
-    return existing.id;
-  }
-
-  const { data: created, error: createErr } = await client
-    .from('conversations')
-    .insert({ recipient_id: recipientId })
-    .select('id')
-    .single();
-
-  if (createErr || !created) {
-    logger.error({ err: createErr, recipientId }, 'Error creating conversation');
-    throw createErr || new Error('Failed to create conversation');
-  }
-
-  return created.id;
-}
-
-export async function recordMessage(
-  conversationId: string,
-  direction: 'inbound' | 'outbound',
-  content: string,
-  metadata?: Record<string, unknown>,
-): Promise<string> {
-  const client = getSupabase();
-
-  const { data, error } = await client
-    .from('messages')
-    .insert({
-      conversation_id: conversationId,
-      direction,
-      content,
-      metadata: metadata ?? {},
-    })
-    .select('id')
-    .single();
-
-  if (error || !data) {
-    logger.error({ err: error, conversationId }, 'Error recording message');
-    throw error || new Error('Failed to record message');
-  }
-
-  return data.id;
-}
-*/

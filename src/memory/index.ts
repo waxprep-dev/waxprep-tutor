@@ -47,7 +47,7 @@ class MemoryOrchestrator implements MemoryInterface {
   private userProfiles: Map<string, UserProfile> = new Map();
 
   constructor() {
-    this.assembler = new ContextAssembler();
+    this.assembler = ContextAssembler.initialize();
   }
 
   async saveTurn(userId: string, role: 'user' | 'assistant', content: string): Promise<void> {
@@ -119,7 +119,7 @@ class MemoryOrchestrator implements MemoryInterface {
   }
 
   async assembleContext(userId: string, currentMessage: string): Promise<AssembledContext> {
-    return this.assembler.assemble(userId, currentMessage);
+    return this.assembler.assembleContextContext(userId, currentMessage);
   }
 
   async recordExchange(

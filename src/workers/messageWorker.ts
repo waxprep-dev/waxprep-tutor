@@ -117,7 +117,7 @@ async function processWithAI(
     : {
         name: '',
         subjects: [],
-        learningStyle: 'adaptive',
+        learningStyle: 'adaptive' as const as const,
         proficiencyVector: {},
         engagementScore: 0.5,
         preferences: {

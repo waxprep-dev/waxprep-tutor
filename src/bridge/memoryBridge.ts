@@ -35,7 +35,7 @@ export async function registerMemoryBridge(fastify: FastifyInstance) {
       const context = await memory.assembleContext(userId, query);
 
       // Return formatted memories
-      const memories = context.retrievedMemories.map(m => ({
+      const memories = context.retrievedMemories?.map || [](m => ({
         id: m.id,
         content: m.content,
         type: m.type,
