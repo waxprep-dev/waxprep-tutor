@@ -91,6 +91,51 @@ async function processWithAI(
   const context = await memory.assembleContext(userId, message);
   const userProfile = await memory.getUserProfile(userId);
 
+  // Convert userProfile to a plain object for compatibility
+  const profileObj = userProfile && typeof userProfile === 'object' && 'id' in userProfile
+    ? {
+        name: (userProfile as { name?: string }).name || '',
+        subjects: (userProfile as { subjects?: string[] }).subjects || [],
+        learningStyle: (userProfile as { learningStyle?: string }).learningStyle || 'adaptive',
+        proficiencyVector: (userProfile as { proficiencyVector?: Record<string, number> }).proficiencyVector || {},
+        engagementScore: (userProfile as { engagementScore?: number }).engagementScore || 0.5,
+        preferences: (userProfile as { preferences?: { language: string; tone: string; complexity: number; examplePreference: string[] } }).preferences || {
+          language: 'en',
+          tone: 'friendly',
+          complexity: 0.5,
+          examplePreference: [],
+        },
+        goals: (userProfile as { goals?: Array<{ id: string; description: string; progress: number; priority: number; status: string }> }).goals || [],
+        weaknesses: (userProfile as { weaknesses?: string[] }).weaknesses || [],
+        strengths: (userProfile as { strengths?: string[] }).strengths || [],
+        recentActivity: (userProfile as { recentActivity?: { lastSessionAt: number; sessionCount: number; avgSatisfaction: number } }).recentActivity || {
+          lastSessionAt: Date.now(),
+          sessionCount: 1,
+          avgSatisfaction: 0.8,
+        },
+      }
+    : {
+        name: '',
+        subjects: [],
+        learningStyle: 'adaptive',
+        proficiencyVector: {},
+        engagementScore: 0.5,
+        preferences: {
+          language: 'en',
+          tone: 'friendly',
+          complexity: 0.5,
+          examplePreference: [],
+        },
+        goals: [],
+        weaknesses: [],
+        strengths: [],
+        recentActivity: {
+          lastSessionAt: Date.now(),
+          sessionCount: 1,
+          avgSatisfaction: 0.8,
+        },
+      };
+
   // Step 4: Assemble dynamic prompt using attention mechanism
   const promptResult = await DynamicPromptEngine.getInstance(embedder).assemblePrompt({
     currentMessage: message,
@@ -100,27 +145,7 @@ async function processWithAI(
     longTermFacts: [],
     intentDistribution: intentResult.distribution,
     emotionalState: [emotionalState.valence, emotionalState.arousal, emotionalState.dominance],
-    userProfile: userProfile || {
-      name: '',
-      subjects: [],
-      learningStyle: 'adaptive',
-      proficiencyVector: {},
-      engagementScore: 0.5,
-      preferences: {
-        language: 'en',
-        tone: 'friendly',
-        complexity: 0.5,
-        examplePreference: [],
-      },
-      goals: [],
-      weaknesses: [],
-      strengths: [],
-      recentActivity: {
-        lastSessionAt: Date.now(),
-        sessionCount: 1,
-        avgSatisfaction: 0.8,
-      },
-    },
+    userProfile: profileObj,
     session: {
       messageCount: 1,
       startTime: Date.now(),
@@ -131,7 +156,7 @@ async function processWithAI(
   // Step 5: Select tools based on embedding similarity
   const tools = await ToolSystem.getInstance(embedder).selectTools(message, {
     userId,
-    userProfile: userProfile || {},
+    userProfile: profileObj as unknown as Record<string, unknown>,
     conversationHistory: context.recentTurns || [],
     intent: intentResult.primaryIntent,
   });
@@ -140,7 +165,7 @@ async function processWithAI(
   const agentResponse = await MultiAgentOrchestrator.getInstance(embedder).route(
     message,
     {
-      userProfile: userProfile || {},
+      userProfile: profileObj as unknown as Record<string, unknown>,
       recentTurns: context.recentTurns || [],
       intent: intentResult.primaryIntent,
       intentConfidence: intentResult.confidence,
@@ -193,7 +218,7 @@ async function processWithAI(
       latencyMs,
       agentUsed: agentResponse.response.agentName,
       intent: intentResult.primaryIntent,
-      emotionalState: emotionalState,
+      emotionalState: emotionalState as unknown as Record<string, unknown>,
     }
   );
 
@@ -245,11 +270,11 @@ async function processWithAI(
         arousal: emotionalState.arousal,
         dominance: emotionalState.dominance,
         category: emotionalState.category,
-      },
+      } as Record<string, unknown>,
       intent: {
         primary: intentResult.primaryIntent,
         confidence: intentResult.confidence,
-      },
+      } as Record<string, unknown>,
     },
   };
 }
