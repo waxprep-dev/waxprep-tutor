@@ -3,13 +3,11 @@
  */
 import pino from 'pino';
 
-let loggerInstance: ReturnType<typeof pino>;
+let loggerInstance: any;
 
-// Normalize log level to lowercase (Pino expects lowercase)
-const rawLevel = process.env.LOG_LEVEL || 'info';
-export const logLevel: string = rawLevel.toLowerCase();
+export const logLevel: string = (process.env.LOG_LEVEL || 'info').toLowerCase();
 
-export function getLogger(): ReturnType<typeof pino> {
+export function getLogger(): any {
   if (!loggerInstance) {
     loggerInstance = pino({
       level: logLevel,
