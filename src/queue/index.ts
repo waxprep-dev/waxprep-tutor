@@ -160,7 +160,7 @@ export async function getJobInfo(jobId: string): Promise<{
   return {
     id: job.id ?? jobId,
     state,
-    progress: job.progress || 0,
+    progress: (job.progress ?? 0) as number | object,
     attemptsMade: job.attemptsMade,
     failedReason: job.failedReason ?? undefined,
   };
