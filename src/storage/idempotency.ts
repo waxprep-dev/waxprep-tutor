@@ -1,8 +1,7 @@
 /**
  * Idempotency guard — dedup processing of identical webhook events
  */
-import type { Redis as RedisType } from 'ioredis';
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 import { logger } from '../utils/logger.js';
 
 let redis: Redis | null = null;
