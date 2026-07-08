@@ -29,69 +29,6 @@ export function getSupabase(): SupabaseClient<Database> {
 }
 
 // ------------------------------------------------------------------
-// Conversation operations
-// ------------------------------------------------------------------
-
-export async function getOrCreateConversation(recipientId: string): Promise<string> {
-  const client = getSupabase();
-
-  const { data: existing, error: findErr } = await client
-    .from('conversations')
-    .select('id')
-    .eq('recipient_id', recipientId)
-    .single();
-
-  if (findErr && findErr.code !== 'PGRST116') {
-    logger.error({ err: findErr, recipientId }, 'Error finding conversation');
-    throw findErr;
-  }
-
-  if (existing?.id) {
-    return existing.id;
-  }
-
-  const { data: created, error: createErr } = await client
-    .from('conversations')
-    .insert({ recipient_id: recipientId })
-    .select('id')
-    .single();
-
-  if (createErr || !created) {
-    logger.error({ err: createErr, recipientId }, 'Error creating conversation');
-    throw createErr || new Error('Failed to create conversation');
-  }
-
-  return created.id;
-}
-
-export async function recordMessage(
-  conversationId: string,
-  direction: 'inbound' | 'outbound',
-  content: string,
-  metadata?: Record<string, unknown>,
-): Promise<string> {
-  const client = getSupabase();
-
-  const { data, error } = await client
-    .from('messages')
-    .insert({
-      conversation_id: conversationId,
-      direction,
-      content,
-      metadata: metadata ?? {},
-    })
-    .select('id')
-    .single();
-
-  if (error || !data) {
-    logger.error({ err: error, conversationId }, 'Error recording message');
-    throw error || new Error('Failed to record message');
-  }
-
-  return data.id;
-}
-
-// ------------------------------------------------------------------
 // Message status tracking
 // ------------------------------------------------------------------
 
@@ -152,12 +89,12 @@ export async function storeWebhookEvents(events: WebhookEvent[]): Promise<void> 
 
   const rows = events.map(event => ({
     id: event.id,
-    type: event.type,
-    subtype: event.subtype,
+    event_type: event.type,
+    event_subtype: event.subtype,
     source: event.source,
     source_phone: event.sourcePhone,
     phone_number_id: event.phoneNumberId,
-    timestamp: event.timestamp,
+    timestamp: new Date(event.timestamp * 1000).toISOString(),
     raw_payload: event.rawPayload as Database['public']['Tables']['webhook_events']['Insert']['raw_payload'],
     metadata: (event.metadata ?? {}) as Database['public']['Tables']['webhook_events']['Insert']['metadata'],
   }));
@@ -190,13 +127,81 @@ export async function getRecentEvents(hours: number = 24): Promise<WebhookEvent[
 
   return (data ?? []).map(row => ({
     id: row.id,
-    type: row.type,
-    subtype: row.subtype,
+    type: row.event_type,
+    subtype: row.event_subtype,
     source: row.source,
     sourcePhone: row.source_phone,
     phoneNumberId: row.phone_number_id,
-    timestamp: row.timestamp,
+    timestamp: new Date(row.timestamp).getTime() / 1000,
     rawPayload: row.raw_payload as Record<string, unknown>,
     metadata: (row.metadata ?? {}) as Record<string, unknown>,
   }));
 }
+
+// ------------------------------------------------------------------
+// NOTE: The following functions are commented out because the
+// 'conversations' and 'messages' tables do not exist in the
+// current Database schema. They will be re-enabled once these
+// tables are created in Supabase.
+// ------------------------------------------------------------------
+
+/*
+export async function getOrCreateConversation(recipientId: string): Promise<string> {
+  const client = getSupabase();
+
+  const { data: existing, error: findErr } = await client
+    .from('conversations')
+    .select('id')
+    .eq('recipient_id', recipientId)
+    .single();
+
+  if (findErr && findErr.code !== 'PGRST116') {
+    logger.error({ err: findErr, recipientId }, 'Error finding conversation');
+    throw findErr;
+  }
+
+  if (existing?.id) {
+    return existing.id;
+  }
+
+  const { data: created, error: createErr } = await client
+    .from('conversations')
+    .insert({ recipient_id: recipientId })
+    .select('id')
+    .single();
+
+  if (createErr || !created) {
+    logger.error({ err: createErr, recipientId }, 'Error creating conversation');
+    throw createErr || new Error('Failed to create conversation');
+  }
+
+  return created.id;
+}
+
+export async function recordMessage(
+  conversationId: string,
+  direction: 'inbound' | 'outbound',
+  content: string,
+  metadata?: Record<string, unknown>,
+): Promise<string> {
+  const client = getSupabase();
+
+  const { data, error } = await client
+    .from('messages')
+    .insert({
+      conversation_id: conversationId,
+      direction,
+      content,
+      metadata: metadata ?? {},
+    })
+    .select('id')
+    .single();
+
+  if (error || !data) {
+    logger.error({ err: error, conversationId }, 'Error recording message');
+    throw error || new Error('Failed to record message');
+  }
+
+  return data.id;
+}
+*/
