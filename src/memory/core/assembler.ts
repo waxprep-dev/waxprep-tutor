@@ -408,7 +408,7 @@ export class ContextAssembler {
       promptParts.push(`They are in ${userProfile.grade} grade.`);
     }
 
-    if (userProfile.subjects if (userProfile.subjects.length > 0)if (userProfile.subjects.length > 0) userProfile.subjects.length > 0) {
+    if (userProfile.subjects && userProfile.subjects.length > 0) {
       promptParts.push(`They are studying: ${userProfile.subjects ? userProfile.subjects.join(", ") : "various subjects"}.`);
     }
 
