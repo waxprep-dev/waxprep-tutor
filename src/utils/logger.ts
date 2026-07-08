@@ -3,11 +3,11 @@
  */
 import pino from 'pino';
 
-let loggerInstance: any;
+let loggerInstance: ReturnType<typeof pino>;
 
 export const logLevel: string = process.env.LOG_LEVEL || 'info';
 
-export function getLogger(): any {
+export function getLogger(): ReturnType<typeof pino> {
   if (!loggerInstance) {
     loggerInstance = pino({
       level: logLevel,
