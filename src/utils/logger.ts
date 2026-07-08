@@ -1,7 +1,7 @@
 /**
  * Structured logging with Pino
  */
-const pino = require('pino');
+import pino from 'pino';
 
 let loggerInstance: any;
 
