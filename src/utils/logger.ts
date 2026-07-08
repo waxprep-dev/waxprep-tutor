@@ -1,14 +1,15 @@
 /**
  * Structured logging with Pino
  */
-import pkg from 'pino';
-const pino = pkg.default || pkg;
+import pino from 'pino';
 
-let loggerInstance: any;
+let loggerInstance: ReturnType<typeof pino>;
 
-export const logLevel: string = process.env.LOG_LEVEL || 'info';
+// Normalize log level to lowercase (Pino expects lowercase)
+const rawLevel = process.env.LOG_LEVEL || 'info';
+export const logLevel: string = rawLevel.toLowerCase();
 
-export function getLogger(): any {
+export function getLogger(): ReturnType<typeof pino> {
   if (!loggerInstance) {
     loggerInstance = pino({
       level: logLevel,
