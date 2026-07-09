@@ -29,7 +29,7 @@ import { cugaClient } from '../cugaClient.js';
 
 const redisConnection = { url: config.redis.url };
 
-const messageQueue = new Queue(`${config.queue.prefix}:messages`, {
+const messageQueue = new Queue(`${config.queue.prefix}_messages`, {
   connection: redisConnection,
   defaultJobOptions: {
     attempts: config.queue.maxRetries,
@@ -42,7 +42,7 @@ const messageQueue = new Queue(`${config.queue.prefix}:messages`, {
   },
 });
 
-const statusQueue = new Queue(`${config.queue.prefix}:status`, {
+const statusQueue = new Queue(`${config.queue.prefix}_status`, {
   connection: redisConnection,
 });
 
@@ -483,7 +483,7 @@ async function handleMessage(job: Job<MessageJobData>): Promise<Record<string, u
 
 export function startMessageWorker(): Worker<MessageJobData> {
   const worker = new Worker(
-    `${config.queue.prefix}:messages`,
+    `${config.queue.prefix}_messages`,
     handleMessage,
     {
       connection: redisConnection,
@@ -525,7 +525,7 @@ export function startMessageWorker(): Worker<MessageJobData> {
 
 export function startStatusWorker(): Worker {
   const worker = new Worker(
-    `${config.queue.prefix}:status`,
+    `${config.queue.prefix}_status`,
     async (job) => {
       const data = job.data as { event?: Record<string, unknown> };
       logger.debug({ event: data.event }, 'Status update received');
@@ -545,7 +545,7 @@ export function startStatusWorker(): Worker {
 
 export function startDLQWorker(): Worker {
   const worker = new Worker(
-    `${config.queue.prefix}:messages:dlq`,
+    `${config.queue.prefix}_messages:dlq`,
     async (job) => {
       logger.warn({
         jobId: job.id,
