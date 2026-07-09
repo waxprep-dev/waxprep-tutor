@@ -11,11 +11,8 @@ import { WebhookJobData } from '../types/queue.js';
 import { WebhookEvent } from '../types/webhook.js';
 import { getSupabase } from '../storage/supabase.js';
 
-const connection = {
-  host: new URL(config.redis.url).hostname,
-  port: parseInt(new URL(config.redis.url).port || '6379'),
-  password: config.redis.password || undefined,
-  db: config.redis.db,
+import { getRedisConnectionConfig } from "../storage/idempotency.js";
+const connection = getRedisConnectionConfig();
 };
 
 /**

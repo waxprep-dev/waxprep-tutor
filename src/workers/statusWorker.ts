@@ -10,7 +10,8 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '../storage/database.types.js';
 
 // Redis connection for worker
-const redisConnection = { url: config.redis.url };
+import { getRedisConnectionConfig } from "../storage/idempotency.js";
+const redisConnection = getRedisConnectionConfig();
 
 interface StatusUpdate {
   id: string;

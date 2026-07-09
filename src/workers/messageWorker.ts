@@ -27,7 +27,8 @@ import { cugaClient } from '../cugaClient.js';
 // QUEUE SETUP
 // ═══════════════════════════════════════════════════════════════
 
-const redisConnection = { url: config.redis.url };
+import { getRedisConnectionConfig } from "../storage/idempotency.js";
+const redisConnection = getRedisConnectionConfig();
 
 const messageQueue = new Queue(`${config.queue.prefix}_messages`, {
   connection: redisConnection,

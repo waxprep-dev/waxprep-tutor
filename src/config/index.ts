@@ -65,6 +65,7 @@ export function validateConfig(): void {
   if (!config.meta.verifyToken) missing.push('WHATSAPP_VERIFY_TOKEN or META_VERIFY_TOKEN');
   if (!config.meta.phoneNumberId) missing.push('WHATSAPP_PHONE_NUMBER_ID or META_PHONE_NUMBER_ID');
   if (!config.meta.accessToken) missing.push('WHATSAPP_ACCESS_TOKEN or META_ACCESS_TOKEN');
+  if (!config.redis.url || config.redis.url === 'redis://localhost:6379') missing.push('REDIS_URL');
   if (!config.supabase.url) missing.push('SUPABASE_URL');
   if (!config.supabase.serviceRoleKey) missing.push('SUPABASE_SERVICE_KEY or SUPABASE_SERVICE_ROLE_KEY');
 

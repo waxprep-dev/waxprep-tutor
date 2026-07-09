@@ -144,10 +144,8 @@ export class ConsolidationWorker {
 
   constructor(aiService?: AIService) {
     this.redisConnection = {
-      host: new URL(config.redis.url).hostname,
-      port: parseInt(new URL(config.redis.url).port || '6379'),
-      password: config.redis.password || undefined,
-      db: config.redis.db,
+      import { getRedisConnectionConfig } from "../../storage/idempotency.js";
+    this.redisConnection = getRedisConnectionConfig();
     };
 
     this.queue = new Queue<ConsolidationJobData>(`${config.queue.prefix}_memory_consolidation`, {
