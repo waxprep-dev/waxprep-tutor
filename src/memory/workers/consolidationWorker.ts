@@ -143,10 +143,7 @@ export class ConsolidationWorker {
   private readonly aiService: AIService;
 
   constructor(aiService?: AIService) {
-    this.redisConnection = {
-      import { getRedisConnectionConfig } from "../../storage/idempotency.js";
     this.redisConnection = getRedisConnectionConfig();
-    };
 
     this.queue = new Queue<ConsolidationJobData>(`${config.queue.prefix}_memory_consolidation`, {
       connection: this.redisConnection,

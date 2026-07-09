@@ -13,7 +13,6 @@ import { getSupabase } from '../storage/supabase.js';
 
 import { getRedisConnectionConfig } from "../storage/idempotency.js";
 const connection = getRedisConnectionConfig();
-};
 
 /**
  * Simple function to mark an event as processed in Supabase
