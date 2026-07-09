@@ -16,6 +16,7 @@ import { embedder } from '../core/embedder.js';
 import { decayEngine } from '../core/decay.js';
 import { logger } from '../../utils/logger.js';
 import { Timer } from '../../utils/timing.js';
+import { getRedisConnectionConfig } from "../../storage/idempotency.js";
 
 // Define the job data structure
 interface ConsolidationJobData {

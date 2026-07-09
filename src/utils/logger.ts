@@ -1,8 +1,10 @@
 /**
- * Structured logging with Pino — ESM-safe, no top-level await
+ * Structured logging with Pino — ESM-safe using createRequire
  */
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
-// Simple fallback logger that works in any environment
+// Simple fallback logger
 const fallbackLogger = {
   trace: () => {},
   debug: (...args: unknown[]) => { if (process.env.LOG_LEVEL === 'debug') console.debug('[DEBUG]', ...args); },
@@ -14,16 +16,13 @@ const fallbackLogger = {
 };
 
 let pinoLogger: any = null;
-let pinoLoadAttempted = false;
 
-async function loadPinoLogger(): Promise<any> {
-  if (pinoLoadAttempted) return pinoLogger || fallbackLogger;
-  pinoLoadAttempted = true;
-
+function getPinoLogger(): any {
+  if (pinoLogger) return pinoLogger;
   try {
-    const pinoModule = await import('pino');
-    const pino = pinoModule.default || pinoModule;
-    pinoLogger = pino({
+    const pino = require('pino');
+    const targetPino = pino.default || pino;
+    pinoLogger = targetPino({
       level: (process.env.LOG_LEVEL || 'info').toLowerCase(),
       transport: process.env.NODE_ENV !== 'production'
         ? { target: 'pino-pretty', options: { colorize: true, ignore: 'pid,hostname' } }
@@ -36,20 +35,10 @@ async function loadPinoLogger(): Promise<any> {
   }
 }
 
-// Synchronous proxy — async init happens lazily
-let asyncLogger: any = null;
-
-function ensureLogger(): any {
-  if (!asyncLogger) {
-    // Kick off async load but return fallback immediately
-    loadPinoLogger().then(logger => { asyncLogger = logger; });
-  }
-  return asyncLogger || fallbackLogger;
-}
-
+// Proxy that lazily loads pino on first access
 export const logger = new Proxy({} as any, {
   get(_target, prop: string) {
-    const instance = ensureLogger();
+    const instance = getPinoLogger();
     const fn = instance[prop];
     if (typeof fn === 'function') {
       return fn.bind(instance);
