@@ -1,14 +1,25 @@
 /**
  * Structured logging with Pino
  */
-import pino from 'pino';
 
-let loggerInstance: any;
+let loggerInstance: any = null;
+let pinoModule: any = null;
 
 export const logLevel: string = (process.env.LOG_LEVEL || 'info').toLowerCase();
 
-export function getLogger(): any {
+async function loadPino() {
+  if (!pinoModule) {
+    // Dynamic import for ES module compatibility
+    pinoModule = await import('pino');
+    // Handle both default and named exports
+    pinoModule = pinoModule.default || pinoModule;
+  }
+  return pinoModule;
+}
+
+export async function getLogger(): Promise<any> {
   if (!loggerInstance) {
+    const pino = await loadPino();
     loggerInstance = pino({
       level: logLevel,
       transport: process.env.NODE_ENV !== 'production'
@@ -19,7 +30,8 @@ export function getLogger(): any {
   return loggerInstance;
 }
 
-export const logger = getLogger();
+// Initialize logger with a top-level await
+export const logger = await getLogger();
 
 export function startTimer(label: string): () => void {
   const start = performance.now();
