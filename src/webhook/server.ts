@@ -41,7 +41,7 @@ export function startServer(): FastifyInstance {
     const token = query['hub.verify_token'];
     const challenge = query['hub.challenge'];
 
-    if (mode === 'subscribe' && token === process.env.VERIFY_TOKEN) {
+    if (mode === 'subscribe' && token === process.env.WHATSAPP_VERIFY_TOKEN) {
       logger.info('Webhook verified');
       return reply.status(200).send(challenge);
     }
@@ -132,6 +132,18 @@ export function startServer(): FastifyInstance {
   // ----------------------------------------------------------------
   app.get('/health', async (_request, reply) => {
     return reply.status(200).send({ status: 'ok', timestamp: new Date().toISOString() });
+  });
+
+  // ----------------------------------------------------------------
+  // Start listening — bind to 0.0.0.0 for Render
+  // ----------------------------------------------------------------
+  const port = parseInt(process.env.PORT || '3000');
+  app.listen({ port, host: '0.0.0.0' }, (err, address) => {
+    if (err) {
+      logger.error({ err }, 'Failed to start server');
+      throw err;
+    }
+    logger.info({ address, port }, 'HTTP server listening');
   });
 
   return app;

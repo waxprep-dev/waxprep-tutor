@@ -11,48 +11,43 @@ let redisInstance: Redis | null = null;
 let redisConnectionConfig: any = null;
 
 export function getRedisConnectionConfig(): any {
-  if (!redisConnectionConfig) {
-    const isTls = config.redis.url?.startsWith('rediss://');
+  if (redisConnectionConfig) return redisConnectionConfig;
 
-    redisConnectionConfig = {
-      host: new URL(config.redis.url).hostname,
-      port: parseInt(new URL(config.redis.url).port || '6379'),
-      password: config.redis.password || undefined,
-      db: config.redis.db,
-      maxRetriesPerRequest: null, // REQUIRED for BullMQ
-      enableReadyCheck: false,    // REQUIRED for BullMQ — prevents hanging
-      enableOfflineQueue: false,  // Don't queue commands when disconnected
-      lazyConnect: true,          // Connect on first use, not instantiation
-      connectTimeout: 10000,      // 10 second connection timeout
-      commandTimeout: 5000,       // 5 second command timeout
-      tls: isTls ? { rejectUnauthorized: false } : undefined,
-      retryStrategy(times: number) {
-        if (times > 10) {
-          logger.error('Redis max retries exceeded — giving up');
-          return null; // Stop retrying
-        }
-        const delay = Math.min(times * 100, 3000);
-        logger.warn({ attempt: times, delay }, 'Redis reconnecting...');
-        return delay;
-      },
-      reconnectOnError(err: Error) {
-        const targetErrors = ['READONLY', 'ECONNREFUSED', 'ETIMEDOUT', 'ECONNRESET', 'EPIPE'];
-        const shouldReconnect = targetErrors.some(e => err.message.includes(e));
-        if (shouldReconnect) {
-          logger.warn({ error: err.message }, 'Redis reconnecting on error');
-          return 1;
-        }
-        return false;
-      },
-    };
-  }
+  const isTls = config.redis.url?.startsWith('rediss://');
+
+  redisConnectionConfig = {
+    url: config.redis.url,  // Pass the full URL directly
+    maxRetriesPerRequest: null,
+    enableReadyCheck: false,
+    enableOfflineQueue: false,
+    lazyConnect: true,
+    connectTimeout: 10000,
+    commandTimeout: 5000,
+    tls: isTls ? { rejectUnauthorized: false } : undefined,
+    retryStrategy(times: number) {
+      if (times > 10) {
+        logger.error('Redis max retries exceeded — giving up');
+        return null;
+      }
+      const delay = Math.min(times * 100, 3000);
+      logger.warn({ attempt: times, delay }, 'Redis reconnecting...');
+      return delay;
+    },
+    reconnectOnError(err: Error) {
+      const targetErrors = ['READONLY', 'ECONNREFUSED', 'ETIMEDOUT', 'ECONNRESET', 'EPIPE'];
+      const shouldReconnect = targetErrors.some(e => err.message.includes(e));
+      if (shouldReconnect) {
+        logger.warn({ error: err.message }, 'Redis reconnecting on error');
+        return 1;
+      }
+      return false;
+    },
+  };
   return redisConnectionConfig;
 }
 
 export function getRedis(): Redis {
-  if (redisInstance) {
-    return redisInstance;
-  }
+  if (redisInstance) return redisInstance;
 
   redisInstance = new Redis(getRedisConnectionConfig());
 
@@ -65,7 +60,6 @@ export function getRedis(): Redis {
   });
 
   redisInstance.on('error', (err) => {
-    // CRITICAL: Don't let unhandled Redis errors crash the process
     logger.error({ error: err.message, code: (err as any).code }, 'Redis error');
   });
 
