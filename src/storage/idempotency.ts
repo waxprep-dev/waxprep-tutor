@@ -1,67 +1,86 @@
 /**
- * Idempotency guard — dedup processing of identical webhook events
+ * Redis Connection Manager
+ * Singleton with reconnection handling and graceful degradation
  */
+
 import { Redis } from 'ioredis';
+import { config } from '../config/index.js';
 import { logger } from '../utils/logger.js';
 
-let redis: Redis | null = null;
+let redisInstance: Redis | null = null;
+let redisConnected = false;
 
 export function getRedis(): Redis {
-  if (redis) return redis;
-
-  const redisUrl = process.env.REDIS_URL;
-  if (!redisUrl) {
-    throw new Error('REDIS_URL is not configured');
+  if (redisInstance) {
+    return redisInstance;
   }
 
-  // For Upstash Redis with TLS
-  const isTLS = redisUrl.startsWith('rediss://');
-  
-  redis = new Redis(redisUrl, {
+  const redisUrl = config.redis.url;
+
+  redisInstance = new Redis(redisUrl, {
+    password: config.redis.password || undefined,
+    db: config.redis.db,
     maxRetriesPerRequest: 3,
     enableReadyCheck: true,
-    lazyConnect: false,
-    retryStrategy: (times: number) => {
-      const delay = Math.min(times * 100, 3000);
-      logger.warn({ times, delay }, 'Retrying Redis connection');
+    lazyConnect: true,
+    retryStrategy(times: number) {
+      const delay = Math.min(times * 50, 2000);
+      logger.warn({ attempt: times, delay }, 'Redis reconnecting...');
       return delay;
     },
-    reconnectOnError: (err: Error) => {
-      logger.error({ err }, 'Redis reconnect on error');
-      return true;
+    reconnectOnError(err: Error) {
+      const targetErrors = ['READONLY', 'ECONNREFUSED', 'ETIMEDOUT', 'ECONNRESET'];
+      const shouldReconnect = targetErrors.some(e => err.message.includes(e));
+      if (shouldReconnect) {
+        logger.warn({ error: err.message }, 'Redis reconnecting on error');
+      }
+      return shouldReconnect ? 2 : false;
     },
-    ...(isTLS ? { tls: { rejectUnauthorized: false } } : {}),
   });
 
-  redis.on('error', (err) => {
-    logger.error({ err }, 'Redis error');
+  redisInstance.on('connect', () => {
+    redisConnected = true;
+    logger.info('Redis connected');
   });
 
-  redis.on('connect', () => {
-    logger.info('Redis connected successfully');
-  });
-
-  redis.on('ready', () => {
+  redisInstance.on('ready', () => {
     logger.info('Redis ready');
   });
 
-  redis.on('close', () => {
+  redisInstance.on('error', (err) => {
+    logger.error({ error: err.message }, 'Redis error');
+    redisConnected = false;
+  });
+
+  redisInstance.on('close', () => {
     logger.warn('Redis connection closed');
+    redisConnected = false;
   });
 
-  redis.on('reconnecting', () => {
-    logger.warn('Redis reconnecting');
+  redisInstance.on('reconnecting', () => {
+    logger.info('Redis reconnecting...');
   });
 
-  return redis;
+  return redisInstance;
 }
 
-const IDEMPOTENCY_TTL_SECONDS = 86400; // 24 hours
+export async function closeRedis(): Promise<void> {
+  if (redisInstance) {
+    await redisInstance.quit();
+    redisInstance = null;
+    redisConnected = false;
+  }
+}
+
+export function isRedisConnected(): boolean {
+  return redisConnected;
+}
+
+const IDEMPOTENCY_TTL_SECONDS = 86400;
 
 export async function isDuplicate(eventId: string): Promise<boolean> {
   const key = `idempotency:${eventId}`;
   const client = getRedis();
-
   const result = await client.set(key, '1', 'EX', IDEMPOTENCY_TTL_SECONDS, 'NX');
   return result !== 'OK';
 }
@@ -78,11 +97,4 @@ export async function getFirstSeenTimestamp(eventId: string): Promise<number | u
   const ttl = await client.ttl(key);
   if (ttl < 0) return undefined;
   return Date.now() - (IDEMPOTENCY_TTL_SECONDS - ttl) * 1000;
-}
-
-export async function closeRedis(): Promise<void> {
-  if (redis) {
-    await redis.quit();
-    redis = null;
-  }
 }
