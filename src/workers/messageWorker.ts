@@ -545,7 +545,7 @@ export function startStatusWorker(): Worker {
 
 export function startDLQWorker(): Worker {
   const worker = new Worker(
-    `${config.queue.prefix}_messages:dlq`,
+    `${config.queue.prefix}_messages_dlq`,
     async (job) => {
       logger.warn({
         jobId: job.id,

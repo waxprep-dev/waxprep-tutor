@@ -24,7 +24,7 @@ export class SessionMemoryLayer implements SessionStorage {
 
   constructor(redis?: Redis) {
     this.redis = redis || getRedis();
-    this.sessionPrefix = `${config.queue.prefix}:session`;
+    this.sessionPrefix = `${config.queue.prefix}_session`;
     this.sessionExpiry = 24 * 60 * 60; // 24 hours default
   }
 

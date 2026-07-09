@@ -122,7 +122,7 @@ export function startStatusWorker(): Worker<StatusJobData> {
   const supabase = getSupabase();
 
   const worker = new Worker<StatusJobData>(
-    `${config.queue.prefix}:status`,
+    `${config.queue.prefix}_status`,
     async (job) => {
       logger.info({
         jobId: job.id,

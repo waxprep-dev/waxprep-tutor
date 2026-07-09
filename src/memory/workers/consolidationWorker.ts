@@ -150,14 +150,14 @@ export class ConsolidationWorker {
       db: config.redis.db,
     };
 
-    this.queue = new Queue<ConsolidationJobData>(`${config.queue.prefix}:memory_consolidation`, {
+    this.queue = new Queue<ConsolidationJobData>(`${config.queue.prefix}_memory_consolidation`, {
       connection: this.redisConnection,
     });
 
     this.aiService = aiService || new PlaceholderAIService();
 
     this.worker = new Worker<ConsolidationJobData>(
-      `${config.queue.prefix}:memory_consolidation`,
+      `${config.queue.prefix}_memory_consolidation`,
       async (job) => {
         const timer = new Timer();
         logger.info({ jobId: job.id, sessionId: job.data.sessionId }, 'Starting memory consolidation job');

@@ -44,7 +44,7 @@ async function markEventProcessed(eventId: string, errorMessage?: string): Promi
 
 export function startDLQWorker(): Worker<WebhookJobData> {
   const worker = new Worker<WebhookJobData>(
-    `${config.queue.prefix}:dlq`,
+    `${config.queue.prefix}_dlq`,
     async (job) => {
       const event = job.data.event as WebhookEvent;
 
